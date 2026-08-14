@@ -162,6 +162,17 @@ Aktualisieren „Kein Zugriff auf den Feed“. Zwei Möglichkeiten:
 
 Aktionen von Hand anlegen geht unabhängig davon immer.
 
+### Erst nach dem Merge nach `main` aktiv
+
+GitHub startet zeitgesteuerte Workflows (`schedule`) und manuelle Läufe
+(`workflow_dispatch`) **nur für Workflow-Dateien auf dem Standardbranch**. Solange
+`scrape.yml` nur auf einem Feature-Branch liegt, taucht „Aktionen sammeln“ nicht unter
+*Actions* auf und der tägliche Lauf passiert nicht. Nach dem Merge nach `main` läuft
+beides von selbst.
+
+Bis dahin lässt sich der Scraper lokal starten (siehe
+[Entwickeln und Testen](#entwickeln-und-testen)).
+
 ### Ablauf des Jobs
 
 1. `scrape.yml` läuft täglich um 04:00 UTC, oder von Hand über *Actions → Aktionen
@@ -190,7 +201,8 @@ Das heißt fast immer: Das Portal hat sein HTML umgebaut, die Selektoren in
 
 ### 1. Ansehen, wie die Seite jetzt aufgebaut ist
 
-Ohne lokale Python-Installation, direkt über GitHub:
+Ohne lokale Python-Installation, direkt über GitHub (setzt voraus, dass `scrape.yml`
+auf `main` liegt — siehe oben):
 
 *Actions → **Aktionen sammeln** → Run workflow* → Feld **inspect** auf den Quellennamen
 setzen (z. B. `gratis-testen`) → starten. Der Job schreibt die Struktur ins Log:

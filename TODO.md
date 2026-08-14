@@ -10,7 +10,7 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Manifest, Berechtigungen (nur Kamera + Internet), FileProvider
 - [x] Adaptive Launcher-Icon im Bon-Look
 - [x] `.github/workflows/android.yml` — Debug-APK + Tests, Release bei Tag `v*`
-- [ ] Erster gruener CI-Lauf
+- [x] Erster gruener CI-Lauf
 
 ## Phase 2 — Datenmodell, Room, Design-System
 
@@ -63,6 +63,6 @@ Abgehakt heisst: gebaut, getestet, committet.
 
 ## Phase 7 — Abschluss
 
-- [ ] Tests gruen, CI gruen
+- [x] Tests gruen, CI gruen
 - [x] README: Setup, Architektur, APK installieren, Scraper reparieren, Quelle ergaenzen
 - [x] `DECISIONS.md` vollstaendig

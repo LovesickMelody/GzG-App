@@ -102,8 +102,12 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   mit echter Logik gibt es das Parser-Register.
 - **Die Selektoren in `sources.yaml` sind Startwerte, keine geprüften Werte** — die
   Zielportale sind aus dieser Umgebung nicht erreichbar, ich konnte sie nicht live
-  ansehen. `inspect_source.py` (auch per Workflow startbar) gibt den Seitenaufbau aus,
-  daraus sind sie in wenigen Minuten abgeleitet. Ablauf steht in der README.
+  ansehen. Der Umweg über CI ging auch nicht: GitHub startet `workflow_dispatch` und
+  `schedule` nur für Workflow-Dateien auf dem Standardbranch, und `scrape.yml` liegt
+  bisher nur auf dem Feature-Branch. `inspect_source.py` gibt den Seitenaufbau aus,
+  daraus sind die Selektoren in wenigen Minuten abgeleitet — Ablauf steht in der README.
+- **Der tägliche Scrape-Lauf startet erst nach dem Merge nach `main`** — dieselbe
+  GitHub-Einschränkung. Bis dahin bleibt `data/actions.json` leer.
 - **Stabile Id aus Titel + Marke + Einsendeschluss** — bewusst *ohne* URL (Portale
   hängen Tracking-Parameter an) und *ohne* Betrag (wird nachträglich korrigiert), sonst
   bekäme dieselbe Aktion ständig eine neue Id.
