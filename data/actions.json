@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T10:56:44Z",
+  "generated_at": "2026-08-14T10:59:14Z",
   "actions": [
     {
       "id": "9d2656572f72",
@@ -107,11 +107,11 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "b0f5116fc016",
-      "title": "2x Flaschen SACHSEN QUELLE medium+ orange und/oder medium+ lemon 0,75l [gratis testen, Geld zurück!]",
+      "id": "315c3d192f98",
+      "title": "2x Flaschen SACHSEN QUELLE medium+ orange und/oder medium+ lemon 0,75l",
       "brand": null,
       "type": "gratis_testen",
-      "max_refund_cents": 75,
+      "max_refund_cents": null,
       "valid_from": null,
       "valid_to": "2026-10-30",
       "submission_deadline": "2026-10-30",
@@ -122,8 +122,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "24ba3b93aa4e",
-      "title": "Andros Be Nuts! Erdnusscreme [gratis testen, Geld zurück!]",
+      "id": "09a9184a93aa",
+      "title": "Andros Be Nuts! Erdnusscreme",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -137,8 +137,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "2f80b9dd73ff",
-      "title": "BiFi Tasty Bites [gratis testen, Geld zurück!]",
+      "id": "f81657d956e3",
+      "title": "BiFi Tasty Bites",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -152,8 +152,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "6d7b05f7b96e",
-      "title": "Bonduelle Frische Salate [gratis testen, Geld zurück!]",
+      "id": "5485abe75f12",
+      "title": "Bonduelle Frische Salate",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -167,8 +167,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "3a602af0fff9",
-      "title": "Deli Reform Omega-3 [gratis testen, Geld zurück!]",
+      "id": "5f0dd252f20b",
+      "title": "Deli Reform Omega-3",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -182,8 +182,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "ca59e97106dc",
-      "title": "Fazer Aito Haferdrink [gratis testen, Geld zurück!]",
+      "id": "20109d372907",
+      "title": "Fazer Aito Haferdrink",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -214,8 +214,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "100264e5602a",
-      "title": "MinusL Milchsnack [gratis testen, Geld zurück!]",
+      "id": "b47fc132bd92",
+      "title": "MinusL Milchsnack",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -229,8 +229,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "c4400ffd1acb",
-      "title": "Rockstar Original Sugar & Blueberry Acai [gratis testen, Geld zurück!]",
+      "id": "162fcf047430",
+      "title": "Rockstar Original Sugar & Blueberry Acai",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": 149,
@@ -244,8 +244,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "110215783046",
-      "title": "Sensodyne Proschmelz Clincal Zahnschmelz Protect [gratis testen, Geld zurück!]",
+      "id": "242a7cfb981a",
+      "title": "Sensodyne Proschmelz Clincal Zahnschmelz Protect",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -259,8 +259,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "7bd980b5a797",
-      "title": "TENA Produkt deiner Wahl! [gratis testen, Geld zurück!]",
+      "id": "ea2fe2e2f7f1",
+      "title": "TENA Produkt deiner Wahl!",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -276,8 +276,8 @@
       "source": "rabattigel"
     },
     {
-      "id": "23e7f3b0a84d",
-      "title": "Valess Produkt Deiner Wahl gratis probieren [gratis testen, Geld zurück!]",
+      "id": "4245241cfc44",
+      "title": "Valess Produkt Deiner Wahl gratis probieren",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
