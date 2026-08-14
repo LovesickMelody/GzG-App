@@ -21,8 +21,10 @@
 # /rss/gruppe/<name> an. Falls das traegt, waere es die ergiebigste Quelle:
 # grosse Gemeinschaft, jede Aktion mit Link zur Einreichungsseite.
 https://www.mydealz.de/rss/gruppe/geld-zurueck
-https://www.mydealz.de/rss/gruppe/gratis
-https://www.mydealz.de/gruppe/geld-zurueck
+# https://www.mydealz.de/rss/gruppe/gratis
+#   HTTP 404 — diese Gruppe gibt es nicht.
+# https://www.mydealz.de/gruppe/geld-zurueck
+#   Antwortet, aber der RSS-Feed daneben ist der bessere Weg.
 
 # --- Uebernommen nach sources.yaml ---------------------------------------
 # https://geldzurueck.deals/

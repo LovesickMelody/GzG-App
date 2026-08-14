@@ -159,6 +159,93 @@ def art_aus_text(text: str | None, max_refund_cents: int | None = None) -> str:
     return "gratis_testen"
 
 
+# Was man braucht, um bei einer Aktion mitzumachen. Reihenfolge = Reihenfolge
+# der Checkliste in der App, deshalb bewusst als Liste und nicht als Menge.
+#
+# Je Eintrag: (Schluessel, Woerter, die ihn ausloesen). Erkannt wird grob und
+# konservativ — ein fehlender Haken ist aergerlich, ein erfundener schickt
+# jemanden mit dem falschen Foto los.
+_ANFORDERUNGEN: list[tuple[str, tuple[str, ...]]] = [
+    (
+        "produktfoto",
+        (
+            "produkt fotografieren", "produkte fotografieren", "produktfoto",
+            "foto des produkts", "foto vom produkt", "artikel fotografieren",
+            "produkt abfotografieren",
+        ),
+    ),
+    (
+        "bonfoto",
+        (
+            "kassenbon", "kaufbeleg", "kassenzettel", "beleg hochladen",
+            "bon hochladen", "bon fotografieren", "originalbon", "original-kassenbon",
+        ),
+    ),
+    (
+        "zusammen_fotografieren",
+        (
+            "zusammen mit dem kassenbon", "zusammen fotografieren",
+            "alles zusammen", "gemeinsam fotografieren", "zusammen mit dem beleg",
+            "produkt und kassenbon", "produkt mit kassenbon",
+        ),
+    ),
+    (
+        "strichcode",
+        ("strichcode", "barcode", "ean ausschneiden", "ean-code ausschneiden"),
+    ),
+    (
+        "verpackung_aufbewahren",
+        ("verpackung aufbewahren", "verpackung aufheben", "verpackung einsenden"),
+    ),
+    (
+        "app",
+        ("in der app", "über die app", "app hochladen", "scondoo", "marktguru"),
+    ),
+    (
+        "registrierung",
+        ("registrieren", "registrierung", "konto anlegen", "benutzerkonto"),
+    ),
+    (
+        "iban",
+        ("iban", "kontodaten", "bankverbindung", "bankdaten"),
+    ),
+]
+
+
+def anforderungen_aus(text: str | None) -> list[str]:
+    """
+    Liest aus der Beschreibung, was man zum Mitmachen braucht.
+
+    Ergebnis sind Schluessel wie ``produktfoto`` oder ``bonfoto``, aus denen die
+    App die Checkliste "Was brauche ich?" baut. Die Reihenfolge ist fest, damit
+    die Liste in der App nicht bei jedem Lauf springt.
+
+    Bewusst ohne Raten: Steht nichts Erkennbares im Text, kommt eine leere Liste
+    zurueck und die App sagt ehrlich, dass die Bedingungen auf der Aktionsseite
+    stehen. Ein erfundener Haken waere schlimmer als kein Haken — danach steht
+    man mit dem falschen Foto da und die Erstattung faellt aus.
+    """
+    if not text:
+        return []
+
+    inhalt = text.casefold()
+    gefunden = [
+        schluessel
+        for schluessel, woerter in _ANFORDERUNGEN
+        if any(wort in inhalt for wort in woerter)
+    ]
+
+    # "Zusammen fotografieren" heisst zwangslaeufig: beides wird gebraucht.
+    # Portale schreiben das oft nur einmal hin, statt beide Fotos aufzuzaehlen.
+    if "zusammen_fotografieren" in gefunden:
+        for noetig in ("produktfoto", "bonfoto"):
+            if noetig not in gefunden:
+                gefunden.append(noetig)
+        gefunden.sort(key=lambda s: [k for k, _ in _ANFORDERUNGEN].index(s))
+
+    return gefunden
+
+
 def saeubere(text: str | None) -> str | None:
     """Schrumpft Leerraum und macht aus einem leeren Rest ``None``."""
     if text is None:

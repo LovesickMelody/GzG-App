@@ -61,7 +61,7 @@ def ist_feed(content_type: str, text: str) -> bool:
     return text.lstrip()[:200].startswith("<?xml") or "<rss" in text[:400].lower()
 
 
-def zeige_feed(text: str) -> None:
+def zeige_feed(text: str, roh_zeichen: int = 3000) -> None:
     suppe = BeautifulSoup(text, "xml")
     eintraege = suppe.find_all(["item", "entry"])
     print(f"  Feed mit {len(eintraege)} Einträgen")
@@ -72,6 +72,16 @@ def zeige_feed(text: str) -> None:
             f"    - {titel.get_text(strip=True)[:80]!r}"
             + (f"  ({datum.get_text(strip=True)})" if datum else "")
         )
+
+    # Die Titelliste sagt nur, dass der Feed das richtige Thema hat. Ob auch
+    # Einreichungslink und Teilnahmebedingungen drinstehen, sieht man erst am
+    # vollstaendigen Eintrag.
+    if eintraege:
+        roh = eintraege[0].prettify()
+        print(f"\n  Erster Eintrag im Rohbau ({len(roh)} Zeichen):")
+        print(roh[:roh_zeichen])
+        if len(roh) > roh_zeichen:
+            print(f"  ... [{len(roh) - roh_zeichen} Zeichen gekürzt]")
 
 
 def zeige_einschaetzung(text: str) -> None:
