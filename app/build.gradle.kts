@@ -39,6 +39,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        // Startwert fuer den Aktions-Feed. In den Einstellungen ueberschreibbar,
+        // damit der Feed auch aus einem anderen Repo kommen kann.
+        buildConfigField(
+            "String",
+            "ACTIONS_FEED_URL",
+            "\"https://raw.githubusercontent.com/LovesickMelody/GzG-App/main/data/actions.json\"",
+        )
     }
 
     signingConfigs {
@@ -105,11 +113,18 @@ android {
     }
 }
 
+// Room legt das Schema als JSON ab. Damit sind spaetere Migrationen nachvollziehbar
+// und Room kann sie beim Bauen gegenpruefen.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
@@ -138,6 +153,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.androidx.exifinterface)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.serialization)

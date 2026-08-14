@@ -36,8 +36,10 @@ jobs:
       - name: Debug-APK bauen
         run: ./gradlew assembleDebug --stacktrace
 
+      # Nur wenn wirklich etwas schiefging — spart Artifact-Speicher.
       - name: Testberichte hochladen
-        if: always()
+        if: failure()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
@@ -45,15 +47,64 @@ jobs:
             core/build/reports/tests/
             app/build/reports/tests/
           if-no-files-found: ignore
-          retention-days: 14
+          retention-days: 7
 
+      # Weg 1 zur APK: Artifact. Bequem, zaehlt aber gegen das Artifact-Kontingent
+      # des Kontos. Ist es voll, schlaegt nur dieser Schritt fehl.
       - name: Debug-APK hochladen
+        id: apk_artifact
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: gzg-tracker-debug-apk
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 14
+
+      - name: Hinweis bei vollem Artifact-Speicher
+        if: steps.apk_artifact.outcome == 'failure'
+        run: |
+          echo "::warning::Artifact-Upload fehlgeschlagen (meist volles Speicherkontingent)." \
+               "Die APK haengt stattdessen am Prerelease 'debug-latest'."
+
+  # Weg 2 zur APK: ein mitlaufendes Prerelease. Release-Assets zaehlen nicht gegen
+  # das Artifact-Kontingent, die APK ist also auch dann erreichbar, wenn Weg 1 klemmt.
+  debug-release:
+    name: Debug-APK als Prerelease
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Gradle einrichten (mit Cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Debug-APK bauen
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Prerelease aktualisieren
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/*.apk "dist/gzg-tracker-debug.apk"
+          gh release delete debug-latest --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create debug-latest \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Debug-APK (letzter Stand)" \
+            --notes "Automatisch gebaut aus \`$GITHUB_REF_NAME\` ($GITHUB_SHA). Zum Ausprobieren, nicht zum Aufheben." \
+            --prerelease \
+            dist/gzg-tracker-debug.apk
 
   release:
     name: Release-APK veroeffentlichen
