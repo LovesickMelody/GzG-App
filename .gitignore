@@ -1,0 +1,22 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+
+# Signing – niemals ins Repo
+*.jks
+*.keystore
+keystore.properties
+
+# Python (scraper/)
+__pycache__/
+*.pyc
+.venv/
+venv/
