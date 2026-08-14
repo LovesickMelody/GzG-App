@@ -105,14 +105,28 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Portal** — diese Seiten ändern ihr Markup öfter als ihre Struktur. So ist eine kaputte
   Quelle mit einer Zeile YAML repariert, ohne Python und ohne neuen Test. Für Portale
   mit echter Logik gibt es das Parser-Register.
-- **Die Selektoren in `sources.yaml` sind Startwerte, keine geprüften Werte** — die
-  Zielportale sind aus dieser Umgebung nicht erreichbar, ich konnte sie nicht live
-  ansehen. Der Umweg über CI ging auch nicht: GitHub startet `workflow_dispatch` und
-  `schedule` nur für Workflow-Dateien auf dem Standardbranch, und `scrape.yml` liegt
-  bisher nur auf dem Feature-Branch. `inspect_source.py` gibt den Seitenaufbau aus,
-  daraus sind die Selektoren in wenigen Minuten abgeleitet — Ablauf steht in der README.
-- **Der tägliche Scrape-Lauf startet erst nach dem Merge nach `main`** — dieselbe
-  GitHub-Einschränkung. Bis dahin bleibt `data/actions.json` leer.
+- **Beide Portale aus der Aufgabenstellung sind ersetzt worden** — sie antworten nicht
+  mehr: `www.gratis-testen.de` läuft in einen Verbindungs-Timeout,
+  `www.aktion-gratis-testen.de` löst nicht einmal im DNS auf. Geprüft vom GitHub-Runner
+  aus, also mit freiem Netz, nicht nur aus der gesperrten Entwicklungsumgebung.
+  Nachfolger sind `geldzurueck.deals` und `rabattigel.de/cashback` — beide antworten,
+  liefern ihre Aktionen im HTML und haben eine klar benannte Kartenstruktur.
+- **Selektoren werden am Rohbau abgelesen, nicht an Klassennamen geraten** — ob ein
+  Betrag im Text oder in einem Attribut steht und welcher Link zur Aktion führt statt zu
+  einem Anker auf derselben Seite, steht nur im Markup. Dafür gibt es
+  `inspect_source.py --roh`.
+- **Der Umweg über `push` statt `workflow_dispatch`** — GitHub startet
+  `workflow_dispatch` und `schedule` nur für Workflow-Dateien auf dem Standardbranch,
+  `push` dagegen auf jedem Branch. Nur so kam vor dem Merge überhaupt ein Lauf an die
+  echten Seiten.
+- **Der tägliche Scrape-Lauf startet trotzdem erst nach dem Merge nach `main`** —
+  dieselbe Einschränkung gilt für `schedule`.
+- **Ein Feed-Parser für RSS und Atom neben dem CSS-Parser** — ein Feed ist eine Zusage
+  des Betreibers, maschinenlesbar zu bleiben, überlebt jede Seitenumgestaltung und
+  kostet weniger Last. Bei den geprüften Portalen taugte keiner: `geldzurueck.deals`
+  antwortet mit 404, die WordPress-Seiten liefern unter `/feed/` die *Kommentare* statt
+  der Aktionen. Der Parser bleibt trotzdem im Register, damit die nächste Quelle mit
+  echtem Feed ohne Code auskommt.
 - **Stabile Id aus Titel + Marke + Einsendeschluss** — bewusst *ohne* URL (Portale
   hängen Tracking-Parameter an) und *ohne* Betrag (wird nachträglich korrigiert), sonst
   bekäme dieselbe Aktion ständig eine neue Id.
