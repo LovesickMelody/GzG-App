@@ -1,17 +1,20 @@
 name: Portale ansehen
 
-# Vorübergehender Hilfs-Workflow, um die echten Selektoren zu ermitteln.
+# Vorübergehender Hilfs-Workflow, um echte, erreichbare Quellen zu finden und
+# daraus Selektoren abzuleiten.
 #
 # Warum nicht scrape.yml: GitHub startet `workflow_dispatch` und `schedule` nur für
 # Workflow-Dateien auf dem Standardbranch. `push` dagegen greift auf jedem Branch —
 # darüber kommt der Job an die Portale, solange der Feature-Branch noch offen ist.
 #
-# Verschwindet wieder, sobald die Selektoren in sources.yaml stehen.
+# Verschwindet wieder, sobald die Quellen in sources.yaml stehen.
 
 on:
   push:
     paths:
       - "scraper/sources.yaml"
+      - "scraper/kandidaten.txt"
+      - "scraper/probe_kandidaten.py"
       - "scraper/inspect_source.py"
       - ".github/workflows/inspect.yml"
   workflow_dispatch:
@@ -21,9 +24,9 @@ permissions:
 
 jobs:
   ansehen:
-    name: Seitenaufbau ausgeben
+    name: Kandidaten abklopfen
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -34,34 +37,24 @@ jobs:
       - name: Abhängigkeiten
         run: pip install -r scraper/requirements.txt
 
-      - name: Erreichbarkeit und robots.txt
-        working-directory: scraper
+      - name: Kandidaten abklopfen
+        continue-on-error: true
+        run: python scraper/probe_kandidaten.py
+
+      - name: Konfigurierte Quellen prüfen
         continue-on-error: true
         run: |
           python - <<'PY'
-          import urllib.robotparser, requests
-          from gzg_scraper.fetch import USER_AGENT
-          from gzg_scraper.run import lade_quellen
+          import subprocess, sys, yaml
           from pathlib import Path
 
-          for quelle in lade_quellen(Path("sources.yaml")):
-              print(f"\n=== {quelle['name']} ===")
-              for adresse in quelle.get("listing_urls", []):
-                  try:
-                      antwort = requests.get(
-                          adresse, headers={"User-Agent": USER_AGENT}, timeout=20
-                      )
-                      print(f"  {adresse} -> HTTP {antwort.status_code}, "
-                            f"{len(antwort.text)} Zeichen, "
-                            f"Content-Type {antwort.headers.get('content-type')}")
-                  except Exception as fehler:
-                      print(f"  {adresse} -> nicht erreichbar: {fehler}")
+          quellen = yaml.safe_load(Path("scraper/sources.yaml").read_text())["sources"]
+          for quelle in quellen:
+              if not quelle.get("enabled"):
+                  continue
+              print(f"\n\n########## {quelle['name']} ##########")
+              subprocess.run(
+                  [sys.executable, "scraper/inspect_source.py", "--source", quelle["name"]],
+                  check=False,
+              )
           PY
-
-      - name: gratis-testen
-        continue-on-error: true
-        run: python scraper/inspect_source.py --source gratis-testen
-
-      - name: aktion-gratis-testen
-        continue-on-error: true
-        run: python scraper/inspect_source.py --source aktion-gratis-testen

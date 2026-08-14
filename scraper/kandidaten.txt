@@ -1,0 +1,32 @@
+# Kandidaten fuer den Aktions-Feed — eine Adresse je Zeile.
+#
+# Diese Liste ist kein Teil des Scrapers. Sie dient nur dazu, mit
+# `probe_kandidaten.py` herauszufinden, welche Portale ueberhaupt antworten und
+# wie ihre Uebersichtsseiten aufgebaut sind. Was sich bewaehrt, wandert danach
+# nach sources.yaml; der Rest bleibt hier als Notiz stehen, warum es ausfiel.
+#
+# Jede Adresse wird genau einmal je Lauf abgerufen, mit Pause zwischen zwei
+# Abrufen desselben Hosts. Die Liste bitte kurz halten.
+
+# --- Aus der urspruenglichen Aufgabenstellung (beide tot, siehe DECISIONS.md) ---
+https://www.gratis-testen.de/
+https://gratis-testen.de/
+https://aktion-gratis-testen.de/
+
+# --- Spezialisierte Portale fuer Geld-zurueck-Aktionen ---
+https://geldzurueck.deals/
+https://www.dealdoktor.de/gratis-testen/
+https://www.mein-deal.com/cashback-aktionen/
+https://www.einfach-sparsam.de/gratis-testen
+https://rabattigel.de/cashback/
+https://www.gratisalarm.de/gratis/geld-zurueck/
+https://schnaeppchenfuchs.com/angebote/cashback-geld-zurueck-aktionen
+https://www.sparwelt.de/gratis/cashback
+https://sparzwerge.de/geld-zurueck-aktionen-fuer-kinder/
+https://spaaaren.de/geld-zurueck-aktion-cash-back/
+
+# --- Moegliche RSS-Feeds (waeren stabiler als CSS-Selektoren) ---
+https://geldzurueck.deals/feed/
+https://www.dealdoktor.de/gratis-testen/feed/
+https://www.mein-deal.com/cashback-aktionen/feed/
+https://rabattigel.de/cashback/feed/
