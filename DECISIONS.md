@@ -83,9 +83,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 ## Aktions-Feed
 
 - **Feed-URL in den Einstellungen änderbar** — Startwert zeigt auf `main` dieses Repos.
-  **Achtung:** `raw.githubusercontent.com` liefert aus *privaten* Repos nichts ohne
-  Zugangsdaten. Solange das Repo privat ist, kann die App den Feed nicht laden; siehe
-  README. Aktionen von Hand anlegen geht davon unabhängig.
+- **Das Repository wird öffentlich gestellt (deine Entscheidung)** — anders kommt die
+  App nicht an `actions.json`: `raw.githubusercontent.com` liefert aus privaten Repos
+  nichts ohne Zugangsdaten, und ein Token in der APK wäre für jeden auslesbar.
+  Öffentlich werden Code, Aktionsdaten und Commit-Adressen; Einreichungen, Bonfotos und
+  Konten liegen ausschließlich auf dem Gerät und sind nie im Repo.
+- **Das Bauen der APK ist davon unberührt** — Build, Tests, Artifacts und Releases
+  funktionieren in privaten Repos genauso. Betroffen war nur der Laufzeit-Abruf des
+  Feeds durch die App.
 - **Ein leerer Feed löscht nichts** — sonst würde ein kaputter Scraper-Lauf die gesamte
   Aktionsliste auf dem Gerät ausradieren.
 - **Aufgeräumt wird pro Quelle** — fällt ein Portal aus, verschwinden nur dessen

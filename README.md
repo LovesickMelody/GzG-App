@@ -150,17 +150,27 @@ Das Scraping läuft **nicht in der App**, sondern als GitHub-Actions-Job. Ergebn
 `data/actions.json` im Repo. Die App lädt diese Datei per HTTPS, legt sie in Room ab und
 funktioniert danach offline mit dem letzten Stand. Pull-to-Refresh holt neu.
 
-### Wichtig bei privatem Repository
+### Das Repository muss öffentlich sein
 
 `raw.githubusercontent.com` liefert Dateien aus **privaten** Repositorys nicht ohne
-Zugangsdaten aus. Solange dieses Repository privat ist, meldet die App beim
-Aktualisieren „Kein Zugriff auf den Feed“. Zwei Möglichkeiten:
+Zugangsdaten aus — und ein Zugangstoken hätte in einer APK nichts zu suchen, jeder
+könnte ihn dort auslesen. Ist das Repository privat, meldet die App beim Aktualisieren
+deshalb „Kein Zugriff auf den Feed“.
 
-- Repository auf **öffentlich** stellen (`actions.json` enthält nur öffentliche
-  Aktionsdaten, keine persönlichen), **oder**
-- unter *Einstellungen → Feed-URL* eine andere, frei erreichbare Adresse eintragen.
+Umstellen unter *Settings → General → ganz unten „Danger Zone“ → Change repository
+visibility → Make public*. Was dabei öffentlich wird: der App-Code, die gesammelten
+Aktionsdaten und die Git-Historie samt der Commit-Adressen. Was **nicht** im
+Repository liegt und daher auch nicht öffentlich wird: deine Einreichungen, Bonfotos
+und Konten — die bleiben ausschließlich auf dem Gerät.
 
-Aktionen von Hand anlegen geht unabhängig davon immer.
+Nebeneffekt: Öffentliche Repositorys haben unbegrenzte Actions-Minuten und ein
+großzügigeres Artifact-Kontingent.
+
+Wenn das Repository doch privat bleiben soll, gibt es zwei Wege:
+
+- unter *Einstellungen → Feed-URL* eine frei erreichbare Adresse eintragen (etwa einen
+  öffentlichen Gist, den der Scrape-Workflow mitpflegt), **oder**
+- ohne Feed arbeiten und Aktionen von Hand anlegen — das geht ohnehin jederzeit.
 
 ### Erst nach dem Merge nach `main` aktiv
 
