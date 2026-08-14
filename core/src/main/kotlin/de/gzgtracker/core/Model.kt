@@ -72,12 +72,29 @@ data class PromoAction(
     val validTo: LocalDate? = null,
     val submissionDeadline: LocalDate? = null,
     val url: String? = null,
+    /**
+     * Wo man tatsaechlich einreicht — meist eine andere Adresse als [url].
+     * [url] zeigt auf den Artikel im Portal, hier steht das Formular des
+     * Anbieters. Die App verlinkt bevorzugt hierhin und faellt auf [url] zurueck.
+     */
+    val submitUrl: String? = null,
+    /**
+     * Was man zum Mitmachen braucht, als Schluessel aus dem Feed. Leer heisst
+     * "nicht bekannt", nicht "nichts noetig" — die App sagt das auch so.
+     */
+    val requirements: List<String> = emptyList(),
     val retailers: List<String> = emptyList(),
     val eans: List<String> = emptyList(),
     val imageUrl: String? = null,
     val source: String = "manuell",
     val isManual: Boolean = false,
-)
+) {
+    /** Die Adresse, die "Zur Einreichung" oeffnet. */
+    val besteAdresse: String? get() = submitUrl ?: url
+
+    /** True, wenn [besteAdresse] direkt zum Formular fuehrt und nicht nur zum Portal. */
+    val fuehrtDirektZumFormular: Boolean get() = submitUrl != null
+}
 
 /** Ein gekauftes Produkt und der Stand seiner Erstattung. */
 data class Submission(

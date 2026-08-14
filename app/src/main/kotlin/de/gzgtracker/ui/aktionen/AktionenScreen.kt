@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoAction
+import de.gzgtracker.ui.components.TeilnahmeKurz
 import de.gzgtracker.ui.format.deutsch
 import de.gzgtracker.ui.format.relativeAngabe
 import de.gzgtracker.ui.theme.MoneyTextStyle
@@ -138,7 +139,7 @@ fun AktionenScreen(
                                 aktion = aktion,
                                 onErfassen = { onAktionErfassen(aktion.id) },
                                 onBearbeiten = { onAktionBearbeiten(aktion.id) },
-                                onOeffnen = { aktion.url?.let(uriHandler::openUri) },
+                                onOeffnen = { aktion.besteAdresse?.let(uriHandler::openUri) },
                             )
                             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                         }
@@ -211,13 +212,22 @@ private fun AktionZeile(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+
+            TeilnahmeKurz(aktion.requirements)
         }
 
-        if (aktion.url != null) {
+        if (aktion.besteAdresse != null) {
             IconButton(onClick = onOeffnen) {
                 Icon(
                     Icons.Outlined.OpenInNew,
-                    contentDescription = "Aktionsseite öffnen",
+                    // Der Unterschied zählt: Bei der einen Quelle landet man
+                    // direkt im Formular, bei der anderen erst auf der
+                    // Portalseite. Wer das vorher weiß, klickt richtig.
+                    contentDescription = if (aktion.fuehrtDirektZumFormular) {
+                        "Zur Einreichung"
+                    } else {
+                        "Aktionsseite öffnen"
+                    },
                 )
             }
         }

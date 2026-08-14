@@ -29,11 +29,23 @@ data class PromoActionDto(
     @SerialName("valid_to") val validTo: String? = null,
     @SerialName("submission_deadline") val submissionDeadline: String? = null,
     val url: String? = null,
+    @SerialName("submit_url") val submitUrl: String? = null,
+    val requirements: List<String> = emptyList(),
     val retailers: List<String> = emptyList(),
     val eans: List<String> = emptyList(),
     @SerialName("image_url") val imageUrl: String? = null,
     val source: String? = null,
 )
+
+/**
+ * Laesst nur echte Web-Adressen durch.
+ *
+ * Die Adressen kommen aus fremden Portalen. Ein `javascript:`- oder
+ * `intent:`-Link daraus wuerde beim Antippen im Browser oder in einer anderen
+ * App landen — das gehoert gar nicht erst in die Datenbank.
+ */
+private fun webAdresse(raw: String?): String? =
+    raw?.trim()?.takeIf { it.startsWith("https://") || it.startsWith("http://") }
 
 /** Kaputte Datumsangaben werden verworfen, nicht geworfen. */
 private fun datum(raw: String?): LocalDate? =
@@ -48,7 +60,9 @@ fun PromoActionDto.toEntity(gesehenAm: Instant) = PromoActionEntity(
     validFrom = datum(validFrom),
     validTo = datum(validTo),
     submissionDeadline = datum(submissionDeadline),
-    url = url?.takeIf { it.isNotBlank() },
+    url = webAdresse(url),
+    submitUrl = webAdresse(submitUrl),
+    requirements = requirements.map { it.trim() }.filter { it.isNotBlank() },
     retailers = retailers.map { it.trim() }.filter { it.isNotBlank() },
     // Nur plausible EANs uebernehmen — EAN-8 und EAN-13, reine Ziffern.
     eans = eans.map { it.trim() }.filter { (it.length == 8 || it.length == 13) && it.all(Char::isDigit) },

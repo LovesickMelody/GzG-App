@@ -64,6 +64,7 @@ import de.gzgtracker.ui.components.DatumFeld
 import de.gzgtracker.ui.components.label
 import de.gzgtracker.ui.konten.FarbPunkt
 import de.gzgtracker.ui.theme.MoneyTextStyle
+import de.gzgtracker.ui.components.Teilnahmeliste
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -156,26 +157,32 @@ fun ErfassenScreen(
             }
 
             zustand.gewaehlteAktion?.let { aktion ->
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    aktion.maxRefundCents?.let { max ->
-                        Text(
-                            text = "Erstattung bis ${Money.format(max)}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                aktion.maxRefundCents?.let { max ->
+                    Text(
+                        text = "Erstattung bis ${Money.format(max)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                // Hier steht man kurz vor dem Einkauf oder direkt danach — der
+                // richtige Moment fuer "was muss ich fotografieren?".
+                Teilnahmeliste(aktion.requirements)
+
+                aktion.besteAdresse?.let { adresse ->
+                    TextButton(onClick = { uriHandler.openUri(adresse) }) {
+                        Icon(
+                            Icons.Outlined.OpenInNew,
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
                         )
-                    }
-                    if (aktion.url != null) {
-                        TextButton(onClick = { uriHandler.openUri(aktion.url!!) }) {
-                            Icon(
-                                Icons.Outlined.OpenInNew,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                            )
-                            Text(" Aktionsseite öffnen")
-                        }
+                        Text(
+                            if (aktion.fuehrtDirektZumFormular) {
+                                " Zur Einreichung"
+                            } else {
+                                " Aktionsseite öffnen"
+                            },
+                        )
                     }
                 }
             }

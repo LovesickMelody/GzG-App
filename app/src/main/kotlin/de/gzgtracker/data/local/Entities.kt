@@ -38,6 +38,8 @@ data class PromoActionEntity(
     val validTo: LocalDate?,
     val submissionDeadline: LocalDate?,
     val url: String?,
+    val submitUrl: String?,
+    val requirements: List<String>,
     val retailers: List<String>,
     val eans: List<String>,
     val imageUrl: String?,
