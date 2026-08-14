@@ -36,10 +36,11 @@ sources:
   # vollstaendiger als jede redaktionelle Seite.
   #
   # Der Feed liefert die Marke sauber als eigenes Element mit (pepper:merchant),
-  # dazu Zeitraum und Bild. Was er nicht liefert, ist der Einreichungslink: Die
-  # Detailseite baut ihre Links per JavaScript, ein Nachladen braechte also
-  # nichts. Deshalb fuehrt "Aktion oeffnen" hier auf die mydealz-Seite, von der
-  # aus es einen Klick weiter geht.
+  # dazu Zeitraum und Bild. Einen Link zum Anbieter enthaelt er nicht, und die
+  # Detailseite baut ihre Links per JavaScript — nachladen braechte nichts.
+  # Dafuer hat mydealz eine eigene Weiterleitung: /visit/threadmain/<id> landet
+  # direkt auf der Aktionsseite des Herstellers. Die Kennnummer steht hinten in
+  # jeder Deal-Adresse.
   - name: mydealz
     enabled: true
     base_url: https://www.mydealz.de/
@@ -49,6 +50,9 @@ sources:
     # Titel tragen fast immer eine Kennzeichnung vorneweg: "[GzG]", "GZG -",
     # "(personalisiert)". Die steht schon in anderen Feldern.
     titel_entfernen: '^(?:\s*(?:\[[^\]]*\]|\([^)]*\)|GZG\s*[-–]))+\s*'
+    submit_url_aus_link:
+      muster: '-(\d+)/?$'
+      vorlage: 'https://www.mydealz.de/visit/threadmain/{}'
     ausschluss:
       - gewinnspiel
       - verlosung

@@ -21,6 +21,7 @@ Zusaetzliche Felder in ``sources.yaml``:
 from __future__ import annotations
 
 import logging
+import re
 
 from bs4 import BeautifulSoup
 
@@ -118,6 +119,32 @@ def _sortiere_anbieter(
     return anbieter, []
 
 
+def _einreichungslink(link: str | None, regel: dict | None) -> str | None:
+    """
+    Baut die Einreichungsadresse aus der Adresse des Eintrags.
+
+    Manche Portale halten keinen Link zum Anbieter im Feed, haben dafuer aber
+    eine eigene Weiterleitung: mydealz fuehrt ueber ``/visit/threadmain/<id>``
+    direkt auf die Aktionsseite. Die Kennnummer steht hinten in der Deal-Adresse.
+
+    Bewusst die Weiterleitung selbst statt ihres Ziels: Sie einmal aufzuloesen
+    hiesse ein zusaetzlicher Abruf je Aktion, und die Weiterleitung ist der Weg,
+    ueber den das Portal seine Vermittlung zaehlt. Wer die Aktion ueber mydealz
+    findet, soll mydealz auch nicht die Anrechnung wegnehmen. Zu sehen bekommt
+    man davon nichts — der Browser springt durch.
+    """
+    if not link or not regel:
+        return None
+    muster = regel.get("muster")
+    vorlage = regel.get("vorlage")
+    if not muster or not vorlage:
+        return None
+    treffer = re.search(muster, link)
+    if not treffer:
+        return None
+    return vorlage.format(*treffer.groups())
+
+
 def _marke(titel: str, trenner: str | None) -> str | None:
     """
     Schneidet den Markennamen vom Titel ab.
@@ -173,6 +200,7 @@ def parse(xml: str, quelle: dict) -> list[Action]:
         if bis is None:
             von, bis = datum_bereich(titel)
 
+        adresse = _link(eintrag)
         bekannte = quelle.get("retailers", BEKANNTE_HAENDLER)
         marke, aus_anbieter = _sortiere_anbieter(_anbieter_aus_element(eintrag), bekannte)
 
@@ -186,7 +214,8 @@ def parse(xml: str, quelle: dict) -> list[Action]:
                 valid_from=von,
                 valid_to=bis,
                 submission_deadline=bis,
-                url=_link(eintrag),
+                url=adresse,
+                submit_url=_einreichungslink(adresse, quelle.get("submit_url_aus_link")),
                 requirements=anforderungen_aus(volltext),
                 retailers=haendler_aus(volltext, bekannte) + aus_anbieter,
                 eans=eans_aus(volltext),
