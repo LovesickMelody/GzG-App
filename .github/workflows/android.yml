@@ -106,17 +106,14 @@ jobs:
           disable-animations: true
           emulator-options: >-
             -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          # ACHTUNG: Der Emulator-Runner führt jede Zeile einzeln über `sh -c` aus.
+          # Eine mit `\` umgebrochene Zeile kommt deshalb halbiert an — Gradle sah
+          # zuletzt einen Task namens `\`. Jeder Befehl gehört auf **eine** Zeile.
           script: |
-            # Blockierender Teil: Startet die App wirklich, trägt Room, Hilt und
-            # DataStore, funktioniert die Navigation? Wird das rot, ist die App kaputt.
-            ./gradlew connectedDebugAndroidTest \
-              -Pandroid.testInstrumentationRunnerArguments.notAnnotation=de.gzgtracker.Beobachtung
-
-            # Berichtender Teil: Pixelgenaue Fragen, die im kopflosen Emulator nicht
-            # verlässlich sind. Sie erscheinen als Warnung und halten die APK nicht auf.
-            ./gradlew connectedDebugAndroidTest \
-              -Pandroid.testInstrumentationRunnerArguments.annotation=de.gzgtracker.Beobachtung \
-              || echo "::warning::Beobachtungs-Prüfung fehlgeschlagen — Scan-Knopf am Gerät nachsehen."
+            # Blockierender Teil: Startet die App wirklich, trägt Room, Hilt und DataStore, funktioniert die Navigation? Wird das rot, ist die App kaputt.
+            ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.notAnnotation=de.gzgtracker.Beobachtung
+            # Berichtender Teil: Pixelgenaue Fragen, die im kopflosen Emulator nicht verlässlich sind. Sie erscheinen als Warnung und halten die APK nicht auf.
+            ./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.annotation=de.gzgtracker.Beobachtung || echo "::warning::Beobachtungs-Prüfung fehlgeschlagen — Scan-Knopf am Gerät nachsehen."
 
       - name: Testberichte hochladen
         if: failure()
