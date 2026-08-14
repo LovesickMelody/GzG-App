@@ -6,7 +6,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +51,17 @@ class AppSmokeTest {
 
     @Test
     fun zeigtDenScanKnopf() {
-        app.onNodeWithText("Produkt scannen").assertIsDisplayed()
+        // Bei "nicht sichtbar" sagt die nackte Meldung nicht, wo das Element liegt.
+        // Der Baum mit Koordinaten macht daraus eine brauchbare Diagnose.
+        try {
+            app.onNodeWithText("Produkt scannen").assertIsDisplayed()
+        } catch (fehler: AssertionError) {
+            throw AssertionError(
+                "Der Scan-Knopf ist nicht sichtbar. UI-Baum mit Koordinaten:\n" +
+                    app.onRoot().printToString(maxDepth = 100),
+                fehler,
+            )
+        }
     }
 
     @Test
