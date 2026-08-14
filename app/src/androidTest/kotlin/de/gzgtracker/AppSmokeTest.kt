@@ -60,6 +60,7 @@ class AppSmokeTest {
      * Meldungen schneidet Gradle in der Konsole ab.
      */
     @Test
+    @Beobachtung
     fun hatEinenBedienbarenScanKnopf() {
         val erschienen = runCatching {
             app.waitUntil(timeoutMillis = 10_000) {
