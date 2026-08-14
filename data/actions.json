@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T11:37:18Z",
+  "generated_at": "2026-08-14T11:40:06Z",
   "actions": [
     {
       "id": "9d2656572f72",
@@ -78,9 +78,9 @@
       "source": "mydealz"
     },
     {
-      "id": "b0632f5a1a74",
+      "id": "a1d1aee4440c",
       "title": "100% Cashback GZG - Oyess Honey & Vanilla • MARKTGURU • DM",
-      "brand": "marktguru",
+      "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": 295,
       "valid_from": null,
@@ -99,9 +99,9 @@
       "source": "mydealz"
     },
     {
-      "id": "298e1a6bb7e3",
+      "id": "f4c5d90a58a6",
       "title": "100% Cashback auf Borotalco Deo",
-      "brand": "dm",
+      "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
@@ -115,26 +115,6 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/jpe9Q/2817904_1/re/150x150/qt/55/2817904_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "a495d9fb9b02",
-      "title": "100% Cashback auf PET Einweg Einzelflaschen oder 2€ auf ein PET Einweg Multipack der zuckerfreien Sorten über Marktguru",
-      "brand": "marktguru",
-      "type": "gratis_testen",
-      "max_refund_cents": 200,
-      "valid_from": null,
-      "valid_to": "2026-07-29",
-      "submission_deadline": "2026-07-29",
-      "url": "https://www.mydealz.de/deals/100-cashback-auf-pet-einweg-einzelflaschen-oder-2eur-auf-ein-pet-einweg-multipack-der-zuckerfreien-sorten-uber-marktguru-2822162",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto",
-        "app"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/RrZAF/2822162_1/re/150x150/qt/55/2822162_1.jpg",
       "source": "mydealz"
     },
     {
@@ -194,9 +174,9 @@
       "source": "mydealz"
     },
     {
-      "id": "5701b6193a1e",
+      "id": "388fb64349a3",
       "title": "Bonduelle Salat Gratis Testen via scondoo",
-      "brand": "scondoo",
+      "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": "2026-08-10",
@@ -213,50 +193,6 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/OWElM/2822886_1/re/150x150/qt/55/2822886_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "37419e2e3855",
-      "title": "Coca-Cola Zuckerfrei probieren – bis zu 2 Einzelflaschen/dosen gratis oder 2€ für Multipacks",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 200,
-      "valid_from": "2026-06-29",
-      "valid_to": "2026-08-09",
-      "submission_deadline": "2026-08-09",
-      "url": "https://www.mydealz.de/deals/ankundigung-coca-cola-zuckerfrei-probieren-geld-zuruck-aktion-2794303",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto",
-        "app",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/qEj1L/2794303_1/re/150x150/qt/55/2794303_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "3f27eaa0e0ea",
-      "title": "Dove oder Rexona Whole Body Deo Gratis Testen ab 27.07.",
-      "brand": "ROSSMANN",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-07-27",
-      "valid_to": "2026-08-09",
-      "submission_deadline": "2026-08-09",
-      "url": "https://www.mydealz.de/deals/gzg-bei-rossmann-dove-oder-rexona-whole-body-deo-gratis-testen-ab-2707-2814241",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Rossmann",
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/fQuhJ/2814241_1/re/150x150/qt/55/2814241_1.jpg",
       "source": "mydealz"
     },
     {
@@ -280,9 +216,9 @@
       "source": "mydealz"
     },
     {
-      "id": "10c1e56b5177",
+      "id": "45cf5ca9f17b",
       "title": "Fazer Aito Haferdrink gratis testen nur bei REWE scondoo, personalisiert",
-      "brand": "scondoo",
+      "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
@@ -317,31 +253,6 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/9pOhE/2821392_1/re/150x150/qt/55/2821392_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "dcd9ed15bb9b",
-      "title": "Gratis Testen Axe Deospray Geld zurück Deo ohne Alu bei dm budni Rossmann Müller GZG",
-      "brand": "ROSSMANN",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-07-16",
-      "valid_to": "2026-07-29",
-      "submission_deadline": "2026-07-29",
-      "url": "https://www.mydealz.de/deals/gzg-gratis-testen-axe-deospray-geld-zuruck-deo-ohne-alu-bei-dm-budni-rossmann-muller-gzg-2809021",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Budni",
-        "Müller",
-        "Rossmann",
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/MA9Xm/2809021_1/re/150x150/qt/55/2809021_1.jpg",
       "source": "mydealz"
     },
     {
@@ -397,27 +308,6 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1JBZd/2818983_1/re/150x150/qt/55/2818983_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "6846297ff7b2",
-      "title": "Purya bei DM kaufen - Gutschein über Vollbetrag für Onlineshop erhalten",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 2150,
-      "valid_from": "2026-07-01",
-      "valid_to": "2026-07-31",
-      "submission_deadline": "2026-07-31",
-      "url": "https://www.mydealz.de/deals/purya-bei-dm-kaufen-gutschein-uber-vollbetrag-fur-onlineshop-erhalten-2807578",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/5uwfU/2807578_1/re/150x150/qt/55/2807578_1.jpg",
       "source": "mydealz"
     },
     {
@@ -477,9 +367,9 @@
       "source": "mydealz"
     },
     {
-      "id": "66e928fdfacc",
+      "id": "1ccdaaba1184",
       "title": "TENA Gratis Testen",
-      "brand": "Lidl",
+      "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": "2026-07-20",
@@ -497,46 +387,6 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/VG2cr/2813750_1/re/150x150/qt/55/2813750_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "80a654f2ae4f",
-      "title": "Wasa Crunchy Bites gratis testen – bis zu 2,19 € Cashback",
-      "brand": "Wasa",
-      "type": "gratis_testen",
-      "max_refund_cents": 219,
-      "valid_from": "2026-04-13",
-      "valid_to": "2026-07-31",
-      "submission_deadline": "2026-07-31",
-      "url": "https://www.mydealz.de/deals/wasa-crunchy-bites-gratis-testen-bis-zu-219-eur-cashback-2814546",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/7o59c/2814546_1/re/150x150/qt/55/2814546_1.jpg",
-      "source": "mydealz"
-    },
-    {
-      "id": "a5d76e01bf91",
-      "title": "Zuckerfrei probieren - 100% Cashback auf eine Einweg Einzelpackung (Flasche/Dose) oder 2 € auf ein Multipack",
-      "brand": "marktguru",
-      "type": "gratis_testen",
-      "max_refund_cents": 200,
-      "valid_from": null,
-      "valid_to": "2026-07-29",
-      "submission_deadline": "2026-07-29",
-      "url": "https://www.mydealz.de/deals/gzg-marktguru-zuckerfrei-probieren-2817734",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto",
-        "app"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/VF7oU/2817734_1/re/150x150/qt/55/2817734_1.jpg",
       "source": "mydealz"
     },
     {
