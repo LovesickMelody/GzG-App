@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Nachgebauter Portal-Feed. Enthaelt absichtlich die Faelle, die in echten
+  Feeds Aerger machen: eingepacktes HTML in der Beschreibung, ein Eintrag ohne
+  Geldbetrag, ein Gewinnspiel zum Aussortieren und ein Eintrag ohne Titel.
+-->
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Beispielportal — Geld zurück</title>
+    <link>https://www.beispiel.de/</link>
+
+    <item>
+      <title>Valess: 100 % Geld zurück beim Kauf</title>
+      <link>https://www.beispiel.de/aktion/valess</link>
+      <pubDate>Mon, 03 Aug 2026 08:00:00 +0200</pubDate>
+      <description>&lt;p&gt;Produkt bei Rewe oder Edeka kaufen und bis zu &lt;b&gt;3,99 €&lt;/b&gt;
+        zurückerhalten. Kaufbeleg bis zum 30.09.2026 einreichen. EAN 4005900123459.&lt;/p&gt;</description>
+      <media:content url="https://www.beispiel.de/bilder/valess.jpg"/>
+    </item>
+
+    <item>
+      <title>Wasa Crunchy Bites gratis testen</title>
+      <link>https://www.beispiel.de/aktion/wasa</link>
+      <description>Kaufpreis erstattet, Einsendeschluss 15. Dezember 2026 bei dm und Rossmann.</description>
+    </item>
+
+    <item>
+      <title>Ben's Original: 2 Euro Cashback als Teilbetrag</title>
+      <link>https://www.beispiel.de/aktion/bens</link>
+      <description>Beim Kauf von drei Packungen gibt es einen Teilbetrag zurück.</description>
+    </item>
+
+    <item>
+      <title>Großes Gewinnspiel: Wochenende gewinnen</title>
+      <link>https://www.beispiel.de/gewinnspiel</link>
+      <description>Kein Geld zurück, sondern eine Verlosung.</description>
+    </item>
+
+    <item>
+      <link>https://www.beispiel.de/ohne-titel</link>
+      <description>Geld zurück, aber ohne Titel — unbrauchbar.</description>
+    </item>
+  </channel>
+</rss>
