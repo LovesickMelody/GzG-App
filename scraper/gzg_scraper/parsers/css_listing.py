@@ -11,6 +11,7 @@ Logik, kommt daneben ein eigener Parser ins Register.
 from __future__ import annotations
 
 import logging
+import re
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
@@ -57,6 +58,21 @@ def _text(knoten, selektor: str | None) -> str | None:
     return saeubere(treffer.get_text(" ", strip=True))
 
 
+def _kuerze_titel(titel: str, muster: str | None) -> str:
+    """
+    Entfernt einen wiederkehrenden Zusatz aus dem Titel.
+
+    Manche Portale haengen an jeden Titel dieselbe Kennzeichnung — etwa
+    "[gratis testen, Geld zurueck!]". In der App steht das dann neunzehnmal
+    untereinander und verdeckt den Produktnamen. Bleibt nach dem Kuerzen nichts
+    uebrig, gilt der urspruengliche Titel: lieber laut als leer.
+    """
+    if not muster:
+        return titel
+    gekuerzt = saeubere(re.sub(muster, " ", titel))
+    return gekuerzt or titel
+
+
 def parse(html: str, quelle: dict) -> list[Action]:
     """Zerlegt eine Uebersichtsseite anhand der Selektoren aus ``sources.yaml``."""
     suppe = BeautifulSoup(html, "lxml")
@@ -78,6 +94,7 @@ def parse(html: str, quelle: dict) -> list[Action]:
         titel = _text(eintrag, selektoren.get("title"))
         if not titel:
             continue
+        titel = _kuerze_titel(titel, quelle.get("titel_entfernen"))
 
         volltext = eintrag.get_text(" ", strip=True)
 

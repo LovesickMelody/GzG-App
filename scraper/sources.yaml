@@ -52,6 +52,9 @@ sources:
     listing_urls:
       - https://rabattigel.de/cashback/
     parser: css_listing
+    # Jeder Titel endet auf "[gratis testen, Geld zurück!]" oder aehnlich. Die
+    # Angabe steht schon im Feld "type"; im Titel verdeckt sie nur das Produkt.
+    titel_entfernen: '\s*\[[^\]]*\]\s*$'
     selectors:
       item: "article.rgu-card"
       title: "h3.rgu-card-title"

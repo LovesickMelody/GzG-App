@@ -21,12 +21,17 @@ MONATE = {
 }
 
 _BETRAG = re.compile(r"(\d{1,3}(?:[.\s]\d{3})*|\d+)(?:[,.](\d{1,2}))?\s*(?:€|EUR|Euro)", re.I)
-# Ohne Waehrungszeichen ist die Erkennung heikel: "30.08.2026" saehe sonst aus
-# wie 30,08 € und "1.450" wie 1,45 €. Die beiden Absicherungen verlangen, dass
-# links und rechts der Zahl nichts steht, was sie zum Teil eines Datums oder
-# einer laengeren Zahl macht.
+# Ohne Waehrungszeichen ist die Erkennung heikel. Drei Faelle aus den echten
+# Portalseiten, die alle wie ein Betrag aussehen und keiner sind:
+#   "30.08.2026"          -> waere 30,08 €   (Datum)
+#   "1.450 Einlösungen"   -> waere 1,45 €    (laengere Zahl)
+#   "medium+ lemon 0,75l" -> waere 0,75 €    (Fuellmenge)
+# Deshalb: links und rechts keine weitere Ziffer, und rechts keine Einheit.
+_EINHEITEN = r"l|ml|cl|dl|g|mg|kg|m|mm|cm|km|St|Stk|Stück|kWh|x|%"
 _BETRAG_OHNE_WAEHRUNG = re.compile(
-    r"(?<![\d.,])(\d{1,3}(?:[.\s]\d{3})*|\d+)[,.](\d{2})(?![\d.,])"
+    r"(?<![\d.,])(\d{1,3}(?:[.\s]\d{3})*|\d+)[,.](\d{2})"
+    rf"(?![\d.,])(?!\s*(?:{_EINHEITEN})\b)",
+    re.I,
 )
 _EAN = re.compile(r"\b(\d{13}|\d{8})\b")
 

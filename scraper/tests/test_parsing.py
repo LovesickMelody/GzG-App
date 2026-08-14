@@ -49,10 +49,20 @@ class TestBetrag:
             "Gültig bis 30.08.2026",
             "Laut Community noch etwa 1.450 Einlösungen",
             "Bestellnummer 12.3456",
+            # Füllmengen und Maße stehen in fast jedem Produkttitel.
+            "SACHSEN QUELLE medium+ lemon 0,75l",
+            "Flasche 0,75 l",
+            "Kabel 1,5 m lang",
+            "Packung 0,25 kg",
         ],
     )
-    def test_haelt_datum_und_lange_zahl_nicht_fuer_geld(self, text):
+    def test_haelt_datum_menge_und_lange_zahl_nicht_fuer_geld(self, text):
         assert betrag_in_cent(text) is None
+
+    def test_ein_wort_nach_dem_betrag_ist_keine_einheit(self):
+        # "im" faengt mit einem Buchstaben an, ist aber keine Einheit — der
+        # Betrag muss trotzdem durchkommen.
+        assert betrag_in_cent("nur 3,99 im Angebot") == 399
 
     def test_findet_den_betrag_trotzdem_wenn_ein_datum_danebensteht(self):
         assert betrag_in_cent("Gültig bis 30.08.2026, du bekommst 4,99 € zurück") == 499

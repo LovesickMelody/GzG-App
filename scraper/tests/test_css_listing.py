@@ -121,3 +121,47 @@ class TestRobustheit:
         assert aktionen[0].url is None
         # Ohne eigenen Betrags-Selektor wird der Eintragstext durchsucht.
         assert aktionen[0].max_refund_cents == 399
+
+
+class TestTitelKuerzen:
+    """
+    Manche Portale haengen an jeden Titel dieselbe Kennzeichnung. In der App
+    steht die dann unter jedem Eintrag und verdeckt den Produktnamen.
+    """
+
+    HTML = """
+    <article class="promo-card">
+      <h2 class="promo-title">Bonduelle Frische Salate [gratis testen, Geld zurück!]</h2>
+    </article>
+    <article class="promo-card">
+      <h2 class="promo-title">Gillette Geld zurück – jetzt mitmachen!</h2>
+    </article>
+    <article class="promo-card">
+      <h2 class="promo-title">[gratis testen]</h2>
+    </article>
+    """
+
+    QUELLE = {
+        "name": "testportal",
+        "base_url": "https://www.beispiel.de/",
+        "titel_entfernen": r"\s*\[[^\]]*\]\s*$",
+        "selectors": {"item": "article.promo-card", "title": "h2.promo-title"},
+    }
+
+    def test_entfernt_den_zusatz_am_ende(self):
+        assert parse(self.HTML, self.QUELLE)[0].title == "Bonduelle Frische Salate"
+
+    def test_laesst_titel_ohne_zusatz_unangetastet(self):
+        assert parse(self.HTML, self.QUELLE)[1].title == "Gillette Geld zurück – jetzt mitmachen!"
+
+    def test_kuerzt_nicht_bis_zur_leere(self):
+        # Bliebe nichts uebrig, waere der Eintrag in der App namenlos —
+        # dann lieber der ungekuerzte Titel.
+        assert parse(self.HTML, self.QUELLE)[2].title == "[gratis testen]"
+
+    def test_ohne_muster_bleibt_alles_stehen(self):
+        ohne = {**self.QUELLE}
+        del ohne["titel_entfernen"]
+        assert parse(self.HTML, ohne)[0].title == (
+            "Bonduelle Frische Salate [gratis testen, Geld zurück!]"
+        )
