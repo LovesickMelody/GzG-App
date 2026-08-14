@@ -1,32 +1,67 @@
 # Kandidaten fuer den Aktions-Feed — eine Adresse je Zeile.
 #
-# Diese Liste ist kein Teil des Scrapers. Sie dient nur dazu, mit
+# Diese Liste ist kein Teil des Scrapers. Sie dient dazu, mit
 # `probe_kandidaten.py` herauszufinden, welche Portale ueberhaupt antworten und
-# wie ihre Uebersichtsseiten aufgebaut sind. Was sich bewaehrt, wandert danach
-# nach sources.yaml; der Rest bleibt hier als Notiz stehen, warum es ausfiel.
+# wie ihre Uebersichtsseiten aufgebaut sind. Was sich bewaehrt, wandert nach
+# sources.yaml; der Rest bleibt hier als Notiz stehen, warum es ausfiel.
 #
 # Jede Adresse wird genau einmal je Lauf abgerufen, mit Pause zwischen zwei
 # Abrufen desselben Hosts. Die Liste bitte kurz halten.
+#
+# Aufruf:  python scraper/probe_kandidaten.py
+#
+# ============================================================================
+# Stand der Pruefung vom 14.08.2026 (Lauf 31793562975, 13 von 17 erreichbar).
+# Alle Zeilen sind auskommentiert, damit nicht jeder Workflow-Lauf erneut
+# 17 fremde Seiten abruft. Zum Nachpruefen die gewuenschte Zeile einkommentieren.
+# ============================================================================
 
-# --- Aus der urspruenglichen Aufgabenstellung (beide tot, siehe DECISIONS.md) ---
-https://www.gratis-testen.de/
-https://gratis-testen.de/
-https://aktion-gratis-testen.de/
+# --- Uebernommen nach sources.yaml ---------------------------------------
+# https://geldzurueck.deals/
+#   Spezialportal, nur Geld-zurueck-Aktionen. Saubere Karten: div.card, davon
+#   div.card.expired fuer abgelaufene. Beste Quelle im Feld.
+# https://rabattigel.de/cashback/
+#   article.rgu-card mit h3.rgu-card-title, eigenem Bild und Detailseite.
+#   Titel enthaelt die Aktionsart im Klartext ("[gratis testen, Geld zurueck!]").
 
-# --- Spezialisierte Portale fuer Geld-zurueck-Aktionen ---
-https://geldzurueck.deals/
-https://www.dealdoktor.de/gratis-testen/
-https://www.mein-deal.com/cashback-aktionen/
-https://www.einfach-sparsam.de/gratis-testen
-https://rabattigel.de/cashback/
-https://www.gratisalarm.de/gratis/geld-zurueck/
-https://schnaeppchenfuchs.com/angebote/cashback-geld-zurueck-aktionen
-https://www.sparwelt.de/gratis/cashback
-https://sparzwerge.de/geld-zurueck-aktionen-fuer-kinder/
-https://spaaaren.de/geld-zurueck-aktion-cash-back/
+# --- Erreichbar, aber (noch) nicht brauchbar ------------------------------
+# https://www.dealdoktor.de/gratis-testen/
+#   Antwortet, aber die Uebersicht besteht aus generischen <li>; die Seite ist
+#   ueberwiegend Kommentarbereich. Braucht einen eigenen Parser, kein
+#   Selektor-Einzeiler. Zurueckgestellt.
+# https://www.mein-deal.com/cashback-aktionen/
+#   Dito: die haeufigsten Container sind Kommentare (div.comment-body).
+# https://www.einfach-sparsam.de/gratis-testen
+#   Leitet auf die Startseite um — die Rubrik gibt es so nicht mehr.
+# https://www.gratisalarm.de/gratis/geld-zurueck/
+#   Leitet auf .../geld-zurueck-aktion/ um, dort stehen 0 Geldbetraege im Text.
+#   Inhalt wird offenbar per JavaScript nachgeladen; Scrapen bringt nichts.
+# https://schnaeppchenfuchs.com/angebote/cashback-geld-zurueck-aktionen
+#   Aufbau brauchbar (div.deals-list-item-secondary__title), aber die Seite
+#   mischt Cashback-Portale und Produktaktionen. Kandidat fuer spaeter.
+# https://www.sparwelt.de/gratis/cashback
+#   Klassennamen sind generierte Utility-Klassen (Tailwind). Jede Umgestaltung
+#   der Seite bricht die Selektoren. Bewusst nicht genommen.
+# https://sparzwerge.de/geld-zurueck-aktionen-fuer-kinder/
+#   Redaktioneller Sammelartikel, keine Liste. Nur generische <li>.
+# https://spaaaren.de/geld-zurueck-aktion-cash-back/
+#   Dito, ausserdem 0 Geldbetraege im Text.
 
-# --- Moegliche RSS-Feeds (waeren stabiler als CSS-Selektoren) ---
-https://geldzurueck.deals/feed/
-https://www.dealdoktor.de/gratis-testen/feed/
-https://www.mein-deal.com/cashback-aktionen/feed/
-https://rabattigel.de/cashback/feed/
+# --- Tot ------------------------------------------------------------------
+# https://www.gratis-testen.de/
+#   Verbindungs-Timeout, auch vom GitHub-Runner aus. Aus der Aufgabenstellung.
+# https://gratis-testen.de/
+#   Dito.
+# https://aktion-gratis-testen.de/
+#   Loest nicht im DNS auf. Aus der Aufgabenstellung.
+
+# --- RSS-Feeds: alle unbrauchbar ------------------------------------------
+# https://geldzurueck.deals/feed/
+#   HTTP 404.
+# https://www.dealdoktor.de/gratis-testen/feed/
+#   Antwortet, enthaelt aber die *Kommentare* zur Seite ("Von: Burgfee53"),
+#   nicht die Aktionen. Typische WordPress-Falle.
+# https://www.mein-deal.com/cashback-aktionen/feed/
+#   Dito.
+# https://rabattigel.de/cashback/feed/
+#   Antwortet mit 0 Eintraegen.

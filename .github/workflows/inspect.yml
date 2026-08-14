@@ -37,9 +37,27 @@ jobs:
       - name: Abhängigkeiten
         run: pip install -r scraper/requirements.txt
 
-      - name: Kandidaten abklopfen
+      # Die Kandidatenliste ist einmal durchgelaufen, das Ergebnis steht in
+      # scraper/kandidaten.txt. Wer sie erneut braucht, hängt hier
+      # `python scraper/probe_kandidaten.py` an — jeder Lauf kostet die
+      # Portale Traffic, deshalb nicht dauerhaft.
+
+      # Klassennamen allein reichen nicht — erst am Markup sieht man, ob der
+      # Betrag im Text oder in einem Attribut steht und welcher Link zur Aktion
+      # führt statt zu einem Anker auf derselben Seite.
+      - name: geldzurueck.deals im Rohbau
         continue-on-error: true
-        run: python scraper/probe_kandidaten.py
+        run: >-
+          python scraper/inspect_source.py
+          --url https://geldzurueck.deals/
+          --roh "div.card" --roh-anzahl 2
+
+      - name: rabattigel.de im Rohbau
+        continue-on-error: true
+        run: >-
+          python scraper/inspect_source.py
+          --url https://rabattigel.de/cashback/
+          --roh "article.rgu-card" --roh-anzahl 2
 
       - name: Konfigurierte Quellen prüfen
         continue-on-error: true

@@ -88,6 +88,30 @@ def zeige_kandidaten(suppe: BeautifulSoup, anzahl: int = 12) -> None:
             print(f"      {eintrag}")
 
 
+def zeige_roh(suppe: BeautifulSoup, selektor: str, anzahl: int, zeichen: int) -> None:
+    """
+    Gibt den rohen HTML-Code der ersten Treffer aus.
+
+    Die Klassennamen allein reichen nicht: Ob der Betrag im Text oder in einem
+    Attribut steht und welcher Link zur Aktion fuehrt statt zu einem Anker auf
+    derselben Seite, sieht man erst am Markup.
+    """
+    try:
+        treffer = suppe.select(selektor)
+    except Exception as fehler:  # noqa: BLE001
+        print(f"  Ungültiger Selektor {selektor!r}: {fehler}")
+        return
+
+    print(f"\n  {len(treffer)} Treffer für {selektor!r} — die ersten {anzahl} im Rohbau:")
+    for nummer, knoten in enumerate(treffer[:anzahl], start=1):
+        roh = knoten.prettify()
+        gekuerzt = roh[:zeichen]
+        print(f"\n  ----- Treffer {nummer} ({len(roh)} Zeichen) -----")
+        print(gekuerzt)
+        if len(roh) > zeichen:
+            print(f"  ... [{len(roh) - zeichen} Zeichen gekürzt]")
+
+
 def pruefe_selektoren(html: str, quelle: dict) -> None:
     suppe = BeautifulSoup(html, "lxml")
     selektoren = quelle.get("selectors", {})
@@ -119,6 +143,14 @@ def main(argv: list[str] | None = None) -> int:
     zerleger.add_argument("--url", help="einzelne Adresse statt einer Quelle")
     zerleger.add_argument("--datei", type=Path, help="lokale HTML-Datei statt Abruf")
     zerleger.add_argument("--speichern", type=Path, help="HTML als Fixture ablegen")
+    zerleger.add_argument(
+        "--roh",
+        help="CSS-Selektor; gibt den rohen HTML-Code der ersten Treffer aus. "
+        "Nötig, um Selektoren für brand/max_refund/deadline exakt abzulesen, "
+        "statt sie aus Klassennamen zu raten.",
+    )
+    zerleger.add_argument("--roh-anzahl", type=int, default=2)
+    zerleger.add_argument("--roh-zeichen", type=int, default=6000)
     argumente = zerleger.parse_args(argv)
 
     if argumente.datei:
@@ -167,6 +199,11 @@ def main(argv: list[str] | None = None) -> int:
         suppe = BeautifulSoup(html, "lxml")
         titel = suppe.find("title")
         print(f"  <title>: {titel.get_text(strip=True)[:90]!r}" if titel else "  kein <title>")
+
+        if argumente.roh:
+            zeige_roh(suppe, argumente.roh, argumente.roh_anzahl, argumente.roh_zeichen)
+            continue
+
         zeige_kandidaten(suppe)
         pruefe_selektoren(html, quelle)
 
