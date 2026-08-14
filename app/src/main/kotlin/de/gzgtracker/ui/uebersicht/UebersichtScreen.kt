@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.IosShare
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -134,16 +135,26 @@ fun UebersichtScreen(
                             Icon(Icons.Outlined.FilterList, contentDescription = "Filtern")
                         }
                     }
+                    IconButton(onClick = onScannen) {
+                        Icon(
+                            Icons.Outlined.QrCodeScanner,
+                            contentDescription = "Produkt scannen",
+                        )
+                    }
                 },
             )
         },
         floatingActionButton = {
+            // Die Hauptaktion ist das Eintragen eines gekauften Produkts — das
+            // ist der Weg, den man taeglich geht. Der Barcode-Scan hilft nur im
+            // Sonderfall "steht im Laden vor einem Produkt und will wissen, ob
+            // dazu eine Aktion laeuft"; er sitzt deshalb in der Titelzeile.
             ExtendedFloatingActionButton(
-                onClick = onScannen,
+                onClick = onErfassen,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
-                icon = { Icon(Icons.Outlined.QrCodeScanner, contentDescription = null) },
-                text = { Text("Produkt scannen") },
+                icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
+                text = { Text("Beleg eintragen") },
             )
         },
     ) { innen ->

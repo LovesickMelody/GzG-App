@@ -48,9 +48,10 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] `submit_url`: Link zur Einreichungsseite statt nur zum Portalartikel
 - [x] `requirements`: Checkliste "Was brauche ich?" aus den Teilnahmebedingungen
 - [x] Checkliste und Einreichungs-Knopf in der App
-- [ ] Erfassung mit mehreren Fotos (Produkt, Bon, beides zusammen) statt nur Bonfoto
-- [ ] Scannen als Nebenweg statt als Haupteinstieg
-- [ ] Dieselbe Aktion aus zwei Quellen zusammenfassen (ueber gleiche `submit_url`)
+- [x] Erfassung mit mehreren Fotos (Produkt, Bon, beides zusammen) statt nur Bonfoto
+- [x] Scannen als Nebenweg statt als Haupteinstieg
+- [x] Dieselbe Aktion aus zwei Quellen zusammenfassen (ueber gleiche `submit_url`)
+- [x] Merkliste: Aktionen vormerken und im Laden abhaken
 - [x] App laedt `actions.json`, cached in Room, Pull-to-Refresh, offline nutzbar
 - [x] Aktion manuell anlegen
 - [x] Parser-Tests gegen HTML-Fixtures (offline)

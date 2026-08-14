@@ -160,6 +160,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   als Fehlalarm durch. Rot wird er erst, wenn keine einzige Quelle mehr liefert.
 - **`generated_at` ändert sich nur bei echter Änderung** — sonst gäbe es jeden Tag einen
   Commit, der nichts als den Zeitstempel dreht.
+- **Dieselbe Aktion aus zwei Portalen wird nur bei identischer Einreichungsadresse
+  zusammengefasst** — wer auf demselben Formular einreicht, macht bei derselben Aktion
+  mit. Titel zu vergleichen wäre verlockend („Bonduelle Frische Salate" gegen „Bonduelle
+  Salat Gratis Testen via scondoo"), würde aber mal richtig und mal falsch zusammenwerfen.
+  Eine fälschlich verschluckte Aktion ist schlimmer als eine doppelt angezeigte.
+- **Beim Zusammenfassen bleibt die Quelle die des Grundeintrags** — die App räumt je Quelle
+  auf; ein zusammengesetzter Wert wie „a+b" würde dabei nie wieder getroffen und der
+  Eintrag bliebe ewig stehen.
 - **Ehrlicher User-Agent mit Projektlink statt getarntem Browser** — fair gegenüber den
   Betreibern und macht Probleme nachvollziehbar.
 - **Der Feed sammelt nur volle Erstattungen** (`nur_arten: [gratis_testen]`) — Teilbeträge
@@ -240,7 +248,31 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Der Export liegt im Cache** — er ist eine Momentaufnahme zum Weitergeben, kein
   Dokument, das die App verwalten müsste.
 
+## Merkliste
+
+- **Eigene Tabelle statt einer Spalte an der Aktion** — Aktionen werden bei jedem
+  Feed-Abgleich ersetzt und verschwundene weggeräumt. Eine Merkung ist eine Entscheidung
+  des Nutzers, keine Feed-Angabe, und muss das überleben.
+- **Eine Merkung schützt die Aktion vorm Aufräumen** — sonst wäre der Einkaufszettel
+  morgens im Supermarkt plötzlich halb leer, weil ein Portal einen Eintrag kurz nicht
+  ausgeliefert hat.
+- **Das Häkchen „im Wagen" steht in der Datenbank, nicht im Bildschirmzustand** — im Laden
+  verlässt man die App zwischendurch und will danach nicht von vorn anfangen.
+- **Wer eine gemerkte Aktion erfasst, nimmt sie vom Zettel** — sonst hakt man dieselbe
+  Zeile zweimal ab, einmal im Laden und einmal in der App.
+
 ## App
+
+- **„Beleg eintragen" ist die Hauptaktion, nicht „Produkt scannen"** — der tägliche Weg
+  ist: Aktion aussuchen, kaufen, fotografieren, eintragen. Der Barcode-Scan hilft nur im
+  Sonderfall „steht im Laden vor einem Produkt und will wissen, ob dazu etwas läuft"; er
+  sitzt deshalb in der Titelzeile statt auf dem großen Knopf.
+- **Drei feste Belegplätze statt einer freien Anhangsliste** — die Portale verlangen genau
+  drei Dinge: das Produkt allein, den Bon allein, oder beides zusammen auf einem Bild.
+  Eine generische Liste hätte die Frage offengelassen, die beim Einreichen zählt: *Was
+  zeigt das Bild?*
+- **Verlangte Belege werden hervorgehoben, nicht erzwungen** — die Checkliste aus dem Feed
+  ist nicht immer vollständig, und wer ein Bild zu viel macht, verliert nichts.
 
 - **Echte Room-Migrationen statt `fallbackToDestructiveMigration()`** — in dieser Datenbank
   stehen Einreichungen, Konten und die Pfade zu den Bonfotos. Ein Update, das die Belege

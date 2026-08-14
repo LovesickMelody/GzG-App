@@ -51,32 +51,31 @@ class AppSmokeTest {
     }
 
     /**
-     * Der Scan-Knopf ist die Hauptaktion der App — fehlt er, ist die App kaputt.
+     * Die Hauptaktion der App — fehlt sie, kommt man nirgendwo hin.
      *
      * Der Knoten war in einem Lauf vorhanden (nur "nicht sichtbar") und im naechsten
-     * gar nicht, ohne dass sich App-Code geaendert haette. Das deutet auf ein
+     * gar nicht, ohne dass sich App-Code geaendert haette. Das deutete auf ein
      * Zeitproblem beim Aufbau hin, nicht auf Geometrie. Deshalb wird hier aktiv
      * gewartet und im Fehlerfall der gesamte Baum einzeilig ausgegeben — mehrzeilige
      * Meldungen schneidet Gradle in der Konsole ab.
      */
     @Test
-    @Beobachtung
-    fun hatEinenBedienbarenScanKnopf() {
+    fun hatEinenBedienbarenHauptknopf() {
         val erschienen = runCatching {
             app.waitUntil(timeoutMillis = 10_000) {
-                app.onAllNodesWithText("Produkt scannen").fetchSemanticsNodes().isNotEmpty()
+                app.onAllNodesWithText("Beleg eintragen").fetchSemanticsNodes().isNotEmpty()
             }
             true
         }.getOrDefault(false)
 
         if (!erschienen) {
             throw AssertionError(
-                "Scan-Knopf nach 10 s nicht im Baum. Baum: " +
+                "Hauptknopf nach 10 s nicht im Baum. Baum: " +
                     app.onRoot().printToString(maxDepth = 100).replace("\n", " | "),
             )
         }
 
-        app.onNodeWithText("Produkt scannen").assertHasClickAction()
+        app.onNodeWithText("Beleg eintragen").assertHasClickAction()
     }
 
     @Test
