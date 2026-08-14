@@ -150,6 +150,20 @@ Das Scraping läuft **nicht in der App**, sondern als GitHub-Actions-Job. Ergebn
 `data/actions.json` im Repo. Die App lädt diese Datei per HTTPS, legt sie in Room ab und
 funktioniert danach offline mit dem letzten Stand. Pull-to-Refresh holt neu.
 
+### Welche Quellen gesammelt werden
+
+| Quelle | Was sie liefert |
+|---|---|
+| [geldzurueck.deals](https://geldzurueck.deals/) | Portal ausschließlich für Geld-zurück-Aktionen. Titel, Art (gratis testen / Cashback), Bild, Link. Ohne Datum: die Seite zeigt nur eine Restlaufzeit als Countdown. |
+| [rabattigel.de/cashback](https://rabattigel.de/cashback/) | Aktionen mit **echtem Einsendeschluss** und Aktionszeitraum. |
+
+Zwei Quellen sind Absicht: Fällt eine aus, bleibt der Feed gefüllt.
+
+Die beiden Portale, die ursprünglich vorgesehen waren, gibt es nicht mehr —
+`www.gratis-testen.de` antwortet nicht mehr, `www.aktion-gratis-testen.de` löst nicht
+einmal im DNS auf. Welche Portale sonst noch geprüft wurden und warum sie ausschieden,
+steht mit Begründung je Adresse in [`scraper/kandidaten.txt`](scraper/kandidaten.txt).
+
 ### Das Repository muss öffentlich sein
 
 `raw.githubusercontent.com` liefert Dateien aus **privaten** Repositorys nicht ohne
@@ -172,16 +186,19 @@ Wenn das Repository doch privat bleiben soll, gibt es zwei Wege:
   öffentlichen Gist, den der Scrape-Workflow mitpflegt), **oder**
 - ohne Feed arbeiten und Aktionen von Hand anlegen — das geht ohnehin jederzeit.
 
-### Erst nach dem Merge nach `main` aktiv
+### Der tägliche Lauf startet erst nach dem Merge nach `main`
 
 GitHub startet zeitgesteuerte Workflows (`schedule`) und manuelle Läufe
 (`workflow_dispatch`) **nur für Workflow-Dateien auf dem Standardbranch**. Solange
 `scrape.yml` nur auf einem Feature-Branch liegt, taucht „Aktionen sammeln“ nicht unter
-*Actions* auf und der tägliche Lauf passiert nicht. Nach dem Merge nach `main` läuft
+*Actions* auf und der nächtliche Lauf passiert nicht. Nach dem Merge nach `main` läuft
 beides von selbst.
 
-Bis dahin lässt sich der Scraper lokal starten (siehe
-[Entwickeln und Testen](#entwickeln-und-testen)).
+`push` gilt dagegen auf **jedem** Branch. Deshalb läuft `scrape.yml` zusätzlich bei
+jeder Änderung unter `scraper/**` — vor dem Merge ist das der einzige Weg, den
+Sammellauf überhaupt zu starten, und danach sieht man eine geänderte Quelle sofort,
+statt bis zum nächsten Morgen zu warten. `data/**` löst bewusst nichts aus, sonst
+stieße der eigene Commit den nächsten Lauf an.
 
 ### Ablauf des Jobs
 
@@ -202,7 +219,7 @@ Quelle mehr etwas liefert.
 Typisches Symptom: Der Job ist grün, aber im Log steht
 
 ```
-ERROR gzg_scraper: Quelle gratis-testen: Seiten geladen, aber keine Aktion erkannt —
+ERROR gzg_scraper: Quelle rabattigel: Seiten geladen, aber keine Aktion erkannt —
 Selektoren prüfen. Alter Stand bleibt.
 ```
 
@@ -215,7 +232,7 @@ Ohne lokale Python-Installation, direkt über GitHub (setzt voraus, dass `scrape
 auf `main` liegt — siehe oben):
 
 *Actions → **Aktionen sammeln** → Run workflow* → Feld **inspect** auf den Quellennamen
-setzen (z. B. `gratis-testen`) → starten. Der Job schreibt die Struktur ins Log:
+setzen (z. B. `rabattigel`) → starten. Der Job schreibt die Struktur ins Log:
 
 ```
   Wiederkehrende Container (Kandidaten für `item`), Top 12:
@@ -239,8 +256,19 @@ Lokal geht dasselbe mit:
 ```bash
 cd scraper
 pip install -r requirements.txt
-python inspect_source.py --source gratis-testen
+python inspect_source.py --source rabattigel
 ```
+
+**Klassennamen allein reichen nicht.** Ob ein Betrag im Text oder in einem Attribut
+steht und welcher der fünf Links im Eintrag zur Aktion führt statt zu einem Anker auf
+derselben Seite, sieht man erst am Markup:
+
+```bash
+python inspect_source.py --url https://rabattigel.de/cashback/ --roh "article.rgu-card"
+```
+
+Das gibt den rohen HTML-Code der ersten Treffer aus. Selektoren daraus **ablesen**, nicht
+aus den Klassennamen raten — sonst schreibt der Scraper still Unsinn in den Feed.
 
 ### 2. `sources.yaml` anpassen
 
@@ -256,8 +284,16 @@ selectors:
   deadline: "time.deal-card__until@datetime"
 ```
 
-`@attribut` liest ein Attribut statt des Textes. Fehlende Felder sind kein Fehler —
-Betrag, EANs und Händler werden notfalls aus dem Text des Eintrags gelesen.
+`@attribut` liest ein Attribut statt des Textes, `"@data-href"` ohne Selektor davor eines
+des Eintrags selbst. Fehlende Felder sind kein Fehler — Betrag, EANs und Händler werden
+notfalls aus dem Text des Eintrags gelesen.
+
+Zwei Angaben stehen neben `selectors`, nicht darin:
+
+```yaml
+titel_entfernen: '\s*\[[^\]]*\]\s*$'   # wiederkehrenden Zusatz aus dem Titel schneiden
+retailers: ["dm", "Rossmann"]          # eigene Händlerliste statt der eingebauten
+```
 
 ### 3. Gegenprüfen
 
@@ -275,7 +311,7 @@ Stimmen Beträge und Fristen, ist die Quelle repariert.
 Damit derselbe Umbau beim nächsten Mal auffällt, bevor die Daten weg sind:
 
 ```bash
-python inspect_source.py --source gratis-testen --speichern tests/fixtures/gratis_testen.html
+python inspect_source.py --source rabattigel --speichern tests/fixtures/rabattigel.html
 ```
 
 Und einen Test dazu in `scraper/tests/`. Die Fixtures machen die Tests offline
@@ -293,10 +329,40 @@ stört die Quelle nicht weiter.
 
 ## Eine neue Quelle hinzufügen
 
+0. **Erst prüfen, ob das Portal überhaupt taugt.** Adressen in
+   `scraper/kandidaten.txt` eintragen und abklopfen:
+
+   ```bash
+   python scraper/probe_kandidaten.py
+   ```
+
+   Je Adresse kommt Erreichbarkeit, `robots.txt`, Feed- oder HTML-Aufbau und eine grobe
+   Einschätzung, wie viel auf der Seite nach Geld-zurück-Aktion aussieht. Aussortieren
+   lassen sich damit die drei häufigsten Enttäuschungen: tote Domains, Seiten, die ihre
+   Liste erst per JavaScript nachladen (kein wiederkehrender Container, keine Beträge im
+   Text), und Portale mit generierten Utility-Klassen, deren Selektoren jede
+   Seitenumgestaltung zerbricht. Ergebnisse gehören als Kommentar in dieselbe Datei —
+   die nächste Suche fängt sonst wieder bei null an.
+
+   **Hat das Portal einen RSS- oder Atom-Feed, nimm den.** Ein Feed ist eine Zusage des
+   Betreibers, maschinenlesbar zu bleiben; er überlebt Umgestaltungen und kostet weniger
+   Last. Vorsicht bei WordPress: `…/feed/` liefert oft die *Kommentare* der Seite statt
+   der Beiträge — das sieht man sofort an Titeln wie „Von: Burgfee53“.
+
+   ```yaml
+   - name: neues-portal
+     parser: feed
+     listing_urls: ["https://neues-portal.de/aktionen/feed/"]
+     keywords: ["geld zurück", "gratis testen", "cashback"]   # nur passende Einträge
+     ausschluss: ["gewinnspiel", "verlosung"]
+     brand_trenner: ":"                                       # "Marke: Titel" auftrennen
+   ```
+
 1. **Struktur ansehen:**
 
    ```bash
    python scraper/inspect_source.py --url https://neues-portal.de/aktionen
+   python scraper/inspect_source.py --url https://neues-portal.de/aktionen --roh "div.card"
    ```
 
 2. **Eintrag in `scraper/sources.yaml`** anlegen — der auskommentierte Block
@@ -322,7 +388,14 @@ stört die Quelle nicht weiter.
    cat /tmp/probe.json
    ```
 
-4. **Fixture und Test** ergänzen (siehe `tests/test_css_listing.py`).
+4. **Ergebnis lesen, nicht nur zählen.** „19 Aktionen gefunden“ heißt nicht, dass sie
+   stimmen. Beim ersten echten Lauf stand in einem Titel `[gratis testen, Geld zurück!]`
+   und bei einer Flasche „0,75 l“ ein Erstattungsbetrag von 0,75 €. Beides sah im
+   JSON völlig plausibel aus. Deshalb gibt der Workflow das Ergebnis lesbar ins Log —
+   Titel, Art, Betrag, Frist, Link — und ein Blick dort gehört zu jeder neuen Quelle.
+
+5. **Fixture und Test** ergänzen (siehe `tests/test_css_listing.py`,
+   `tests/test_feed.py`).
 
 `name` ist der Schlüssel fürs Aufräumen: Aktionen dieser Quelle werden bei jedem Lauf
 ersetzt. Wird `name` später geändert, gelten die alten Einträge als verwaist und
@@ -338,6 +411,7 @@ Braucht ein Portal echte Logik (Detailseiten nachladen, JSON auswerten):
    ```python
    PARSER = {
        "css_listing": css_listing.parse,
+       "feed": feed.parse,
        "mein_portal": mein_portal.parse,
    }
    ```
@@ -383,7 +457,8 @@ Nützliche Schalter: `--only <quelle>`, `--delay <sekunden>`, `--sources <datei>
 | Summenberechnung | `core/…/TotalsCalculatorTest.kt` |
 | Filter und Suche | `core/…/SubmissionFilteringTest.kt` |
 | CSV-Export | `core/…/CsvExportTest.kt` |
-| Scraper-Parser gegen HTML-Fixtures | `scraper/tests/` |
+| Scraper-Parser gegen HTML- und XML-Fixtures | `scraper/tests/` |
+| Beträge: Datum, Füllmenge und lange Zahl sind kein Geld | `scraper/tests/test_parsing.py` |
 
 ---
 

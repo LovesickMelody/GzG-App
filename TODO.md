@@ -37,9 +37,11 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Stabiler Hash fuer Aktions-IDs
 - [x] `data/actions.json` erzeugen, nur bei Aenderung committen
 - [x] `.github/workflows/scrape.yml` (taeglich 04:00 UTC + manuell)
-- [ ] Live-Struktur der Portale pruefen und Selektoren daraus ableiten
-      (aus dieser Umgebung nicht erreichbar — über `scrape.yml` mit `inspect: <quelle>`
-      nachholen, Anleitung in der README)
+- [x] Live-Struktur der Portale pruefen und Selektoren daraus ableiten
+      (beide Portale der Aufgabenstellung sind tot; 17 Kandidaten abgeklopft,
+      geldzurueck.deals und rabattigel.de uebernommen, Selektoren am Rohbau abgelesen —
+      19 echte Aktionen in `data/actions.json`)
+- [x] Feed-Parser fuer RSS/Atom als Alternative zu CSS-Selektoren
 - [x] App laedt `actions.json`, cached in Room, Pull-to-Refresh, offline nutzbar
 - [x] Aktion manuell anlegen
 - [x] Parser-Tests gegen HTML-Fixtures (offline)

@@ -137,6 +137,25 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Aktion.
 - **Händler nur gegen eine feste Namensliste** — ein aus dem Fließtext geratener „Markt“
   wäre als Filter wertlos.
+- **Ohne Währungszeichen gilt eine Zahl nur dann als Betrag, wenn rechts weder Ziffer
+  noch Einheit steht** — auf den echten Seiten sahen „30.08.2026“, „1.450 Einlösungen“
+  und „0,75 l“ alle wie Geldbeträge aus, und der Scraper hat zwei davon auch so
+  eingetragen. Aufgefallen ist das erst beim Lesen des Ergebnisses, nicht beim Zählen.
+- **Der Sammellauf schreibt sein Ergebnis lesbar ins Log** — „19 Aktionen gefunden“
+  beweist nichts. Erst Titel, Betrag und Frist nebeneinander zeigen, ob die Selektoren
+  Sinn ergeben.
+- **Wiederkehrende Zusätze werden aus dem Titel geschnitten (`titel_entfernen`)** —
+  rabattigel hängt an jeden Titel „[gratis testen, Geld zurück!]“. Das steht schon im
+  Feld `type`; im Titel verdeckte es neunzehnmal den Produktnamen. Bleibt nach dem
+  Kürzen nichts übrig, gilt der ursprüngliche Titel — lieber laut als namenlos.
+- **Dieselbe Aktion darf aus zwei Portalen doppelt auftauchen** — die Titel weichen
+  voneinander ab („Bonduelle Frische Salate“ gegen „Bonduelle Frische Salate Gratis
+  Testen mit Scondoo“), und eine Ähnlichkeitsregel würde mal richtig, mal falsch
+  zusammenfassen. Ein doppelter Eintrag ist ärgerlich, ein fälschlich verschluckter
+  wäre schlimmer.
+- **Der Countdown „31 Tage“ wird nicht in ein Datum umgerechnet** — die Aktions-Id
+  enthält den Einsendeschluss. Ein täglich um einen Tag wanderndes Datum ergäbe jeden
+  Morgen eine neue Id, und die App führte dieselbe Aktion immer wieder als neu.
 - **Ausgefallene Quellen färben den Job nicht rot** — sonst rauscht jede Portalwartung
   als Fehlalarm durch. Rot wird er erst, wenn keine einzige Quelle mehr liefert.
 - **`generated_at` ändert sich nur bei echter Änderung** — sonst gäbe es jeden Tag einen
