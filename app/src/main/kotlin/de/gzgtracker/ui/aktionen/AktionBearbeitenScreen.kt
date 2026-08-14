@@ -1,6 +1,7 @@
 package de.gzgtracker.ui.aktionen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,6 +48,10 @@ fun AktionBearbeitenScreen(
     }
 
     Scaffold(
+        // Das aeussere Scaffold in GzgApp rechnet die System-Insets bereits an.
+        // Ohne diese Zeile zieht dieses Scaffold sie ein zweites Mal ab, und die
+        // Inhalte rutschen um Status- und Navigationsleiste zu weit nach innen.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             TopAppBar(
                 title = { Text(if (zustand.istNeu) "Aktion anlegen" else "Aktion bearbeiten") },

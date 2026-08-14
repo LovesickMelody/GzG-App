@@ -21,7 +21,18 @@ MONATE = {
 }
 
 _BETRAG = re.compile(r"(\d{1,3}(?:[.\s]\d{3})*|\d+)(?:[,.](\d{1,2}))?\s*(?:€|EUR|Euro)", re.I)
-_BETRAG_OHNE_WAEHRUNG = re.compile(r"(\d{1,3}(?:[.\s]\d{3})*|\d+)[,.](\d{2})\b")
+# Ohne Waehrungszeichen ist die Erkennung heikel. Drei Faelle aus den echten
+# Portalseiten, die alle wie ein Betrag aussehen und keiner sind:
+#   "30.08.2026"          -> waere 30,08 €   (Datum)
+#   "1.450 Einlösungen"   -> waere 1,45 €    (laengere Zahl)
+#   "medium+ lemon 0,75l" -> waere 0,75 €    (Fuellmenge)
+# Deshalb: links und rechts keine weitere Ziffer, und rechts keine Einheit.
+_EINHEITEN = r"l|ml|cl|dl|g|mg|kg|m|mm|cm|km|St|Stk|Stück|kWh|x|%"
+_BETRAG_OHNE_WAEHRUNG = re.compile(
+    r"(?<![\d.,])(\d{1,3}(?:[.\s]\d{3})*|\d+)[,.](\d{2})"
+    rf"(?![\d.,])(?!\s*(?:{_EINHEITEN})\b)",
+    re.I,
+)
 _EAN = re.compile(r"\b(\d{13}|\d{8})\b")
 
 _DATUM_PUNKT = re.compile(r"\b(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{2,4})\b")
@@ -85,6 +96,33 @@ def datum_iso(text: str | None, heute: date | None = None) -> str | None:
     return None
 
 
+def datum_bereich(text: str | None) -> tuple[str | None, str | None]:
+    """
+    Liest einen Aktionszeitraum wie "17.08.2026-30.09.2026" als (von, bis).
+
+    Portale schreiben den Zeitraum meist in einer Zeile statt in zwei Feldern.
+    Steht nur ein Datum da, ist es das Ende — bei einer Aktion interessiert der
+    Einsendeschluss, nicht der Beginn.
+    """
+    if not text:
+        return None, None
+
+    gefunden: list[str] = []
+    for muster in (_DATUM_ISO, _DATUM_PUNKT, _DATUM_WORT):
+        for treffer in muster.finditer(text):
+            iso = datum_iso(treffer.group(0))
+            if iso and iso not in gefunden:
+                gefunden.append(iso)
+
+    if not gefunden:
+        return None, None
+    if len(gefunden) == 1:
+        return None, gefunden[0]
+
+    gefunden.sort()
+    return gefunden[0], gefunden[-1]
+
+
 def _bauen(jahr: int, monat: int, tag: int) -> str | None:
     try:
         return datetime(jahr, monat, tag).date().isoformat()
@@ -126,26 +164,151 @@ def pruefziffer_stimmt(code: str) -> bool:
     return (10 - summe % 10) % 10 == pruefziffer
 
 
+# Formulierungen, die "du bekommst den vollen Kaufpreis zurueck" bedeuten.
+# "100 % Cashback" gehoert ausdruecklich dazu: Das Wort Cashback allein sagt
+# noch nicht, ob voll oder anteilig erstattet wird.
+_VOLLE_ERSTATTUNG = (
+    "gratis", "kostenlos", "umsonst",
+    "100 %", "100%", "100 prozent",
+    "voller kaufpreis", "vollen kaufpreis", "kompletten kaufpreis",
+    "kaufpreis erstattet", "kaufpreis zurück", "kaufpreis zurueck",
+    "geld komplett zurück", "komplett erstattet",
+)
+
+_TEILERSTATTUNG = (
+    "teilbetrag", "teil-cashback", "anteilig", "rabatt von",
+    "50 %", "50%", "25 %", "25%",
+)
+
+
 def art_aus_text(text: str | None, max_refund_cents: int | None = None) -> str:
     """
     Rät die Art der Aktion aus der Beschreibung.
 
-    "Gratis testen" heisst voller Kaufpreis zurueck, "Cashback" oder ein
-    genannter Teilbetrag heisst nur anteilig. Im Zweifel gilt gratis_testen,
-    weil das bei diesen Portalen der Regelfall ist.
+    "Gratis testen" heisst voller Kaufpreis zurueck, ein genannter Teilbetrag
+    heisst nur anteilig. Entscheidend ist die Reihenfolge: Eine Formulierung
+    fuer volle Erstattung schlaegt jeden Cashback-Hinweis, denn "100 % Cashback"
+    ist gratis testen — das Wort Cashback allein sagt nichts ueber die Hoehe.
+
+    Im Zweifel gilt gratis_testen, weil das bei diesen Portalen der Regelfall
+    ist. Wer nur volle Erstattungen sehen will, filtert ueber ``nur_arten`` in
+    ``sources.yaml``; ein zu Unrecht aussortierter Volltreffer waere aergerlicher
+    als ein durchgerutschter Teilbetrag.
     """
     inhalt = (text or "").casefold()
 
-    if any(
-        wort in inhalt
-        for wort in ("teilbetrag", "teil-cashback", "anteilig", "rabatt von")
-    ):
+    if any(wort in inhalt for wort in _VOLLE_ERSTATTUNG):
+        return "gratis_testen"
+
+    if any(wort in inhalt for wort in _TEILERSTATTUNG):
         return "cashback_teilbetrag"
 
-    if "cashback" in inhalt and "gratis" not in inhalt:
+    if "cashback" in inhalt:
         return "cashback_teilbetrag"
 
     return "gratis_testen"
+
+
+# Was man braucht, um bei einer Aktion mitzumachen. Reihenfolge = Reihenfolge
+# der Checkliste in der App, deshalb bewusst als Liste und nicht als Menge.
+#
+# Je Eintrag: (Schluessel, Woerter, die ihn ausloesen). Erkannt wird grob und
+# konservativ — ein fehlender Haken ist aergerlich, ein erfundener schickt
+# jemanden mit dem falschen Foto los.
+_ANFORDERUNGEN: list[tuple[str, tuple[str, ...]]] = [
+    (
+        "produktfoto",
+        (
+            "produkt fotografieren", "produkte fotografieren", "produktfoto",
+            "foto des produkts", "foto vom produkt", "artikel fotografieren",
+            "produkt abfotografieren",
+        ),
+    ),
+    (
+        "bonfoto",
+        (
+            "kassenbon", "kaufbeleg", "kassenzettel", "beleg hochladen",
+            "bon hochladen", "bon fotografieren", "originalbon", "original-kassenbon",
+        ),
+    ),
+    (
+        "zusammen_fotografieren",
+        (
+            "zusammen mit dem kassenbon", "zusammen fotografieren",
+            "alles zusammen", "gemeinsam fotografieren", "zusammen mit dem beleg",
+            "produkt und kassenbon", "produkt mit kassenbon",
+        ),
+    ),
+    (
+        "strichcode",
+        ("strichcode", "barcode", "ean ausschneiden", "ean-code ausschneiden"),
+    ),
+    (
+        "verpackung_aufbewahren",
+        ("verpackung aufbewahren", "verpackung aufheben", "verpackung einsenden"),
+    ),
+    (
+        "app",
+        ("in der app", "über die app", "app hochladen", "scondoo", "marktguru"),
+    ),
+    (
+        "registrierung",
+        ("registrieren", "registrierung", "konto anlegen", "benutzerkonto"),
+    ),
+    (
+        "iban",
+        ("iban", "kontodaten", "bankverbindung", "bankdaten"),
+    ),
+]
+
+
+def anforderungen_aus(text: str | None) -> list[str]:
+    """
+    Liest aus der Beschreibung, was man zum Mitmachen braucht.
+
+    Ergebnis sind Schluessel wie ``produktfoto`` oder ``bonfoto``, aus denen die
+    App die Checkliste "Was brauche ich?" baut. Die Reihenfolge ist fest, damit
+    die Liste in der App nicht bei jedem Lauf springt.
+
+    Bewusst ohne Raten: Steht nichts Erkennbares im Text, kommt eine leere Liste
+    zurueck und die App sagt ehrlich, dass die Bedingungen auf der Aktionsseite
+    stehen. Ein erfundener Haken waere schlimmer als kein Haken — danach steht
+    man mit dem falschen Foto da und die Erstattung faellt aus.
+    """
+    if not text:
+        return []
+
+    inhalt = text.casefold()
+    gefunden = [
+        schluessel
+        for schluessel, woerter in _ANFORDERUNGEN
+        if any(wort in inhalt for wort in woerter)
+    ]
+
+    # "Zusammen fotografieren" heisst zwangslaeufig: beides wird gebraucht.
+    # Portale schreiben das oft nur einmal hin, statt beide Fotos aufzuzaehlen.
+    if "zusammen_fotografieren" in gefunden:
+        for noetig in ("produktfoto", "bonfoto"):
+            if noetig not in gefunden:
+                gefunden.append(noetig)
+        gefunden.sort(key=lambda s: [k for k, _ in _ANFORDERUNGEN].index(s))
+
+    return gefunden
+
+
+def kuerze_titel(titel: str, muster: str | None) -> str:
+    """
+    Entfernt einen wiederkehrenden Zusatz aus dem Titel.
+
+    Manche Portale haengen an jeden Titel dieselbe Kennzeichnung — etwa
+    "[gratis testen, Geld zurueck!]". In der App steht das dann neunzehnmal
+    untereinander und verdeckt den Produktnamen. Bleibt nach dem Kuerzen nichts
+    uebrig, gilt der urspruengliche Titel: lieber laut als leer.
+    """
+    if not muster:
+        return titel
+    gekuerzt = saeubere(re.sub(muster, " ", titel))
+    return gekuerzt or titel
 
 
 def saeubere(text: str | None) -> str | None:

@@ -72,12 +72,29 @@ data class PromoAction(
     val validTo: LocalDate? = null,
     val submissionDeadline: LocalDate? = null,
     val url: String? = null,
+    /**
+     * Wo man tatsaechlich einreicht — meist eine andere Adresse als [url].
+     * [url] zeigt auf den Artikel im Portal, hier steht das Formular des
+     * Anbieters. Die App verlinkt bevorzugt hierhin und faellt auf [url] zurueck.
+     */
+    val submitUrl: String? = null,
+    /**
+     * Was man zum Mitmachen braucht, als Schluessel aus dem Feed. Leer heisst
+     * "nicht bekannt", nicht "nichts noetig" — die App sagt das auch so.
+     */
+    val requirements: List<String> = emptyList(),
     val retailers: List<String> = emptyList(),
     val eans: List<String> = emptyList(),
     val imageUrl: String? = null,
     val source: String = "manuell",
     val isManual: Boolean = false,
-)
+) {
+    /** Die Adresse, die "Zur Einreichung" oeffnet. */
+    val besteAdresse: String? get() = submitUrl ?: url
+
+    /** True, wenn [besteAdresse] direkt zum Formular fuehrt und nicht nur zum Portal. */
+    val fuehrtDirektZumFormular: Boolean get() = submitUrl != null
+}
 
 /** Ein gekauftes Produkt und der Stand seiner Erstattung. */
 data class Submission(
@@ -90,10 +107,52 @@ data class Submission(
     val purchaseDate: LocalDate,
     val retailer: String? = null,
     val receiptImagePath: String? = null,
+    /** Foto des Produkts allein. */
+    val productImagePath: String? = null,
+    /** Ein Bild, auf dem Produkt und Kassenbon zusammen zu sehen sind. */
+    val comboImagePath: String? = null,
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
     val submittedAt: LocalDate? = null,
     val refundedAt: LocalDate? = null,
     val refundedAmountCents: Int? = null,
     val note: String? = null,
     val createdAt: Instant = Instant.EPOCH,
-)
+) {
+    /**
+     * Alle Belegfotos in fester Reihenfolge, leere Plaetze ausgelassen.
+     *
+     * Drei Faelle statt einer Liste, weil die Portale genau diese drei
+     * verlangen: nur den Bon, nur das Produkt, oder beides zusammen auf einem
+     * Bild. Ein generischer Anhang haette dieselbe Frage offengelassen, die
+     * beim Einreichen zaehlt — *was* zeigt das Bild?
+     */
+    val belege: List<Beleg>
+        get() = listOfNotNull(
+            productImagePath?.let { Beleg(Belegart.PRODUKT, it) },
+            receiptImagePath?.let { Beleg(Belegart.BON, it) },
+            comboImagePath?.let { Beleg(Belegart.ZUSAMMEN, it) },
+        )
+
+    val hatBeleg: Boolean get() = belege.isNotEmpty()
+}
+
+/** Was ein Belegfoto zeigt. */
+enum class Belegart(val label: String, val anforderung: String) {
+    PRODUKT("Produkt", "produktfoto"),
+    BON("Kassenbon", "bonfoto"),
+    ZUSAMMEN("Produkt mit Bon", "zusammen_fotografieren"),
+    ;
+
+    /**
+     * True, wenn die Aktion genau dieses Bild verlangt.
+     *
+     * Kennt der Feed die Bedingungen nicht, ist die Antwort ueberall `false` —
+     * dann wird kein Platz hervorgehoben, aber auch keiner gesperrt. Die
+     * Checkliste fuehrt; sie schreibt nichts vor.
+     */
+    fun wirdVerlangt(anforderungen: List<String>?): Boolean =
+        anforderungen?.contains(anforderung) == true
+}
+
+/** Ein Belegfoto und was darauf zu sehen ist. */
+data class Beleg(val art: Belegart, val pfad: String)

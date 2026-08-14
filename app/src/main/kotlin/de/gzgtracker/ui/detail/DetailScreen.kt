@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -84,7 +85,8 @@ fun DetailScreen(
     val uriHandler = LocalUriHandler.current
     var loeschenOffen by remember { mutableStateOf(false) }
     var erstattungOffen by remember { mutableStateOf(false) }
-    var bonGross by remember { mutableStateOf(false) }
+    // Pfad des Bildes, das gerade im Vollbild liegt — null heisst: keins.
+    var grossesBild by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(zustand.geloescht) {
         if (zustand.geloescht) onZurueck()
@@ -93,6 +95,10 @@ fun DetailScreen(
     val eintrag = zustand.submission
 
     Scaffold(
+        // Das aeussere Scaffold in GzgApp rechnet die System-Insets bereits an.
+        // Ohne diese Zeile zieht dieses Scaffold sie ein zweites Mal ab, und die
+        // Inhalte rutschen um Status- und Navigationsleiste zu weit nach innen.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
@@ -250,23 +256,26 @@ fun DetailScreen(
                 VerlaufsZeile(schritt)
             }
 
-            eintrag.receiptImagePath?.let { pfad ->
-                Ueberschrift("Kassenbon")
-                AsyncImage(
-                    model = File(pfad),
-                    contentDescription = "Kassenbon, zum Vergrößern antippen",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 420.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .border(
-                            1.dp,
-                            MaterialTheme.colorScheme.outlineVariant,
-                            RoundedCornerShape(4.dp),
-                        )
-                        .clickable { bonGross = true },
-                )
+            if (eintrag.hatBeleg) {
+                Ueberschrift("Belege")
+                eintrag.belege.forEach { beleg ->
+                    Beschriftung(beleg.art.label)
+                    AsyncImage(
+                        model = File(beleg.pfad),
+                        contentDescription = "${beleg.art.label}, zum Vergrößern antippen",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 420.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.outlineVariant,
+                                RoundedCornerShape(4.dp),
+                            )
+                            .clickable { grossesBild = beleg.pfad },
+                    )
+                }
             }
 
             Box(Modifier.height(32.dp))
@@ -312,10 +321,10 @@ fun DetailScreen(
         )
     }
 
-    if (bonGross && eintrag?.receiptImagePath != null) {
+    grossesBild?.let { pfad ->
         BonVollbild(
-            pfad = eintrag.receiptImagePath!!,
-            onSchliessen = { bonGross = false },
+            pfad = pfad,
+            onSchliessen = { grossesBild = null },
         )
     }
 }

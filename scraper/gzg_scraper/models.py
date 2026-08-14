@@ -21,6 +21,13 @@ class Action:
     valid_to: str | None = None
     submission_deadline: str | None = None
     url: str | None = None
+    # Wo man tatsaechlich einreicht — meist eine andere Adresse als [url], denn
+    # [url] zeigt auf den Artikel im Portal, nicht auf das Formular des
+    # Herstellers. Die App verlinkt bevorzugt hierhin.
+    submit_url: str | None = None
+    # Was man zum Mitmachen braucht, als Schluessel: "produktfoto", "bonfoto",
+    # "zusammen_fotografieren", … Die App baut daraus die Checkliste.
+    requirements: list[str] = field(default_factory=list)
     retailers: list[str] = field(default_factory=list)
     eans: list[str] = field(default_factory=list)
     image_url: str | None = None
@@ -42,6 +49,9 @@ class Action:
             "valid_to": daten["valid_to"],
             "submission_deadline": daten["submission_deadline"],
             "url": daten["url"],
+            "submit_url": daten["submit_url"],
+            # Nicht sortiert: Die Reihenfolge ist die der Checkliste in der App.
+            "requirements": daten["requirements"],
             "retailers": sorted(set(daten["retailers"])),
             "eans": sorted(set(daten["eans"])),
             "image_url": daten["image_url"],

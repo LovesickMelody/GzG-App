@@ -38,6 +38,8 @@ data class PromoActionEntity(
     val validTo: LocalDate?,
     val submissionDeadline: LocalDate?,
     val url: String?,
+    val submitUrl: String?,
+    val requirements: List<String>,
     val retailers: List<String>,
     val eans: List<String>,
     val imageUrl: String?,
@@ -77,10 +79,30 @@ data class SubmissionEntity(
     val purchaseDate: LocalDate,
     val retailer: String?,
     val receiptImagePath: String?,
+    val productImagePath: String?,
+    val comboImagePath: String?,
     val status: String,
     val submittedAt: LocalDate?,
     val refundedAt: LocalDate?,
     val refundedAmountCents: Int?,
     val note: String?,
     val createdAt: Instant,
+)
+
+/**
+ * Die Merkliste — was beim naechsten Einkauf mitkommen soll.
+ *
+ * Bewusst eine eigene Tabelle statt einer Spalte an der Aktion: Aktionen werden
+ * bei jedem Feed-Abgleich ersetzt und verschwundene weggeraeumt. Eine Merkung
+ * darf das ueberleben; sie ist eine Entscheidung des Nutzers, keine Feed-Angabe.
+ *
+ * [imWagen] ist das Haekchen fuer den Einkauf selbst. Es steht in der Datenbank
+ * und nicht nur im Bildschirmzustand, weil man im Laden zwischendurch die App
+ * verlaesst — und danach nicht wieder von vorn anfangen will.
+ */
+@Entity(tableName = "watchlist")
+data class WatchlistEntity(
+    @PrimaryKey val actionId: String,
+    val imWagen: Boolean = false,
+    val addedAt: Instant,
 )

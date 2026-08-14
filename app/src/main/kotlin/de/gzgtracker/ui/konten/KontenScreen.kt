@@ -2,6 +2,7 @@ package de.gzgtracker.ui.konten
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -70,6 +71,10 @@ fun KontenScreen(viewModel: KontenViewModel = hiltViewModel()) {
     }
 
     Scaffold(
+        // Das aeussere Scaffold in GzgApp rechnet die System-Insets bereits an.
+        // Ohne diese Zeile zieht dieses Scaffold sie ein zweites Mal ab, und die
+        // Inhalte rutschen um Status- und Navigationsleiste zu weit nach innen.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(

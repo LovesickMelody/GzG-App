@@ -105,14 +105,28 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Portal** — diese Seiten ändern ihr Markup öfter als ihre Struktur. So ist eine kaputte
   Quelle mit einer Zeile YAML repariert, ohne Python und ohne neuen Test. Für Portale
   mit echter Logik gibt es das Parser-Register.
-- **Die Selektoren in `sources.yaml` sind Startwerte, keine geprüften Werte** — die
-  Zielportale sind aus dieser Umgebung nicht erreichbar, ich konnte sie nicht live
-  ansehen. Der Umweg über CI ging auch nicht: GitHub startet `workflow_dispatch` und
-  `schedule` nur für Workflow-Dateien auf dem Standardbranch, und `scrape.yml` liegt
-  bisher nur auf dem Feature-Branch. `inspect_source.py` gibt den Seitenaufbau aus,
-  daraus sind die Selektoren in wenigen Minuten abgeleitet — Ablauf steht in der README.
-- **Der tägliche Scrape-Lauf startet erst nach dem Merge nach `main`** — dieselbe
-  GitHub-Einschränkung. Bis dahin bleibt `data/actions.json` leer.
+- **Beide Portale aus der Aufgabenstellung sind ersetzt worden** — sie antworten nicht
+  mehr: `www.gratis-testen.de` läuft in einen Verbindungs-Timeout,
+  `www.aktion-gratis-testen.de` löst nicht einmal im DNS auf. Geprüft vom GitHub-Runner
+  aus, also mit freiem Netz, nicht nur aus der gesperrten Entwicklungsumgebung.
+  Nachfolger sind `geldzurueck.deals` und `rabattigel.de/cashback` — beide antworten,
+  liefern ihre Aktionen im HTML und haben eine klar benannte Kartenstruktur.
+- **Selektoren werden am Rohbau abgelesen, nicht an Klassennamen geraten** — ob ein
+  Betrag im Text oder in einem Attribut steht und welcher Link zur Aktion führt statt zu
+  einem Anker auf derselben Seite, steht nur im Markup. Dafür gibt es
+  `inspect_source.py --roh`.
+- **Der Umweg über `push` statt `workflow_dispatch`** — GitHub startet
+  `workflow_dispatch` und `schedule` nur für Workflow-Dateien auf dem Standardbranch,
+  `push` dagegen auf jedem Branch. Nur so kam vor dem Merge überhaupt ein Lauf an die
+  echten Seiten.
+- **Der tägliche Scrape-Lauf startet trotzdem erst nach dem Merge nach `main`** —
+  dieselbe Einschränkung gilt für `schedule`.
+- **Ein Feed-Parser für RSS und Atom neben dem CSS-Parser** — ein Feed ist eine Zusage
+  des Betreibers, maschinenlesbar zu bleiben, überlebt jede Seitenumgestaltung und
+  kostet weniger Last. Bei den geprüften Portalen taugte keiner: `geldzurueck.deals`
+  antwortet mit 404, die WordPress-Seiten liefern unter `/feed/` die *Kommentare* statt
+  der Aktionen. Der Parser bleibt trotzdem im Register, damit die nächste Quelle mit
+  echtem Feed ohne Code auskommt.
 - **Stabile Id aus Titel + Marke + Einsendeschluss** — bewusst *ohne* URL (Portale
   hängen Tracking-Parameter an) und *ohne* Betrag (wird nachträglich korrigiert), sonst
   bekäme dieselbe Aktion ständig eine neue Id.
@@ -123,12 +137,62 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Aktion.
 - **Händler nur gegen eine feste Namensliste** — ein aus dem Fließtext geratener „Markt“
   wäre als Filter wertlos.
+- **Ohne Währungszeichen gilt eine Zahl nur dann als Betrag, wenn rechts weder Ziffer
+  noch Einheit steht** — auf den echten Seiten sahen „30.08.2026“, „1.450 Einlösungen“
+  und „0,75 l“ alle wie Geldbeträge aus, und der Scraper hat zwei davon auch so
+  eingetragen. Aufgefallen ist das erst beim Lesen des Ergebnisses, nicht beim Zählen.
+- **Der Sammellauf schreibt sein Ergebnis lesbar ins Log** — „19 Aktionen gefunden“
+  beweist nichts. Erst Titel, Betrag und Frist nebeneinander zeigen, ob die Selektoren
+  Sinn ergeben.
+- **Wiederkehrende Zusätze werden aus dem Titel geschnitten (`titel_entfernen`)** —
+  rabattigel hängt an jeden Titel „[gratis testen, Geld zurück!]“. Das steht schon im
+  Feld `type`; im Titel verdeckte es neunzehnmal den Produktnamen. Bleibt nach dem
+  Kürzen nichts übrig, gilt der ursprüngliche Titel — lieber laut als namenlos.
+- **Dieselbe Aktion darf aus zwei Portalen doppelt auftauchen** — die Titel weichen
+  voneinander ab („Bonduelle Frische Salate“ gegen „Bonduelle Frische Salate Gratis
+  Testen mit Scondoo“), und eine Ähnlichkeitsregel würde mal richtig, mal falsch
+  zusammenfassen. Ein doppelter Eintrag ist ärgerlich, ein fälschlich verschluckter
+  wäre schlimmer.
+- **Der Countdown „31 Tage“ wird nicht in ein Datum umgerechnet** — die Aktions-Id
+  enthält den Einsendeschluss. Ein täglich um einen Tag wanderndes Datum ergäbe jeden
+  Morgen eine neue Id, und die App führte dieselbe Aktion immer wieder als neu.
 - **Ausgefallene Quellen färben den Job nicht rot** — sonst rauscht jede Portalwartung
   als Fehlalarm durch. Rot wird er erst, wenn keine einzige Quelle mehr liefert.
 - **`generated_at` ändert sich nur bei echter Änderung** — sonst gäbe es jeden Tag einen
   Commit, der nichts als den Zeitstempel dreht.
+- **Dieselbe Aktion aus zwei Portalen wird nur bei identischer Einreichungsadresse
+  zusammengefasst** — wer auf demselben Formular einreicht, macht bei derselben Aktion
+  mit. Titel zu vergleichen wäre verlockend („Bonduelle Frische Salate" gegen „Bonduelle
+  Salat Gratis Testen via scondoo"), würde aber mal richtig und mal falsch zusammenwerfen.
+  Eine fälschlich verschluckte Aktion ist schlimmer als eine doppelt angezeigte.
+- **Beim Zusammenfassen bleibt die Quelle die des Grundeintrags** — die App räumt je Quelle
+  auf; ein zusammengesetzter Wert wie „a+b" würde dabei nie wieder getroffen und der
+  Eintrag bliebe ewig stehen.
 - **Ehrlicher User-Agent mit Projektlink statt getarntem Browser** — fair gegenüber den
   Betreibern und macht Probleme nachvollziehbar.
+- **Der Feed sammelt nur volle Erstattungen** (`nur_arten: [gratis_testen]`) — Teilbeträge
+  sind nicht der Zweck dieser App. Dafür musste die Arterkennung lernen, dass
+  „100 % Cashback" gratis testen *ist*: Das Wort Cashback allein sagt nichts über die
+  Höhe, und ohne diese Unterscheidung hätte der Filter genau die Volltreffer weggeworfen.
+- **Abgelaufene Aktionen fliegen raus, Aktionen ohne Frist bleiben** — Portale lassen alte
+  Einträge stehen. Eine abgelaufene Aktion ist schlimmer als eine fehlende: Man kauft das
+  Produkt und erfährt erst beim Einreichen, dass nichts mehr geht. „Keine Frist bekannt"
+  ist aber etwas anderes als „abgelaufen", und bei einer Quelle fehlt die Frist immer.
+- **`submit_url` neben `url`** — `url` zeigt auf den Artikel im Portal, `submit_url` auf
+  das Formular des Anbieters. Nur so führt ein Fingertipp dorthin, wo man tatsächlich
+  einreicht. Wo es keine gibt, sagt die Beschriftung das ehrlich („Aktionsseite öffnen"
+  statt „Zur Einreichung").
+- **Detailseiten werden nur dort nachgeladen, wo die Übersicht den Link nicht hergibt** —
+  ein zusätzlicher Abruf je Aktion. rabattigel verlinkt schon in der Liste,
+  geldzurueck.deals erst auf der Detailseite; mydealz baut seine Links per JavaScript,
+  da bringt Nachladen nichts.
+- **`requirements` wird konservativ erkannt, im Zweifel leer** — die Checkliste sagt dann
+  „steht nicht im Feed" statt einen Haken zu erfinden. Ein erfundener Haken schickt
+  jemanden mit dem falschen Foto los, und die Erstattung fällt aus; ein fehlender kostet
+  einen Blick auf die Aktionsseite.
+- **Was mydealz als `pepper:merchant` liefert, wird einsortiert statt ins Markenfeld
+  geschrieben** — mal ist es die Marke („Milka"), mal der Händler („ROSSMANN"), mal die
+  Einreichplattform („scondoo"). Sonst hieße die Hälfte aller Aktionen „scondoo".
 
 ## Design
 
@@ -183,6 +247,39 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   „-3,99“ ein Betrag bleibt und kein Text wird.
 - **Der Export liegt im Cache** — er ist eine Momentaufnahme zum Weitergeben, kein
   Dokument, das die App verwalten müsste.
+
+## Merkliste
+
+- **Eigene Tabelle statt einer Spalte an der Aktion** — Aktionen werden bei jedem
+  Feed-Abgleich ersetzt und verschwundene weggeräumt. Eine Merkung ist eine Entscheidung
+  des Nutzers, keine Feed-Angabe, und muss das überleben.
+- **Eine Merkung schützt die Aktion vorm Aufräumen** — sonst wäre der Einkaufszettel
+  morgens im Supermarkt plötzlich halb leer, weil ein Portal einen Eintrag kurz nicht
+  ausgeliefert hat.
+- **Das Häkchen „im Wagen" steht in der Datenbank, nicht im Bildschirmzustand** — im Laden
+  verlässt man die App zwischendurch und will danach nicht von vorn anfangen.
+- **Wer eine gemerkte Aktion erfasst, nimmt sie vom Zettel** — sonst hakt man dieselbe
+  Zeile zweimal ab, einmal im Laden und einmal in der App.
+
+## App
+
+- **„Beleg eintragen" ist die Hauptaktion, nicht „Produkt scannen"** — der tägliche Weg
+  ist: Aktion aussuchen, kaufen, fotografieren, eintragen. Der Barcode-Scan hilft nur im
+  Sonderfall „steht im Laden vor einem Produkt und will wissen, ob dazu etwas läuft"; er
+  sitzt deshalb in der Titelzeile statt auf dem großen Knopf.
+- **Drei feste Belegplätze statt einer freien Anhangsliste** — die Portale verlangen genau
+  drei Dinge: das Produkt allein, den Bon allein, oder beides zusammen auf einem Bild.
+  Eine generische Liste hätte die Frage offengelassen, die beim Einreichen zählt: *Was
+  zeigt das Bild?*
+- **Verlangte Belege werden hervorgehoben, nicht erzwungen** — die Checkliste aus dem Feed
+  ist nicht immer vollständig, und wer ein Bild zu viel macht, verliert nichts.
+
+- **Echte Room-Migrationen statt `fallbackToDestructiveMigration()`** — in dieser Datenbank
+  stehen Einreichungen, Konten und die Pfade zu den Bonfotos. Ein Update, das die Belege
+  eines halben Jahres wegwirft, wäre der schlimmste denkbare Fehler dieser App.
+- **`url` und `submit_url` müssen `http(s)` sein** — beide kommen aus fremden Portalen. Ein
+  `javascript:`- oder `intent:`-Link daraus würde beim Antippen in einer anderen App
+  landen; das gehört gar nicht erst in die Datenbank.
 
 ## Sonstiges
 

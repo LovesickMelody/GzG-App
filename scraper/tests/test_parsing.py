@@ -39,6 +39,34 @@ class TestBetrag:
     def test_nimmt_den_ersten_betrag(self):
         assert betrag_in_cent("statt 5,99 € nur 3,99 €") == 599
 
+    @pytest.mark.parametrize(
+        "text",
+        [
+            # Aus den echten Portalseiten: ohne Absicherung las die Erkennung
+            # hier 30,08 € beziehungsweise 1,45 € — beides frei erfunden.
+            "Eingetragen am: 10.08.2026",
+            "Zeitraum: 10.08.2026 – 30.08.2026",
+            "Gültig bis 30.08.2026",
+            "Laut Community noch etwa 1.450 Einlösungen",
+            "Bestellnummer 12.3456",
+            # Füllmengen und Maße stehen in fast jedem Produkttitel.
+            "SACHSEN QUELLE medium+ lemon 0,75l",
+            "Flasche 0,75 l",
+            "Kabel 1,5 m lang",
+            "Packung 0,25 kg",
+        ],
+    )
+    def test_haelt_datum_menge_und_lange_zahl_nicht_fuer_geld(self, text):
+        assert betrag_in_cent(text) is None
+
+    def test_ein_wort_nach_dem_betrag_ist_keine_einheit(self):
+        # "im" faengt mit einem Buchstaben an, ist aber keine Einheit — der
+        # Betrag muss trotzdem durchkommen.
+        assert betrag_in_cent("nur 3,99 im Angebot") == 399
+
+    def test_findet_den_betrag_trotzdem_wenn_ein_datum_danebensteht(self):
+        assert betrag_in_cent("Gültig bis 30.08.2026, du bekommst 4,99 € zurück") == 499
+
 
 class TestDatum:
     @pytest.mark.parametrize(
@@ -108,6 +136,23 @@ class TestArt:
 
     def test_gratis_schlaegt_cashback(self):
         assert art_aus_text("Gratis testen per Cashback-Aktion") == "gratis_testen"
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            # Echte Titel aus dem mydealz-Feed. "100 % Cashback" ist gratis
+            # testen — das Wort Cashback allein sagt nichts über die Höhe.
+            "[GzG] 100% Cashback auf PET Einweg Einzelflaschen",
+            "GZG - 100 % zurück auf Pantene Pro-V Repair & Care",
+            "Kaufpreis erstattet nach Einsendung",
+            "Du bekommst den vollen Kaufpreis zurück",
+        ],
+    )
+    def test_volle_erstattung_ist_gratis_testen(self, text):
+        assert art_aus_text(text) == "gratis_testen"
+
+    def test_haelt_50_prozent_auseinander(self):
+        assert art_aus_text("Naturals 50 % Cashback-Aktion") == "cashback_teilbetrag"
 
 
 class TestHilfen:

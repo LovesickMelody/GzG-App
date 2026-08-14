@@ -142,8 +142,8 @@ class TestJsonForm:
         schluessel = list(aktion("Titel").to_json().keys())
         assert schluessel == [
             "id", "title", "brand", "type", "max_refund_cents",
-            "valid_from", "valid_to", "submission_deadline", "url",
-            "retailers", "eans", "image_url", "source",
+            "valid_from", "valid_to", "submission_deadline", "url", "submit_url",
+            "requirements", "retailers", "eans", "image_url", "source",
         ]
 
     def test_sortiert_listen(self):

@@ -11,12 +11,13 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from .models import Action
-from .parsers import css_listing
+from .parsers import css_listing, feed
 
 Parser = Callable[[str, dict], list[Action]]
 
 PARSER: dict[str, Parser] = {
     "css_listing": css_listing.parse,
+    "feed": feed.parse,
 }
 
 

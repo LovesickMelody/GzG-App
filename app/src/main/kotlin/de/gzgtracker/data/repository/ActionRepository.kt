@@ -4,6 +4,8 @@ import de.gzgtracker.core.PromoAction
 import de.gzgtracker.data.local.PromoActionDao
 import de.gzgtracker.data.local.PromoActionEntity
 import de.gzgtracker.data.local.toDomain
+import de.gzgtracker.data.local.WatchlistDao
+import de.gzgtracker.data.local.WatchlistEntity
 import de.gzgtracker.data.local.toEntity
 import de.gzgtracker.data.remote.ActionsApi
 import de.gzgtracker.data.remote.toEntity
@@ -24,6 +26,7 @@ sealed interface FeedErgebnis {
 @Singleton
 class ActionRepository @Inject constructor(
     private val dao: PromoActionDao,
+    private val watchlist: WatchlistDao,
     private val api: ActionsApi,
     private val settings: SettingsRepository,
 ) {
@@ -34,6 +37,29 @@ class ActionRepository @Inject constructor(
 
     fun beobachte(id: String): Flow<PromoAction?> =
         dao.beobachte(id).map { it?.toDomain() }
+
+    /** Die Merkliste: Aktions-Id -> ist es schon im Wagen? */
+    val gemerkt: Flow<Map<String, Boolean>> = watchlist.beobachteAlle().map { liste ->
+        liste.associate { it.actionId to it.imWagen }
+    }
+
+    suspend fun merkenUmschalten(actionId: String) =
+        watchlist.schalteUm(actionId, Instant.now())
+
+    suspend fun setzeImWagen(actionId: String, imWagen: Boolean) =
+        watchlist.setzeImWagen(actionId, imWagen)
+
+    /**
+     * Nimmt eine Aktion von der Merkliste.
+     *
+     * Wird beim Erfassen aufgerufen: Was gekauft und eingetragen ist, gehoert
+     * nicht mehr auf die Einkaufsliste. Sonst muesste man dieselbe Zeile zweimal
+     * abhaken — einmal im Laden, einmal in der App.
+     */
+    suspend fun vergiss(actionId: String) = watchlist.entferne(actionId)
+
+    /** Raeumt die abgehakten Zeilen weg — der Knopf nach dem Einkauf. */
+    suspend fun entferneErledigte() = watchlist.entferneErledigte()
 
     suspend fun lade(id: String): PromoAction? = dao.lade(id)?.toDomain()
 

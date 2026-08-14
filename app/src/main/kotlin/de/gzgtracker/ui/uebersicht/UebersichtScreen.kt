@@ -3,6 +3,7 @@ package de.gzgtracker.ui.uebersicht
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.outlined.IosShare
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ReceiptLong
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -48,6 +50,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -80,6 +84,10 @@ fun UebersichtScreen(
     }
 
     Scaffold(
+        // Das aeussere Scaffold in GzgApp rechnet die System-Insets bereits an.
+        // Ohne diese Zeile zieht dieses Scaffold sie ein zweites Mal ab, und die
+        // Inhalte rutschen um Status- und Navigationsleiste zu weit nach innen.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
@@ -129,16 +137,31 @@ fun UebersichtScreen(
                             Icon(Icons.Outlined.FilterList, contentDescription = "Filtern")
                         }
                     }
+                    IconButton(onClick = onScannen) {
+                        Icon(
+                            Icons.Outlined.QrCodeScanner,
+                            contentDescription = "Produkt scannen",
+                        )
+                    }
                 },
             )
         },
         floatingActionButton = {
+            // Die Hauptaktion ist das Eintragen eines gekauften Produkts — das
+            // ist der Weg, den man taeglich geht. Der Barcode-Scan hilft nur im
+            // Sonderfall "steht im Laden vor einem Produkt und will wissen, ob
+            // dazu eine Aktion laeuft"; er sitzt deshalb in der Titelzeile.
             ExtendedFloatingActionButton(
-                onClick = onScannen,
+                onClick = onErfassen,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
-                icon = { Icon(Icons.Outlined.QrCodeScanner, contentDescription = null) },
-                text = { Text("Produkt scannen") },
+                icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
+                text = { Text("Beleg eintragen") },
+                // Eigene Beschriftung, weil die Beschriftung aus dem `text`-Slot
+                // nicht im Baum der Bedienhilfen ankommt — der Emulator-Test fand
+                // an dieser Stelle einen Knopf ganz ohne Namen. Ein Screenreader
+                // haette die Hauptaktion der App also gar nicht angesagt.
+                modifier = Modifier.semantics { contentDescription = "Beleg eintragen" },
             )
         },
     ) { innen ->
@@ -363,7 +386,7 @@ private fun LeererZustand(
             text = if (gefiltert) {
                 "Kein Beleg passt zu diesen Filtern. Setz sie zurück, um alles zu sehen."
             } else {
-                "Scanne dein erstes Produkt oder trag es von Hand ein."
+                "Such dir eine Aktion, kauf das Produkt und trag den Beleg hier ein."
             },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

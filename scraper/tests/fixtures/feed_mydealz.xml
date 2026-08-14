@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Nachgebauter mydealz-Feed, Aufbau 1:1 vom echten uebernommen (Lauf vom
+  14.08.2026): Marke als eigenes Element, Beschreibung als eingepacktes HTML,
+  Zeitraum in einer Zeile, Kennzeichnung vorn im Titel.
+-->
+<rss version="2.0"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:pepper="https://about.pepper.com/rss">
+  <channel>
+    <title>Geld-zurück-Aktionen</title>
+
+    <item>
+      <category>Lebensmittel &amp; Haushalt</category>
+      <pepper:merchant name="JACOBS Kaffee"/>
+      <media:content height="100" medium="image" url="https://static.mydealz.de/jacobs.jpg" width="100"/>
+      <title>[GzG] Jacobs 3in1/2in1 gratis testen ab dem 17.08-26 - 30.09.26</title>
+      <description>&lt;strong&gt;JACOBS Kaffee&lt;/strong&gt;&lt;br /&gt;Jacobs 3in1/2in1 gratis
+        testen&lt;br /&gt;17.08.2026-30.09.2026&lt;br /&gt;Pro Haushalt wird der Kaufpreis für
+        maximal ein Produkt pro Teilnahme rückerstattet. Bitte Produkt zusammen mit dem
+        Kassenbon fotografieren und in der App hochladen.&lt;/p&gt;</description>
+      <link>https://www.mydealz.de/deals/jacobs-3in12in1-gratis-testen-2823305</link>
+      <pubDate>Mon, 10 Aug 2026 21:17:01 +0200</pubDate>
+    </item>
+
+    <item>
+      <pepper:merchant name="Coca-Cola"/>
+      <title>(personalisiert) GZG - 100 % zurück auf Pantene Pro-V</title>
+      <description>Du bekommst 100 % des Kaufpreises zurück. IBAN angeben, Kassenbon hochladen.</description>
+      <link>https://www.mydealz.de/deals/pantene-2768029</link>
+    </item>
+
+    <item>
+      <title>GZG - 2 € Cashback auf ein PET Multipack</title>
+      <description>Ein Teilbetrag von 2 € wird erstattet.</description>
+      <link>https://www.mydealz.de/deals/pet-multipack-1</link>
+    </item>
+
+    <item>
+      <title>Großes Gewinnspiel zum Sommer</title>
+      <description>Eine Verlosung, kein Geld zurück.</description>
+      <link>https://www.mydealz.de/deals/gewinnspiel-1</link>
+    </item>
+  </channel>
+</rss>

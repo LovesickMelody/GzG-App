@@ -2,6 +2,7 @@ package de.gzgtracker.ui.aktionen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,12 @@ import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -44,6 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoAction
+import de.gzgtracker.ui.components.TeilnahmeKurz
 import de.gzgtracker.ui.format.deutsch
 import de.gzgtracker.ui.format.relativeAngabe
 import de.gzgtracker.ui.theme.MoneyTextStyle
@@ -68,6 +76,10 @@ fun AktionenScreen(
     }
 
     Scaffold(
+        // Das aeussere Scaffold in GzgApp rechnet die System-Insets bereits an.
+        // Ohne diese Zeile zieht dieses Scaffold sie ein zweites Mal ab, und die
+        // Inhalte rutschen um Status- und Navigationsleiste zu weit nach innen.
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
@@ -112,28 +124,86 @@ fun AktionenScreen(
                         onClick = { viewModel.setzeNurLaufende(!zustand.nurLaufende) },
                         label = { Text("Nur laufende") },
                     )
-                    zustand.letzterSync?.let { sync ->
+                    FilterChip(
+                        selected = zustand.nurMerkliste,
+                        onClick = { viewModel.setzeNurMerkliste(!zustand.nurMerkliste) },
+                        label = {
+                            Text(
+                                if (zustand.anzahlGemerkt > 0) {
+                                    "Merkliste (${zustand.anzahlGemerkt})"
+                                } else {
+                                    "Merkliste"
+                                },
+                            )
+                        },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Outlined.ShoppingCart,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp),
+                            )
+                        },
+                    )
+                    if (!zustand.nurMerkliste) {
+                        zustand.letzterSync?.let { sync ->
+                            Text(
+                                text = "Aktualisiert ${sync.relativeAngabe()}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+
+                // Kopfzeile des Einkaufszettels: was noch fehlt, und der Knopf
+                // zum Aufraeumen nach dem Einkauf.
+                if (zustand.nurMerkliste && zustand.anzahlGemerkt > 0) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 4.dp, bottom = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
                         Text(
-                            text = "Aktualisiert ${sync.relativeAngabe()}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            text = when (zustand.nochZuKaufen) {
+                                0 -> "Alles im Wagen"
+                                1 -> "Noch 1 Produkt zu kaufen"
+                                else -> "Noch ${zustand.nochZuKaufen} Produkte zu kaufen"
+                            },
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
+                        if (zustand.hatErledigte) {
+                            TextButton(onClick = viewModel::entferneErledigte) {
+                                Text("Abgehakte entfernen")
+                            }
+                        }
                     }
                 }
 
                 if (zustand.istLeer) {
-                    LeereAktionen(
-                        onAnlegen = onAktionAnlegen,
-                        onAktualisieren = viewModel::aktualisiere,
-                    )
+                    if (zustand.nurMerkliste) {
+                        LeereMerkliste(onAlleZeigen = { viewModel.setzeNurMerkliste(false) })
+                    } else {
+                        LeereAktionen(
+                            onAnlegen = onAktionAnlegen,
+                            onAktualisieren = viewModel::aktualisiere,
+                        )
+                    }
                 } else {
                     LazyColumn(Modifier.fillMaxSize()) {
                         items(zustand.aktionen, key = { it.id }) { aktion ->
                             AktionZeile(
                                 aktion = aktion,
+                                gemerkt = aktion.id in zustand.gemerkt,
+                                imWagen = zustand.gemerkt[aktion.id] == true,
+                                einkaufsmodus = zustand.nurMerkliste,
                                 onErfassen = { onAktionErfassen(aktion.id) },
                                 onBearbeiten = { onAktionBearbeiten(aktion.id) },
-                                onOeffnen = { aktion.url?.let(uriHandler::openUri) },
+                                onMerken = { viewModel.merkenUmschalten(aktion.id) },
+                                onImWagen = { viewModel.setzeImWagen(aktion.id, it) },
+                                onOeffnen = { aktion.besteAdresse?.let(uriHandler::openUri) },
                             )
                             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                         }
@@ -148,8 +218,13 @@ fun AktionenScreen(
 @Composable
 private fun AktionZeile(
     aktion: PromoAction,
+    gemerkt: Boolean,
+    imWagen: Boolean,
+    einkaufsmodus: Boolean,
     onErfassen: () -> Unit,
     onBearbeiten: () -> Unit,
+    onMerken: () -> Unit,
+    onImWagen: (Boolean) -> Unit,
     onOeffnen: () -> Unit,
 ) {
     val tage = aktion.tageBisFrist()
@@ -163,6 +238,15 @@ private fun AktionZeile(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Im Einkaufsmodus steht das Häkchen vorn — dort greift der Daumen im
+        // Laden hin, mit dem Wagen in der anderen Hand.
+        if (einkaufsmodus) {
+            Checkbox(
+                checked = imWagen,
+                onCheckedChange = onImWagen,
+            )
+        }
+
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(3.dp),
@@ -175,7 +259,16 @@ private fun AktionZeile(
                 Text(
                     text = aktion.title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (imWagen && einkaufsmodus) {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
+                    textDecoration = if (imWagen && einkaufsmodus) {
+                        TextDecoration.LineThrough
+                    } else {
+                        null
+                    },
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f),
@@ -206,18 +299,40 @@ private fun AktionZeile(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+
+            TeilnahmeKurz(aktion.requirements)
         }
 
-        if (aktion.url != null) {
+        if (aktion.besteAdresse != null) {
             IconButton(onClick = onOeffnen) {
                 Icon(
                     Icons.Outlined.OpenInNew,
-                    contentDescription = "Aktionsseite öffnen",
+                    // Der Unterschied zählt: Bei der einen Quelle landet man
+                    // direkt im Formular, bei der anderen erst auf der
+                    // Portalseite. Wer das vorher weiß, klickt richtig.
+                    contentDescription = if (aktion.fuehrtDirektZumFormular) {
+                        "Zur Einreichung"
+                    } else {
+                        "Aktionsseite öffnen"
+                    },
                 )
             }
         }
-        IconButton(onClick = onBearbeiten) {
-            Icon(Icons.Outlined.Edit, contentDescription = "Aktion bearbeiten")
+        IconButton(onClick = onMerken) {
+            Icon(
+                if (gemerkt) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                contentDescription = if (gemerkt) {
+                    "Von der Merkliste nehmen"
+                } else {
+                    "Auf die Merkliste setzen"
+                },
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+        if (!einkaufsmodus) {
+            IconButton(onClick = onBearbeiten) {
+                Icon(Icons.Outlined.Edit, contentDescription = "Aktion bearbeiten")
+            }
         }
     }
 }
@@ -232,6 +347,42 @@ private fun fristText(aktion: PromoAction, tage: Long?): String {
         tage == 1L -> "$bezeichnung morgen"
         tage <= 14 -> "$bezeichnung in $tage Tagen (${frist.deutsch()})"
         else -> "$bezeichnung ${frist.deutsch()}"
+    }
+}
+
+@Composable
+private fun LeereMerkliste(onAlleZeigen: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            Icons.Outlined.ShoppingCart,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = "Dein Einkaufszettel ist leer",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(top = 16.dp),
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "Setz Aktionen mit dem Lesezeichen auf die Merkliste. " +
+                "Im Laden hakst du sie hier der Reihe nach ab.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        TextButton(onClick = onAlleZeigen, modifier = Modifier.padding(top = 8.dp)) {
+            Text("Alle Aktionen zeigen")
+        }
     }
 }
 

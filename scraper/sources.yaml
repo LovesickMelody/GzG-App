@@ -3,11 +3,11 @@
 # Eine Quelle je Eintrag. Faellt eine aus, laufen die anderen weiter und der
 # bisherige Stand dieser Quelle bleibt in data/actions.json stehen.
 #
-# WICHTIG — die Selektoren unten sind Startwerte und muessen gegen die echten
-# Seiten geprueft werden. Wie das geht, steht in der README unter
-# "Einen kaputten Scraper reparieren": Der Workflow `scrape.yml` laesst sich mit
-# `inspect: <name>` von Hand starten und schreibt dann den Seitenaufbau ins
-# Job-Log, woraus sich die richtigen Selektoren ablesen lassen.
+# Die Selektoren unten sind am echten Markup abgelesen (Stand 14.08.2026),
+# nicht geraten. Wie man das nachvollzieht, steht in der README unter
+# "Einen kaputten Scraper reparieren":
+#   python scraper/inspect_source.py --source <name>
+#   python scraper/inspect_source.py --url <adresse> --roh "<selektor>"
 #
 # Felder:
 #   name          Kurzname; landet als "source" in actions.json und gruppiert
@@ -15,40 +15,102 @@
 #   enabled       false schaltet eine Quelle ab, ohne sie zu loeschen.
 #   base_url      Basis fuer relative Links und Bilder.
 #   listing_urls  Uebersichtsseiten, die abgeklappert werden.
-#   parser        Eintrag aus gzg_scraper/registry.py.
-#   selectors     CSS-Selektoren. "a@href" liest ein Attribut statt des Textes.
+#   parser        Eintrag aus gzg_scraper/registry.py: css_listing oder feed.
+#   selectors     CSS-Selektoren. "a@href" liest ein Attribut statt des Textes,
+#                 "@data-href" ein Attribut des Eintrags selbst.
 #                 Fehlt ein Feld, bleibt es leer — das ist kein Fehler.
 
-sources:
-  - name: gratis-testen
-    enabled: true
-    base_url: https://www.gratis-testen.de/
-    listing_urls:
-      - https://www.gratis-testen.de/
-    parser: css_listing
-    selectors:
-      item: "article"
-      title: "h2"
-      link: "a@href"
-      brand: ".brand"
-      max_refund: ".price"
-      deadline: ".deadline"
-      image: "img@src"
+# Zusaetzlich je Quelle moeglich, ausserhalb von `selectors`:
+#   nur_arten       Welche Aktionsarten behalten werden. Standard ist
+#                   [gratis_testen] — also nur volle Erstattungen. [] heisst
+#                   "alles behalten".
+#   titel_entfernen Regulaerer Ausdruck; schneidet einen wiederkehrenden Zusatz
+#                   aus dem Titel ("[GzG]", "[gratis testen, Geld zurueck!]").
+#   detail          Holt je Aktion die Detailseite nach, um den Einreichungslink
+#                   und die Teilnahmebedingungen zu lesen. Kostet einen Abruf je
+#                   Aktion — nur setzen, wo die Uebersicht das nicht hergibt.
 
-  - name: aktion-gratis-testen
+sources:
+  # Groesste Quelle: die Gruppe "Geld zurueck" auf mydealz, als RSS. Eine
+  # Gemeinschaft traegt hier zusammen, was gerade laeuft — schneller und
+  # vollstaendiger als jede redaktionelle Seite.
+  #
+  # Der Feed liefert die Marke sauber als eigenes Element mit (pepper:merchant),
+  # dazu Zeitraum und Bild. Was er nicht liefert, ist der Einreichungslink: Die
+  # Detailseite baut ihre Links per JavaScript, ein Nachladen braechte also
+  # nichts. Deshalb fuehrt "Aktion oeffnen" hier auf die mydealz-Seite, von der
+  # aus es einen Klick weiter geht.
+  - name: mydealz
     enabled: true
-    base_url: https://www.aktion-gratis-testen.de/
+    base_url: https://www.mydealz.de/
     listing_urls:
-      - https://www.aktion-gratis-testen.de/
+      - https://www.mydealz.de/rss/gruppe/geld-zurueck
+    parser: feed
+    # Titel tragen fast immer eine Kennzeichnung vorneweg: "[GzG]", "GZG -",
+    # "(personalisiert)". Die steht schon in anderen Feldern.
+    titel_entfernen: '^(?:\s*(?:\[[^\]]*\]|\([^)]*\)|GZG\s*[-–]))+\s*'
+    ausschluss:
+      - gewinnspiel
+      - verlosung
+      - abgelaufen
+
+  # Spezialportal, das ausschliesslich Geld-zurueck-Aktionen fuehrt. Beste
+  # Struktur im Feld: jede Aktion ist eine Karte, abgelaufene tragen zusaetzlich
+  # die Klasse "expired" und werden hier ausgeschlossen.
+  - name: geldzurueck-deals
+    enabled: true
+    base_url: https://geldzurueck.deals/
+    listing_urls:
+      - https://geldzurueck.deals/
     parser: css_listing
     selectors:
-      item: "article"
-      title: "h2"
-      link: "a@href"
-      brand: ".brand"
-      max_refund: ".price"
-      deadline: ".deadline"
-      image: "img@src"
+      item: "div.card:not(.expired)"
+      title: "div.card-title"
+      # Die Karte ist kein <a>, sondern traegt das Ziel als Attribut.
+      link: "@data-href"
+      image: "div.detail-hero img@src"
+      # Kein max_refund-Selektor: Die Karte weist keinen Betrag aus, er steht
+      # nur im Titel oder Kurztext ("1 € Cashback"). Ohne Selektor sucht der
+      # Parser im gesamten Eintragstext — genau das ist hier richtig.
+      #
+      # Kein deadline-Selektor: Die Karte zeigt die Restlaufzeit als Countdown
+      # ("31 Tage"), kein Datum. Daraus ein Datum zu rechnen waere unsicher und
+      # wuerde die Aktions-Id taeglich veraendern (siehe DECISIONS.md).
+    # Die Uebersicht kennt den Einreichungslink nicht, die Detailseite schon:
+    # dort steht ein Knopf "Zur Aktion", der direkt zum Formular des Anbieters
+    # fuehrt. Dieselbe Seite nennt auch die Teilnahmebedingungen, aus denen die
+    # Checkliste entsteht — der zusaetzliche Abruf lohnt sich hier doppelt.
+    detail:
+      enabled: true
+      submit_link: "a.button@href"
+      submit_link_text: "Zur Aktion"
+
+  # Zweite Quelle, damit ein Ausfall nicht den ganzen Feed leert. Fuehrt echte
+  # Datumsangaben mit und ergaenzt damit, was geldzurueck.deals fehlt.
+  - name: rabattigel
+    enabled: true
+    base_url: https://rabattigel.de/
+    listing_urls:
+      - https://rabattigel.de/cashback/
+    parser: css_listing
+    # Jeder Titel endet auf "[gratis testen, Geld zurück!]" oder aehnlich. Die
+    # Angabe steht schon im Feld "type"; im Titel verdeckt sie nur das Produkt.
+    titel_entfernen: '\s*\[[^\]]*\]\s*$'
+    selectors:
+      item: "article.rgu-card"
+      title: "h3.rgu-card-title"
+      link: "h3.rgu-card-title a@href"
+      # Der Knopf "Cashback sichern" zeigt direkt auf das Formular des
+      # Anbieters — hier steht der Einreichungslink schon in der Übersicht,
+      # ein Nachladen der Detailseite erübrigt sich.
+      submit_link: "a.rgu-cta@href"
+      image: "a.rgu-card-image img@src"
+      # "Gültig bis 30.08.2026" — der Einsendeschluss steht direkt am Bild.
+      deadline: "div.rgu-date strong"
+      valid_to: "div.rgu-date strong"
+      # Der Kurztext beginnt mit "Zeitraum: 10.08.2026 – 30.08.2026"; das erste
+      # Datum darin ist der Aktionsbeginn.
+      valid_from: "span.rgu-excerpt-short"
 
   # Beispiel fuer eine abgeschaltete Quelle — als Vorlage fuer neue Portale.
   - name: beispiel-portal
@@ -66,3 +128,24 @@ sources:
       deadline: "time.promo-deadline@datetime"
       valid_to: "time.promo-end@datetime"
       image: "img.promo-image@src"
+
+  # Vorlage fuer ein Portal mit RSS- oder Atom-Feed. Der Weg ist dem Scrapen
+  # vorzuziehen: weniger Last, stabilerer Aufbau. Bei den bisher geprueften
+  # Portalen gab es keinen brauchbaren Feed (siehe kandidaten.txt).
+  - name: beispiel-feed
+    enabled: false
+    base_url: https://example.invalid/
+    listing_urls:
+      - https://example.invalid/aktionen/feed/
+    parser: feed
+    # Nur Eintraege, in denen eines dieser Woerter vorkommt.
+    keywords:
+      - geld zurück
+      - gratis testen
+      - cashback
+      - kaufpreis erstattet
+    ausschluss:
+      - gewinnspiel
+      - verlosung
+    # Trennt "Marke: Rest des Titels" auf.
+    brand_trenner: ":"

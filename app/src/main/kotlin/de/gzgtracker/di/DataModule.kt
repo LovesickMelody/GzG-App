@@ -11,8 +11,10 @@ import dagger.hilt.components.SingletonComponent
 import de.gzgtracker.BuildConfig
 import de.gzgtracker.data.local.AccountDao
 import de.gzgtracker.data.local.GzgDatabase
+import de.gzgtracker.data.local.Migrationen
 import de.gzgtracker.data.local.PromoActionDao
 import de.gzgtracker.data.local.SubmissionDao
+import de.gzgtracker.data.local.WatchlistDao
 import de.gzgtracker.data.remote.ActionsApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -29,13 +31,19 @@ object DataModule {
     @Provides
     @Singleton
     fun database(@ApplicationContext context: Context): GzgDatabase =
-        Room.databaseBuilder(context, GzgDatabase::class.java, GzgDatabase.NAME).build()
+        Room.databaseBuilder(context, GzgDatabase::class.java, GzgDatabase.NAME)
+            // Echte Migrationen: In dieser Datenbank stehen Belege und Konten.
+            .addMigrations(*Migrationen.ALLE)
+            .build()
 
     @Provides
     fun accountDao(database: GzgDatabase): AccountDao = database.accountDao()
 
     @Provides
     fun promoActionDao(database: GzgDatabase): PromoActionDao = database.promoActionDao()
+
+    @Provides
+    fun watchlistDao(database: GzgDatabase): WatchlistDao = database.watchlistDao()
 
     @Provides
     fun submissionDao(database: GzgDatabase): SubmissionDao = database.submissionDao()
