@@ -67,6 +67,57 @@ jobs:
           echo "::warning::Artifact-Upload fehlgeschlagen (meist volles Speicherkontingent)." \
                "Die APK haengt stattdessen am Prerelease 'debug-latest'."
 
+  # Ein gruener Compile beweist nicht, dass die App startet. Dieser Job installiert
+  # die APK auf einem echten Emulator und laesst sie laufen — er faengt Abstuerze
+  # durch Hilt, Room, DataStore oder fehlende Ressourcen ab, die der Compiler nicht
+  # sehen kann.
+  smoke:
+    name: App auf Emulator starten
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Gradle einrichten (mit Cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      # Ohne KVM laeuft der Emulator in Software und braucht ein Vielfaches der Zeit.
+      - name: KVM freigeben
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Instrumentierte Tests auf dem Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          # `default` statt `google_apis`: Die App braucht keine Play Services —
+          # das ML-Kit-Barcode-Modell ist mit einkompiliert.
+          target: default
+          disable-animations: true
+          emulator-options: >-
+            -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: ./gradlew connectedDebugAndroidTest
+
+      - name: Testberichte hochladen
+        if: failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: emulator-test-reports
+          path: app/build/reports/androidTests/
+          if-no-files-found: ignore
+          retention-days: 7
+
   # Weg 2 zur APK: ein mitlaufendes Prerelease. Release-Assets zaehlen nicht gegen
   # das Artifact-Kontingent, die APK ist also auch dann erreichbar, wenn Weg 1 klemmt.
   debug-release:
