@@ -21,6 +21,9 @@
 # /rss/gruppe/<name> an. Falls das traegt, waere es die ergiebigste Quelle:
 # grosse Gemeinschaft, jede Aktion mit Link zur Einreichungsseite.
 https://www.mydealz.de/rss/gruppe/geld-zurueck
+# Pepper-Seiten leiten ueber /visit/threadmain/<id> zum Anbieter weiter —
+# falls das traegt, gibt es auch fuer mydealz einen direkten Einreichungslink.
+https://www.mydealz.de/visit/threadmain/2823305
 # https://www.mydealz.de/rss/gruppe/gratis
 #   HTTP 404 — diese Gruppe gibt es nicht.
 # https://www.mydealz.de/gruppe/geld-zurueck

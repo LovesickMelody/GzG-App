@@ -18,7 +18,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.ShoppingCart
@@ -46,6 +45,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -88,15 +92,14 @@ fun AktionenScreen(
                     containerColor = MaterialTheme.colorScheme.background,
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
                 ),
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = onAktionAnlegen,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
-                text = { Text("Aktion anlegen") },
+                actions = {
+                    // Eine Aktion von Hand anzulegen ist der Ausnahmefall — der
+                    // Feed bringt sie sonst mit. Ein großer Knopf am Daumen
+                    // hätte hier nichts verloren.
+                    IconButton(onClick = onAktionAnlegen) {
+                        Icon(Icons.Outlined.Add, contentDescription = "Aktion anlegen")
+                    }
+                },
             )
         },
     ) { innen ->
@@ -244,6 +247,24 @@ private fun AktionZeile(
             Checkbox(
                 checked = imWagen,
                 onCheckedChange = onImWagen,
+            )
+        }
+
+        // Produktbild aus dem Feed. Im Laden erkennt man die Packung schneller
+        // wieder als den Produktnamen — und viele Titel sind ohnehin kryptisch.
+        aktion.imageUrl?.let { adresse ->
+            AsyncImage(
+                model = adresse,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .border(
+                        1.dp,
+                        MaterialTheme.colorScheme.outlineVariant,
+                        RoundedCornerShape(4.dp),
+                    ),
             )
         }
 

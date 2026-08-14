@@ -196,6 +196,8 @@ class ErfassenViewModel @Inject constructor(
         setzeKonto(vorschlag.id)
     }
 
+    fun zeigeMeldung(text: String) = _uiState.update { it.copy(meldung = text) }
+
     /** Merkt sich, welcher Belegplatz gemeint ist, bevor der Bildwähler aufgeht. */
     fun waehleBeleg(art: Belegart) {
         _uiState.update { it.copy(offeneBelegart = art) }

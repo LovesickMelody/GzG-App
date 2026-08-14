@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
+import android.util.Log
 import androidx.exifinterface.media.ExifInterface
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,10 @@ class ReceiptStorage @Inject constructor(
             }
             bitmap.recycle()
             ziel.absolutePath
+        }.onFailure { fehler ->
+            // Ohne diese Zeile steht im Fehlerfall nur "ließ sich nicht laden"
+            // und niemand weiss, woran es lag.
+            Log.w(TAG, "Bild $quelle nicht übernommen", fehler)
         }.getOrNull()
     }
 
@@ -64,10 +69,14 @@ class ReceiptStorage @Inject constructor(
     fun neueDatei(): File = File(ordner, "bon-${UUID.randomUUID()}.jpg")
 
     private fun ladeVerkleinert(quelle: Uri): Bitmap? {
+        // ACHTUNG: Mit inJustDecodeBounds gibt decodeStream absichtlich null
+        // zurueck — es misst nur. Ein `?: return null` hinter dem use-Block
+        // haette also bei *jedem* Bild abgebrochen, bevor ueberhaupt etwas
+        // geladen wird. Genau das war der Fehler "Das Bild liess sich nicht
+        // laden". Der Strom wird deshalb einzeln geprueft, nicht das Ergebnis.
         val masse = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        context.contentResolver.openInputStream(quelle)?.use {
-            BitmapFactory.decodeStream(it, null, masse)
-        } ?: return null
+        val messstrom = context.contentResolver.openInputStream(quelle) ?: return null
+        messstrom.use { BitmapFactory.decodeStream(it, null, masse) }
 
         val laengsteKante = maxOf(masse.outWidth, masse.outHeight)
         if (laengsteKante <= 0) return null
@@ -77,7 +86,8 @@ class ReceiptStorage @Inject constructor(
                 .first { schritt -> laengsteKante / schritt <= MAX_KANTE }
         }
 
-        val bitmap = context.contentResolver.openInputStream(quelle)?.use {
+        val ladestrom = context.contentResolver.openInputStream(quelle) ?: return null
+        val bitmap = ladestrom.use {
             BitmapFactory.decodeStream(it, null, optionen)
         } ?: return null
 
@@ -121,6 +131,7 @@ class ReceiptStorage @Inject constructor(
     }
 
     private companion object {
+        const val TAG = "ReceiptStorage"
         const val ORDNER = "receipts"
         const val MAX_KANTE = 2000
         const val QUALITAET = 85

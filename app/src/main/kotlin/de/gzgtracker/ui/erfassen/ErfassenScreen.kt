@@ -54,6 +54,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -80,11 +88,59 @@ fun ErfassenScreen(
     val snackbar = remember { SnackbarHostState() }
     val uriHandler = LocalUriHandler.current
 
+    val context = LocalContext.current
+
     val bildWaehler = rememberLauncherForActivityResult(
         // Photo Picker: kein Speicherzugriff noetig, der Nutzer gibt genau ein Bild frei.
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri -> uri?.let(viewModel::setzeBeleg) },
     )
+
+    // Ziel der naechsten Aufnahme. Die Kamera-App meldet nur "hat geklappt",
+    // nicht wohin sie geschrieben hat — die Adresse muessen wir uns merken.
+    var aufnahmeZiel by remember { mutableStateOf<Uri?>(null) }
+
+    val kamera = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = { erfolg ->
+            aufnahmeZiel?.takeIf { erfolg }?.let(viewModel::setzeBeleg)
+            aufnahmeZiel = null
+        },
+    )
+
+    val kameraErlaubnis = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { erlaubt ->
+            if (erlaubt) {
+                aufnahmeZiel?.let(kamera::launch)
+            } else {
+                aufnahmeZiel = null
+                viewModel.zeigeMeldung("Ohne Kamerazugriff geht nur die Galerie.")
+            }
+        },
+    )
+
+    fun fotografiere() {
+        val ziel = kameraZiel(context)
+        aufnahmeZiel = ziel
+        // Weil die App die Kamera-Berechtigung im Manifest fuehrt (fuer den
+        // Barcode-Scan), verlangt Android sie auch fuer den Aufruf der
+        // Kamera-App — sonst bricht die Aufnahme wortlos ab.
+        if (
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            kamera.launch(ziel)
+        } else {
+            kameraErlaubnis.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    fun waehleAusGalerie() {
+        bildWaehler.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+        )
+    }
 
     LaunchedEffect(zustand.gespeichert) {
         if (zustand.gespeichert) onFertig()
@@ -285,13 +341,13 @@ fun ErfassenScreen(
                     // hervorgehoben — die anderen bleiben trotzdem benutzbar, denn
                     // die Checkliste ist nicht immer vollstaendig.
                     verlangt = art.wirdVerlangt(zustand.gewaehlteAktion?.requirements),
-                    onWaehlen = {
+                    onFotografieren = {
                         viewModel.waehleBeleg(art)
-                        bildWaehler.launch(
-                            PickVisualMediaRequest(
-                                ActivityResultContracts.PickVisualMedia.ImageOnly,
-                            ),
-                        )
+                        fotografiere()
+                    },
+                    onAusGalerie = {
+                        viewModel.waehleBeleg(art)
+                        waehleAusGalerie()
                     },
                     onEntfernen = { viewModel.entferneBeleg(art) },
                 )
@@ -404,7 +460,8 @@ private fun BelegFeld(
     art: Belegart,
     pfad: String?,
     verlangt: Boolean,
-    onWaehlen: () -> Unit,
+    onFotografieren: () -> Unit,
+    onAusGalerie: () -> Unit,
     onEntfernen: () -> Unit,
 ) {
     Text(
@@ -443,16 +500,35 @@ private fun BelegFeld(
                 )
             }
         }
-        TextButton(onClick = onWaehlen) { Text("Anderes Bild wählen") }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TextButton(onClick = onFotografieren) { Text("Neu aufnehmen") }
+            TextButton(onClick = onAusGalerie) { Text("Aus Galerie") }
+        }
     } else {
-        OutlinedButton(
-            onClick = onWaehlen,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(96.dp),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
-            Text("  ${art.label} fotografieren oder auswählen")
+            // Fotografieren steht links und traegt das Kamerasymbol: Das ist der
+            // Regelfall — man kommt vom Einkauf und hat den Bon in der Hand.
+            OutlinedButton(
+                onClick = onFotografieren,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(72.dp),
+            ) {
+                Icon(Icons.Outlined.PhotoCamera, contentDescription = null)
+                Text("  Fotografieren")
+            }
+            OutlinedButton(
+                onClick = onAusGalerie,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(72.dp),
+            ) {
+                Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
+                Text("  Galerie")
+            }
         }
     }
 }
