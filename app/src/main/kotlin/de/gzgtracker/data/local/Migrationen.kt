@@ -31,5 +31,20 @@ object Migrationen {
         }
     }
 
-    val ALLE = arrayOf(VON_1_AUF_2)
+    /**
+     * v3: Eine Einreichung kann mehrere Belegfotos haben.
+     *
+     * Bisher gab es nur das Bonfoto. Die Portale verlangen aber je nach Aktion
+     * das Produkt allein, den Bon allein oder beides zusammen auf einem Bild.
+     * Die bestehende Spalte bleibt, wie sie ist — vorhandene Bonfotos wandern
+     * also nicht und gehen nicht verloren.
+     */
+    val VON_2_AUF_3 = object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE submissions ADD COLUMN productImagePath TEXT")
+            db.execSQL("ALTER TABLE submissions ADD COLUMN comboImagePath TEXT")
+        }
+    }
+
+    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3)
 }

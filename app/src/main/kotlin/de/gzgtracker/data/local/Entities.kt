@@ -79,6 +79,8 @@ data class SubmissionEntity(
     val purchaseDate: LocalDate,
     val retailer: String?,
     val receiptImagePath: String?,
+    val productImagePath: String?,
+    val comboImagePath: String?,
     val status: String,
     val submittedAt: LocalDate?,
     val refundedAt: LocalDate?,

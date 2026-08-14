@@ -81,6 +81,8 @@ fun SubmissionEntity.toDomain() = Submission(
     purchaseDate = purchaseDate,
     retailer = retailer,
     receiptImagePath = receiptImagePath,
+    productImagePath = productImagePath,
+    comboImagePath = comboImagePath,
     status = runCatching { SubmissionStatus.valueOf(status) }
         .getOrDefault(SubmissionStatus.GEKAUFT),
     submittedAt = submittedAt,
@@ -100,6 +102,8 @@ fun Submission.toEntity() = SubmissionEntity(
     purchaseDate = purchaseDate,
     retailer = retailer,
     receiptImagePath = receiptImagePath,
+    productImagePath = productImagePath,
+    comboImagePath = comboImagePath,
     status = status.name,
     submittedAt = submittedAt,
     refundedAt = refundedAt,

@@ -107,10 +107,52 @@ data class Submission(
     val purchaseDate: LocalDate,
     val retailer: String? = null,
     val receiptImagePath: String? = null,
+    /** Foto des Produkts allein. */
+    val productImagePath: String? = null,
+    /** Ein Bild, auf dem Produkt und Kassenbon zusammen zu sehen sind. */
+    val comboImagePath: String? = null,
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
     val submittedAt: LocalDate? = null,
     val refundedAt: LocalDate? = null,
     val refundedAmountCents: Int? = null,
     val note: String? = null,
     val createdAt: Instant = Instant.EPOCH,
-)
+) {
+    /**
+     * Alle Belegfotos in fester Reihenfolge, leere Plaetze ausgelassen.
+     *
+     * Drei Faelle statt einer Liste, weil die Portale genau diese drei
+     * verlangen: nur den Bon, nur das Produkt, oder beides zusammen auf einem
+     * Bild. Ein generischer Anhang haette dieselbe Frage offengelassen, die
+     * beim Einreichen zaehlt — *was* zeigt das Bild?
+     */
+    val belege: List<Beleg>
+        get() = listOfNotNull(
+            productImagePath?.let { Beleg(Belegart.PRODUKT, it) },
+            receiptImagePath?.let { Beleg(Belegart.BON, it) },
+            comboImagePath?.let { Beleg(Belegart.ZUSAMMEN, it) },
+        )
+
+    val hatBeleg: Boolean get() = belege.isNotEmpty()
+}
+
+/** Was ein Belegfoto zeigt. */
+enum class Belegart(val label: String, val anforderung: String) {
+    PRODUKT("Produkt", "produktfoto"),
+    BON("Kassenbon", "bonfoto"),
+    ZUSAMMEN("Produkt mit Bon", "zusammen_fotografieren"),
+    ;
+
+    /**
+     * True, wenn die Aktion genau dieses Bild verlangt.
+     *
+     * Kennt der Feed die Bedingungen nicht, ist die Antwort ueberall `false` —
+     * dann wird kein Platz hervorgehoben, aber auch keiner gesperrt. Die
+     * Checkliste fuehrt; sie schreibt nichts vor.
+     */
+    fun wirdVerlangt(anforderungen: List<String>?): Boolean =
+        anforderungen?.contains(anforderung) == true
+}
+
+/** Ein Belegfoto und was darauf zu sehen ist. */
+data class Beleg(val art: Belegart, val pfad: String)

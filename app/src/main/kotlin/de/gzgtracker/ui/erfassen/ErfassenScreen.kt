@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import de.gzgtracker.core.Belegart
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.SubmissionStatus
 import de.gzgtracker.ui.components.DatumFeld
@@ -82,7 +83,7 @@ fun ErfassenScreen(
     val bildWaehler = rememberLauncherForActivityResult(
         // Photo Picker: kein Speicherzugriff noetig, der Nutzer gibt genau ein Bild frei.
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> uri?.let(viewModel::setzeBon) },
+        onResult = { uri -> uri?.let(viewModel::setzeBeleg) },
     )
 
     LaunchedEffect(zustand.gespeichert) {
@@ -264,18 +265,37 @@ fun ErfassenScreen(
                 )
             }
 
-            Abschnitt("Kassenbon")
-            BonFeld(
-                pfad = zustand.bonPfad,
-                onWaehlen = {
-                    bildWaehler.launch(
-                        PickVisualMediaRequest(
-                            ActivityResultContracts.PickVisualMedia.ImageOnly,
-                        ),
-                    )
-                },
-                onEntfernen = viewModel::entferneBon,
+            Abschnitt("Belege")
+            Text(
+                text = "Was du brauchst, steht oben in der Checkliste. Im Zweifel " +
+                    "lieber ein Bild zu viel als eins zu wenig.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+
+            Belegart.entries.forEach { art ->
+                BelegFeld(
+                    art = art,
+                    pfad = when (art) {
+                        Belegart.PRODUKT -> zustand.produktPfad
+                        Belegart.BON -> zustand.bonPfad
+                        Belegart.ZUSAMMEN -> zustand.zusammenPfad
+                    },
+                    // Fordert die Aktion diesen Beleg ausdruecklich, wird der Platz
+                    // hervorgehoben — die anderen bleiben trotzdem benutzbar, denn
+                    // die Checkliste ist nicht immer vollstaendig.
+                    verlangt = art.wirdVerlangt(zustand.gewaehlteAktion?.requirements),
+                    onWaehlen = {
+                        viewModel.waehleBeleg(art)
+                        bildWaehler.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly,
+                            ),
+                        )
+                    },
+                    onEntfernen = { viewModel.entferneBeleg(art) },
+                )
+            }
 
             Abschnitt("Status")
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -380,16 +400,27 @@ private fun KontoWarnung(
 }
 
 @Composable
-private fun BonFeld(
+private fun BelegFeld(
+    art: Belegart,
     pfad: String?,
+    verlangt: Boolean,
     onWaehlen: () -> Unit,
     onEntfernen: () -> Unit,
 ) {
+    Text(
+        text = if (verlangt) "${art.label} — von dieser Aktion verlangt" else art.label,
+        style = MaterialTheme.typography.labelLarge,
+        color = if (verlangt) {
+            MaterialTheme.colorScheme.onSurface
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        },
+    )
     if (pfad != null) {
         Box(Modifier.fillMaxWidth()) {
             AsyncImage(
                 model = File(pfad),
-                contentDescription = "Kassenbon",
+                contentDescription = art.label,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -407,7 +438,7 @@ private fun BonFeld(
             ) {
                 Icon(
                     Icons.Outlined.Delete,
-                    contentDescription = "Bon entfernen",
+                    contentDescription = "${art.label} entfernen",
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -421,7 +452,7 @@ private fun BonFeld(
                 .height(96.dp),
         ) {
             Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
-            Text("  Bon fotografieren oder auswählen")
+            Text("  ${art.label} fotografieren oder auswählen")
         }
     }
 }

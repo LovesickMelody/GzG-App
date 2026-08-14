@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.gzgtracker.core.Account
 import de.gzgtracker.core.AccountCheck
+import de.gzgtracker.core.Belegart
 import de.gzgtracker.core.DuplicateAccountRule
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoAction
@@ -42,6 +43,10 @@ data class ErfassenUiState(
     val haendler: String = "",
     val kontoId: Long? = null,
     val bonPfad: String? = null,
+    val produktPfad: String? = null,
+    val zusammenPfad: String? = null,
+    /** Welcher Belegplatz gerade gefuellt wird — gesetzt, solange der Bildwähler offen ist. */
+    val offeneBelegart: Belegart? = null,
     val notiz: String = "",
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
 
@@ -118,6 +123,8 @@ class ErfassenViewModel @Inject constructor(
                     haendler = bestehend.retailer.orEmpty(),
                     kontoId = bestehend.accountId,
                     bonPfad = bestehend.receiptImagePath,
+                    produktPfad = bestehend.productImagePath,
+                    zusammenPfad = bestehend.comboImagePath,
                     notiz = bestehend.note.orEmpty(),
                     status = bestehend.status,
                     regel = einstellungen.duplicateRule,
@@ -189,26 +196,50 @@ class ErfassenViewModel @Inject constructor(
         setzeKonto(vorschlag.id)
     }
 
-    fun setzeBon(quelle: Uri) {
+    /** Merkt sich, welcher Belegplatz gemeint ist, bevor der Bildwähler aufgeht. */
+    fun waehleBeleg(art: Belegart) {
+        _uiState.update { it.copy(offeneBelegart = art) }
+    }
+
+    private fun pfadVon(zustand: ErfassenUiState, art: Belegart): String? = when (art) {
+        Belegart.PRODUKT -> zustand.produktPfad
+        Belegart.BON -> zustand.bonPfad
+        Belegart.ZUSAMMEN -> zustand.zusammenPfad
+    }
+
+    private fun mitPfad(
+        zustand: ErfassenUiState,
+        art: Belegart,
+        pfad: String?,
+    ): ErfassenUiState = when (art) {
+        Belegart.PRODUKT -> zustand.copy(produktPfad = pfad)
+        Belegart.BON -> zustand.copy(bonPfad = pfad)
+        Belegart.ZUSAMMEN -> zustand.copy(zusammenPfad = pfad)
+    }
+
+    fun setzeBeleg(quelle: Uri) {
+        val art = _uiState.value.offeneBelegart ?: Belegart.BON
         viewModelScope.launch {
-            val alt = _uiState.value.bonPfad
+            val alt = pfadVon(_uiState.value, art)
             val neu = receipts.uebernehmen(quelle)
             if (neu == null) {
-                _uiState.update { it.copy(meldung = "Das Bild ließ sich nicht laden.") }
+                _uiState.update {
+                    it.copy(meldung = "Das Bild ließ sich nicht laden.", offeneBelegart = null)
+                }
                 return@launch
             }
             // Erst nach erfolgreichem Uebernehmen aufraeumen — sonst waere bei einem
-            // Fehlschlag der alte Bon weg und der neue nicht da.
+            // Fehlschlag das alte Bild weg und das neue nicht da.
             if (alt != null && alt != neu) receipts.loeschen(alt)
-            _uiState.update { it.copy(bonPfad = neu) }
+            _uiState.update { mitPfad(it, art, neu).copy(offeneBelegart = null) }
         }
     }
 
-    fun entferneBon() {
-        val pfad = _uiState.value.bonPfad ?: return
+    fun entferneBeleg(art: Belegart) {
+        val pfad = pfadVon(_uiState.value, art) ?: return
         viewModelScope.launch {
             receipts.loeschen(pfad)
-            _uiState.update { it.copy(bonPfad = null) }
+            _uiState.update { mitPfad(it, art, null) }
         }
     }
 
@@ -247,6 +278,8 @@ class ErfassenViewModel @Inject constructor(
                 purchaseDate = zustand.kaufdatum,
                 retailer = zustand.haendler.trim().takeIf { it.isNotBlank() },
                 receiptImagePath = zustand.bonPfad,
+                productImagePath = zustand.produktPfad,
+                comboImagePath = zustand.zusammenPfad,
                 status = zustand.status,
                 submittedAt = if (zustand.status == SubmissionStatus.GEKAUFT) {
                     null

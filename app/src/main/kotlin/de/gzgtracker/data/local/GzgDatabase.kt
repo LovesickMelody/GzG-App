@@ -10,7 +10,7 @@ import androidx.room.TypeConverters
         PromoActionEntity::class,
         SubmissionEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
