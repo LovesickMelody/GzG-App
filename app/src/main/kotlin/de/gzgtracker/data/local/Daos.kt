@@ -92,6 +92,10 @@ interface PromoActionDao {
           AND source = :source
           AND id NOT IN (:aktuelleIds)
           AND id NOT IN (SELECT DISTINCT actionId FROM submissions)
+          -- Gemerkte Aktionen bleiben stehen, auch wenn das Portal sie
+          -- kurzzeitig nicht mehr ausliefert. Sonst waere die Einkaufsliste
+          -- morgens im Supermarkt ploetzlich halb leer.
+          AND id NOT IN (SELECT actionId FROM watchlist)
         """,
     )
     suspend fun raeumeAufFuerQuelle(source: String, aktuelleIds: List<String>)
@@ -136,4 +140,36 @@ interface SubmissionDao {
 
     @Query("DELETE FROM submissions WHERE id = :id")
     suspend fun loesche(id: Long)
+}
+
+@Dao
+interface WatchlistDao {
+
+    @Query("SELECT * FROM watchlist ORDER BY addedAt ASC")
+    fun beobachteAlle(): Flow<List<WatchlistEntity>>
+
+    @Upsert
+    suspend fun upsert(eintrag: WatchlistEntity)
+
+    @Query("DELETE FROM watchlist WHERE actionId = :actionId")
+    suspend fun entferne(actionId: String)
+
+    @Query("UPDATE watchlist SET imWagen = :imWagen WHERE actionId = :actionId")
+    suspend fun setzeImWagen(actionId: String, imWagen: Boolean)
+
+    @Query("DELETE FROM watchlist WHERE imWagen = 1")
+    suspend fun entferneErledigte()
+
+    @Query("SELECT COUNT(*) FROM watchlist WHERE actionId = :actionId")
+    suspend fun anzahl(actionId: String): Int
+
+    /** Merken und Vergessen in einem Schritt — ein Fingertipp, ein Aufruf. */
+    @Transaction
+    suspend fun schalteUm(actionId: String, jetzt: Instant) {
+        if (anzahl(actionId) > 0) {
+            entferne(actionId)
+        } else {
+            upsert(WatchlistEntity(actionId = actionId, addedAt = jetzt))
+        }
+    }
 }

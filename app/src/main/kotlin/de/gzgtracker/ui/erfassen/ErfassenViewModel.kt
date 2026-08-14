@@ -291,6 +291,9 @@ class ErfassenViewModel @Inject constructor(
 
             if (zustand.istNeu) {
                 submissions.anlegen(eintrag)
+                // Was gekauft und eingetragen ist, gehoert nicht mehr auf den
+                // Einkaufszettel — sonst haekt man dieselbe Zeile zweimal ab.
+                actions.vergiss(eintrag.actionId)
             } else {
                 val bestehend = submissions.ladeAlle()
                     .firstOrNull { it.id == zustand.submissionId }

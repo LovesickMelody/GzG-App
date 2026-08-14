@@ -88,3 +88,21 @@ data class SubmissionEntity(
     val note: String?,
     val createdAt: Instant,
 )
+
+/**
+ * Die Merkliste — was beim naechsten Einkauf mitkommen soll.
+ *
+ * Bewusst eine eigene Tabelle statt einer Spalte an der Aktion: Aktionen werden
+ * bei jedem Feed-Abgleich ersetzt und verschwundene weggeraeumt. Eine Merkung
+ * darf das ueberleben; sie ist eine Entscheidung des Nutzers, keine Feed-Angabe.
+ *
+ * [imWagen] ist das Haekchen fuer den Einkauf selbst. Es steht in der Datenbank
+ * und nicht nur im Bildschirmzustand, weil man im Laden zwischendurch die App
+ * verlaesst — und danach nicht wieder von vorn anfangen will.
+ */
+@Entity(tableName = "watchlist")
+data class WatchlistEntity(
+    @PrimaryKey val actionId: String,
+    val imWagen: Boolean = false,
+    val addedAt: Instant,
+)

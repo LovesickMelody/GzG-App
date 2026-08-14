@@ -23,11 +23,22 @@ data class AktionenUiState(
     val aktionen: List<PromoAction> = emptyList(),
     val suche: String = "",
     val nurLaufende: Boolean = true,
+    /** Zeigt nur die gemerkten Aktionen — der Einkaufszettel. */
+    val nurMerkliste: Boolean = false,
+    /** Aktions-Id -> schon im Wagen. Enthaelt genau die gemerkten Aktionen. */
+    val gemerkt: Map<String, Boolean> = emptyMap(),
     val aktualisiertGerade: Boolean = false,
     val letzterSync: Instant? = null,
     val meldung: String? = null,
 ) {
     val istLeer: Boolean get() = !laedt && aktionen.isEmpty()
+
+    val anzahlGemerkt: Int get() = gemerkt.size
+
+    /** Wie viele Zeilen des Einkaufszettels noch offen sind. */
+    val nochZuKaufen: Int get() = gemerkt.count { !it.value }
+
+    val hatErledigte: Boolean get() = gemerkt.any { it.value }
 }
 
 @HiltViewModel
@@ -40,15 +51,21 @@ class AktionenViewModel @Inject constructor(
 
     val uiState: StateFlow<AktionenUiState> = combine(
         actions.alle,
+        actions.gemerkt,
         eingaben,
         settings.settings,
-    ) { alle, eingabe, einstellungen ->
+    ) { alle, gemerkt, eingabe, einstellungen ->
         val heute = LocalDate.now()
         val begriff = eingabe.suche.trim().lowercase()
 
         AktionenUiState(
             laedt = false,
             aktionen = alle
+                .filter { aktion ->
+                    // Auf dem Einkaufszettel zaehlt nur, was daraufsteht — alle
+                    // anderen Filter treten dahinter zurueck.
+                    !eingabe.nurMerkliste || aktion.id in gemerkt
+                }
                 .filter { aktion ->
                     !eingabe.nurLaufende || aktion.laeuftNoch(heute)
                 }
@@ -61,6 +78,8 @@ class AktionenViewModel @Inject constructor(
                 },
             suche = eingabe.suche,
             nurLaufende = eingabe.nurLaufende,
+            nurMerkliste = eingabe.nurMerkliste,
+            gemerkt = gemerkt,
             aktualisiertGerade = eingabe.aktualisiert,
             letzterSync = einstellungen.lastSyncAt,
             meldung = eingabe.meldung,
@@ -74,6 +93,23 @@ class AktionenViewModel @Inject constructor(
     fun setzeSuche(begriff: String) = eingaben.update { it.copy(suche = begriff) }
 
     fun setzeNurLaufende(nur: Boolean) = eingaben.update { it.copy(nurLaufende = nur) }
+
+    fun setzeNurMerkliste(nur: Boolean) = eingaben.update { it.copy(nurMerkliste = nur) }
+
+    fun merkenUmschalten(aktionId: String) {
+        viewModelScope.launch { actions.merkenUmschalten(aktionId) }
+    }
+
+    fun setzeImWagen(aktionId: String, imWagen: Boolean) {
+        viewModelScope.launch { actions.setzeImWagen(aktionId, imWagen) }
+    }
+
+    fun entferneErledigte() {
+        viewModelScope.launch {
+            actions.entferneErledigte()
+            eingaben.update { it.copy(meldung = "Abgehakte Zeilen entfernt") }
+        }
+    }
 
     fun aktualisiere() {
         if (eingaben.value.aktualisiert) return
@@ -105,6 +141,7 @@ class AktionenViewModel @Inject constructor(
     private data class Eingaben(
         val suche: String = "",
         val nurLaufende: Boolean = true,
+        val nurMerkliste: Boolean = false,
         val aktualisiert: Boolean = false,
         val meldung: String? = null,
     )

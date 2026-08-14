@@ -46,5 +46,25 @@ object Migrationen {
         }
     }
 
-    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3)
+    /**
+     * v4: Die Merkliste.
+     *
+     * Eigene Tabelle, damit eine Merkung den Feed-Abgleich überlebt — Aktionen
+     * werden dabei ersetzt und verschwundene weggeräumt.
+     */
+    val VON_3_AUF_4 = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS watchlist (
+                    actionId TEXT NOT NULL PRIMARY KEY,
+                    imWagen INTEGER NOT NULL DEFAULT 0,
+                    addedAt INTEGER NOT NULL
+                )
+                """.trimIndent(),
+            )
+        }
+    }
+
+    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4)
 }
