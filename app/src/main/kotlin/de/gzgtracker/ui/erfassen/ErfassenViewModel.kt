@@ -13,6 +13,7 @@ import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoAction
 import de.gzgtracker.core.Submission
 import de.gzgtracker.core.SubmissionStatus
+import de.gzgtracker.data.receipt.BonLeser
 import de.gzgtracker.data.receipt.ReceiptStorage
 import de.gzgtracker.data.repository.AccountRepository
 import de.gzgtracker.data.repository.ActionRepository
@@ -47,6 +48,11 @@ data class ErfassenUiState(
     val zusammenPfad: String? = null,
     /** Welcher Belegplatz gerade gefuellt wird — gesetzt, solange der Bildwähler offen ist. */
     val offeneBelegart: Belegart? = null,
+    /** Läuft gerade die Texterkennung auf einem frisch gewählten Bon? */
+    val liestBon: Boolean = false,
+    /** Preis und Datum kamen aus dem Bon und sollten nachgeprüft werden. */
+    val preisAusBon: Boolean = false,
+    val datumAusBon: Boolean = false,
     val notiz: String = "",
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
 
@@ -85,6 +91,7 @@ class ErfassenViewModel @Inject constructor(
     private val accounts: AccountRepository,
     private val settings: SettingsRepository,
     private val receipts: ReceiptStorage,
+    private val bonLeser: BonLeser,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -179,8 +186,13 @@ class ErfassenViewModel @Inject constructor(
 
     fun setzeProduktname(wert: String) = _uiState.update { it.copy(produktname = wert) }
     fun setzeEan(wert: String) = _uiState.update { it.copy(ean = wert.filter(Char::isDigit)) }
-    fun setzePreis(wert: String) = _uiState.update { it.copy(preis = wert) }
-    fun setzeKaufdatum(wert: LocalDate) = _uiState.update { it.copy(kaufdatum = wert) }
+    // Von Hand geaendert heisst: nicht mehr "aus dem Bon". Der Hinweis
+    // "bitte prüfen" verschwindet damit genau dann, wenn er erledigt ist.
+    fun setzePreis(wert: String) =
+        _uiState.update { it.copy(preis = wert, preisAusBon = false) }
+
+    fun setzeKaufdatum(wert: LocalDate) =
+        _uiState.update { it.copy(kaufdatum = wert, datumAusBon = false) }
     fun setzeHaendler(wert: String) = _uiState.update { it.copy(haendler = wert) }
     fun setzeNotiz(wert: String) = _uiState.update { it.copy(notiz = wert) }
     fun setzeStatus(wert: SubmissionStatus) = _uiState.update { it.copy(status = wert) }
@@ -234,6 +246,48 @@ class ErfassenViewModel @Inject constructor(
             // Fehlschlag das alte Bild weg und das neue nicht da.
             if (alt != null && alt != neu) receipts.loeschen(alt)
             _uiState.update { mitPfad(it, art, neu).copy(offeneBelegart = null) }
+
+            // Nur Bilder, auf denen ein Bon zu sehen ist. Ein Produktfoto
+            // enthaelt keinen Betrag — es zu durchsuchen kostet nur Zeit.
+            if (art == Belegart.BON || art == Belegart.ZUSAMMEN) {
+                werteBonAus(neu)
+            }
+        }
+    }
+
+    /**
+     * Fuellt Preis und Kaufdatum aus dem Bon vor.
+     *
+     * Bereits Eingetragenes wird nicht ueberschrieben: Wer den Preis von Hand
+     * korrigiert und danach ein besseres Foto macht, will seine Korrektur
+     * behalten. Das Kaufdatum steht anfangs auf heute — das gilt als "noch
+     * nicht gesetzt", weil es der Startwert ist.
+     */
+    private suspend fun werteBonAus(pfad: String) {
+        _uiState.update { it.copy(liestBon = true) }
+        val ergebnis = bonLeser.auswerten(pfad)
+        _uiState.update { zustand ->
+            val preisFrei = zustand.preis.isBlank()
+            val datumFrei = zustand.kaufdatum == LocalDate.now() && !zustand.datumAusBon
+            zustand.copy(
+                liestBon = false,
+                preis = if (preisFrei && ergebnis.preisCents != null) {
+                    Money.formatPlain(ergebnis.preisCents)
+                } else {
+                    zustand.preis
+                },
+                preisAusBon = zustand.preisAusBon || (preisFrei && ergebnis.preisCents != null),
+                kaufdatum = if (datumFrei && ergebnis.datum != null) {
+                    ergebnis.datum
+                } else {
+                    zustand.kaufdatum
+                },
+                datumAusBon = zustand.datumAusBon || (datumFrei && ergebnis.datum != null),
+                meldung = when {
+                    ergebnis.hatVorschlag -> "Aus dem Bon gelesen — bitte prüfen"
+                    else -> null
+                },
+            )
         }
     }
 

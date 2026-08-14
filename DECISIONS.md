@@ -261,6 +261,26 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Wer eine gemerkte Aktion erfasst, nimmt sie vom Zettel** — sonst hakt man dieselbe
   Zeile zweimal ab, einmal im Laden und einmal in der App.
 
+## Bon auswerten
+
+- **Texterkennung läuft auf dem Gerät, das Modell ist einkompiliert** — kein Netz, kein
+  Dienst. Auf einem Kassenbon steht, was jemand wann wo gekauft hat; das verlässt das
+  Telefon nicht.
+- **Die Auswertung liegt in `:core`, nicht in der App** — so ist sie ohne Android und ohne
+  Kamera testbar, und genau sie ist der schwierige Teil.
+- **Ohne Schlüsselwort gibt es keinen Vorschlag** — „größter Betrag auf dem Bon" wäre
+  verlockend, trifft aber bei Barzahlung den gegebenen Schein. Lieber kein Vorschlag als
+  ein falscher, den man übersieht: Er fällt sonst erst auf, wenn die Erstattung ausbleibt.
+- **„Bar", „Rückgeld", „MwSt" und Verwandte werden ausgeschlossen** — sie tragen Beträge,
+  aber nie den bezahlten Preis.
+- **Beim Datum gewinnt das jüngste, das nicht in der Zukunft und nicht älter als ein Jahr
+  ist** — auf einem Bon stehen auch Haltbarkeits- und Gutscheindaten.
+- **Vorgefüllte Werte tragen den Hinweis „Aus dem Bon — prüfen" unter dem Feld**, nicht als
+  Meldung, die wieder verschwindet. Sobald man den Wert anfasst, verschwindet der Hinweis.
+- **Vorhandene Eingaben werden nie überschrieben** — wer den Preis korrigiert und danach
+  ein besseres Foto macht, behält seine Korrektur.
+- **Nur Bilder mit Bon werden durchsucht** — ein Produktfoto enthält keinen Betrag.
+
 ## App
 
 - **„Beleg eintragen" ist die Hauptaktion, nicht „Produkt scannen"** — der tägliche Weg

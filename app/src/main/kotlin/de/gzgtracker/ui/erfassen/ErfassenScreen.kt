@@ -62,6 +62,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -272,6 +273,14 @@ fun ErfassenScreen(
                     suffix = { Text("€") },
                     singleLine = true,
                     isError = zustand.preis.isNotEmpty() && !zustand.preisOk,
+                    // Der Hinweis steht unter dem Feld, nicht als Meldung, die
+                    // wieder verschwindet: Ein falsch gelesener Betrag faellt
+                    // sonst erst auf, wenn die Erstattung ausbleibt.
+                    supportingText = if (zustand.preisAusBon) {
+                        { Text("Aus dem Bon — prüfen") }
+                    } else {
+                        null
+                    },
                     textStyle = MoneyTextStyle,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.weight(1f),
@@ -280,8 +289,23 @@ fun ErfassenScreen(
                     label = "Kaufdatum",
                     wert = zustand.kaufdatum,
                     onWert = viewModel::setzeKaufdatum,
+                    hinweis = if (zustand.datumAusBon) "Aus dem Bon — prüfen" else null,
                     modifier = Modifier.weight(1f),
                 )
+            }
+
+            if (zustand.liestBon) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                    Text(
+                        text = "Bon wird gelesen …",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
 
             OutlinedTextField(

@@ -52,6 +52,10 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Scannen als Nebenweg statt als Haupteinstieg
 - [x] Dieselbe Aktion aus zwei Quellen zusammenfassen (ueber gleiche `submit_url`)
 - [x] Merkliste: Aktionen vormerken und im Laden abhaken
+- [x] Belegfoto: Ladefehler behoben, Kamera als Quelle dazu
+- [x] Preis und Kaufdatum aus dem Bon lesen (Texterkennung auf dem Geraet)
+- [x] Produktbild aus dem Feed in der Aktionsliste
+- [x] Einreichungslink auch fuer mydealz
 - [x] App laedt `actions.json`, cached in Room, Pull-to-Refresh, offline nutzbar
 - [x] Aktion manuell anlegen
 - [x] Parser-Tests gegen HTML-Fixtures (offline)
