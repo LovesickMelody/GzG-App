@@ -27,11 +27,28 @@ class AppSmokeTest {
     @get:Rule
     val app = createAndroidComposeRule<MainActivity>()
 
+    // Bewusst je eine Behauptung pro Test: Faellt eine, sagt schon der Testname,
+    // welches Element fehlt — statt dass drei Moeglichkeiten offenbleiben.
+
     @Test
-    fun startetUndZeigtDenLeerenBelegstapel() {
+    fun startetUndZeigtDieTitelzeile() {
         // "Belege" steht in der Titelzeile und in der Navigation — daher onFirst().
         app.onAllNodesWithText("Belege").onFirst().assertIsDisplayed()
+    }
+
+    @Test
+    fun zeigtDenLeerenZustand() {
         app.onNodeWithText("Noch keine Einreichungen").assertIsDisplayed()
+    }
+
+    @Test
+    fun zeigtDenEinladungstext() {
+        app.onNodeWithText("Scanne dein erstes Produkt oder trag es von Hand ein.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun zeigtDenScanKnopf() {
         app.onNodeWithText("Produkt scannen").assertIsDisplayed()
     }
 

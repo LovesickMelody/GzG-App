@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.room)
 }
 
 // Release-Signing ist optional. Liegt eine keystore.properties vor (lokal, nicht im
@@ -115,8 +116,15 @@ android {
 
 // Room legt das Schema als JSON ab. Damit sind spaetere Migrationen nachvollziehbar
 // und Room kann sie beim Bauen gegenpruefen.
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
+//
+// Bewusst ueber das Room-Plugin statt ueber `ksp { arg("room.schemaLocation", ...) }`:
+// Das KSP-Argument gilt fuer alle Varianten gleichzeitig, also schreiben
+// kspDebugKotlin und kspReleaseKotlin bei parallelen Builds in dieselbe Datei. Der
+// eine leert sie, waehrend der andere sie liest — Room bricht dann mit
+// "Empty schema file" ab, und zwar je nach Timing mal so, mal so. Das Plugin gibt
+// jeder Variante ein eigenes Unterverzeichnis und meldet es als Task-Ausgabe an.
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
