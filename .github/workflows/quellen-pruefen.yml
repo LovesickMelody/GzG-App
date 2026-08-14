@@ -59,3 +59,18 @@ jobs:
         run: >-
           python scraper/inspect_source.py
           --url "${{ inputs.url }}" --roh "${{ inputs.roh }}"
+
+      # Wo steht die Einreichungsseite? Portale verlinken sie als ausgehenden
+      # Link. Die Ziel-Adresse selbst sagt, ob es die richtige ist — das ist
+      # verlässlicher, als einen Selektor zu raten.
+      - name: Ausgehende Links einer mydealz-Detailseite
+        continue-on-error: true
+        run: >-
+          python scraper/inspect_source.py --extern
+          --url https://www.mydealz.de/deals/jacobs-3in12in1-gratis-testen-2823305
+
+      - name: Ausgehende Links einer geldzurueck.deals-Detailseite
+        continue-on-error: true
+        run: >-
+          python scraper/inspect_source.py --extern
+          --url https://geldzurueck.deals/bonduelle-frische-salate-gratis-testen-mit-scondoo

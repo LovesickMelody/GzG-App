@@ -137,23 +137,46 @@ def pruefziffer_stimmt(code: str) -> bool:
     return (10 - summe % 10) % 10 == pruefziffer
 
 
+# Formulierungen, die "du bekommst den vollen Kaufpreis zurueck" bedeuten.
+# "100 % Cashback" gehoert ausdruecklich dazu: Das Wort Cashback allein sagt
+# noch nicht, ob voll oder anteilig erstattet wird.
+_VOLLE_ERSTATTUNG = (
+    "gratis", "kostenlos", "umsonst",
+    "100 %", "100%", "100 prozent",
+    "voller kaufpreis", "vollen kaufpreis", "kompletten kaufpreis",
+    "kaufpreis erstattet", "kaufpreis zurück", "kaufpreis zurueck",
+    "geld komplett zurück", "komplett erstattet",
+)
+
+_TEILERSTATTUNG = (
+    "teilbetrag", "teil-cashback", "anteilig", "rabatt von",
+    "50 %", "50%", "25 %", "25%",
+)
+
+
 def art_aus_text(text: str | None, max_refund_cents: int | None = None) -> str:
     """
     Rät die Art der Aktion aus der Beschreibung.
 
-    "Gratis testen" heisst voller Kaufpreis zurueck, "Cashback" oder ein
-    genannter Teilbetrag heisst nur anteilig. Im Zweifel gilt gratis_testen,
-    weil das bei diesen Portalen der Regelfall ist.
+    "Gratis testen" heisst voller Kaufpreis zurueck, ein genannter Teilbetrag
+    heisst nur anteilig. Entscheidend ist die Reihenfolge: Eine Formulierung
+    fuer volle Erstattung schlaegt jeden Cashback-Hinweis, denn "100 % Cashback"
+    ist gratis testen — das Wort Cashback allein sagt nichts ueber die Hoehe.
+
+    Im Zweifel gilt gratis_testen, weil das bei diesen Portalen der Regelfall
+    ist. Wer nur volle Erstattungen sehen will, filtert ueber ``nur_arten`` in
+    ``sources.yaml``; ein zu Unrecht aussortierter Volltreffer waere aergerlicher
+    als ein durchgerutschter Teilbetrag.
     """
     inhalt = (text or "").casefold()
 
-    if any(
-        wort in inhalt
-        for wort in ("teilbetrag", "teil-cashback", "anteilig", "rabatt von")
-    ):
+    if any(wort in inhalt for wort in _VOLLE_ERSTATTUNG):
+        return "gratis_testen"
+
+    if any(wort in inhalt for wort in _TEILERSTATTUNG):
         return "cashback_teilbetrag"
 
-    if "cashback" in inhalt and "gratis" not in inhalt:
+    if "cashback" in inhalt:
         return "cashback_teilbetrag"
 
     return "gratis_testen"

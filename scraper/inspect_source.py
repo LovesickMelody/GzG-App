@@ -24,6 +24,7 @@ import argparse
 import sys
 from collections import Counter
 from pathlib import Path
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 
@@ -86,6 +87,48 @@ def zeige_kandidaten(suppe: BeautifulSoup, anzahl: int = 12) -> None:
         print("    Klassen im Eintrag (Kandidaten für brand/max_refund/deadline):")
         for eintrag in sorted(innere)[:20]:
             print(f"      {eintrag}")
+
+
+def zeige_externe_links(suppe: BeautifulSoup, seite: str, anzahl: int = 25) -> None:
+    """
+    Listet die Links, die von der Seite weg fuehren.
+
+    Genau danach sucht man, wenn die Einreichungsseite gefunden werden soll:
+    Portale verlinken sie als ausgehenden Link, oft mit ``rel="nofollow
+    sponsored"`` und dem Ziel zusaetzlich in einem ``data-``-Attribut. Das ist
+    verlaesslicher, als einen Selektor zu raten — die Ziel-Adresse selbst sagt,
+    ob es die richtige ist.
+    """
+    eigener_host = urlparse(seite).netloc.removeprefix("www.")
+    gesehen: dict[str, tuple[str, str]] = {}
+
+    for knoten in suppe.find_all("a", href=True):
+        ziel = knoten["href"]
+        if not ziel.startswith("http"):
+            continue
+        host = urlparse(ziel).netloc.removeprefix("www.")
+        if not host or host == eigener_host:
+            continue
+        beschriftung = knoten.get_text(" ", strip=True)[:50]
+        # Klassen und data-Attribute mitnehmen: daraus wird spaeter der Selektor.
+        kennung = ".".join(knoten.get("class") or []) or "(ohne Klasse)"
+        daten = " ".join(
+            f"{name}={wert!r}"
+            for name, wert in knoten.attrs.items()
+            if name.startswith("data-") and isinstance(wert, str)
+        )
+        gesehen.setdefault(ziel, (f"{kennung} | {beschriftung}", daten))
+
+    if not gesehen:
+        print("  Keine ausgehenden Links gefunden.")
+        return
+
+    print(f"\n  Ausgehende Links ({len(gesehen)}), die ersten {anzahl}:")
+    for ziel, (kennung, daten) in list(gesehen.items())[:anzahl]:
+        print(f"    {ziel}")
+        print(f"        a.{kennung}")
+        if daten:
+            print(f"        {daten[:200]}")
 
 
 def zeige_roh(suppe: BeautifulSoup, selektor: str, anzahl: int, zeichen: int) -> None:
@@ -151,6 +194,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     zerleger.add_argument("--roh-anzahl", type=int, default=2)
     zerleger.add_argument("--roh-zeichen", type=int, default=6000)
+    zerleger.add_argument(
+        "--extern",
+        action="store_true",
+        help="listet die ausgehenden Links der Seite — so findet man die "
+        "Einreichungsseite, ohne einen Selektor zu raten.",
+    )
     argumente = zerleger.parse_args(argv)
 
     if argumente.datei:
@@ -199,6 +248,10 @@ def main(argv: list[str] | None = None) -> int:
         suppe = BeautifulSoup(html, "lxml")
         titel = suppe.find("title")
         print(f"  <title>: {titel.get_text(strip=True)[:90]!r}" if titel else "  kein <title>")
+
+        if argumente.extern:
+            zeige_externe_links(suppe, adresse)
+            continue
 
         if argumente.roh:
             zeige_roh(suppe, argumente.roh, argumente.roh_anzahl, argumente.roh_zeichen)

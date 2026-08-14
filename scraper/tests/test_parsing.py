@@ -137,6 +137,23 @@ class TestArt:
     def test_gratis_schlaegt_cashback(self):
         assert art_aus_text("Gratis testen per Cashback-Aktion") == "gratis_testen"
 
+    @pytest.mark.parametrize(
+        "text",
+        [
+            # Echte Titel aus dem mydealz-Feed. "100 % Cashback" ist gratis
+            # testen — das Wort Cashback allein sagt nichts über die Höhe.
+            "[GzG] 100% Cashback auf PET Einweg Einzelflaschen",
+            "GZG - 100 % zurück auf Pantene Pro-V Repair & Care",
+            "Kaufpreis erstattet nach Einsendung",
+            "Du bekommst den vollen Kaufpreis zurück",
+        ],
+    )
+    def test_volle_erstattung_ist_gratis_testen(self, text):
+        assert art_aus_text(text) == "gratis_testen"
+
+    def test_haelt_50_prozent_auseinander(self):
+        assert art_aus_text("Naturals 50 % Cashback-Aktion") == "cashback_teilbetrag"
+
 
 class TestHilfen:
     def test_saeubert_leerraum(self):
