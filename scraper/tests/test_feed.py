@@ -135,3 +135,37 @@ class TestMydealzFeed:
         # Lieber ehrlich leer als ein erfundener Haken — sonst steht man mit
         # dem falschen Foto da.
         assert aktionen[2].requirements == []
+
+
+class TestAnbieterfeld:
+    """
+    Was mydealz als ``pepper:merchant`` liefert, ist mal die Marke und mal der
+    Händler oder die Plattform — der Einsteller entscheidet das.
+    """
+
+    def _parse(self, anbieter: str):
+        xml = f"""<?xml version="1.0"?>
+        <rss xmlns:pepper="https://about.pepper.com/rss"><channel><item>
+          <pepper:merchant name="{anbieter}"/>
+          <title>Produkt gratis testen</title>
+          <description>Kaufpreis erstattet.</description>
+          <link>https://example.org/a</link>
+        </item></channel></rss>"""
+        return parse(xml, {"name": "mydealz", "parser": "feed"})[0]
+
+    def test_echte_marke_bleibt_marke(self):
+        aktion = self._parse("JACOBS Kaffee")
+        assert aktion.brand == "JACOBS Kaffee"
+        assert aktion.retailers == []
+
+    def test_haendler_wandert_ins_haendlerfeld(self):
+        aktion = self._parse("ROSSMANN")
+        assert aktion.brand is None
+        # Kanonische Schreibweise, damit der Filter in der App zusammenfindet.
+        assert aktion.retailers == ["Rossmann"]
+
+    def test_einreichplattform_ist_weder_noch(self):
+        # Sonst hiesse die Hälfte aller Aktionen "scondoo".
+        aktion = self._parse("scondoo")
+        assert aktion.brand is None
+        assert aktion.retailers == []

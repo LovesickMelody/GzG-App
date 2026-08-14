@@ -16,7 +16,7 @@ import argparse
 import json
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -102,15 +102,48 @@ def sammle_quelle(quelle: dict, fetcher: Fetcher) -> list[Action] | None:
     # Erst filtern, dann Detailseiten holen: Was ohnehin rausfliegt, muss auch
     # nicht abgerufen werden. Spart je Lauf ein gutes Dutzend Abrufe.
     gesammelt = filtere_arten(gesammelt, quelle)
+    gesammelt = filtere_abgelaufene(gesammelt, quelle["name"])
     if not gesammelt:
-        log.warning(
-            "Quelle %s: alle Aktionen vom Arten-Filter aussortiert", quelle["name"]
-        )
+        log.warning("Quelle %s: alle Aktionen aussortiert", quelle["name"])
         return []
 
     reichere_an(gesammelt, quelle, fetcher)
 
     return gesammelt
+
+
+def filtere_abgelaufene(
+    aktionen: list[Action], quellenname: str, heute: date | None = None
+) -> list[Action]:
+    """
+    Wirft Aktionen weg, deren Einsendeschluss vorbei ist.
+
+    Portale lassen abgelaufene Eintraege gern stehen — mydealz zeigt Aktionen
+    aus dem Juli noch im August. In der App waere das schlimmer als eine
+    fehlende Aktion: Man kauft das Produkt und erfaehrt erst beim Einreichen,
+    dass nichts mehr geht.
+
+    Ohne Frist bleibt eine Aktion stehen. "Keine Frist bekannt" heisst nicht
+    "abgelaufen", und die Frist fehlt bei einer der Quellen grundsaetzlich.
+    """
+    stichtag = heute or date.today()
+    behalten: list[Action] = []
+    verworfen = 0
+
+    for aktion in aktionen:
+        frist = aktion.submission_deadline or aktion.valid_to
+        if frist:
+            try:
+                if date.fromisoformat(frist) < stichtag:
+                    verworfen += 1
+                    continue
+            except ValueError:
+                pass  # Unlesbares Datum: lieber behalten als grundlos wegwerfen.
+        behalten.append(aktion)
+
+    if verworfen:
+        log.info("Quelle %s: %s abgelaufene Aktion(en) aussortiert", quellenname, verworfen)
+    return behalten
 
 
 def filtere_arten(aktionen: list[Action], quelle: dict) -> list[Action]:

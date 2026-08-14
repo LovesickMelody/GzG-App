@@ -73,13 +73,15 @@ def _bild(eintrag) -> str | None:
     return None
 
 
-def _marke_aus_element(eintrag) -> str | None:
+def _anbieter_aus_element(eintrag) -> str | None:
     """
-    Liest die Marke aus einem eigenen Feed-Element.
+    Liest den Anbieter aus einem eigenen Feed-Element.
 
-    mydealz (Pepper) haengt an jeden Eintrag ``<pepper:merchant name="…"/>`` —
-    das ist die zuverlaessigste Markenangabe ueberhaupt, weil sie nicht aus dem
-    Titel geraten werden muss.
+    mydealz (Pepper) haengt an jeden Eintrag ``<pepper:merchant name="…"/>``.
+    Was da drinsteht, ist mal die Marke ("Milka", "JACOBS Kaffee") und mal der
+    Haendler oder die Cashback-Plattform ("dm", "Rossmann", "marktguru") — der
+    Einsteller entscheidet das. Deshalb wird der Wert oben einsortiert statt
+    blind ins Markenfeld geschrieben.
     """
     for name in ("merchant", "brand", "vendor"):
         knoten = eintrag.find(name)
@@ -89,6 +91,31 @@ def _marke_aus_element(eintrag) -> str | None:
         if wert:
             return saeubere(wert)
     return None
+
+
+# Plattformen, ueber die eingereicht wird. Stehen sie im Anbieterfeld, ist das
+# keine Marke — sonst hiesse die Haelfte aller Aktionen "scondoo".
+PLATTFORMEN = ("scondoo", "marktguru", "payback", "coupies", "smhaggle")
+
+
+def _sortiere_anbieter(
+    anbieter: str | None, bekannte_haendler: list[str]
+) -> tuple[str | None, list[str]]:
+    """Entscheidet, ob der Anbieter eine Marke oder ein Haendler/eine Plattform ist."""
+    if not anbieter:
+        return None, []
+
+    klein = anbieter.casefold()
+    if any(plattform in klein for plattform in PLATTFORMEN):
+        return None, []
+
+    for haendler in bekannte_haendler:
+        if haendler.casefold() == klein:
+            # Kanonische Schreibweise nehmen: "ROSSMANN" und "Rossmann" sollen
+            # denselben Filtereintrag ergeben.
+            return None, [haendler]
+
+    return anbieter, []
 
 
 def _marke(titel: str, trenner: str | None) -> str | None:
@@ -146,11 +173,14 @@ def parse(xml: str, quelle: dict) -> list[Action]:
         if bis is None:
             von, bis = datum_bereich(titel)
 
+        bekannte = quelle.get("retailers", BEKANNTE_HAENDLER)
+        marke, aus_anbieter = _sortiere_anbieter(_anbieter_aus_element(eintrag), bekannte)
+
         aktionen.append(
             Action(
                 title=kuerze_titel(titel, quelle.get("titel_entfernen")),
                 source=name,
-                brand=_marke_aus_element(eintrag) or _marke(titel, trenner),
+                brand=marke or _marke(titel, trenner),
                 type=art_aus_text(volltext),
                 max_refund_cents=betrag_in_cent(volltext),
                 valid_from=von,
@@ -158,7 +188,7 @@ def parse(xml: str, quelle: dict) -> list[Action]:
                 submission_deadline=bis,
                 url=_link(eintrag),
                 requirements=anforderungen_aus(volltext),
-                retailers=haendler_aus(volltext, quelle.get("retailers", BEKANNTE_HAENDLER)),
+                retailers=haendler_aus(volltext, bekannte) + aus_anbieter,
                 eans=eans_aus(volltext),
                 image_url=_bild(eintrag),
             )

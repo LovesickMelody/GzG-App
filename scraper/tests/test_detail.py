@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from gzg_scraper.detail import reichere_an
 from gzg_scraper.models import Action
-from gzg_scraper.run import filtere_arten
+from gzg_scraper.run import filtere_abgelaufene, filtere_arten
 
 DETAILSEITE = """
 <html><body>
@@ -109,3 +109,36 @@ class TestArtenFilter:
     def test_mehrere_arten_lassen_sich_erlauben(self):
         quelle = {"name": "q", "nur_arten": ["gratis_testen", "cashback_teilbetrag"]}
         assert len(filtere_arten(self._aktionen(), quelle)) == 2
+
+
+class TestAbgelaufeneFilter:
+    from datetime import date as _date
+
+    HEUTE = _date(2026, 8, 14)
+
+    def test_wirft_abgelaufene_weg(self):
+        aktionen = [
+            Action(title="Vorbei", source="q", submission_deadline="2026-07-29"),
+            Action(title="Läuft", source="q", submission_deadline="2026-09-30"),
+        ]
+        behalten = filtere_abgelaufene(aktionen, "q", heute=self.HEUTE)
+        assert [a.title for a in behalten] == ["Läuft"]
+
+    def test_heute_zaehlt_noch(self):
+        # Am letzten Tag kann man noch einreichen.
+        aktionen = [Action(title="Heute", source="q", submission_deadline="2026-08-14")]
+        assert len(filtere_abgelaufene(aktionen, "q", heute=self.HEUTE)) == 1
+
+    def test_ohne_frist_bleibt_die_aktion_stehen(self):
+        # "Keine Frist bekannt" heisst nicht "abgelaufen" — eine der Quellen
+        # liefert grundsaetzlich keine.
+        aktionen = [Action(title="Ohne", source="q")]
+        assert len(filtere_abgelaufene(aktionen, "q", heute=self.HEUTE)) == 1
+
+    def test_faellt_auf_valid_to_zurueck(self):
+        aktionen = [Action(title="Ende", source="q", valid_to="2026-07-01")]
+        assert filtere_abgelaufene(aktionen, "q", heute=self.HEUTE) == []
+
+    def test_unlesbares_datum_wirft_nichts_weg(self):
+        aktionen = [Action(title="Krumm", source="q", submission_deadline="demnächst")]
+        assert len(filtere_abgelaufene(aktionen, "q", heute=self.HEUTE)) == 1
