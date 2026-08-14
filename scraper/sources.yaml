@@ -1,0 +1,68 @@
+# Quellen des Aktions-Feeds.
+#
+# Eine Quelle je Eintrag. Faellt eine aus, laufen die anderen weiter und der
+# bisherige Stand dieser Quelle bleibt in data/actions.json stehen.
+#
+# WICHTIG — die Selektoren unten sind Startwerte und muessen gegen die echten
+# Seiten geprueft werden. Wie das geht, steht in der README unter
+# "Einen kaputten Scraper reparieren": Der Workflow `scrape.yml` laesst sich mit
+# `inspect: <name>` von Hand starten und schreibt dann den Seitenaufbau ins
+# Job-Log, woraus sich die richtigen Selektoren ablesen lassen.
+#
+# Felder:
+#   name          Kurzname; landet als "source" in actions.json und gruppiert
+#                 das Aufraeumen. Nicht mehr aendern, sobald Daten drinstehen.
+#   enabled       false schaltet eine Quelle ab, ohne sie zu loeschen.
+#   base_url      Basis fuer relative Links und Bilder.
+#   listing_urls  Uebersichtsseiten, die abgeklappert werden.
+#   parser        Eintrag aus gzg_scraper/registry.py.
+#   selectors     CSS-Selektoren. "a@href" liest ein Attribut statt des Textes.
+#                 Fehlt ein Feld, bleibt es leer — das ist kein Fehler.
+
+sources:
+  - name: gratis-testen
+    enabled: true
+    base_url: https://www.gratis-testen.de/
+    listing_urls:
+      - https://www.gratis-testen.de/
+    parser: css_listing
+    selectors:
+      item: "article"
+      title: "h2"
+      link: "a@href"
+      brand: ".brand"
+      max_refund: ".price"
+      deadline: ".deadline"
+      image: "img@src"
+
+  - name: aktion-gratis-testen
+    enabled: true
+    base_url: https://www.aktion-gratis-testen.de/
+    listing_urls:
+      - https://www.aktion-gratis-testen.de/
+    parser: css_listing
+    selectors:
+      item: "article"
+      title: "h2"
+      link: "a@href"
+      brand: ".brand"
+      max_refund: ".price"
+      deadline: ".deadline"
+      image: "img@src"
+
+  # Beispiel fuer eine abgeschaltete Quelle — als Vorlage fuer neue Portale.
+  - name: beispiel-portal
+    enabled: false
+    base_url: https://example.invalid/
+    listing_urls:
+      - https://example.invalid/aktionen
+    parser: css_listing
+    selectors:
+      item: "div.promo-card"
+      title: "h3.promo-title"
+      link: "a.promo-link@href"
+      brand: "span.promo-brand"
+      max_refund: "span.promo-amount"
+      deadline: "time.promo-deadline@datetime"
+      valid_to: "time.promo-end@datetime"
+      image: "img.promo-image@src"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spiegelt die Tokens aus ui/theme/Color.kt. Nur fuer System-/XML-Kontexte,
+         die kein Compose kennen (Starting-Theme, Adaptive Icon). -->
+    <color name="paper">#FAF8F3</color>
+    <color name="ink">#16181C</color>
+</resources>

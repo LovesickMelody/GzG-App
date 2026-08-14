@@ -1,0 +1,159 @@
+name: Android
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Debug-APK und Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Gradle einrichten (mit Cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit-Tests
+        run: ./gradlew test
+
+      - name: Debug-APK bauen
+        run: ./gradlew assembleDebug
+
+      # Nur wenn wirklich etwas schiefging — spart Artifact-Speicher.
+      - name: Testberichte hochladen
+        if: failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            core/build/reports/tests/
+            app/build/reports/tests/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      # Weg 1 zur APK: Artifact. Bequem, zaehlt aber gegen das Artifact-Kontingent
+      # des Kontos. Ist es voll, schlaegt nur dieser Schritt fehl.
+      - name: Debug-APK hochladen
+        id: apk_artifact
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: gzg-tracker-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Hinweis bei vollem Artifact-Speicher
+        if: steps.apk_artifact.outcome == 'failure'
+        run: |
+          echo "::warning::Artifact-Upload fehlgeschlagen (meist volles Speicherkontingent)." \
+               "Die APK haengt stattdessen am Prerelease 'debug-latest'."
+
+  # Weg 2 zur APK: ein mitlaufendes Prerelease. Release-Assets zaehlen nicht gegen
+  # das Artifact-Kontingent, die APK ist also auch dann erreichbar, wenn Weg 1 klemmt.
+  debug-release:
+    name: Debug-APK als Prerelease
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Gradle einrichten (mit Cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Debug-APK bauen
+        run: ./gradlew assembleDebug
+
+      - name: Prerelease aktualisieren
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/*.apk "dist/gzg-tracker-debug.apk"
+          gh release delete debug-latest --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create debug-latest \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Debug-APK (letzter Stand)" \
+            --notes "Automatisch gebaut aus \`$GITHUB_REF_NAME\` ($GITHUB_SHA). Zum Ausprobieren, nicht zum Aufheben." \
+            --prerelease \
+            dist/gzg-tracker-debug.apk
+
+  release:
+    name: Release-APK veroeffentlichen
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      # Der `secrets`-Kontext ist in Step-`if` nicht verfuegbar, `env` schon.
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Gradle einrichten (mit Cache)
+        uses: gradle/actions/setup-gradle@v4
+
+      # Optional: nur wenn die Secrets hinterlegt sind. Ohne Keystore signiert
+      # der Release-Build mit dem Debug-Key (siehe README) und ist trotzdem
+      # installierbar — nur nicht fuer den Play Store geeignet.
+      - name: Keystore aus Secret schreiben
+        if: env.KEYSTORE_BASE64 != ''
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          echo "KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Release-APK bauen
+        run: ./gradlew assembleRelease
+
+      - name: APK umbenennen
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/release/*.apk "dist/gzg-tracker-${GITHUB_REF_NAME}.apk"
+
+      - name: GitHub Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "GZG-Tracker $GITHUB_REF_NAME" \
+            --generate-notes \
+            dist/*.apk

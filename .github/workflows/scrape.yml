@@ -1,0 +1,106 @@
+name: Aktionen sammeln
+
+on:
+  schedule:
+    # Täglich 04:00 UTC. Die Portale aktualisieren nachts, morgens steht der
+    # Feed dann fertig im Repo.
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+    inputs:
+      inspect:
+        description: >-
+          Name einer Quelle aus sources.yaml. Gesetzt, wird nichts geschrieben —
+          stattdessen landet der Seitenaufbau im Job-Log, um Selektoren abzulesen.
+        required: false
+        default: ""
+      only:
+        description: "Nur diese eine Quelle laufen lassen"
+        required: false
+        default: ""
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Parser-Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Abhängigkeiten
+        run: pip install -r scraper/requirements.txt
+
+      # Laufen gegen gespeicherte HTML-Fixtures, brauchen kein Netz.
+      - name: Tests
+        working-directory: scraper
+        run: python -m pytest
+
+  inspect:
+    name: Seitenaufbau ansehen
+    if: github.event_name == 'workflow_dispatch' && inputs.inspect != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Abhängigkeiten
+        run: pip install -r scraper/requirements.txt
+
+      - name: Struktur ausgeben
+        run: python scraper/inspect_source.py --source "${{ inputs.inspect }}"
+
+  scrape:
+    name: Feed aktualisieren
+    if: github.event_name != 'workflow_dispatch' || inputs.inspect == ''
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Abhängigkeiten
+        run: pip install -r scraper/requirements.txt
+
+      - name: Aktionen sammeln
+        run: |
+          python -m gzg_scraper.run \
+            --sources sources.yaml \
+            --output ../data/actions.json \
+            --delay 3 \
+            ${{ inputs.only != '' && format('--only {0}', inputs.only) || '' }}
+        working-directory: scraper
+
+      - name: Änderungen committen
+        run: |
+          if git diff --quiet -- data/actions.json; then
+            echo "Keine Änderungen an data/actions.json."
+            exit 0
+          fi
+
+          anzahl=$(python -c "import json;print(len(json.load(open('data/actions.json'))['actions']))")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/actions.json
+          git commit -m "Aktionen aktualisiert (${anzahl} Einträge)"
+          git push
