@@ -50,6 +50,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -155,6 +157,11 @@ fun UebersichtScreen(
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
                 text = { Text("Beleg eintragen") },
+                // Eigene Beschriftung, weil die Beschriftung aus dem `text`-Slot
+                // nicht im Baum der Bedienhilfen ankommt — der Emulator-Test fand
+                // an dieser Stelle einen Knopf ganz ohne Namen. Ein Screenreader
+                // haette die Hauptaktion der App also gar nicht angesagt.
+                modifier = Modifier.semantics { contentDescription = "Beleg eintragen" },
             )
         },
     ) { innen ->
@@ -379,7 +386,7 @@ private fun LeererZustand(
             text = if (gefiltert) {
                 "Kein Beleg passt zu diesen Filtern. Setz sie zurück, um alles zu sehen."
             } else {
-                "Scanne dein erstes Produkt oder trag es von Hand ein."
+                "Such dir eine Aktion, kauf das Produkt und trag den Beleg hier ein."
             },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

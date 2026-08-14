@@ -3,7 +3,9 @@ package de.gzgtracker
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -46,7 +48,7 @@ class AppSmokeTest {
 
     @Test
     fun zeigtDenEinladungstext() {
-        app.onNodeWithText("Scanne dein erstes Produkt oder trag es von Hand ein.")
+        app.onNodeWithText("Such dir eine Aktion, kauf das Produkt und trag den Beleg hier ein.")
             .assertIsDisplayed()
     }
 
@@ -63,7 +65,8 @@ class AppSmokeTest {
     fun hatEinenBedienbarenHauptknopf() {
         val erschienen = runCatching {
             app.waitUntil(timeoutMillis = 10_000) {
-                app.onAllNodesWithText("Beleg eintragen").fetchSemanticsNodes().isNotEmpty()
+                app.onAllNodesWithContentDescription("Beleg eintragen")
+                    .fetchSemanticsNodes().isNotEmpty()
             }
             true
         }.getOrDefault(false)
@@ -75,7 +78,7 @@ class AppSmokeTest {
             )
         }
 
-        app.onNodeWithText("Beleg eintragen").assertHasClickAction()
+        app.onNodeWithContentDescription("Beleg eintragen").assertHasClickAction()
     }
 
     @Test
