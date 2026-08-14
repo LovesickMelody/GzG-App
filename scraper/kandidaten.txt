@@ -16,6 +16,14 @@
 # 17 fremde Seiten abruft. Zum Nachpruefen die gewuenschte Zeile einkommentieren.
 # ============================================================================
 
+# --- Offen: wird gerade geprueft ------------------------------------------
+# mydealz ist eine Pepper-Seite und bietet laut eigenem Magazin RSS unter
+# /rss/gruppe/<name> an. Falls das traegt, waere es die ergiebigste Quelle:
+# grosse Gemeinschaft, jede Aktion mit Link zur Einreichungsseite.
+https://www.mydealz.de/rss/gruppe/geld-zurueck
+https://www.mydealz.de/rss/gruppe/gratis
+https://www.mydealz.de/gruppe/geld-zurueck
+
 # --- Uebernommen nach sources.yaml ---------------------------------------
 # https://geldzurueck.deals/
 #   Spezialportal, nur Geld-zurueck-Aktionen. Saubere Karten: div.card, davon

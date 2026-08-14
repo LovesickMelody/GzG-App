@@ -1,0 +1,61 @@
+name: Quellen prüfen
+
+# Klopft mögliche neue Portale ab, ohne etwas zu schreiben.
+#
+# Läuft automatisch, wenn sich die Kandidatenliste ändert, und lässt sich unter
+# *Actions → Quellen prüfen → Run workflow* von Hand starten (letzteres erst,
+# wenn diese Datei auf dem Standardbranch liegt — `push` greift dagegen auf
+# jedem Branch).
+#
+# Ausgegeben wird je Adresse: Erreichbarkeit, robots.txt, Feed- oder
+# HTML-Aufbau und eine Einschätzung, wie sehr der Inhalt nach
+# Geld-zurück-Aktion aussieht. Was taugt, wandert danach nach sources.yaml.
+
+on:
+  push:
+    paths:
+      - "scraper/kandidaten.txt"
+      - "scraper/probe_kandidaten.py"
+      - ".github/workflows/quellen-pruefen.yml"
+  workflow_dispatch:
+    inputs:
+      roh:
+        description: >-
+          CSS-Selektor. Gesetzt, wird zusätzlich das Markup der ersten Treffer
+          ausgegeben — nötig, um Selektoren abzulesen statt zu raten.
+        required: false
+        default: ""
+      url:
+        description: "Einzelne Adresse für die Rohbau-Ausgabe"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  pruefen:
+    name: Kandidaten abklopfen
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: scraper/requirements.txt
+
+      - name: Abhängigkeiten
+        run: pip install -r scraper/requirements.txt
+
+      - name: Kandidaten abklopfen
+        if: inputs.roh == ''
+        run: python scraper/probe_kandidaten.py
+
+      - name: Rohbau eines Eintrags
+        if: inputs.roh != ''
+        run: >-
+          python scraper/inspect_source.py
+          --url "${{ inputs.url }}" --roh "${{ inputs.roh }}"
