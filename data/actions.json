@@ -1,65 +1,6 @@
 {
-  "generated_at": "2026-08-14T11:40:06Z",
+  "generated_at": "2026-08-14T12:12:42Z",
   "actions": [
-    {
-      "id": "9d2656572f72",
-      "title": "Bonduelle Frische Salate Gratis Testen mit Scondoo",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/bonduelle-frische-salate-gratis-testen-mit-scondoo",
-      "submit_url": "https://scondoo.de/?cashbackDetail=81788",
-      "requirements": [
-        "app"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/133/bonduelle-frische-salate-gratis-testen-mit-scondoo_xs.png",
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "7d533a4f3acb",
-      "title": "SACHSEN QUELLE Medium+ Orange & Lemon Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/sachsen-quelle-medium-orange-lemon-gratis-testen",
-      "submit_url": "https://www.sachsenquelle.de/medium-orange/",
-      "requirements": [
-        "bonfoto",
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/125/sachsen-quelle-medium-orange-lemon-gratis-testen_xs.png",
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "bcc52dd35edf",
-      "title": "Sensodyne Proschmelz Clinical Zahnschmelz Protect Zahnpasta Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/sensodyne-proschmelz-clinical-zahnschmelz-protect-zahnpasta-gratis-testen",
-      "submit_url": "https://www.erlebe-haleon.de/deals/proschmelz-clinical-protect/",
-      "requirements": [
-        "bonfoto",
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/131/sensodyne-proschmelz-clinical-zahnschmelz-protect-zahnpasta-gratis-testen_xs.png",
-      "source": "geldzurueck-deals"
-    },
     {
       "id": "7f1d1c84fa28",
       "title": "100 % zurück auf Pantene Pro-V Repair & Care Collection und andere Artikel über for me",
@@ -419,7 +360,10 @@
       "submission_deadline": "2026-10-30",
       "url": "https://rabattigel.de/2x-flaschen-sachsen-quelle-medium-orange-und-oder-medium-lemon-075l-gratis-testen-geld-zurueck/",
       "submit_url": "https://www.sachsenquelle.de/medium-orange",
-      "requirements": [],
+      "requirements": [
+        "bonfoto",
+        "registrierung"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/84684-768x1145.jpg",
@@ -567,7 +511,10 @@
       "submission_deadline": "2026-10-31",
       "url": "https://rabattigel.de/sensodyne-proschmelz-clincal-zahnschmelz-protect-gratis-testen-geld-zurueck/",
       "submit_url": "https://www.erlebe-haleon.de/deals/proschmelz-clinical-protect",
-      "requirements": [],
+      "requirements": [
+        "bonfoto",
+        "registrierung"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/08/werbung-mobile-768x469.png",
