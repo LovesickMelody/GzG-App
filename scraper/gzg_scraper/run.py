@@ -21,6 +21,7 @@ from pathlib import Path
 
 import yaml
 
+from .detail import reichere_an
 from .fetch import Fetcher
 from .models import Action
 from .registry import hole as hole_parser
@@ -98,7 +99,43 @@ def sammle_quelle(quelle: dict, fetcher: Fetcher) -> list[Action] | None:
         )
         return None
 
+    # Erst filtern, dann Detailseiten holen: Was ohnehin rausfliegt, muss auch
+    # nicht abgerufen werden. Spart je Lauf ein gutes Dutzend Abrufe.
+    gesammelt = filtere_arten(gesammelt, quelle)
+    if not gesammelt:
+        log.warning(
+            "Quelle %s: alle Aktionen vom Arten-Filter aussortiert", quelle["name"]
+        )
+        return []
+
+    reichere_an(gesammelt, quelle, fetcher)
+
     return gesammelt
+
+
+def filtere_arten(aktionen: list[Action], quelle: dict) -> list[Action]:
+    """
+    Behaelt nur die gewuenschten Aktionsarten.
+
+    Standard sind ausschliesslich volle Erstattungen (``gratis_testen``): Genau
+    dafuer ist die App da. Wer auch Teilbetraege sehen will, setzt in
+    ``sources.yaml`` etwa ``nur_arten: [gratis_testen, cashback_teilbetrag]``
+    oder ``nur_arten: []`` fuer "alles".
+    """
+    erlaubt = quelle.get("nur_arten", ["gratis_testen"])
+    if not erlaubt:
+        return aktionen
+
+    behalten = [a for a in aktionen if a.type in erlaubt]
+    verworfen = len(aktionen) - len(behalten)
+    if verworfen:
+        log.info(
+            "Quelle %s: %s Aktion(en) aussortiert, weil nicht %s",
+            quelle["name"],
+            verworfen,
+            "/".join(erlaubt),
+        )
+    return behalten
 
 
 def fuehre_zusammen(

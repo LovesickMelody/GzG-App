@@ -26,11 +26,13 @@ from bs4 import BeautifulSoup
 
 from ..models import Action
 from ..parsing import (
+    anforderungen_aus,
     art_aus_text,
     betrag_in_cent,
-    datum_iso,
+    datum_bereich,
     eans_aus,
     haendler_aus,
+    kuerze_titel,
     saeubere,
 )
 
@@ -68,6 +70,24 @@ def _bild(eintrag) -> str | None:
         knoten = eintrag.find(name)
         if knoten is not None and knoten.get(attribut):
             return saeubere(knoten.get(attribut))
+    return None
+
+
+def _marke_aus_element(eintrag) -> str | None:
+    """
+    Liest die Marke aus einem eigenen Feed-Element.
+
+    mydealz (Pepper) haengt an jeden Eintrag ``<pepper:merchant name="…"/>`` —
+    das ist die zuverlaessigste Markenangabe ueberhaupt, weil sie nicht aus dem
+    Titel geraten werden muss.
+    """
+    for name in ("merchant", "brand", "vendor"):
+        knoten = eintrag.find(name)
+        if knoten is None:
+            continue
+        wert = knoten.get("name") or knoten.get_text(" ", strip=True)
+        if wert:
+            return saeubere(wert)
     return None
 
 
@@ -120,17 +140,24 @@ def parse(xml: str, quelle: dict) -> list[Action]:
             aussortiert += 1
             continue
 
-        frist = datum_iso(beschreibung) or datum_iso(titel)
+        # Der Zeitraum steht meist als "17.08.2026-30.09.2026" in einer Zeile.
+        # Der Einsendeschluss ist das spaetere der beiden Daten.
+        von, bis = datum_bereich(beschreibung)
+        if bis is None:
+            von, bis = datum_bereich(titel)
 
         aktionen.append(
             Action(
-                title=titel,
+                title=kuerze_titel(titel, quelle.get("titel_entfernen")),
                 source=name,
-                brand=_marke(titel, trenner),
+                brand=_marke_aus_element(eintrag) or _marke(titel, trenner),
                 type=art_aus_text(volltext),
                 max_refund_cents=betrag_in_cent(volltext),
-                submission_deadline=frist,
+                valid_from=von,
+                valid_to=bis,
+                submission_deadline=bis,
                 url=_link(eintrag),
+                requirements=anforderungen_aus(volltext),
                 retailers=haendler_aus(volltext, quelle.get("retailers", BEKANNTE_HAENDLER)),
                 eans=eans_aus(volltext),
                 image_url=_bild(eintrag),

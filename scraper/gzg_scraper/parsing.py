@@ -96,6 +96,33 @@ def datum_iso(text: str | None, heute: date | None = None) -> str | None:
     return None
 
 
+def datum_bereich(text: str | None) -> tuple[str | None, str | None]:
+    """
+    Liest einen Aktionszeitraum wie "17.08.2026-30.09.2026" als (von, bis).
+
+    Portale schreiben den Zeitraum meist in einer Zeile statt in zwei Feldern.
+    Steht nur ein Datum da, ist es das Ende — bei einer Aktion interessiert der
+    Einsendeschluss, nicht der Beginn.
+    """
+    if not text:
+        return None, None
+
+    gefunden: list[str] = []
+    for muster in (_DATUM_ISO, _DATUM_PUNKT, _DATUM_WORT):
+        for treffer in muster.finditer(text):
+            iso = datum_iso(treffer.group(0))
+            if iso and iso not in gefunden:
+                gefunden.append(iso)
+
+    if not gefunden:
+        return None, None
+    if len(gefunden) == 1:
+        return None, gefunden[0]
+
+    gefunden.sort()
+    return gefunden[0], gefunden[-1]
+
+
 def _bauen(jahr: int, monat: int, tag: int) -> str | None:
     try:
         return datetime(jahr, monat, tag).date().isoformat()
@@ -267,6 +294,21 @@ def anforderungen_aus(text: str | None) -> list[str]:
         gefunden.sort(key=lambda s: [k for k, _ in _ANFORDERUNGEN].index(s))
 
     return gefunden
+
+
+def kuerze_titel(titel: str, muster: str | None) -> str:
+    """
+    Entfernt einen wiederkehrenden Zusatz aus dem Titel.
+
+    Manche Portale haengen an jeden Titel dieselbe Kennzeichnung — etwa
+    "[gratis testen, Geld zurueck!]". In der App steht das dann neunzehnmal
+    untereinander und verdeckt den Produktnamen. Bleibt nach dem Kuerzen nichts
+    uebrig, gilt der urspruengliche Titel: lieber laut als leer.
+    """
+    if not muster:
+        return titel
+    gekuerzt = saeubere(re.sub(muster, " ", titel))
+    return gekuerzt or titel
 
 
 def saeubere(text: str | None) -> str | None:
