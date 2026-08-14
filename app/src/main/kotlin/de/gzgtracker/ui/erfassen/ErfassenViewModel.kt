@@ -266,26 +266,28 @@ class ErfassenViewModel @Inject constructor(
     private suspend fun werteBonAus(pfad: String) {
         _uiState.update { it.copy(liestBon = true) }
         val ergebnis = bonLeser.auswerten(pfad)
+        // In eigene Variablen, bevor sie gelesen werden: Werte aus einem anderen
+        // Modul behandelt Kotlin nach einer Null-Pruefung nicht automatisch als
+        // "nicht null", weil sie sich zwischendurch geaendert haben koennten.
+        val gelesenerPreis = ergebnis.preisCents
+        val gelesenesDatum = ergebnis.datum
+
         _uiState.update { zustand ->
-            val preisFrei = zustand.preis.isBlank()
-            val datumFrei = zustand.kaufdatum == LocalDate.now() && !zustand.datumAusBon
+            val preisUebernehmen = gelesenerPreis != null && zustand.preis.isBlank()
+            val datumUebernehmen = gelesenesDatum != null &&
+                zustand.kaufdatum == LocalDate.now() &&
+                !zustand.datumAusBon
+
             zustand.copy(
                 liestBon = false,
-                preis = if (preisFrei && ergebnis.preisCents != null) {
-                    Money.formatPlain(ergebnis.preisCents)
+                preis = if (preisUebernehmen) Money.formatPlain(gelesenerPreis) else zustand.preis,
+                preisAusBon = zustand.preisAusBon || preisUebernehmen,
+                kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
+                datumAusBon = zustand.datumAusBon || datumUebernehmen,
+                meldung = if (preisUebernehmen || datumUebernehmen) {
+                    "Aus dem Bon gelesen — bitte prüfen"
                 } else {
-                    zustand.preis
-                },
-                preisAusBon = zustand.preisAusBon || (preisFrei && ergebnis.preisCents != null),
-                kaufdatum = if (datumFrei && ergebnis.datum != null) {
-                    ergebnis.datum
-                } else {
-                    zustand.kaufdatum
-                },
-                datumAusBon = zustand.datumAusBon || (datumFrei && ergebnis.datum != null),
-                meldung = when {
-                    ergebnis.hatVorschlag -> "Aus dem Bon gelesen — bitte prüfen"
-                    else -> null
+                    null
                 },
             )
         }
