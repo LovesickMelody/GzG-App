@@ -162,6 +162,29 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Commit, der nichts als den Zeitstempel dreht.
 - **Ehrlicher User-Agent mit Projektlink statt getarntem Browser** — fair gegenüber den
   Betreibern und macht Probleme nachvollziehbar.
+- **Der Feed sammelt nur volle Erstattungen** (`nur_arten: [gratis_testen]`) — Teilbeträge
+  sind nicht der Zweck dieser App. Dafür musste die Arterkennung lernen, dass
+  „100 % Cashback" gratis testen *ist*: Das Wort Cashback allein sagt nichts über die
+  Höhe, und ohne diese Unterscheidung hätte der Filter genau die Volltreffer weggeworfen.
+- **Abgelaufene Aktionen fliegen raus, Aktionen ohne Frist bleiben** — Portale lassen alte
+  Einträge stehen. Eine abgelaufene Aktion ist schlimmer als eine fehlende: Man kauft das
+  Produkt und erfährt erst beim Einreichen, dass nichts mehr geht. „Keine Frist bekannt"
+  ist aber etwas anderes als „abgelaufen", und bei einer Quelle fehlt die Frist immer.
+- **`submit_url` neben `url`** — `url` zeigt auf den Artikel im Portal, `submit_url` auf
+  das Formular des Anbieters. Nur so führt ein Fingertipp dorthin, wo man tatsächlich
+  einreicht. Wo es keine gibt, sagt die Beschriftung das ehrlich („Aktionsseite öffnen"
+  statt „Zur Einreichung").
+- **Detailseiten werden nur dort nachgeladen, wo die Übersicht den Link nicht hergibt** —
+  ein zusätzlicher Abruf je Aktion. rabattigel verlinkt schon in der Liste,
+  geldzurueck.deals erst auf der Detailseite; mydealz baut seine Links per JavaScript,
+  da bringt Nachladen nichts.
+- **`requirements` wird konservativ erkannt, im Zweifel leer** — die Checkliste sagt dann
+  „steht nicht im Feed" statt einen Haken zu erfinden. Ein erfundener Haken schickt
+  jemanden mit dem falschen Foto los, und die Erstattung fällt aus; ein fehlender kostet
+  einen Blick auf die Aktionsseite.
+- **Was mydealz als `pepper:merchant` liefert, wird einsortiert statt ins Markenfeld
+  geschrieben** — mal ist es die Marke („Milka"), mal der Händler („ROSSMANN"), mal die
+  Einreichplattform („scondoo"). Sonst hieße die Hälfte aller Aktionen „scondoo".
 
 ## Design
 
@@ -216,6 +239,15 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   „-3,99“ ein Betrag bleibt und kein Text wird.
 - **Der Export liegt im Cache** — er ist eine Momentaufnahme zum Weitergeben, kein
   Dokument, das die App verwalten müsste.
+
+## App
+
+- **Echte Room-Migrationen statt `fallbackToDestructiveMigration()`** — in dieser Datenbank
+  stehen Einreichungen, Konten und die Pfade zu den Bonfotos. Ein Update, das die Belege
+  eines halben Jahres wegwirft, wäre der schlimmste denkbare Fehler dieser App.
+- **`url` und `submit_url` müssen `http(s)` sein** — beide kommen aus fremden Portalen. Ein
+  `javascript:`- oder `intent:`-Link daraus würde beim Antippen in einer anderen App
+  landen; das gehört gar nicht erst in die Datenbank.
 
 ## Sonstiges
 

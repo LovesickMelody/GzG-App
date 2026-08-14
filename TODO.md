@@ -42,6 +42,15 @@ Abgehakt heisst: gebaut, getestet, committet.
       geldzurueck.deals und rabattigel.de uebernommen, Selektoren am Rohbau abgelesen —
       19 echte Aktionen in `data/actions.json`)
 - [x] Feed-Parser fuer RSS/Atom als Alternative zu CSS-Selektoren
+- [x] mydealz-Gruppe "Geld zurueck" als RSS-Quelle
+- [x] Nur volle Erstattungen sammeln, Teilbetraege aussortieren
+- [x] Abgelaufene Aktionen aussortieren
+- [x] `submit_url`: Link zur Einreichungsseite statt nur zum Portalartikel
+- [x] `requirements`: Checkliste "Was brauche ich?" aus den Teilnahmebedingungen
+- [x] Checkliste und Einreichungs-Knopf in der App
+- [ ] Erfassung mit mehreren Fotos (Produkt, Bon, beides zusammen) statt nur Bonfoto
+- [ ] Scannen als Nebenweg statt als Haupteinstieg
+- [ ] Dieselbe Aktion aus zwei Quellen zusammenfassen (ueber gleiche `submit_url`)
 - [x] App laedt `actions.json`, cached in Room, Pull-to-Refresh, offline nutzbar
 - [x] Aktion manuell anlegen
 - [x] Parser-Tests gegen HTML-Fixtures (offline)
