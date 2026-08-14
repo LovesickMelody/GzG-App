@@ -31,10 +31,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Unit-Tests
-        run: ./gradlew test --stacktrace
+        run: ./gradlew test
 
       - name: Debug-APK bauen
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug
 
       # Nur wenn wirklich etwas schiefging — spart Artifact-Speicher.
       - name: Testberichte hochladen
@@ -89,7 +89,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Debug-APK bauen
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleDebug
 
       - name: Prerelease aktualisieren
         env:
@@ -141,7 +141,7 @@ jobs:
           echo "KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
 
       - name: Release-APK bauen
-        run: ./gradlew assembleRelease --stacktrace
+        run: ./gradlew assembleRelease
 
       - name: APK umbenennen
         run: |
