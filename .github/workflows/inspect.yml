@@ -1,0 +1,67 @@
+name: Portale ansehen
+
+# Vorübergehender Hilfs-Workflow, um die echten Selektoren zu ermitteln.
+#
+# Warum nicht scrape.yml: GitHub startet `workflow_dispatch` und `schedule` nur für
+# Workflow-Dateien auf dem Standardbranch. `push` dagegen greift auf jedem Branch —
+# darüber kommt der Job an die Portale, solange der Feature-Branch noch offen ist.
+#
+# Verschwindet wieder, sobald die Selektoren in sources.yaml stehen.
+
+on:
+  push:
+    paths:
+      - "scraper/sources.yaml"
+      - "scraper/inspect_source.py"
+      - ".github/workflows/inspect.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ansehen:
+    name: Seitenaufbau ausgeben
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Abhängigkeiten
+        run: pip install -r scraper/requirements.txt
+
+      - name: Erreichbarkeit und robots.txt
+        working-directory: scraper
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import urllib.robotparser, requests
+          from gzg_scraper.fetch import USER_AGENT
+          from gzg_scraper.run import lade_quellen
+          from pathlib import Path
+
+          for quelle in lade_quellen(Path("sources.yaml")):
+              print(f"\n=== {quelle['name']} ===")
+              for adresse in quelle.get("listing_urls", []):
+                  try:
+                      antwort = requests.get(
+                          adresse, headers={"User-Agent": USER_AGENT}, timeout=20
+                      )
+                      print(f"  {adresse} -> HTTP {antwort.status_code}, "
+                            f"{len(antwort.text)} Zeichen, "
+                            f"Content-Type {antwort.headers.get('content-type')}")
+                  except Exception as fehler:
+                      print(f"  {adresse} -> nicht erreichbar: {fehler}")
+          PY
+
+      - name: gratis-testen
+        continue-on-error: true
+        run: python scraper/inspect_source.py --source gratis-testen
+
+      - name: aktion-gratis-testen
+        continue-on-error: true
+        run: python scraper/inspect_source.py --source aktion-gratis-testen

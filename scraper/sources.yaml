@@ -66,3 +66,5 @@ sources:
       deadline: "time.promo-deadline@datetime"
       valid_to: "time.promo-end@datetime"
       image: "img.promo-image@src"
+
+# (Kommentar zum Auslösen des Inspektionslaufs — wird wieder entfernt.)
