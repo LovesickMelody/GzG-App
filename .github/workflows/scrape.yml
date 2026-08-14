@@ -5,6 +5,16 @@ on:
     # Täglich 04:00 UTC. Die Portale aktualisieren nachts, morgens steht der
     # Feed dann fertig im Repo.
     - cron: "0 4 * * *"
+  # Damit eine geänderte Quelle sofort geprüft wird, statt bis zum nächsten
+  # Nachtlauf zu warten. Vor dem Merge ist das ausserdem der einzige Weg, den
+  # Sammellauf überhaupt zu starten: GitHub kennt `schedule` und
+  # `workflow_dispatch` nur für Workflow-Dateien auf dem Standardbranch.
+  # `data/**` ist bewusst nicht dabei — sonst löste der eigene Commit den
+  # nächsten Lauf aus.
+  push:
+    paths:
+      - "scraper/**"
+      - ".github/workflows/scrape.yml"
   workflow_dispatch:
     inputs:
       inspect:
@@ -90,6 +100,30 @@ jobs:
             --delay 3 \
             ${{ inputs.only != '' && format('--only {0}', inputs.only) || '' }}
         working-directory: scraper
+
+      # Ohne diesen Blick ins Log sieht man erst am Handy, ob die Selektoren
+      # Unsinn geliefert haben — ein Titel wie "Mehr anzeigen" oder ein Betrag,
+      # der in Wahrheit ein Datum war.
+      - name: Ergebnis zur Kontrolle ausgeben
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          daten = json.loads(Path("data/actions.json").read_text(encoding="utf-8"))
+          aktionen = daten["actions"]
+          print(f"{len(aktionen)} Aktionen, Stand {daten['generated_at']}\n")
+          for aktion in aktionen:
+              betrag = aktion["max_refund_cents"]
+              print(
+                  f"  [{aktion['source']}] {aktion['title'][:70]}\n"
+                  f"      Art={aktion['type']} "
+                  f"Betrag={'—' if betrag is None else f'{betrag / 100:.2f} €'} "
+                  f"Frist={aktion['submission_deadline'] or '—'} "
+                  f"Zeitraum={aktion['valid_from'] or '—'}..{aktion['valid_to'] or '—'}\n"
+                  f"      {aktion['url']}"
+              )
+          PY
 
       - name: Änderungen committen
         run: |
