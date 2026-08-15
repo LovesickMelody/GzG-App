@@ -356,6 +356,15 @@ class ErfassenViewModel @Inject constructor(
         if (!zustand.speicherbar) return
         val preisCents = Money.parseOrNull(zustand.preis) ?: return
 
+        // Wer "Speichern und einreichen" drueckt, reicht ein — der Eintrag darf
+        // danach nicht als "gekauft" in der Liste stehen. Ein weiter
+        // fortgeschrittener Status (erstattet, abgelehnt) bleibt unangetastet.
+        val neuerStatus = if (dannEinreichen && zustand.status == SubmissionStatus.GEKAUFT) {
+            SubmissionStatus.EINGEREICHT
+        } else {
+            zustand.status
+        }
+
         viewModelScope.launch {
             val eintrag = Submission(
                 id = zustand.submissionId ?: 0L,
@@ -369,8 +378,8 @@ class ErfassenViewModel @Inject constructor(
                 receiptImagePath = zustand.bonPfad,
                 productImagePath = zustand.produktPfad,
                 comboImagePath = zustand.zusammenPfad,
-                status = zustand.status,
-                submittedAt = if (zustand.status == SubmissionStatus.GEKAUFT) {
+                status = neuerStatus,
+                submittedAt = if (neuerStatus == SubmissionStatus.GEKAUFT) {
                     null
                 } else {
                     LocalDate.now()

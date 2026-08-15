@@ -314,6 +314,21 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Dazu Ladebalken, sichtbare Fehlermeldung und „Im Browser öffnen": Vor einer weißen Fläche
   zu stehen, ohne zu wissen warum, ist der schlechteste Ausgang.
 
+- **Das Datei-Feld der Anbieterseite bedient die App mit den eigenen Fotos** — ein
+  eingebauter Browser öffnet ohne `onShowFileChooser` gar keinen Dateidialog; das Antippen
+  von „Datei auswählen" blieb wirkungslos. Genau dieses Foto ist aber der Kern jeder
+  Einreichung. Angeboten werden zuerst die Bilder dieser Einreichung, dann die Galerie.
+  Eingefügt wird nur, was von Hand ausgewählt wurde — ein Skript darf ein Datei-Feld
+  nicht füllen, und das soll auch so bleiben.
+- **Weiterleitungen werden beim Sammeln aufgelöst, nicht im Gerät** — mydealz verlinkt über
+  `/visit/threadmain/<id>`. In der App erschien deshalb erst ein fremdes Logo, und wenn die
+  Zwischenseite hakte, gar nichts. Der Scraper ruft die Seite ohnehin ab und merkt sich, wo
+  er landet. Bleibt die Weiterleitung auf demselben Host, bleibt die kürzere Adresse stehen.
+- **„Speichern und einreichen" setzt den Status auf eingereicht** — sonst steht der Eintrag
+  danach als „gekauft" in der Liste, obwohl man gerade eingereicht hat. Umgekehrt führt ein
+  abgebrochener Vorgang nicht in eine Sackgasse: In der Detailansicht steht „Nochmal
+  einreichen", und der Status lässt sich mit einem Tipp zurücksetzen.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

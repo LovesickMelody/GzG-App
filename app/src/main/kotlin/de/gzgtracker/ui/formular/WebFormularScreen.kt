@@ -7,15 +7,22 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +34,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.OpenInNew
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -55,15 +63,20 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import java.io.File
 
 /**
  * Die Aktionsseite im Browser der App — mit einem Knopf, der die Daten einträgt.
  *
- * Was die App **nicht** tut: absenden. Das bleibt eine bewusste Handlung. Und
- * das Bonfoto kann sie nicht anhängen: Browser lassen Skripte kein Datei-Feld
- * füllen, sonst könnte jede Seite heimlich Dateien hochladen.
+ * Was die App **nicht** tut: absenden. Das bleibt eine bewusste Handlung.
+ *
+ * Das Bonfoto lässt sich nicht per Skript ins Datei-Feld schreiben — sonst könnte
+ * jede Seite heimlich Dateien hochladen. Tippt man das Feld aber selbst an, bietet
+ * die App die Fotos dieser Einreichung zur Auswahl an; ausgesucht wird von Hand,
+ * hochgeladen erst dann.
  *
  * Daneben stehen die Werte einzeln zum Kopieren. Das ist der Weg für alles, was
  * der Einfüge-Knopf nicht trifft — und für Formulare hinter einem Login, bei
@@ -85,10 +98,84 @@ fun WebFormularScreen(
     var seiteLaedt by remember { mutableStateOf(true) }
     var seitenfehler by remember { mutableStateOf<String?>(null) }
 
+    // Das Datei-Feld der Anbieterseite. Ohne eigene Behandlung passiert beim
+    // Antippen von "Datei auswählen" gar nichts — und genau dieses Foto ist der
+    // Kern der Einreichung. Angeboten werden zuerst die Bilder, die schon in der
+    // App liegen; sie sind der Grund, warum man sie überhaupt aufgenommen hat.
+    var dateiwahl by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
+    var belegwahlOffen by remember { mutableStateOf(false) }
+
+    fun beantworteDateiwahl(auswahl: Array<Uri>?) {
+        // Immer antworten, auch bei Abbruch: Bleibt die Rückmeldung aus, nimmt
+        // die Seite nie wieder eine Datei an.
+        dateiwahl?.onReceiveValue(auswahl)
+        dateiwahl = null
+        belegwahlOffen = false
+    }
+
+    val galerie = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> beantworteDateiwahl(uri?.let { arrayOf(it) }) },
+    )
+
+    // Zurück heisst hier: eine Seite zurück im Formular, und erst am Anfang raus.
+    // Vorher landete man mit einem Tipp wieder in der Liste, mitten im Vorgang.
+    BackHandler {
+        val ziel = webView
+        if (ziel != null && ziel.canGoBack()) ziel.goBack() else onZurueck()
+    }
+
     LaunchedEffect(zustand.meldung) {
         val meldung = zustand.meldung ?: return@LaunchedEffect
         snackbar.showSnackbar(meldung)
         viewModel.meldungGelesen()
+    }
+
+    if (belegwahlOffen) {
+        AlertDialog(
+            onDismissRequest = { beantworteDateiwahl(null) },
+            title = { Text("Bild hochladen") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (zustand.belege.isEmpty()) {
+                        Text("Zu dieser Einreichung ist kein Foto gespeichert.")
+                    }
+                    zustand.belege.forEach { beleg ->
+                        TextButton(
+                            onClick = {
+                                val adresse = teilbareAdresse(context, beleg.pfad)
+                                if (adresse == null) {
+                                    viewModel.zeigeMeldung("Das Foto ließ sich nicht öffnen.")
+                                    beantworteDateiwahl(null)
+                                } else {
+                                    beantworteDateiwahl(arrayOf(adresse))
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(beleg.art.label)
+                        }
+                    }
+                    TextButton(
+                        onClick = {
+                            belegwahlOffen = false
+                            galerie.launch(
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageOnly,
+                                ),
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text("Aus der Galerie")
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { beantworteDateiwahl(null) }) { Text("Abbrechen") }
+            },
+        )
     }
 
     Scaffold(
@@ -146,22 +233,29 @@ fun WebFormularScreen(
                 }
 
                 Text(
-                    text = "Bonfoto und Absenden bleiben bei dir.",
+                    text = "Beim Datei-Feld bietet die App deine Fotos an. Absenden bleibt bei dir.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
-                // Wenn die Seite hier nicht laufen will — manche verlangen einen
-                // Login oder sperren eingebettete Browser aus —, ist der eigene
-                // Browser der Ausweg. Die Werte lassen sich vorher kopieren.
-                zustand.adresse?.let { ziel ->
-                    TextButton(onClick = { uriHandler.openUri(ziel) }) {
-                        Icon(
-                            Icons.Outlined.OpenInNew,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
-                        Text(" Im Browser öffnen")
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // Ein sichtbarer Ausgang. Der Pfeil oben links wird auf einer
+                    // fremden Seite leicht übersehen, und dann sitzt man fest.
+                    TextButton(onClick = onZurueck) { Text("Fertig") }
+
+                    // Wenn die Seite hier nicht laufen will — manche verlangen
+                    // einen Login oder sperren eingebettete Browser aus —, ist der
+                    // eigene Browser der Ausweg. Die Werte lassen sich vorher
+                    // kopieren.
+                    zustand.adresse?.let { ziel ->
+                        TextButton(onClick = { uriHandler.openUri(ziel) }) {
+                            Icon(
+                                Icons.Outlined.OpenInNew,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                            )
+                            Text(" Im Browser öffnen")
+                        }
                     }
                 }
 
@@ -234,6 +328,19 @@ fun WebFormularScreen(
                         webChromeClient = object : WebChromeClient() {
                             override fun onProgressChanged(view: WebView?, fortschritt: Int) {
                                 seiteLaedt = fortschritt < 100
+                            }
+
+                            override fun onShowFileChooser(
+                                view: WebView?,
+                                rueckmeldung: ValueCallback<Array<Uri>>?,
+                                angaben: WebChromeClient.FileChooserParams?,
+                            ): Boolean {
+                                // Eine noch offene Anfrage sauber beenden, sonst
+                                // wartet die Seite ewig auf eine Antwort.
+                                dateiwahl?.onReceiveValue(null)
+                                dateiwahl = rueckmeldung
+                                belegwahlOffen = true
+                                return true
                             }
                         }
 
@@ -342,3 +449,13 @@ private fun kopiere(context: Context, bezeichnung: String, wert: String) {
     val dienst = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     dienst.setPrimaryClip(ClipData.newPlainText(bezeichnung, wert))
 }
+
+/**
+ * Macht ein app-internes Foto für den eingebauten Browser lesbar.
+ *
+ * Der Weg über den FileProvider ist der einzige: Ein roher Dateipfad wird vom
+ * Datei-Feld einer Webseite nicht angenommen, und das ist auch richtig so.
+ */
+private fun teilbareAdresse(context: Context, pfad: String): Uri? = runCatching {
+    FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", File(pfad))
+}.getOrNull()

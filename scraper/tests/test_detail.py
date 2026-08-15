@@ -22,13 +22,20 @@ DETAILSEITE = """
 class FetcherAttrappe:
     """Liefert immer dieselbe Seite und merkt sich, was abgerufen wurde."""
 
-    def __init__(self, html: str | None = DETAILSEITE):
+    def __init__(self, html: str | None = DETAILSEITE, landet_bei: str | None = None):
         self.html = html
+        self.landet_bei = landet_bei
         self.abgerufen: list[str] = []
 
     def hole(self, url: str) -> str | None:
+        seite = self.hole_seite(url)
+        return seite[0] if seite else None
+
+    def hole_seite(self, url: str) -> tuple[str, str] | None:
         self.abgerufen.append(url)
-        return self.html
+        if self.html is None:
+            return None
+        return self.html, self.landet_bei or url
 
 
 QUELLE = {
@@ -89,6 +96,45 @@ class TestAnreicherung:
         fetcher = FetcherAttrappe()
         reichere_an([aktion(url=None)], QUELLE, fetcher)
         assert fetcher.abgerufen == []
+
+
+class TestWeiterleitung:
+    """
+    mydealz verlinkt ueber eine eigene Zwischenseite. In der App sah man beim
+    Einreichen deshalb erst ein fremdes Logo — und wenn die Seite haengen blieb,
+    gar nichts.
+    """
+
+    QUELLE = {"name": "mydealz", "bedingungen_von_aktionsseite": True}
+
+    def _aktion(self, submit_url: str) -> Action:
+        a = Action(title="Borotalco", source="mydealz", url=None)
+        a.submit_url = submit_url
+        return a
+
+    def test_speichert_das_ziel_der_weiterleitung(self):
+        a = self._aktion("https://www.mydealz.de/visit/threadmain/2817904")
+        fetcher = FetcherAttrappe(landet_bei="https://www.borotalco.de/gratis-testen")
+        reichere_an([a], self.QUELLE, fetcher)
+        assert a.submit_url == "https://www.borotalco.de/gratis-testen"
+
+    def test_abgerufen_wird_die_urspruengliche_adresse(self):
+        a = self._aktion("https://www.mydealz.de/visit/threadmain/2817904")
+        fetcher = FetcherAttrappe(landet_bei="https://www.borotalco.de/gratis-testen")
+        reichere_an([a], self.QUELLE, fetcher)
+        assert fetcher.abgerufen == ["https://www.mydealz.de/visit/threadmain/2817904"]
+
+    def test_weiterleitung_auf_denselben_host_aendert_nichts(self):
+        # Nur eine Sprachweiche — die kuerzere Adresse ist die haltbarere.
+        a = self._aktion("https://try.tena.com/de/aktionen")
+        fetcher = FetcherAttrappe(landet_bei="https://try.tena.com/de/aktionen/start")
+        reichere_an([a], self.QUELLE, fetcher)
+        assert a.submit_url == "https://try.tena.com/de/aktionen"
+
+    def test_gescheiterter_abruf_laesst_die_adresse_stehen(self):
+        a = self._aktion("https://www.mydealz.de/visit/threadmain/2817904")
+        reichere_an([a], self.QUELLE, FetcherAttrappe(html=None))
+        assert a.submit_url == "https://www.mydealz.de/visit/threadmain/2817904"
 
 
 class TestArtenFilter:

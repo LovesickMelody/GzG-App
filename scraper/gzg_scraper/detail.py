@@ -17,7 +17,7 @@ Angaben. Eine Aktion ohne Einreichungslink ist immer noch besser als keine.
 from __future__ import annotations
 
 import logging
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
@@ -108,6 +108,37 @@ def reichere_an(aktionen: list[Action], quelle: dict, fetcher: Fetcher) -> None:
     )
 
 
+def _uebernimm_weiterleitung(aktion: Action, gelandet: str) -> None:
+    """
+    Speichert die Adresse, bei der die Weiterleitung wirklich endet.
+
+    mydealz verlinkt ueber ``/visit/threadmain/<id>``. In der App sah man beim
+    Einreichen deshalb erst eine Zwischenseite mit fremdem Logo — und wenn die
+    haengen blieb, gar nichts. Gespeichert wird ab jetzt das Ziel.
+
+    Bleibt die Weiterleitung auf demselben Host (etwa nur ``/de/`` angehaengt),
+    aendert sich nichts Wesentliches, und die urspruengliche Adresse bleibt
+    stehen — sie ist die stabilere von beiden.
+    """
+    if not gelandet or gelandet == aktion.submit_url:
+        return
+
+    vorher = urlparse(aktion.submit_url or "")
+    nachher = urlparse(gelandet)
+    if nachher.scheme not in ("http", "https"):
+        return
+    if nachher.netloc == vorher.netloc:
+        return
+
+    log.info(
+        "Aktion %r: Weiterleitung aufgelöst, %s → %s",
+        aktion.title[:40],
+        aktion.submit_url,
+        gelandet,
+    )
+    aktion.submit_url = gelandet
+
+
 def _lies_bedingungen_von_aktionsseite(aktion: Action, fetcher: Fetcher) -> None:
     """
     Holt die Teilnahmebedingungen dort, wo sie wirklich stehen.
@@ -126,9 +157,13 @@ def _lies_bedingungen_von_aktionsseite(aktion: Action, fetcher: Fetcher) -> None
     if not aktion.submit_url:
         return
 
-    html = fetcher.hole(aktion.submit_url)
-    if html is None:
+    seite = fetcher.hole_seite(aktion.submit_url)
+    if seite is None:
+        log.info("Aktion %r: Aktionsseite %s nicht erreichbar", aktion.title[:40], aktion.submit_url)
         return
+    html, gelandet = seite
+
+    _uebernimm_weiterleitung(aktion, gelandet)
 
     suppe = BeautifulSoup(html, "lxml")
     # Skripte und Stilbloecke raus: Ihr Inhalt ist kein Text fuer Menschen und

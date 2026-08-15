@@ -90,3 +90,9 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Leere Seite nach "Speichern und einreichen": Ladebalken, Fehlermeldung,
       Browser-Kennung ohne "wv", Ausweg "Im Browser öffnen"
 - [x] "Zur Einreichung"-Knopf und die Artikelvorschläge aus der Erfassung entfernt
+- [x] Datei-Feld der Anbieterseite: eigene Fotos zur Auswahl statt Totstellen
+- [x] Zurück-Taste im Formular: erst im Verlauf zurück, dazu ein sichtbares "Fertig"
+- [x] Abgebrochene Einreichung: "Nochmal einreichen" in der Detailansicht
+- [x] mydealz-Zwischenseite beim Sammeln auflösen
+- [x] "Speichern und einreichen" setzt den Status auf eingereicht
+

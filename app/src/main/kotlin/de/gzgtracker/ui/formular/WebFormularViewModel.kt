@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.gzgtracker.core.Beleg
 import de.gzgtracker.core.Einreichdaten
 import de.gzgtracker.core.Formularfeld
 import de.gzgtracker.core.Formularskript
@@ -25,6 +26,8 @@ data class WebFormularUiState(
     val aktionstitel: String = "",
     /** Was in das Formular soll, in fester Reihenfolge. */
     val werte: Map<Formularfeld, String> = emptyMap(),
+    /** Die Fotos dieser Einreichung — für das Datei-Feld der Anbieterseite. */
+    val belege: List<Beleg> = emptyList(),
     val meldung: String? = null,
 ) {
     val hatDaten: Boolean get() = werte.isNotEmpty()
@@ -70,6 +73,7 @@ class WebFormularViewModel @Inject constructor(
                     kaufdatum = eintrag.purchaseDate.format(datumsformat),
                     haendler = eintrag.retailer,
                 ),
+                belege = eintrag.belege,
                 meldung = if (aktion?.besteAdresse == null) {
                     "Zu dieser Aktion ist keine Adresse hinterlegt."
                 } else {
