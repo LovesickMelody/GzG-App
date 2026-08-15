@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T11:47:57Z",
+  "generated_at": "2026-08-15T11:53:25Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,7 +11,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SB4eXF5UG05RFg4eWhDdXpfZmEyRWxmYkdrZ3dhSjFraqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIERGMGRLQ29vaUR3RXI3Z0lEaVpmRl9PRjBRX3BDVlZ0o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBEVDNWTG1RX3ctTktsaUhMcllhVkJ0UWVib0pJUWRwbKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIElVakxwWXVlYzNlZUVQelpWTW5kU3FTMjlLc1VwR3hUo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -135,7 +135,7 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/vzctp/2806111_1/re/150x150/qt/55/2806111_1.jpg",
-      "limit_anzahl": 30652,
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -236,7 +236,7 @@
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -299,7 +299,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NzExNTU&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NzExNTU&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NzE1MjE&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NzE1MjE&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -323,7 +323,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895228441",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895229921",
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -476,7 +476,7 @@
       "limit_anzahl": 333,
       "limit_zeitraum": "tag",
       "limit_reset": null,
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     },
     {
@@ -523,10 +523,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/06/kv_links-767x592.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
+      "limit_anzahl": 100,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     },
     {
@@ -575,7 +575,7 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://minusl-gratistesten.de/design-assets/10008/footer_1782731309.png",
-      "limit_anzahl": 1771,
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
