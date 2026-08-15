@@ -131,10 +131,21 @@ class TestWeiterleitung:
         reichere_an([a], self.QUELLE, fetcher)
         assert a.submit_url == "https://try.tena.com/de/aktionen"
 
-    def test_gescheiterter_abruf_laesst_die_adresse_stehen(self):
+    def test_unaufloesbare_zwischenseite_wird_verworfen(self):
+        # mydealz antwortet auf einzelne /visit/-Adressen mit 403. Bliebe die
+        # Adresse stehen, zeigte die App beim Einreichen eine leere Seite —
+        # genau das ist bei Borotalco passiert.
         a = self._aktion("https://www.mydealz.de/visit/threadmain/2817904")
+        a.url = "https://www.mydealz.de/deals/gzg-borotalco-2817904"
         reichere_an([a], self.QUELLE, FetcherAttrappe(html=None))
-        assert a.submit_url == "https://www.mydealz.de/visit/threadmain/2817904"
+        assert a.submit_url is None
+
+    def test_fremder_link_bleibt_auch_ohne_antwort_stehen(self):
+        # Der Anbieter antwortet gerade nicht — der Link ist trotzdem der richtige.
+        a = self._aktion("https://try.tena.com/de/aktionen")
+        a.url = "https://www.mydealz.de/deals/gzg-tena-2813750"
+        reichere_an([a], self.QUELLE, FetcherAttrappe(html=None))
+        assert a.submit_url == "https://try.tena.com/de/aktionen"
 
 
 class TestArtenFilter:
