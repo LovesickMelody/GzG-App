@@ -206,6 +206,16 @@ class TestKontingent:
         angaben = kontingent_aus("Unsere Hotline erreichen Sie Montag ab 9 Uhr.")
         assert angaben["zuruecksetzung"] is None
 
+    def test_ignoriert_einen_teilnehmerzaehler(self):
+        # "Schon 30.652 Teilnahmen!" ist Werbung, keine Obergrenze. Der erste
+        # Anlauf hat genau das als Kontingent ausgegeben.
+        angaben = kontingent_aus("Schon 30.652 Teilnahmen! Mach jetzt mit.")
+        assert angaben["anzahl"] is None
+
+    def test_braucht_ein_wort_das_die_zahl_zur_grenze_macht(self):
+        assert kontingent_aus("Es stehen insgesamt 25.000 Teilnahmen zur Verfügung.")["anzahl"] == 25000
+        assert kontingent_aus("Bisher 25.000 Teilnahmen.")["anzahl"] is None
+
     def test_ignoriert_kleine_zahlen(self):
         # "2 Teilnahmen je Haushalt" ist eine andere Aussage als ein Kontingent.
         angaben = kontingent_aus("Pro Haushalt sind 2 Teilnahmen möglich.")
@@ -213,6 +223,15 @@ class TestKontingent:
 
     def test_erkennt_ein_erschoepftes_kontingent(self):
         assert kontingent_aus("Das Kontingent ist für heute erschöpft.")["erschoepft"] is True
+
+    def test_bedingung_zaehlt_auch_ueber_satzgrenzen_hinweg_nicht(self):
+        # Seitentexte haben keine verlaesslichen Satzgrenzen. Geprueft wird
+        # deshalb der unmittelbare Zusammenhang, nicht der ganze Satz.
+        angaben = kontingent_aus(
+            "Teilnahmebedingungen Sobald das Kontingent erschöpft ist endet die Aktion "
+            "Weitere Hinweise finden Sie unten"
+        )
+        assert angaben["erschoepft"] is False
 
     def test_haelt_die_bedingung_aus_dem_zustand_heraus(self):
         # Dieser Satz steht in fast jeden Teilnahmebedingungen und bedeutet das

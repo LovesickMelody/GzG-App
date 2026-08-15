@@ -394,8 +394,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   zu spät dran war. Gelesen werden Zahl, Zeitraum und Zurücksetzung; einen *Live-Zähler*
   gibt es nicht, weil die Seiten ihn nicht hergeben.
 - **„Sobald das Kontingent erschöpft ist …" heißt nicht, dass es erschöpft ist** — dieser
-  Satz steht in fast jeden Teilnahmebedingungen. Als „erschöpft" zählt nur eine Aussage
-  ohne Bedingungswort davor; sonst wären alle Aktionen dauerhaft als tot markiert.
+  Satz steht in fast jeden Teilnahmebedingungen. Als „erschöpft" zählt nur eine Aussage im
+  Präsens ohne Bedingungswort in den 70 Zeichen davor; sonst wären alle Aktionen dauerhaft
+  als tot markiert. Geprüft wird der unmittelbare Zusammenhang, nicht der Satz: Ein aus
+  HTML gewonnener Seitentext hat keine verlässlichen Satzgrenzen.
+- **Eine Zahl wird erst zur Obergrenze, wenn ein Wort sie dazu macht** — der erste Anlauf
+  las den Teilnehmerzähler einer Seite („schon 30.652 Teilnahmen!") als Kontingent. Jetzt
+  muss in der Nähe „begrenzt", „maximal", „insgesamt", „Kontingent" oder ein Zeitraum
+  stehen. Am echten Feed geprüft, nicht nur an erfundenen Beispielen.
 - **Erinnerungen mit dem AlarmManager, ungenau gestellt** — für eine Meldung zu einem
   Zeitpunkt braucht es keine Bibliothek, und ein ungenauer Alarm erspart die
   Sonderberechtigung für exakte Wecker. Das System darf ihn um bis zu eine Stunde
