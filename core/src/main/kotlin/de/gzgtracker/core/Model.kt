@@ -66,6 +66,8 @@ data class Account(
     // eintraegt, fuellt eben ein Feld mehr von Hand.
     /** Vollstaendige IBAN. Bleibt wie alles andere auf dem Geraet. */
     val iban: String? = null,
+    /** BIC — manche Formulare verlangen sie neben der IBAN. */
+    val bic: String? = null,
     val vorname: String? = null,
     val nachname: String? = null,
     val strasse: String? = null,

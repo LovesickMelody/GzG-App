@@ -395,7 +395,7 @@ private fun LeererZustand(
         androidx.compose.material3.TextButton(
             onClick = if (gefiltert) onZuruecksetzen else onErfassen,
         ) {
-            Text(if (gefiltert) "Filter zurücksetzen" else "Von Hand eintragen")
+            Text(if (gefiltert) "Filter zurücksetzen" else "Manuell eintragen")
         }
     }
 }

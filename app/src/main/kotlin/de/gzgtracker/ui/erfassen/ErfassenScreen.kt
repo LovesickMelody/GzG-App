@@ -25,6 +25,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AddAPhoto
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Warning
@@ -202,13 +203,7 @@ fun ErfassenScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Abschnitt("Aktion")
-            if (zustand.aktionen.isEmpty()) {
-                Text(
-                    text = "Noch keine Aktionen da. Lade den Feed oder leg eine Aktion an.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            } else if (zustand.gewaehlteAktion != null && !aktionswahlOffen) {
+            if (zustand.gewaehlteAktion != null && !aktionswahlOffen) {
                 // Steht die Aktion fest, nimmt sie eine Zeile ein statt des
                 // halben Bildschirms — geaendert wird selten.
                 Row(
@@ -244,9 +239,34 @@ fun ErfassenScreen(
                         aktion.brand?.contains(aktionssuche, ignoreCase = true) == true
                 }
 
+                // Nicht jede Aktion steht im Feed. Wer eine im Laden entdeckt
+                // oder aus der Werbung hat, muss sie hier eintragen koennen —
+                // sonst laesst sich der Kauf gar nicht erfassen.
+                if (aktionssuche.isNotBlank()) {
+                    TextButton(
+                        onClick = {
+                            viewModel.legeEigeneAktionAn(aktionssuche.trim())
+                            aktionswahlOffen = false
+                            aktionssuche = ""
+                        },
+                    ) {
+                        Icon(
+                            Icons.Outlined.AddCircleOutline,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Text("  „${aktionssuche.trim()}“ als eigene Aktion anlegen")
+                    }
+                }
+
                 if (treffer.isEmpty()) {
                     Text(
-                        text = "Keine Aktion passt zu „$aktionssuche“.",
+                        text = if (aktionssuche.isBlank()) {
+                            "Noch keine Aktionen da. Lade den Feed, oder tipp oben einen " +
+                                "Namen ein und leg die Aktion selbst an."
+                        } else {
+                            "Keine Aktion passt zu „$aktionssuche“."
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

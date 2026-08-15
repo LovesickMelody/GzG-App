@@ -25,6 +25,7 @@ data class AccountEntity(
     val email: String? = null,
     val anrede: String? = null,
     val geburtsdatum: LocalDate? = null,
+    val bic: String? = null,
     val createdAt: Instant,
 )
 

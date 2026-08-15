@@ -346,6 +346,26 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Eine leere Seite meldet sich selbst** — bleibt nach dem Laden kein Text übrig, sagt die
   App das und bietet den Browser an, statt eine weisse Fläche stehenzulassen.
 
+- **Lange Bons werden in überlappenden Streifen gelesen** — die Texterkennung arbeitet mit
+  einer festen inneren Größe. Ein ganzer Kassenbon auf einem Bild heißt deshalb wenige
+  Bildpunkte je Zeile, und dann liest sie nur noch aus nächster Nähe etwas. Nur lässt sich
+  ein Bon, der vollständig zu sehen sein muss, nicht aus nächster Nähe fotografieren. Jeder
+  Streifen bekommt ein Vielfaches an Bildpunkten je Zeile; die Rahmen werden zurückgerechnet,
+  und was doppelt aus dem Überlappungsbereich kommt, fliegt raus — sonst würde aus zwei mal
+  `3,45` ein zweiter Posten. Dazu 3200 statt 2000 Bildpunkte beim Speichern.
+- **Die Suche ist eine Lupe** — die Suchleiste stand dauerhaft im Bild und nahm ein Sechstel
+  des Bildschirms, obwohl man selten sucht.
+- **Sortiert wird nach Frist, Betrag oder Name** — die Frist bleibt der Standard: Was morgen
+  abläuft, muss oben stehen.
+- **Produktbilder werden vollständig gezeigt, nicht zugeschnitten** — bei „Crop" fehlte
+  regelmäßig die halbe Packung, und im Laden erkennt man sie dann nicht wieder.
+- **Eigene Aktionen lassen sich beim Erfassen anlegen** — der Feed kennt nicht alles. Manches
+  steht nur auf der Packung, im Prospekt oder auf einem Aufsteller. Ohne diesen Weg ließe sich
+  so ein Kauf überhaupt nicht erfassen, und genau dafür ist die App da.
+- **Die Feed-Adresse steht nicht mehr in den Einstellungen** — sie ist eine Einstellung der
+  App, keine des Nutzers. Wer sie versehentlich ändert, sieht keine Aktionen mehr und weiß
+  nicht, warum.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

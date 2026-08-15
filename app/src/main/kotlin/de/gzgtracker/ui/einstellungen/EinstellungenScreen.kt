@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -26,9 +25,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -44,7 +41,6 @@ import de.gzgtracker.ui.format.relativeAngabe
 fun EinstellungenScreen(viewModel: EinstellungenViewModel = hiltViewModel()) {
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
-    var feedUrlEntwurf by remember(zustand.feedUrl) { mutableStateOf(zustand.feedUrl) }
 
     LaunchedEffect(zustand.meldung) {
         val meldung = zustand.meldung ?: return@LaunchedEffect
@@ -100,31 +96,10 @@ fun EinstellungenScreen(viewModel: EinstellungenViewModel = hiltViewModel()) {
 
             HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
+            // Die Feed-Adresse steht bewusst nicht mehr hier: Sie ist eine
+            // Einstellung der App, keine des Nutzers. Wer sie versehentlich
+            // aendert, sieht keine Aktionen mehr und weiss nicht, warum.
             Abschnitt("Aktions-Feed")
-            OutlinedTextField(
-                value = feedUrlEntwurf,
-                onValueChange = { feedUrlEntwurf = it },
-                label = { Text("Feed-URL") },
-                supportingText = {
-                    Text(
-                        "Zeigt auf die Datei data/actions.json im Repository. " +
-                            "Bei einem privaten Repository kann die App sie nicht laden.",
-                    )
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TextButton(
-                    onClick = { viewModel.setzeFeedUrl(feedUrlEntwurf) },
-                    enabled = feedUrlEntwurf.isNotBlank() && feedUrlEntwurf != zustand.feedUrl,
-                ) {
-                    Text("URL speichern")
-                }
-                TextButton(onClick = { viewModel.setzeFeedUrl("") }) {
-                    Text("Standard verwenden")
-                }
-            }
 
             ZeileMitSchalter(
                 titel = "Beim Start aktualisieren",

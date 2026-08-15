@@ -3,6 +3,7 @@ package de.gzgtracker.ui.aktionen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.filled.Bookmark
@@ -22,6 +26,8 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,11 +43,14 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
@@ -54,7 +63,7 @@ import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoAction
 import de.gzgtracker.ui.components.TeilnahmeKurz
 import de.gzgtracker.ui.format.deutsch
-import de.gzgtracker.ui.format.relativeAngabe
+import de.gzgtracker.ui.format.relativeKurz
 import de.gzgtracker.ui.theme.MoneyTextStyle
 import de.gzgtracker.ui.uebersicht.SucheFeld
 
@@ -67,6 +76,10 @@ fun AktionenScreen(
 ) {
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
+    // Die Suchleiste nahm dauerhaft ein Sechstel des Bildschirms ein, obwohl
+    // man selten sucht. Jetzt eine Lupe — und Platz fuer Aktionen.
+    var sucheOffen by remember { mutableStateOf(false) }
+    var sortiermenue by remember { mutableStateOf(false) }
 
     LaunchedEffect(zustand.meldung) {
         val meldung = zustand.meldung ?: return@LaunchedEffect
@@ -88,7 +101,41 @@ fun AktionenScreen(
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
                 ),
                 actions = {
-                    // Eine Aktion von Hand anzulegen ist der Ausnahmefall — der
+                    IconButton(
+                        onClick = {
+                            sucheOffen = !sucheOffen
+                            if (!sucheOffen) viewModel.setzeSuche("")
+                        },
+                    ) {
+                        Icon(Icons.Outlined.Search, contentDescription = "Suchen")
+                    }
+
+                    Box {
+                        IconButton(onClick = { sortiermenue = true }) {
+                            Icon(Icons.Outlined.SwapVert, contentDescription = "Sortieren")
+                        }
+                        DropdownMenu(
+                            expanded = sortiermenue,
+                            onDismissRequest = { sortiermenue = false },
+                        ) {
+                            Sortierung.entries.forEach { wahl ->
+                                DropdownMenuItem(
+                                    text = { Text(wahl.label) },
+                                    onClick = {
+                                        viewModel.setzeSortierung(wahl)
+                                        sortiermenue = false
+                                    },
+                                    leadingIcon = {
+                                        if (wahl == zustand.sortierung) {
+                                            Icon(Icons.Outlined.Check, contentDescription = null)
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                    }
+
+                    // Eine Aktion selbst anzulegen ist der Ausnahmefall — der
                     // Feed bringt sie sonst mit. Ein großer Knopf am Daumen
                     // hätte hier nichts verloren.
                     IconButton(onClick = onAktionAnlegen) {
@@ -106,11 +153,16 @@ fun AktionenScreen(
                 .padding(innen),
         ) {
             Column(Modifier.fillMaxSize()) {
-                SucheFeld(
-                    wert = zustand.suche,
-                    onWert = viewModel::setzeSuche,
-                    onSchliessen = { viewModel.setzeSuche("") },
-                )
+                if (sucheOffen) {
+                    SucheFeld(
+                        wert = zustand.suche,
+                        onWert = viewModel::setzeSuche,
+                        onSchliessen = {
+                            viewModel.setzeSuche("")
+                            sucheOffen = false
+                        },
+                    )
+                }
 
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
@@ -145,9 +197,13 @@ fun AktionenScreen(
                     if (!zustand.nurMerkliste) {
                         zustand.letzterSync?.let { sync ->
                             Text(
-                                text = "Aktualisiert ${sync.relativeAngabe()}",
+                                // Kurz und einzeilig: "Aktualisiert vor 4 Minuten"
+                                // brach mitten im Wort um und sah kaputt aus.
+                                text = "Stand ${sync.relativeKurz()}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -244,18 +300,22 @@ private fun AktionZeile(
         // Produktbild aus dem Feed. Im Laden erkennt man die Packung schneller
         // wieder als den Produktnamen — und viele Titel sind ohnehin kryptisch.
         aktion.imageUrl?.let { adresse ->
+            // Ganz zeigen statt zuschneiden: Bei "Crop" fehlte regelmaessig die
+            // halbe Packung, und im Laden erkennt man sie dann nicht wieder.
             AsyncImage(
                 model = adresse,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(88.dp)
+                    .size(width = 104.dp, height = 88.dp)
                     .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
                     .border(
                         1.dp,
                         MaterialTheme.colorScheme.outlineVariant,
                         RoundedCornerShape(4.dp),
-                    ),
+                    )
+                    .padding(2.dp),
             )
         }
 

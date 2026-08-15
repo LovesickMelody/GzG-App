@@ -102,5 +102,14 @@ object Migrationen {
         }
     }
 
-    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6)
+    /** v7: BIC. Manche Formulare verlangen sie neben der IBAN. */
+    val VON_6_AUF_7 = object : Migration(6, 7) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE accounts ADD COLUMN bic TEXT")
+        }
+    }
+
+    val ALLE = arrayOf(
+        VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6, VON_6_AUF_7,
+    )
 }

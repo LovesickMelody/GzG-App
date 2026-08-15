@@ -271,6 +271,6 @@ private fun KeineKamera(onNochmal: () -> Unit, onOhneScan: () -> Unit) {
             textAlign = TextAlign.Center,
         )
         Button(onClick = onNochmal) { Text("Kamera freigeben") }
-        TextButton(onClick = onOhneScan) { Text("Von Hand eintragen") }
+        TextButton(onClick = onOhneScan) { Text("Manuell eintragen") }
     }
 }

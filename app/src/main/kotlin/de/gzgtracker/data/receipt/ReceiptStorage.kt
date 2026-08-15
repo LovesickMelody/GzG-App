@@ -133,7 +133,15 @@ class ReceiptStorage @Inject constructor(
     private companion object {
         const val TAG = "ReceiptStorage"
         const val ORDNER = "receipts"
-        const val MAX_KANTE = 2000
-        const val QUALITAET = 85
+
+        /**
+         * Ein ganzer Kassenbon auf 2000 Punkten liess die Texterkennung nur
+         * noch aus naechster Naehe etwas lesen — bei Aktionen, die den
+         * vollstaendigen Bon verlangen, geht das nicht. 3200 Punkte kosten
+         * etwa ein Megabyte mehr je Beleg und machen die Ziffern wieder
+         * lesbar.
+         */
+        const val MAX_KANTE = 3200
+        const val QUALITAET = 88
     }
 }

@@ -102,4 +102,12 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Auswahlfelder im Formularskript
 - [x] Leiste unter dem Formular auf eine Zeile
 - [x] Leere Anbieterseite wird erkannt und gemeldet
+- [x] Kassenbon: streifenweises Lesen, höhere Auflösung
+- [x] Produktbilder vollständig statt zugeschnitten
+- [x] Suche als Lupe statt Dauerleiste
+- [x] Sortierung nach Frist, Betrag, Name
+- [x] "Stand vor X Min." einzeilig
+- [x] BIC im Konto (Datenbank v7)
+- [x] Feed-Adresse aus den Einstellungen entfernt
+- [x] "Manuell eintragen" und eigene Aktion beim Erfassen anlegen
 

@@ -119,6 +119,52 @@ class BonlayoutTest {
         assertEquals("Rewe", ergebnis.haendler)
     }
 
+    // --- Streifenweises Lesen ---------------------------------------------
+
+    @Test
+    fun `wirft doppelt gelesene Zeilen aus der Ueberlappung weg`() {
+        // Der Ueberlappungsbereich zweier Streifen liefert dieselbe Zeile
+        // zweimal. Zwei mal "3,45" waeren sonst zwei Posten.
+        val vereinigt = Bonlayout.vereinige(
+            listOf(
+                stueck("BOROTALCO DEO", links = 20, mitte = 900),
+                stueck("3,45", links = 400, mitte = 902),
+                stueck("BOROTALCO DEO", links = 20, mitte = 903),
+                stueck("3,45", links = 400, mitte = 901),
+            ),
+        )
+        assertEquals(2, vereinigt.size)
+        assertEquals(listOf("3,45", "BOROTALCO DEO"), vereinigt.map { it.text }.sorted())
+    }
+
+    @Test
+    fun `behaelt gleiche Betraege an verschiedenen Stellen`() {
+        // Zwei Artikel zum selben Preis sind keine Dopplung.
+        val vereinigt = Bonlayout.vereinige(
+            listOf(
+                stueck("3,45", links = 400, mitte = 200),
+                stueck("3,45", links = 400, mitte = 900),
+            ),
+        )
+        assertEquals(2, vereinigt.size)
+    }
+
+    @Test
+    fun `behaelt gleiche Texte nebeneinander`() {
+        val vereinigt = Bonlayout.vereinige(
+            listOf(
+                stueck("A", links = 20, mitte = 200),
+                stueck("A", links = 400, mitte = 200),
+            ),
+        )
+        assertEquals(2, vereinigt.size)
+    }
+
+    @Test
+    fun `ohne Stuecke bleibt auch das Vereinigen leer`() {
+        assertEquals(emptyList(), Bonlayout.vereinige(emptyList()))
+    }
+
     @Test
     fun `ohne Zusammensetzen faende sich der falsche Betrag`() {
         // Zum Vergleich: derselbe Bon als roher Blocktext, wie ihn die
