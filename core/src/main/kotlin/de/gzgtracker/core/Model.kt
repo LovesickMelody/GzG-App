@@ -2,6 +2,7 @@ package de.gzgtracker.core
 
 import java.time.Instant
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /** Wo eine Einreichung im Erstattungsprozess steht. */
 enum class SubmissionStatus {
@@ -177,6 +178,23 @@ data class PromoAction(
     /** True, wenn es ueberhaupt etwas ueber das Kontingent zu sagen gibt. */
     val hatKontingent: Boolean
         get() = limitAnzahl != null || limitReset != null || limitErschoepft
+
+    /**
+     * Wie viele Tage bis zum Aktionsbeginn? ``null``, wenn sie schon laeuft oder
+     * keinen Beginn nennt.
+     *
+     * Portale kuendigen Aktionen vorab an — mydealz regelmaessig mit dem
+     * Startdatum im Titel ("ab dem 17.08."). Solche Aktionen gehoeren in die
+     * App, damit man sie vormerken kann. Sie duerfen aber **nicht wie laufende
+     * aussehen**: Wer heute kauft, hat einen Kassenbon von heute, und der liegt
+     * vor dem Aktionszeitraum — die Erstattung faellt aus. Deshalb weist die
+     * Liste eine kuenftige Aktion mit ihrem Beginn aus statt mit ihrer Frist.
+     */
+    fun tageBisStart(heute: LocalDate = LocalDate.now()): Long? {
+        val beginn = validFrom ?: return null
+        val tage = ChronoUnit.DAYS.between(heute, beginn)
+        return if (tage > 0) tage else null
+    }
 }
 
 /** Ein gekauftes Produkt und der Stand seiner Erstattung. */

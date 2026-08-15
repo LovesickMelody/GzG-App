@@ -291,6 +291,7 @@ private fun AktionZeile(
     onImWagen: (Boolean) -> Unit,
 ) {
     val tage = aktion.tageBisFrist()
+    val bisStart = aktion.tageBisStart()
 
     Row(
         modifier = Modifier
@@ -381,7 +382,9 @@ private fun AktionZeile(
 
             // Die Frist ist die kritischste Angabe der ganzen Liste. Vorher sah
             // "Einsendeschluss morgen" genauso aus wie "in acht Tagen".
-            val dringend = tage != null && tage <= 2
+            // Nur was laeuft, kann dringend sein: Eine Aktion, die erst in
+            // zwei Tagen startet, hat keine ablaufende Frist.
+            val dringend = bisStart == null && tage != null && tage <= 2
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -397,7 +400,7 @@ private fun AktionZeile(
                     )
                 }
                 Text(
-                    text = fristText(aktion, tage),
+                    text = fristText(aktion, tage, bisStart),
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = if (dringend) FontWeight.SemiBold else null,
                     color = if (dringend) {
@@ -453,7 +456,19 @@ private fun AktionZeile(
     }
 }
 
-private fun fristText(aktion: PromoAction, tage: Long?): String {
+private fun fristText(aktion: PromoAction, tage: Long?, bisStart: Long? = null): String {
+    // Eine noch nicht gestartete Aktion zeigt ihren Beginn, nicht ihre Frist.
+    // Wer jetzt kauft, hat einen Bon von heute — der liegt vor dem Zeitraum,
+    // und die Erstattung faellt aus. Die Frist steht in der Detailansicht.
+    val beginn = aktion.validFrom
+    if (bisStart != null && beginn != null) {
+        return when {
+            bisStart == 1L -> "Startet morgen (${beginn.deutsch()})"
+            bisStart <= 14 -> "Startet in $bisStart Tagen (${beginn.deutsch()})"
+            else -> "Startet am ${beginn.deutsch()}"
+        }
+    }
+
     val frist = aktion.submissionDeadline ?: aktion.validTo ?: return "Ohne Frist"
     val bezeichnung = if (aktion.submissionDeadline != null) "Einsendeschluss" else "Läuft bis"
     return when {

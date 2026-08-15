@@ -1,5 +1,6 @@
 package de.gzgtracker.core
 
+import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -95,5 +96,41 @@ class KontingentTextTest {
     @Test
     fun `erschoepft zaehlt als Angabe`() {
         assertEquals(true, aktion(erschoepft = true).hatKontingent)
+    }
+}
+
+/**
+ * Vorangekuendigte Aktionen.
+ *
+ * Portale nennen den Start oft Tage im Voraus. Die Aktion gehoert dann in die
+ * App — aber sie darf nicht wie eine laufende aussehen, sonst kauft jemand zu
+ * frueh und die Erstattung faellt aus.
+ */
+class PromoActionStartTest {
+
+    private val heute = LocalDate.of(2026, 8, 15)
+
+    private fun aktion(beginn: LocalDate?) =
+        PromoAction(id = "a", title = "Testaktion", validFrom = beginn)
+
+    @Test
+    fun `kuenftiger Start zaehlt die Tage`() {
+        assertEquals(2L, aktion(LocalDate.of(2026, 8, 17)).tageBisStart(heute))
+        assertEquals(9L, aktion(LocalDate.of(2026, 8, 24)).tageBisStart(heute))
+    }
+
+    @Test
+    fun `am Starttag laeuft sie schon`() {
+        assertNull(aktion(heute).tageBisStart(heute))
+    }
+
+    @Test
+    fun `laengst gestartete Aktion meldet nichts`() {
+        assertNull(aktion(LocalDate.of(2026, 7, 1)).tageBisStart(heute))
+    }
+
+    @Test
+    fun `ohne Startdatum gibt es nichts zu melden`() {
+        assertNull(aktion(null).tageBisStart(heute))
     }
 }
