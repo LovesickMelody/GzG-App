@@ -36,6 +36,8 @@ data class AktionenUiState(
     val sortierung: Sortierung = Sortierung.FRIST,
     /** Aktions-Id -> schon im Wagen. Enthaelt genau die gemerkten Aktionen. */
     val gemerkt: Map<String, Boolean> = emptyMap(),
+    /** Aktionen, zu denen eine Erinnerung gestellt ist. */
+    val erinnert: Set<String> = emptySet(),
     val aktualisiertGerade: Boolean = false,
     val letzterSync: Instant? = null,
     val meldung: String? = null,
@@ -61,9 +63,10 @@ class AktionenViewModel @Inject constructor(
     val uiState: StateFlow<AktionenUiState> = combine(
         actions.alle,
         actions.gemerkt,
+        actions.erinnert,
         eingaben,
         settings.settings,
-    ) { alle, gemerkt, eingabe, einstellungen ->
+    ) { alle, gemerkt, erinnert, eingabe, einstellungen ->
         val heute = LocalDate.now()
         val begriff = eingabe.suche.trim().lowercase()
 
@@ -91,6 +94,7 @@ class AktionenViewModel @Inject constructor(
             nurMerkliste = eingabe.nurMerkliste,
             sortierung = eingabe.sortierung,
             gemerkt = gemerkt,
+            erinnert = erinnert,
             aktualisiertGerade = eingabe.aktualisiert,
             letzterSync = einstellungen.lastSyncAt,
             meldung = eingabe.meldung,
@@ -100,6 +104,13 @@ class AktionenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = AktionenUiState(),
     )
+
+    init {
+        // Wecker des Systems ueberleben keinen Neustart des Telefons. Weil die App
+        // nicht mitbekommt, wann neu gestartet wurde, stellt sie sie bei jedem
+        // Start neu — doppelt stellen schadet nicht.
+        viewModelScope.launch { actions.stelleErinnerungenNeu() }
+    }
 
     fun setzeSuche(begriff: String) = eingaben.update { it.copy(suche = begriff) }
 

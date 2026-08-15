@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Nur diese beiden Berechtigungen. Bonfotos aus der Galerie laufen ueber den
-         Photo Picker, der ohne Speicher-Permission auskommt. -->
+    <!-- Nur diese drei Berechtigungen. Bonfotos aus der Galerie laufen ueber den
+         Photo Picker, der ohne Speicher-Permission auskommt. Meldungen werden erst
+         gefragt, wenn jemand die erste Erinnerung stellt — vorher gibt es nichts
+         zu melden. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-feature
         android:name="android.hardware.camera.any"
@@ -32,6 +35,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Nimmt den Wecker entgegen und zeigt die Erinnerung an. Nicht
+             exportiert: Nur das System selbst darf ihn ausloesen. -->
+        <receiver
+            android:name=".notify.ErinnerungsEmpfaenger"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

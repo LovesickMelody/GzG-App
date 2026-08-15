@@ -173,3 +173,23 @@ interface WatchlistDao {
         }
     }
 }
+
+@Dao
+interface ErinnerungDao {
+
+    @Query("SELECT * FROM reminders")
+    fun beobachteAlle(): Flow<List<ErinnerungEntity>>
+
+    @Query("SELECT * FROM reminders")
+    suspend fun ladeAlle(): List<ErinnerungEntity>
+
+    @Upsert
+    suspend fun upsert(eintrag: ErinnerungEntity)
+
+    @Query("DELETE FROM reminders WHERE actionId = :actionId")
+    suspend fun entferne(actionId: String)
+
+    /** Raeumt auf, was laengst gefeuert hat. */
+    @Query("DELETE FROM reminders WHERE faelligAm < :vor")
+    suspend fun entferneAeltereAls(vor: Instant)
+}

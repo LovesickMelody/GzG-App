@@ -1,5 +1,10 @@
 package de.gzgtracker.ui.aktionen
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,7 +23,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,20 +35,26 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoActionType
@@ -68,9 +81,46 @@ fun AktionDetailScreen(
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
     val uriHandler = LocalUriHandler.current
     val aktion = zustand.aktion
+    val snackbar = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    // Ab Android 13 muss man Meldungen erlauben. Gefragt wird erst hier — beim
+    // ersten Mal, dass jemand tatsaechlich erinnert werden will.
+    val meldeErlaubnis = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { erlaubt ->
+            if (erlaubt) {
+                viewModel.erinnerungUmschalten()
+            } else {
+                viewModel.zeigeMeldung("Ohne Meldungen kann die App nicht erinnern.")
+            }
+        },
+    )
+
+    fun erinnerung() {
+        val brauchtFrage = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS,
+            ) != PackageManager.PERMISSION_GRANTED
+        // Beim Abschalten nicht fragen: Wer die Erinnerung loswerden will,
+        // braucht dafuer keine Erlaubnis.
+        if (brauchtFrage && !zustand.erinnert) {
+            meldeErlaubnis.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            viewModel.erinnerungUmschalten()
+        }
+    }
+
+    LaunchedEffect(zustand.meldung) {
+        val meldung = zustand.meldung ?: return@LaunchedEffect
+        snackbar.showSnackbar(meldung)
+        viewModel.meldungGelesen()
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             TopAppBar(
                 title = { Text("Aktion") },
@@ -81,6 +131,25 @@ fun AktionDetailScreen(
                 },
                 actions = {
                     if (aktion != null) {
+                        IconButton(onClick = { erinnerung() }) {
+                            Icon(
+                                if (zustand.erinnert) {
+                                    Icons.Filled.Notifications
+                                } else {
+                                    Icons.Outlined.NotificationsNone
+                                },
+                                contentDescription = if (zustand.erinnert) {
+                                    "Erinnerung entfernen"
+                                } else {
+                                    "An die Frist erinnern"
+                                },
+                                tint = if (zustand.erinnert) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                            )
+                        }
                         IconButton(onClick = viewModel::merkenUmschalten) {
                             Icon(
                                 if (zustand.gemerkt) {
@@ -92,6 +161,11 @@ fun AktionDetailScreen(
                                     "Von der Merkliste nehmen"
                                 } else {
                                     "Auf die Merkliste setzen"
+                                },
+                                tint = if (zustand.gemerkt) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
                                 },
                             )
                         }

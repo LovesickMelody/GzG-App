@@ -109,7 +109,28 @@ object Migrationen {
         }
     }
 
+    /**
+     * v8: Erinnerungen.
+     *
+     * Eigene Tabelle, damit eine gestellte Erinnerung den Feed-Abgleich ueberlebt —
+     * dabei werden Aktionen ersetzt.
+     */
+    val VON_7_AUF_8 = object : Migration(7, 8) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS reminders (
+                    actionId TEXT NOT NULL PRIMARY KEY,
+                    faelligAm INTEGER NOT NULL,
+                    titel TEXT NOT NULL
+                )
+                """.trimIndent(),
+            )
+        }
+    }
+
     val ALLE = arrayOf(
         VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6, VON_6_AUF_7,
+        VON_7_AUF_8,
     )
 }

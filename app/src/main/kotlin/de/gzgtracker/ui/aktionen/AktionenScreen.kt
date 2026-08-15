@@ -16,11 +16,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.SwapVert
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Checkbox
@@ -114,7 +115,7 @@ fun AktionenScreen(
 
                     Box {
                         IconButton(onClick = { sortiermenue = true }) {
-                            Icon(Icons.Outlined.SwapVert, contentDescription = "Sortieren")
+                            Icon(Icons.Outlined.FilterList, contentDescription = "Sortieren und filtern")
                         }
                         DropdownMenu(
                             expanded = sortiermenue,
@@ -196,18 +197,23 @@ fun AktionenScreen(
                             )
                         },
                     )
-                    if (!zustand.nurMerkliste) {
-                        zustand.letzterSync?.let { sync ->
-                            Text(
-                                // Kurz und einzeilig: "Aktualisiert vor 4 Minuten"
-                                // brach mitten im Wort um und sah kaputt aus.
-                                text = "Stand ${sync.relativeKurz()}",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
+                }
+
+                // Eigene Zeile statt neben den Chips: Dort blieb vom Text nur
+                // "Stand ge..." uebrig, egal wie kurz er gefasst war.
+                if (!zustand.nurMerkliste) {
+                    zustand.letzterSync?.let { sync ->
+                        Text(
+                            text = "Stand ${sync.relativeKurz()}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, bottom = 4.dp),
+                            textAlign = TextAlign.End,
+                        )
                     }
                 }
 
@@ -253,6 +259,7 @@ fun AktionenScreen(
                             AktionZeile(
                                 aktion = aktion,
                                 gemerkt = aktion.id in zustand.gemerkt,
+                                erinnert = aktion.id in zustand.erinnert,
                                 imWagen = zustand.gemerkt[aktion.id] == true,
                                 einkaufsmodus = zustand.nurMerkliste,
                                 onOeffnen = { onAktionOeffnen(aktion.id) },
@@ -273,6 +280,7 @@ fun AktionenScreen(
 private fun AktionZeile(
     aktion: PromoAction,
     gemerkt: Boolean,
+    erinnert: Boolean,
     imWagen: Boolean,
     einkaufsmodus: Boolean,
     onOeffnen: () -> Unit,
@@ -371,16 +379,31 @@ private fun AktionZeile(
             // Die Frist ist die kritischste Angabe der ganzen Liste. Vorher sah
             // "Einsendeschluss morgen" genauso aus wie "in acht Tagen".
             val dringend = tage != null && tage <= 2
-            Text(
-                text = fristText(aktion, tage),
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = if (dringend) FontWeight.SemiBold else null,
-                color = if (dringend) {
-                    GzgTheme.status.dringend
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (erinnert) {
+                    // Kleiner Hinweis statt eines zweiten Knopfes: Gestellt wird
+                    // die Erinnerung auf der Aktionsseite, wo Platz dafuer ist.
+                    Icon(
+                        Icons.Filled.Notifications,
+                        contentDescription = "Erinnerung gestellt",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.dp),
+                    )
+                }
+                Text(
+                    text = fristText(aktion, tage),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = if (dringend) FontWeight.SemiBold else null,
+                    color = if (dringend) {
+                        GzgTheme.status.dringend
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                )
+            }
 
             TeilnahmeKurz(aktion.requirements)
         }

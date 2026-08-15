@@ -14,6 +14,7 @@ import de.gzgtracker.data.local.GzgDatabase
 import de.gzgtracker.data.local.Migrationen
 import de.gzgtracker.data.local.PromoActionDao
 import de.gzgtracker.data.local.SubmissionDao
+import de.gzgtracker.data.local.ErinnerungDao
 import de.gzgtracker.data.local.WatchlistDao
 import de.gzgtracker.data.remote.ActionsApi
 import kotlinx.serialization.json.Json
@@ -44,6 +45,9 @@ object DataModule {
 
     @Provides
     fun watchlistDao(database: GzgDatabase): WatchlistDao = database.watchlistDao()
+
+    @Provides
+    fun erinnerungDao(database: GzgDatabase): ErinnerungDao = database.erinnerungDao()
 
     @Provides
     fun submissionDao(database: GzgDatabase): SubmissionDao = database.submissionDao()

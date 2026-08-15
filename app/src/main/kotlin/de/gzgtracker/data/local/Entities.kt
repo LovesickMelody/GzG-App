@@ -118,3 +118,18 @@ data class WatchlistEntity(
     val imWagen: Boolean = false,
     val addedAt: Instant,
 )
+
+/**
+ * Eine gestellte Erinnerung.
+ *
+ * Eigene Tabelle statt einer Spalte an der Aktion: Aktionen werden beim
+ * Feed-Abgleich ersetzt, eine gestellte Erinnerung soll das ueberleben. Der
+ * Zeitpunkt steht mit dabei, damit die App nach einem Neustart weiss, was sie
+ * neu stellen muss — Alarme des Systems ueberleben einen Neustart nicht.
+ */
+@Entity(tableName = "reminders")
+data class ErinnerungEntity(
+    @PrimaryKey val actionId: String,
+    val faelligAm: Instant,
+    val titel: String,
+)

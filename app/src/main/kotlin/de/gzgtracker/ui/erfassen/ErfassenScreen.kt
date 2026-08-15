@@ -90,7 +90,6 @@ import java.io.File
 fun ErfassenScreen(
     onFertig: () -> Unit,
     onAbbrechen: () -> Unit,
-    onScannen: () -> Unit,
     onEinreichen: (Long) -> Unit,
     viewModel: ErfassenViewModel = hiltViewModel(),
 ) {
@@ -182,16 +181,6 @@ fun ErfassenScreen(
                             Icons.AutoMirrored.Outlined.ArrowBack,
                             contentDescription = "Zurück",
                         )
-                    }
-                },
-                actions = {
-                    if (zustand.istNeu) {
-                        IconButton(onClick = onScannen) {
-                            Icon(
-                                Icons.Outlined.QrCodeScanner,
-                                contentDescription = "Barcode scannen",
-                            )
-                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
