@@ -83,14 +83,69 @@ class KassenbonTest {
     }
 
     @Test
-    fun `gibt lieber nichts zurueck als etwas Falsches`() {
-        // Kein Schluesselwort: Der groesste Betrag waere geraten, und ein
-        // falscher Vorschlag faellt erst beim Einreichen auf.
+    fun `ohne Schluesselwort liefert lesePreis nichts`() {
         val text = """
             ARTIKEL A              2,49
             ARTIKEL B              1,19
         """.trimIndent()
         assertNull(Kassenbon.lesePreis(text))
+    }
+
+    @Test
+    fun `raet den groessten Betrag wenn kein Schluesselwort dasteht`() {
+        // Nicht jeder Markt schreibt "Summe" — beim ersten Versuch am Geraet
+        // stand deshalb gar nichts im Feld. Lieber ein gekennzeichneter
+        // Rateschluss als ein leeres Formular.
+        val text = """
+            ARTIKEL A              2,49
+            ARTIKEL B              1,19
+        """.trimIndent()
+        val ergebnis = Kassenbon.auswerten(text, heute)
+        assertEquals(249, ergebnis.preisCents)
+        assertEquals(true, ergebnis.preisGeraten)
+    }
+
+    @Test
+    fun `ein Treffer am Schluesselwort gilt nicht als geraten`() {
+        assertEquals(false, Kassenbon.auswerten(rewe, heute).preisGeraten)
+    }
+
+    @Test
+    fun `raet nicht den gegebenen Schein`() {
+        val text = """
+            ARTIKEL A              2,49
+            Geg. BAR              20,00
+            Rückgeld              17,51
+        """.trimIndent()
+        assertEquals(249, Kassenbon.auswerten(text, heute).preisCents)
+    }
+
+    @Test
+    fun `schlaegt die Artikelzeilen als Produktnamen vor`() {
+        // Raten waere aussichtslos — welche Position die Aktion betrifft, weiss
+        // nur der Mensch davor. Also alle zur Auswahl stellen.
+        val artikel = Kassenbon.leseArtikel(rewe)
+        assertEquals(listOf("BONDUELLE SALAT", "MILCH 1,5%", "BROT"), artikel)
+    }
+
+    @Test
+    fun `haelt Summe und Rueckgeld aus den Artikelvorschlaegen heraus`() {
+        val artikel = Kassenbon.leseArtikel(rewe)
+        assertEquals(false, artikel.any { it.contains("SUMME", ignoreCase = true) })
+        assertEquals(false, artikel.any { it.contains("Rückgeld", ignoreCase = true) })
+    }
+
+    @Test
+    fun `schneidet Mengenangabe und Steuerkennzeichen vom Artikel ab`() {
+        assertEquals(listOf("BUTTER"), Kassenbon.leseArtikel("2 x BUTTER   3,98 A"))
+    }
+
+    @Test
+    fun `merkt sich wenn gar kein Text erkannt wurde`() {
+        // Der Unterschied zaehlt: "nichts gefunden" ist etwas anderes als
+        // "Bild nicht lesbar", und die App sagt beides verschieden.
+        assertEquals(false, Kassenbon.auswerten("", heute).textErkannt)
+        assertEquals(true, Kassenbon.auswerten(rewe, heute).textErkannt)
     }
 
     @Test

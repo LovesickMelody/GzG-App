@@ -63,6 +63,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -255,6 +256,25 @@ fun ErfassenScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            // Artikelzeilen aus dem Bon zum Antippen. Welche Position die Aktion
+            // betrifft, weiss nur der Mensch davor — deshalb zur Auswahl statt
+            // geraten.
+            if (zustand.artikelvorschlaege.isNotEmpty()) {
+                Text(
+                    text = "Aus dem Bon:",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(zustand.artikelvorschlaege) { vorschlag ->
+                        SuggestionChip(
+                            onClick = { viewModel.setzeProduktname(vorschlag) },
+                            label = { Text(vorschlag) },
+                        )
+                    }
+                }
+            }
+
             OutlinedTextField(
                 value = zustand.ean,
                 onValueChange = viewModel::setzeEan,
@@ -276,10 +296,12 @@ fun ErfassenScreen(
                     // Der Hinweis steht unter dem Feld, nicht als Meldung, die
                     // wieder verschwindet: Ein falsch gelesener Betrag faellt
                     // sonst erst auf, wenn die Erstattung ausbleibt.
-                    supportingText = if (zustand.preisAusBon) {
-                        { Text("Aus dem Bon — prüfen") }
-                    } else {
-                        null
+                    supportingText = when {
+                        // Der Unterschied zaehlt: "an der Summe abgelesen" ist
+                        // etwas anderes als "groesster Betrag auf dem Bon".
+                        zustand.preisGeraten -> { { Text("Geraten — prüfen") } }
+                        zustand.preisAusBon -> { { Text("Aus dem Bon — prüfen") } }
+                        else -> null
                     },
                     textStyle = MoneyTextStyle,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),

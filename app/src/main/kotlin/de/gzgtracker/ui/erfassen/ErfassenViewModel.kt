@@ -53,6 +53,10 @@ data class ErfassenUiState(
     /** Preis und Datum kamen aus dem Bon und sollten nachgeprüft werden. */
     val preisAusBon: Boolean = false,
     val datumAusBon: Boolean = false,
+    /** Der Betrag hing an keinem Schlüsselwort, sondern ist der größte auf dem Bon. */
+    val preisGeraten: Boolean = false,
+    /** Artikelzeilen aus dem Bon, zum Antippen statt Abtippen. */
+    val artikelvorschlaege: List<String> = emptyList(),
     val notiz: String = "",
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
 
@@ -189,7 +193,7 @@ class ErfassenViewModel @Inject constructor(
     // Von Hand geaendert heisst: nicht mehr "aus dem Bon". Der Hinweis
     // "bitte prüfen" verschwindet damit genau dann, wenn er erledigt ist.
     fun setzePreis(wert: String) =
-        _uiState.update { it.copy(preis = wert, preisAusBon = false) }
+        _uiState.update { it.copy(preis = wert, preisAusBon = false, preisGeraten = false) }
 
     fun setzeKaufdatum(wert: LocalDate) =
         _uiState.update { it.copy(kaufdatum = wert, datumAusBon = false) }
@@ -282,22 +286,21 @@ class ErfassenViewModel @Inject constructor(
                 liestBon = false,
                 preis = if (preisUebernehmen) Money.formatPlain(gelesenerPreis) else zustand.preis,
                 preisAusBon = zustand.preisAusBon || preisUebernehmen,
+                preisGeraten = if (preisUebernehmen) ergebnis.preisGeraten else zustand.preisGeraten,
                 kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
                 datumAusBon = zustand.datumAusBon || datumUebernehmen,
-                meldung = if (preisUebernehmen || datumUebernehmen) {
-                    "Aus dem Bon gelesen — bitte prüfen"
-                } else {
-                    null
+                artikelvorschlaege = ergebnis.artikel,
+                // Jeder Ausgang bekommt seine eigene Meldung. Beim ersten
+                // Versuch am Geraet passierte schlicht nichts, und daran war
+                // nicht zu erkennen, ob die Erkennung gelaufen ist, nichts
+                // gefunden hat oder das Bild nicht lesbar war.
+                meldung = when {
+                    !ergebnis.textErkannt -> "Auf dem Bild war kein Text zu erkennen."
+                    preisUebernehmen || datumUebernehmen -> "Aus dem Bon gelesen — bitte prüfen"
+                    gelesenerPreis != null -> "Bon gelesen, Preis stand aber schon da."
+                    else -> "Im Bon war kein Betrag zu erkennen. Bitte von Hand eintragen."
                 },
             )
-        }
-    }
-
-    fun entferneBeleg(art: Belegart) {
-        val pfad = pfadVon(_uiState.value, art) ?: return
-        viewModelScope.launch {
-            receipts.loeschen(pfad)
-            _uiState.update { mitPfad(it, art, null) }
         }
     }
 

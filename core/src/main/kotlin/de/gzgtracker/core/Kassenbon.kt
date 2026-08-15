@@ -20,6 +20,15 @@ import java.time.format.DateTimeParseException
 data class Bonauswertung(
     val preisCents: Int? = null,
     val datum: LocalDate? = null,
+    /**
+     * True, wenn der Betrag nicht an einem Schlüsselwort hing, sondern der
+     * größte plausible auf dem Bon ist. Die App sagt das dann auch dazu.
+     */
+    val preisGeraten: Boolean = false,
+    /** Zeilen, die nach Artikeln aussehen — als Vorschlag für den Produktnamen. */
+    val artikel: List<String> = emptyList(),
+    /** False, wenn die Texterkennung überhaupt nichts gefunden hat. */
+    val textErkannt: Boolean = true,
 ) {
     val hatVorschlag: Boolean get() = preisCents != null || datum != null
 }
@@ -60,11 +69,67 @@ object Kassenbon {
 
     private val DATUM = Regex("""(?<!\d)(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{2}|\d{4})(?!\d)""")
 
-    fun auswerten(text: String, heute: LocalDate = LocalDate.now()): Bonauswertung =
-        Bonauswertung(
-            preisCents = lesePreis(text),
+    fun auswerten(text: String, heute: LocalDate = LocalDate.now()): Bonauswertung {
+        if (text.isBlank()) return Bonauswertung(textErkannt = false)
+
+        val ueberSchluesselwort = lesePreis(text)
+        val geraten = if (ueberSchluesselwort == null) groessterBetrag(text) else null
+
+        return Bonauswertung(
+            preisCents = ueberSchluesselwort ?: geraten,
             datum = leseDatum(text, heute),
+            preisGeraten = ueberSchluesselwort == null && geraten != null,
+            artikel = leseArtikel(text),
         )
+    }
+
+    /**
+     * Notnagel, wenn kein Schlüsselwort auf dem Bon steht.
+     *
+     * Auf einem Bon mit mehreren Positionen ist die Summe die größte Zahl —
+     * sobald der gegebene Schein und das Rückgeld draußen sind. Das ist ein
+     * Rateschluss und wird in der App auch so gekennzeichnet. Ohne ihn stünde
+     * bei jedem Markt mit ungewohnter Beschriftung gar nichts da, und das war
+     * beim ersten Versuch am Gerät genau der Fall.
+     */
+    private fun groessterBetrag(text: String): Int? =
+        text.lines()
+            .filter { zeile -> NIE_DER_PREIS.none { zeile.lowercase().contains(it) } }
+            .mapNotNull(::betragAusZeile)
+            .maxOrNull()
+
+    /**
+     * Sammelt die Zeilen, die nach gekauften Artikeln aussehen.
+     *
+     * Daraus kann man den Produktnamen antippen, statt ihn abzutippen. Den
+     * richtigen zu *raten* wäre aussichtslos: Auf dem Bon steht "BONDUEL SAL
+     * 250G", und welche der acht Positionen die Aktion betrifft, weiß nur der
+     * Mensch davor.
+     */
+    fun leseArtikel(text: String, hoechstens: Int = 8): List<String> {
+        val steuerkennzeichen = Regex("""\s+[A-Z]\s*$""")
+        val menge = Regex("""^\d+\s*[xX]\s*""")
+
+        return text.lines()
+            .map { it.trim() }
+            .filter { zeile ->
+                val klein = zeile.lowercase()
+                BETRAG.containsMatchIn(zeile) &&
+                    NIE_DER_PREIS.none { klein.contains(it) } &&
+                    ENDBETRAG_WOERTER.none { klein.contains(it) }
+            }
+            .mapNotNull { zeile ->
+                // Betrag, Steuerkennzeichen und Mengenangabe abschneiden — übrig
+                // bleibt der Name.
+                BETRAG.replace(zeile, "")
+                    .replace(steuerkennzeichen, "")
+                    .replace(menge, "")
+                    .trim()
+                    .takeIf { it.length in 3..40 && it.any(Char::isLetter) }
+            }
+            .distinct()
+            .take(hoechstens)
+    }
 
     /**
      * Sucht den bezahlten Gesamtbetrag.
