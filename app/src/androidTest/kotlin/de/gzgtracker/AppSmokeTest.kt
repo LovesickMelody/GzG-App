@@ -1,5 +1,6 @@
 package de.gzgtracker
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -125,7 +126,9 @@ class AppSmokeTest {
         app.onNodeWithText("Blockieren").performClick()
         app.onNodeWithText("Warnen").assertIsDisplayed()
 
-        // Die Feed-URL kommt aus BuildConfig und muss gefuellt sein.
-        app.onNodeWithText("Feed-URL").assertIsDisplayed()
+        // Der Feed laesst sich anstossen — die Adresse dazu steht bewusst
+        // nicht mehr hier, sie ist eine Einstellung der App.
+        app.onNodeWithText("Jetzt aktualisieren").assertIsDisplayed()
+        app.onAllNodesWithText("Feed-URL").assertCountEquals(0)
     }
 }
