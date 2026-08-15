@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T12:47:08Z",
+  "generated_at": "2026-08-15T04:52:27Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -12,7 +12,9 @@
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
       "submit_url": "https://www.mydealz.de/visit/threadmain/2822183",
-      "requirements": [],
+      "requirements": [
+        "registrierung"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1b1iF/2822183_1/re/150x150/qt/55/2822183_1.jpg",
@@ -30,6 +32,7 @@
       "url": "https://www.mydealz.de/deals/100-cashback-gzg-oyess-honey-vanilla-nur-bei-dm-2818388",
       "submit_url": "https://www.mydealz.de/visit/threadmain/2818388",
       "requirements": [
+        "bonfoto",
         "app"
       ],
       "retailers": [
@@ -209,6 +212,7 @@
       "submit_url": "https://www.mydealz.de/visit/threadmain/2819890",
       "requirements": [
         "bonfoto",
+        "handy_verifizierung",
         "registrierung",
         "iban"
       ],
@@ -228,7 +232,10 @@
       "submission_deadline": "2026-09-30",
       "url": "https://www.mydealz.de/deals/jacobs-3in12in1-gratis-testen-2823305",
       "submit_url": "https://www.mydealz.de/visit/threadmain/2823305",
-      "requirements": [],
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/LkmY8/2823305_1/re/150x150/qt/55/2823305_1.jpg",
@@ -245,7 +252,10 @@
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
       "submit_url": "https://www.mydealz.de/visit/threadmain/2818983",
-      "requirements": [],
+      "requirements": [
+        "handy_verifizierung",
+        "registrierung"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1JBZd/2818983_1/re/150x150/qt/55/2818983_1.jpg",
@@ -361,8 +371,7 @@
       "url": "https://rabattigel.de/2x-flaschen-sachsen-quelle-medium-orange-und-oder-medium-lemon-075l-gratis-testen-geld-zurueck/",
       "submit_url": "https://www.sachsenquelle.de/medium-orange",
       "requirements": [
-        "bonfoto",
-        "registrierung"
+        "bonfoto"
       ],
       "retailers": [],
       "eans": [],
@@ -380,7 +389,10 @@
       "submission_deadline": "2026-08-31",
       "url": "https://rabattigel.de/andros-be-nuts-erdnusscreme-mus-gratis-testen-geld-zurueck/",
       "submit_url": "https://andros-be-nuts.de/pages/gratistesten",
-      "requirements": [],
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/andros_gratistesten_mobile_header-768x651.webp",
@@ -397,7 +409,10 @@
       "submission_deadline": "2026-08-23",
       "url": "https://rabattigel.de/bifi-tasty-bites-gratis-testen-geld-zurueck/",
       "submit_url": "https://bifi-promotion.de/",
-      "requirements": [],
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/bb_packshots-1-768x522.webp",
@@ -435,7 +450,11 @@
       "submission_deadline": "2026-08-31",
       "url": "https://rabattigel.de/deli-reform-omega-3-gratis-testen-geld-zurueck/",
       "submit_url": "https://www.deli-gratis-testen.de/",
-      "requirements": [],
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "iban"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/06/kv_links-767x592.jpg",
@@ -476,7 +495,9 @@
       "url": "https://rabattigel.de/minusl-milchsnack-gratis-testen-geld-zurueck/",
       "submit_url": "https://minusl-gratistesten.de/",
       "requirements": [
-        "bonfoto"
+        "bonfoto",
+        "app",
+        "iban"
       ],
       "retailers": [],
       "eans": [],
@@ -494,7 +515,9 @@
       "submission_deadline": "2026-12-31",
       "url": "https://rabattigel.de/rockstar-original-sugar-blueberry-acai-gratis-testen-geld-zurueck/",
       "submit_url": "https://www.rockstarenergy.de/geschmacksgarantie",
-      "requirements": [],
+      "requirements": [
+        "iban"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://www.rockstarenergy.de/geschmacksgarantie/assets/gfx/visual.png?v=1.01.4",
@@ -513,7 +536,9 @@
       "submit_url": "https://www.erlebe-haleon.de/deals/proschmelz-clinical-protect",
       "requirements": [
         "bonfoto",
-        "registrierung"
+        "handy_verifizierung",
+        "registrierung",
+        "iban"
       ],
       "retailers": [],
       "eans": [],
@@ -531,7 +556,10 @@
       "submission_deadline": "2026-08-16",
       "url": "https://rabattigel.de/tena-produkt-deiner-wahl-gratis-testen-geld-zurueck/",
       "submit_url": "https://try.tena.com/de/aktionen/gratis-testen",
-      "requirements": [],
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
       "retailers": [
         "Lidl"
       ],
@@ -550,7 +578,9 @@
       "submission_deadline": "2026-09-30",
       "url": "https://rabattigel.de/valess-produkt-deiner-wahl-gratis-probieren-gratis-testen-geld-zurueck/",
       "submit_url": "https://www.valess-aktion.de/",
-      "requirements": [],
+      "requirements": [
+        "bonfoto"
+      ],
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/valess_gt26_packshot_crispy_sticks_2-767x906.webp",
