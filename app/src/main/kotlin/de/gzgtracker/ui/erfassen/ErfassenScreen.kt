@@ -285,6 +285,12 @@ fun ErfassenScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            val preishinweis = when {
+                zustand.preisGeraten -> "Geraten — prüfen"
+                zustand.preisAusBon -> "Aus dem Bon — prüfen"
+                else -> null
+            }
+
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = zustand.preis,
@@ -296,13 +302,9 @@ fun ErfassenScreen(
                     // Der Hinweis steht unter dem Feld, nicht als Meldung, die
                     // wieder verschwindet: Ein falsch gelesener Betrag faellt
                     // sonst erst auf, wenn die Erstattung ausbleibt.
-                    supportingText = when {
-                        // Der Unterschied zaehlt: "an der Summe abgelesen" ist
-                        // etwas anderes als "groesster Betrag auf dem Bon".
-                        zustand.preisGeraten -> { { Text("Geraten — prüfen") } }
-                        zustand.preisAusBon -> { { Text("Aus dem Bon — prüfen") } }
-                        else -> null
-                    },
+                    // Der Unterschied zaehlt: "an der Summe abgelesen" ist etwas
+                    // anderes als "groesster Betrag auf dem Bon".
+                    supportingText = preishinweis?.let { text -> { Text(text) } },
                     textStyle = MoneyTextStyle,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.weight(1f),
