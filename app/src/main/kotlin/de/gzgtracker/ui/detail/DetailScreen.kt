@@ -78,6 +78,7 @@ import java.io.File
 fun DetailScreen(
     onZurueck: () -> Unit,
     onBearbeiten: (Long) -> Unit,
+    onEinreichen: (Long) -> Unit,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
@@ -215,6 +216,24 @@ fun DetailScreen(
             zustand.account?.let { Angabe("Zielkonto", it.name) }
             eintrag.ean?.let { Angabe("EAN", it.eanLesbar()) }
             eintrag.note?.let { Angabe("Notiz", it) }
+
+            // Der Weg zurueck ins Formular. Wer den Vorgang abgebrochen hat —
+            // Seite lud nicht, Foto fehlte, Telefon klingelte —, kommt sonst nicht
+            // mehr hin, obwohl der Eintrag laengst gespeichert ist.
+            if (zustand.action?.besteAdresse != null) {
+                Button(
+                    onClick = { onEinreichen(eintrag.id) },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        if (eintrag.status == SubmissionStatus.GEKAUFT) {
+                            "Jetzt einreichen"
+                        } else {
+                            "Nochmal einreichen"
+                        },
+                    )
+                }
+            }
 
             zustand.action?.url?.let { url ->
                 OutlinedButton(

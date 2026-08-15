@@ -88,5 +88,19 @@ object Migrationen {
         }
     }
 
-    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5)
+    /**
+     * v6: Anrede und Geburtsdatum.
+     *
+     * Beides verlangen die Formulare der Anbieter regelmaessig, und beides
+     * moechte niemand jedes Mal neu eintippen. Freiwillig wie der Rest des
+     * Profils.
+     */
+    val VON_5_AUF_6 = object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE accounts ADD COLUMN anrede TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN geburtsdatum TEXT")
+        }
+    }
+
+    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6)
 }

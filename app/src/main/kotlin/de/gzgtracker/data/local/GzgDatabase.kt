@@ -11,7 +11,7 @@ import androidx.room.TypeConverters
         SubmissionEntity::class,
         WatchlistEntity::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)

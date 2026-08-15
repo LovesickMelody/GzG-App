@@ -61,6 +61,19 @@ class Fetcher:
 
     def hole(self, url: str) -> str | None:
         """Gibt den HTML-Text zurueck oder ``None``, wenn es nicht geklappt hat."""
+        seite = self.hole_seite(url)
+        return seite[0] if seite else None
+
+    def hole_seite(self, url: str) -> tuple[str, str] | None:
+        """
+        Wie [hole], gibt aber zusaetzlich die Adresse zurueck, bei der man
+        wirklich gelandet ist.
+
+        Der Unterschied zaehlt bei Weiterleitungen: mydealz verlinkt ueber eine
+        eigene Zwischenseite, und in der App sah man beim Einreichen erst das
+        mydealz-Logo, statt gleich beim Hersteller zu sein. Wer die
+        Zieladdresse kennt, kann sie speichern und die Zwischenseite ueberspringen.
+        """
         if not self.darf(url):
             log.warning("robots.txt verbietet %s — übersprungen", url)
             return None
@@ -82,7 +95,7 @@ class Fetcher:
         if antwort.encoding is None or antwort.encoding.lower() == "iso-8859-1":
             antwort.encoding = antwort.apparent_encoding
 
-        return antwort.text
+        return antwort.text, str(antwort.url)
 
     def _warte(self, url: str) -> None:
         host = urlparse(url).netloc

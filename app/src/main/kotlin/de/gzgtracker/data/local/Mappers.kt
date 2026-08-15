@@ -30,6 +30,8 @@ fun AccountEntity.toDomain() = Account(
     ort = ort,
     telefon = telefon,
     email = email,
+    anrede = anrede,
+    geburtsdatum = geburtsdatum,
 )
 
 fun Account.toEntity(createdAt: Instant) = AccountEntity(
@@ -47,6 +49,8 @@ fun Account.toEntity(createdAt: Instant) = AccountEntity(
     ort = ort,
     telefon = telefon,
     email = email,
+    anrede = anrede,
+    geburtsdatum = geburtsdatum,
     createdAt = createdAt,
 )
 

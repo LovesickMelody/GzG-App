@@ -27,6 +27,8 @@ data class Bonauswertung(
     val preisGeraten: Boolean = false,
     /** Zeilen, die nach Artikeln aussehen — als Vorschlag für den Produktnamen. */
     val artikel: List<String> = emptyList(),
+    /** Händler aus der Kopfzeile des Bons. */
+    val haendler: String? = null,
     /** False, wenn die Texterkennung überhaupt nichts gefunden hat. */
     val textErkannt: Boolean = true,
 ) {
@@ -69,19 +71,128 @@ object Kassenbon {
 
     private val DATUM = Regex("""(?<!\d)(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{2}|\d{4})(?!\d)""")
 
-    fun auswerten(text: String, heute: LocalDate = LocalDate.now()): Bonauswertung {
+    fun auswerten(
+        text: String,
+        heute: LocalDate = LocalDate.now(),
+        /** Name des Produkts, um das es geht — steuert, welche Zeile zaehlt. */
+        produkt: String? = null,
+        haendlerliste: List<String> = BEKANNTE_HAENDLER,
+    ): Bonauswertung {
         if (text.isBlank()) return Bonauswertung(textErkannt = false)
 
-        val ueberSchluesselwort = lesePreis(text)
-        val geraten = if (ueberSchluesselwort == null) groessterBetrag(text) else null
+        // Reihenfolge nach Verlaesslichkeit: die Zeile des gesuchten Produkts,
+        // dann die ausgewiesene Summe, dann der groesste Betrag.
+        val zumProdukt = produkt?.let { lesePreisFuerProdukt(text, it) }
+        val ueberSchluesselwort = if (zumProdukt == null) lesePreis(text) else null
+        val geraten = if (zumProdukt == null && ueberSchluesselwort == null) {
+            groessterBetrag(text)
+        } else {
+            null
+        }
 
         return Bonauswertung(
-            preisCents = ueberSchluesselwort ?: geraten,
+            preisCents = zumProdukt ?: ueberSchluesselwort ?: geraten,
             datum = leseDatum(text, heute),
-            preisGeraten = ueberSchluesselwort == null && geraten != null,
+            preisGeraten = zumProdukt == null && ueberSchluesselwort == null && geraten != null,
             artikel = leseArtikel(text),
+            haendler = leseHaendler(text, haendlerliste),
         )
     }
+
+    /**
+     * Wertet einen Bon aus, dessen Zeilen aus der Lage auf dem Bild
+     * zusammengesetzt werden.
+     *
+     * Der Weg ueber [Bonlayout] ist der richtige, sobald die Texterkennung
+     * Rahmen mitliefert: Ohne ihn steht der Preis eines Artikels womoeglich
+     * zwanzig Zeilen von dessen Namen entfernt, und dann ist nichts zu holen.
+     */
+    fun auswerten(
+        stuecke: List<Textstueck>,
+        heute: LocalDate = LocalDate.now(),
+        produkt: String? = null,
+        haendlerliste: List<String> = BEKANNTE_HAENDLER,
+    ): Bonauswertung = auswerten(Bonlayout.zuText(stuecke), heute, produkt, haendlerliste)
+
+    /**
+     * Haendlernamen, die auf einem deutschen Kassenbon oben stehen.
+     *
+     * Bewusst nur eindeutige Namen: Ein zu kurzer oder zu gewoehnlicher Eintrag
+     * ("Hit", "Nah") faende sich in jeder zweiten Adresszeile wieder, und ein
+     * falscher Haendler ist schlechter als gar keiner.
+     */
+    val BEKANNTE_HAENDLER = listOf(
+        "dm", "Rossmann", "Müller", "Budni", "Douglas",
+        "Edeka", "E-Center", "Rewe", "Penny", "Nahkauf",
+        "Kaufland", "Lidl", "Aldi", "Netto", "Norma",
+        "Globus", "Marktkauf", "Famila", "Combi", "tegut",
+        "Alnatura", "Denns", "Bio Company", "Real", "V-Markt",
+        "Wasgau", "Feneberg", "Diska", "Konsum", "Selgros",
+        "Metro", "Trinkgut", "Getränkeland", "Fristo", "Hol'ab",
+    )
+
+    /**
+     * Sucht den Betrag der Zeile, die zum gesuchten Produkt gehoert.
+     *
+     * Das ist der eigentlich richtige Wert: Erstattet wird das Aktionsprodukt,
+     * nicht der ganze Einkauf. Wer mit einem Bon ueber 79 € einreicht, weil dort
+     * auch Waschmittel und Getraenke draufstehen, bekommt nichts — oder faellt
+     * unangenehm auf.
+     *
+     * Bons kuerzen ab ("BIFI TASTY B."), deshalb zaehlt ein Wortanfang als
+     * Treffer. Gewonnen hat die Zeile mit den meisten Treffern; bei null
+     * Treffern gibt es kein Ergebnis, und der Aufrufer geht den naechsten Weg.
+     */
+    fun lesePreisFuerProdukt(text: String, produkt: String): Int? {
+        val gesucht = teile(produkt)
+        if (gesucht.isEmpty()) return null
+
+        var bester: Pair<Int, Int>? = null // Treffer zu Betrag
+
+        for (zeile in text.lines()) {
+            val klein = zeile.lowercase()
+            if (NIE_DER_PREIS.any { klein.contains(it) }) continue
+            if (ENDBETRAG_WOERTER.any { klein.contains(it) }) continue
+
+            val betrag = betragAusZeile(zeile) ?: continue
+            val vorhanden = teile(BETRAG.replace(zeile, ""))
+            val treffer = gesucht.count { wort -> vorhanden.any { passt(it, wort) } }
+
+            if (treffer > 0 && (bester == null || treffer > bester!!.first)) {
+                bester = treffer to betrag
+            }
+        }
+
+        return bester?.second
+    }
+
+    /**
+     * Liest den Haendler aus der Kopfzeile.
+     *
+     * Nur die ersten Zeilen: Weiter unten stehen Werbetexte und Adressen, in
+     * denen ein Name zufaellig vorkommen kann.
+     */
+    fun leseHaendler(text: String, bekannte: List<String> = BEKANNTE_HAENDLER): String? {
+        // Zwölf Zeilen: Oben stehen oft Kundennummer, Filiale, Anschrift und
+        // Telefonnummer, bevor der Name auftaucht. Weiter runter zu gehen wird
+        // gefaehrlich — im Fussbereich stehen Werbetexte mit fremden Marken.
+        val kopf = text.lines().take(12).joinToString(" ").lowercase()
+        // Laengste Uebereinstimmung zuerst, damit "Netto Marken-Discount" nicht
+        // an "Netto" haengenbleibt, wenn beides in der Liste steht.
+        return bekannte.sortedByDescending { it.length }.firstOrNull { name ->
+            Regex("(?<![a-zäöüß])${Regex.escape(name.lowercase())}(?![a-zäöüß])").containsMatchIn(kopf)
+        }
+    }
+
+    /** Zerlegt einen Text in vergleichbare Wortteile ab drei Zeichen. */
+    private fun teile(text: String): List<String> =
+        text.lowercase()
+            .split(Regex("[^a-zäöüß0-9]+"))
+            .filter { it.length >= 3 }
+
+    /** Ein Wortanfang reicht: Bons kuerzen ab. */
+    private fun passt(a: String, b: String): Boolean =
+        a.startsWith(b) || b.startsWith(a)
 
     /**
      * Notnagel, wenn kein Schlüsselwort auf dem Bon steht.

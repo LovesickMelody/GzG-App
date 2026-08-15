@@ -301,6 +301,51 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   `javascript:`- oder `intent:`-Link daraus würde beim Antippen in einer anderen App
   landen; das gehört gar nicht erst in die Datenbank.
 
+- **Aus dem Bon zählt der Posten des Aktionsprodukts, nicht die Summe** — erstattet wird das
+  eine Produkt. Wer den Gesamtbetrag eines Wocheneinkaufs einreicht, bekommt nichts oder
+  fällt unangenehm auf. Gesucht wird deshalb die Zeile mit den meisten Wortübereinstimmungen
+  zum Produktnamen; Bons kürzen ab ("BIFI TASTY B."), also zählt schon ein Wortanfang.
+  Erst wenn keine Zeile passt, gilt wieder die ausgewiesene Summe, danach der größte Betrag.
+- **Der Händler kommt aus den ersten acht Zeilen** — weiter unten stehen Werbetexte
+  ("Auch erhältlich bei Rossmann") und Adressen, in denen ein Marktname zufällig vorkommt.
+  Der Abgleich läuft über Wortgrenzen, sonst fände "dm" sich in "Admiralstraße" wieder.
+- **Der eingebaute Browser meldet sich ohne „wv"** — die Standard-Kennung einer
+  WebView enthält dieses Kürzel, und einige Anbieter liefern darauf eine leere Seite aus.
+  Dazu Ladebalken, sichtbare Fehlermeldung und „Im Browser öffnen": Vor einer weißen Fläche
+  zu stehen, ohne zu wissen warum, ist der schlechteste Ausgang.
+
+- **Das Datei-Feld der Anbieterseite bedient die App mit den eigenen Fotos** — ein
+  eingebauter Browser öffnet ohne `onShowFileChooser` gar keinen Dateidialog; das Antippen
+  von „Datei auswählen" blieb wirkungslos. Genau dieses Foto ist aber der Kern jeder
+  Einreichung. Angeboten werden zuerst die Bilder dieser Einreichung, dann die Galerie.
+  Eingefügt wird nur, was von Hand ausgewählt wurde — ein Skript darf ein Datei-Feld
+  nicht füllen, und das soll auch so bleiben.
+- **Weiterleitungen werden beim Sammeln aufgelöst, nicht im Gerät** — mydealz verlinkt über
+  `/visit/threadmain/<id>`. In der App erschien deshalb erst ein fremdes Logo, und wenn die
+  Zwischenseite hakte, gar nichts. Der Scraper ruft die Seite ohnehin ab und merkt sich, wo
+  er landet. Bleibt die Weiterleitung auf demselben Host, bleibt die kürzere Adresse stehen.
+- **„Speichern und einreichen" setzt den Status auf eingereicht** — sonst steht der Eintrag
+  danach als „gekauft" in der Liste, obwohl man gerade eingereicht hat. Umgekehrt führt ein
+  abgebrochener Vorgang nicht in eine Sackgasse: In der Detailansicht steht „Nochmal
+  einreichen", und der Status lässt sich mit einem Tipp zurücksetzen.
+
+- **Bonzeilen werden aus der Lage auf dem Bild zusammengesetzt** — die Texterkennung liefert
+  Blöcke, keine Zeilen. Auf einem Kassenbon heisst das regelmäßig: erst alle Artikelnamen
+  untereinander, dann alle Beträge. Im Text steht dann `BOROTALCO DEO` zwanzig Zeilen über
+  `3,45`, und keine Auswertung kann daraus noch ablesen, was zusammengehört. Genau daran
+  scheiterten Produktpreis, Händler und Kaufdatum am Gerät. Jetzt gilt: Was auf gleicher
+  Höhe steht, stand auf dem Papier in einer Zeile.
+- **Aus dem Bon Gelesenes darf ein zweites Foto überschreiben** — von Hand Eingetragenes
+  nicht. Wer wegen eines falschen Vorschlags noch einmal fotografiert, will den neuen Wert
+  sehen; wer selbst korrigiert hat, will seine Korrektur behalten.
+- **Anrede und Geburtsdatum stehen am Konto** — beides verlangen die Formulare regelmäßig.
+  Für die Anrede füllt das Skript jetzt auch Auswahlfelder: Dort steht kein freier Text,
+  sondern eine Liste, und „Herr" muss auf den passenden Eintrag gelegt werden.
+- **Die Leiste unter dem Formular ist eine Zeile** — jede Zeile dort fehlt der Seite darüber,
+  und ein Anbieterformular, von dem man vier Felder sieht, ist mühsam.
+- **Eine leere Seite meldet sich selbst** — bleibt nach dem Laden kein Text übrig, sagt die
+  App das und bietet den Browser an, statt eine weisse Fläche stehenzulassen.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

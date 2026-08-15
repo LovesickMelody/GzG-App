@@ -74,6 +74,9 @@ data class Account(
     val ort: String? = null,
     val telefon: String? = null,
     val email: String? = null,
+    /** Anrede, wie die Formulare sie verlangen: "Herr", "Frau" oder "Divers". */
+    val anrede: String? = null,
+    val geburtsdatum: LocalDate? = null,
 ) {
     /** Was in der Liste unter dem Namen steht. */
     val vollerName: String?

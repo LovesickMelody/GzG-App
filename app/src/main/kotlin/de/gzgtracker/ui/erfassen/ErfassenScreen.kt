@@ -26,7 +26,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AddAPhoto
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
@@ -52,7 +51,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
 import android.Manifest
 import android.content.pm.PackageManager
@@ -63,7 +61,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.unit.dp
@@ -91,7 +88,6 @@ fun ErfassenScreen(
 ) {
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
-    val uriHandler = LocalUriHandler.current
 
     val context = LocalContext.current
 
@@ -290,23 +286,6 @@ fun ErfassenScreen(
                 // Hier steht man kurz vor dem Einkauf oder direkt danach — der
                 // richtige Moment fuer "was muss ich fotografieren?".
                 Teilnahmeliste(aktion.requirements)
-
-                aktion.besteAdresse?.let { adresse ->
-                    TextButton(onClick = { uriHandler.openUri(adresse) }) {
-                        Icon(
-                            Icons.Outlined.OpenInNew,
-                            contentDescription = null,
-                            modifier = Modifier.size(16.dp),
-                        )
-                        Text(
-                            if (aktion.fuehrtDirektZumFormular) {
-                                " Zur Einreichung"
-                            } else {
-                                " Aktionsseite öffnen"
-                            },
-                        )
-                    }
-                }
             }
 
             Abschnitt("Produkt")
@@ -318,25 +297,6 @@ fun ErfassenScreen(
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
-
-            // Artikelzeilen aus dem Bon zum Antippen. Welche Position die Aktion
-            // betrifft, weiss nur der Mensch davor — deshalb zur Auswahl statt
-            // geraten.
-            if (zustand.artikelvorschlaege.isNotEmpty()) {
-                Text(
-                    text = "Aus dem Bon:",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(zustand.artikelvorschlaege) { vorschlag ->
-                        SuggestionChip(
-                            onClick = { viewModel.setzeProduktname(vorschlag) },
-                            label = { Text(vorschlag) },
-                        )
-                    }
-                }
-            }
 
             OutlinedTextField(
                 value = zustand.ean,

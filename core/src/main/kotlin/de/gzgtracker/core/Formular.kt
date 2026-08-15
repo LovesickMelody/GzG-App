@@ -1,5 +1,7 @@
 package de.gzgtracker.core
 
+import java.time.format.DateTimeFormatter
+
 /**
  * Ausfüllhilfe für die Webformulare der Anbieter.
  *
@@ -52,6 +54,12 @@ enum class Formularfeld(
     PLZ("plz", "PLZ", listOf("plz", "postleitzahl", "zip", "postcode")),
     ORT("ort", "Ort", listOf("ort", "stadt", "wohnort", "city")),
     TELEFON("telefon", "Telefon", listOf("telefon", "handy", "mobil", "phone", "rufnummer")),
+    ANREDE("anrede", "Anrede", listOf("anrede", "salutation", "geschlecht", "gender", "titel")),
+    GEBURTSDATUM(
+        "geburtsdatum",
+        "Geburtsdatum",
+        listOf("geburtsdatum", "geburtstag", "geboren", "birthdate", "birthday", "geb."),
+    ),
     ;
 
     companion object {
@@ -135,6 +143,41 @@ $eintraege
     }
   }
 
+  // Auswahlfelder brauchen einen eigenen Weg: Dort steht kein freier Text,
+  // sondern eine Liste. "Herr" muss auf den passenden Eintrag gelegt werden.
+  var auswahlen = document.querySelectorAll("select");
+  for (var s = 0; s < auswahlen.length; s++) {
+    var auswahl = auswahlen[s];
+    if (auswahl.disabled || auswahl.offsetParent === null) continue;
+    // Steht schon etwas Sinnvolles drin, bleibt es stehen.
+    if (auswahl.value && auswahl.value.trim() !== "") continue;
+
+    var beschriftet = beschriftung(auswahl);
+    for (var w = 0; w < vorgaben.length; w++) {
+      if (vergeben.indexOf(w) !== -1) continue;
+      var passt = false;
+      for (var n = 0; n < vorgaben[w].muster.length; n++) {
+        if (beschriftet.indexOf(vorgaben[w].muster[n]) !== -1) { passt = true; break; }
+      }
+      if (!passt) continue;
+
+      var gesucht = vorgaben[w].wert.toLowerCase();
+      var gewaehlt = -1;
+      for (var o = 0; o < auswahl.options.length; o++) {
+        var eintrag = (auswahl.options[o].text + " " + auswahl.options[o].value).toLowerCase();
+        if (eintrag.indexOf(gesucht) !== -1) { gewaehlt = o; break; }
+      }
+      if (gewaehlt === -1) continue;
+
+      auswahl.selectedIndex = gewaehlt;
+      auswahl.dispatchEvent(new Event("input", { bubbles: true }));
+      auswahl.dispatchEvent(new Event("change", { bubbles: true }));
+      vergeben.push(w);
+      gefuellt++;
+      break;
+    }
+  }
+
   return gefuellt + "/" + vorgaben.length;
 })();
         """.trimIndent()
@@ -183,6 +226,9 @@ $eintraege
  */
 object Einreichdaten {
 
+    private val GEBURTSDATUMSFORMAT: DateTimeFormatter =
+        DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
     fun aus(
         konto: Account?,
         produktname: String,
@@ -203,6 +249,11 @@ object Einreichdaten {
             it.plz?.let { wert -> werte[Formularfeld.PLZ] = wert }
             it.ort?.let { wert -> werte[Formularfeld.ORT] = wert }
             it.telefon?.let { wert -> werte[Formularfeld.TELEFON] = wert }
+            it.anrede?.let { wert -> werte[Formularfeld.ANREDE] = wert }
+            // Deutsche Schreibweise, so wie sie in den Formularen steht.
+            it.geburtsdatum?.let { wert ->
+                werte[Formularfeld.GEBURTSDATUM] = wert.format(GEBURTSDATUMSFORMAT)
+            }
         }
 
         werte[Formularfeld.PRODUKT] = produktname

@@ -191,6 +191,9 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
                     onBearbeiten = { id ->
                         navController.navigate(Routes.erfassen(submissionId = id))
                     },
+                    onEinreichen = { id ->
+                        navController.navigate(Routes.webformular(id))
+                    },
                 )
             }
 

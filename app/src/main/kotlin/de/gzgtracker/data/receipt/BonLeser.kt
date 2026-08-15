@@ -10,6 +10,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.gzgtracker.core.Bonauswertung
 import de.gzgtracker.core.Kassenbon
+import de.gzgtracker.core.Textstueck
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -54,10 +55,17 @@ class BonLeser @Inject constructor(
     /**
      * Wertet das Bild unter [pfad] aus.
      *
+     * [produkt] ist der Name des Aktionsprodukts. Steht er da, sucht die
+     * Auswertung den Posten dieses Produkts statt der Bonsumme — erstattet wird
+     * das Produkt, nicht der ganze Einkauf.
+     *
      * Gibt eine leere [Bonauswertung] zurueck, wenn nichts Brauchbares
      * herauskommt — ein fehlender Vorschlag ist harmlos, ein falscher nicht.
      */
-    suspend fun auswerten(pfad: String): Bonergebnis = withContext(Dispatchers.Default) {
+    suspend fun auswerten(
+        pfad: String,
+        produkt: String? = null,
+    ): Bonergebnis = withContext(Dispatchers.Default) {
         val datei = File(pfad)
         if (!datei.exists()) {
             return@withContext Bonergebnis(fehler = "Das Bild wurde nicht gefunden.")
@@ -69,7 +77,7 @@ class BonLeser @Inject constructor(
         val bitmap = runCatching { BitmapFactory.decodeFile(pfad) }.getOrNull()
             ?: return@withContext Bonergebnis(fehler = "Das Bild ließ sich nicht öffnen.")
 
-        val text = try {
+        val erkannt = try {
             erkenneText(bitmap)
         } catch (fehler: Exception) {
             Log.w(TAG, "Texterkennung auf $pfad fehlgeschlagen", fehler)
@@ -80,7 +88,7 @@ class BonLeser @Inject constructor(
             bitmap.recycle()
         }
 
-        if (text.isBlank()) {
+        if (erkannt.stuecke.isEmpty() && erkannt.roh.isBlank()) {
             // Erkennung lief, fand aber nichts. Das ist etwas anderes als ein
             // Fehler — und der Rat an den Nutzer ist ein anderer.
             return@withContext Bonergebnis(
@@ -88,15 +96,40 @@ class BonLeser @Inject constructor(
             )
         }
 
-        Log.i(TAG, "Bon gelesen: ${text.length} Zeichen, ${text.lines().size} Zeilen")
-        Bonergebnis(auswertung = Kassenbon.auswerten(text))
+        Log.i(TAG, "Bon gelesen: ${erkannt.stuecke.size} Zeilen mit Rahmen")
+
+        // Mit Rahmen laesst sich die Zeile wiederherstellen, in der Name und
+        // Betrag auf dem Papier nebeneinander standen. Ohne Rahmen bleibt nur
+        // der rohe Text — besser als nichts, aber ungenau.
+        val auswertung = if (erkannt.stuecke.isNotEmpty()) {
+            Kassenbon.auswerten(erkannt.stuecke, produkt = produkt)
+        } else {
+            Kassenbon.auswerten(erkannt.roh, produkt = produkt)
+        }
+        Bonergebnis(auswertung = auswertung)
     }
 
-    private suspend fun erkenneText(bitmap: Bitmap): String =
+    /** Was die Texterkennung hergab: Zeilen mit Lage, dazu der rohe Text. */
+    private data class Erkanntes(val stuecke: List<Textstueck>, val roh: String)
+
+    private suspend fun erkenneText(bitmap: Bitmap): Erkanntes =
         suspendCancellableCoroutine { fortsetzung ->
             // Drehung 0: Das Bild wurde beim Uebernehmen schon aufgerichtet.
             erkenner.process(InputImage.fromBitmap(bitmap, 0))
-                .addOnSuccessListener { ergebnis -> fortsetzung.resume(ergebnis.text) }
+                .addOnSuccessListener { ergebnis ->
+                    val stuecke = ergebnis.textBlocks
+                        .flatMap { block -> block.lines }
+                        .mapNotNull { zeile ->
+                            val rahmen = zeile.boundingBox ?: return@mapNotNull null
+                            Textstueck(
+                                text = zeile.text,
+                                links = rahmen.left,
+                                oben = rahmen.top,
+                                unten = rahmen.bottom,
+                            )
+                        }
+                    fortsetzung.resume(Erkanntes(stuecke, ergebnis.text))
+                }
                 .addOnFailureListener { fehler -> fortsetzung.resumeWithException(fehler) }
         }
 

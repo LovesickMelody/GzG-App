@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,6 +58,8 @@ import de.gzgtracker.core.Money
 import de.gzgtracker.ui.components.ReceiptLine
 import de.gzgtracker.ui.theme.MoneySmallTextStyle
 import de.gzgtracker.ui.theme.MoneyTextStyle
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -253,6 +256,15 @@ private fun KontoDialog(
     var ort by remember { mutableStateOf(konto?.ort.orEmpty()) }
     var telefon by remember { mutableStateOf(konto?.telefon.orEmpty()) }
     var email by remember { mutableStateOf(konto?.email.orEmpty()) }
+    var anrede by remember { mutableStateOf(konto?.anrede.orEmpty()) }
+    var geburtstag by remember {
+        mutableStateOf(konto?.geburtsdatum?.format(GEBURTSTAGSFORMAT).orEmpty())
+    }
+
+    // Leer ist in Ordnung — freiwillig heisst freiwillig. Nur halb Getipptes
+    // wird nicht gespeichert, sonst stuende im Formular spaeter Unsinn.
+    val geburtstagWert = leseGeburtstag(geburtstag)
+    val geburtstagOk = geburtstag.isBlank() || geburtstagWert != null
 
     val nameOk = name.isNotBlank()
     // Eine deutsche IBAN hat 22 Zeichen, international bis 34. Geprueft wird
@@ -320,6 +332,27 @@ private fun KontoDialog(
                         modifier = Modifier.weight(1f),
                     )
                 }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ANREDEN.forEach { wahl ->
+                        FilterChip(
+                            // Nochmal antippen hebt die Wahl wieder auf: Wer
+                            // sich vertippt hat, soll nicht festsitzen.
+                            selected = anrede == wahl,
+                            onClick = { anrede = if (anrede == wahl) "" else wahl },
+                            label = { Text(wahl) },
+                        )
+                    }
+                }
+                OutlinedTextField(
+                    value = geburtstag,
+                    onValueChange = { geburtstag = it },
+                    label = { Text("Geburtsdatum") },
+                    placeholder = { Text("TT.MM.JJJJ") },
+                    singleLine = true,
+                    isError = !geburtstagOk,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
                         value = strasse,
@@ -403,10 +436,12 @@ private fun KontoDialog(
                             ort = ort.trim().ifBlank { null },
                             telefon = telefon.trim().ifBlank { null },
                             email = email.trim().ifBlank { null },
+                            anrede = anrede.ifBlank { null },
+                            geburtsdatum = geburtstagWert,
                         ),
                     )
                 },
-                enabled = nameOk && ibanOk,
+                enabled = nameOk && ibanOk && geburtstagOk,
             ) {
                 Text("Speichern")
             }
@@ -480,3 +515,18 @@ private fun LeereKonten(modifier: Modifier = Modifier, onAnlegen: () -> Unit) {
         TextButton(onClick = onAnlegen) { Text("Erstes Konto anlegen") }
     }
 }
+
+/** Die Anreden, die deutsche Formulare anbieten. */
+private val ANREDEN = listOf("Herr", "Frau", "Divers")
+
+private val GEBURTSTAGSFORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+/**
+ * Liest ein Geburtsdatum in deutscher Schreibweise.
+ *
+ * Gibt `null` zurueck, solange die Eingabe unvollstaendig oder unmoeglich ist —
+ * der 31.02. kommt beim Tippen zwangslaeufig vor.
+ */
+private fun leseGeburtstag(eingabe: String): LocalDate? = runCatching {
+    LocalDate.parse(eingabe.trim(), GEBURTSTAGSFORMAT)
+}.getOrNull()

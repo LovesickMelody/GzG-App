@@ -50,13 +50,12 @@ data class ErfassenUiState(
     val offeneBelegart: Belegart? = null,
     /** Läuft gerade die Texterkennung auf einem frisch gewählten Bon? */
     val liestBon: Boolean = false,
-    /** Preis und Datum kamen aus dem Bon und sollten nachgeprüft werden. */
+    /** Preis, Datum und Händler kamen aus dem Bon und sollten nachgeprüft werden. */
     val preisAusBon: Boolean = false,
     val datumAusBon: Boolean = false,
+    val haendlerAusBon: Boolean = false,
     /** Der Betrag hing an keinem Schlüsselwort, sondern ist der größte auf dem Bon. */
     val preisGeraten: Boolean = false,
-    /** Artikelzeilen aus dem Bon, zum Antippen statt Abtippen. */
-    val artikelvorschlaege: List<String> = emptyList(),
     val notiz: String = "",
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
 
@@ -199,7 +198,8 @@ class ErfassenViewModel @Inject constructor(
 
     fun setzeKaufdatum(wert: LocalDate) =
         _uiState.update { it.copy(kaufdatum = wert, datumAusBon = false) }
-    fun setzeHaendler(wert: String) = _uiState.update { it.copy(haendler = wert) }
+    fun setzeHaendler(wert: String) =
+        _uiState.update { it.copy(haendler = wert, haendlerAusBon = false) }
     fun setzeNotiz(wert: String) = _uiState.update { it.copy(notiz = wert) }
     fun setzeStatus(wert: SubmissionStatus) = _uiState.update { it.copy(status = wert) }
 
@@ -270,7 +270,11 @@ class ErfassenViewModel @Inject constructor(
     }
 
     /**
-     * Fuellt Preis und Kaufdatum aus dem Bon vor.
+     * Fuellt Preis, Kaufdatum und Haendler aus dem Bon vor.
+     *
+     * Gesucht wird der Posten des Aktionsprodukts, nicht die Bonsumme: Erstattet
+     * wird das eine Produkt, und wer den Gesamtbetrag eines Wocheneinkaufs
+     * einreicht, bekommt nichts.
      *
      * Bereits Eingetragenes wird nicht ueberschrieben: Wer den Preis von Hand
      * korrigiert und danach ein besseres Foto macht, will seine Korrektur
@@ -279,19 +283,33 @@ class ErfassenViewModel @Inject constructor(
      */
     private suspend fun werteBonAus(pfad: String) {
         _uiState.update { it.copy(liestBon = true) }
-        val ergebnis = bonLeser.auswerten(pfad)
+
+        // Der Produktname aus dem Feld, sonst der Titel der Aktion — irgendetwas
+        // steht praktisch immer da, weil die Aktionswahl ihn vorbelegt.
+        val vorherigerZustand = _uiState.value
+        val gesuchtesProdukt = vorherigerZustand.produktname
+            .ifBlank { vorherigerZustand.gewaehlteAktion?.title.orEmpty() }
+            .takeIf { it.isNotBlank() }
+
+        val ergebnis = bonLeser.auswerten(pfad, produkt = gesuchtesProdukt)
         val auswertung = ergebnis.auswertung
         // In eigene Variablen, bevor sie gelesen werden: Werte aus einem anderen
         // Modul behandelt Kotlin nach einer Null-Pruefung nicht automatisch als
         // "nicht null", weil sie sich zwischendurch geaendert haben koennten.
         val gelesenerPreis = auswertung.preisCents
         val gelesenesDatum = auswertung.datum
+        val gelesenerHaendler = auswertung.haendler
 
         _uiState.update { zustand ->
-            val preisUebernehmen = gelesenerPreis != null && zustand.preis.isBlank()
+            // Ueberschrieben wird nur, was leer ist oder selbst aus einem Bon
+            // stammt. Wer wegen eines falschen Vorschlags ein besseres Foto
+            // macht, will den neuen Wert sehen — von Hand Eingetragenes bleibt.
+            val preisUebernehmen = gelesenerPreis != null &&
+                (zustand.preis.isBlank() || zustand.preisAusBon)
             val datumUebernehmen = gelesenesDatum != null &&
-                zustand.kaufdatum == LocalDate.now() &&
-                !zustand.datumAusBon
+                (zustand.kaufdatum == LocalDate.now() || zustand.datumAusBon)
+            val haendlerUebernehmen = gelesenerHaendler != null &&
+                (zustand.haendler.isBlank() || zustand.haendlerAusBon)
 
             zustand.copy(
                 liestBon = false,
@@ -300,13 +318,15 @@ class ErfassenViewModel @Inject constructor(
                 preisGeraten = if (preisUebernehmen) auswertung.preisGeraten else zustand.preisGeraten,
                 kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
                 datumAusBon = zustand.datumAusBon || datumUebernehmen,
-                artikelvorschlaege = auswertung.artikel,
+                haendler = if (haendlerUebernehmen) gelesenerHaendler else zustand.haendler,
+                haendlerAusBon = zustand.haendlerAusBon || haendlerUebernehmen,
                 // Jeder Ausgang bekommt seine eigene Meldung. Wer nur "es hat
                 // nicht geklappt" liest, weiss nicht, ob er naeher rangehen,
                 // mehr Licht machen oder von Hand tippen soll.
                 meldung = when {
                     ergebnis.fehler != null -> ergebnis.fehler
-                    preisUebernehmen || datumUebernehmen -> "Aus dem Bon gelesen — bitte prüfen"
+                    preisUebernehmen || datumUebernehmen || haendlerUebernehmen ->
+                        "Aus dem Bon gelesen — bitte prüfen"
                     gelesenerPreis != null -> "Bon gelesen, Preis stand aber schon da."
                     else -> "Bon gelesen, aber kein Betrag gefunden. Bitte eintragen."
                 },
@@ -343,6 +363,15 @@ class ErfassenViewModel @Inject constructor(
         if (!zustand.speicherbar) return
         val preisCents = Money.parseOrNull(zustand.preis) ?: return
 
+        // Wer "Speichern und einreichen" drueckt, reicht ein — der Eintrag darf
+        // danach nicht als "gekauft" in der Liste stehen. Ein weiter
+        // fortgeschrittener Status (erstattet, abgelehnt) bleibt unangetastet.
+        val neuerStatus = if (dannEinreichen && zustand.status == SubmissionStatus.GEKAUFT) {
+            SubmissionStatus.EINGEREICHT
+        } else {
+            zustand.status
+        }
+
         viewModelScope.launch {
             val eintrag = Submission(
                 id = zustand.submissionId ?: 0L,
@@ -356,8 +385,8 @@ class ErfassenViewModel @Inject constructor(
                 receiptImagePath = zustand.bonPfad,
                 productImagePath = zustand.produktPfad,
                 comboImagePath = zustand.zusammenPfad,
-                status = zustand.status,
-                submittedAt = if (zustand.status == SubmissionStatus.GEKAUFT) {
+                status = neuerStatus,
+                submittedAt = if (neuerStatus == SubmissionStatus.GEKAUFT) {
                     null
                 } else {
                     LocalDate.now()
