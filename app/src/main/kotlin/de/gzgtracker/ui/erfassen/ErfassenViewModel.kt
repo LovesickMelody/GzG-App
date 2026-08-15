@@ -50,9 +50,10 @@ data class ErfassenUiState(
     val offeneBelegart: Belegart? = null,
     /** Läuft gerade die Texterkennung auf einem frisch gewählten Bon? */
     val liestBon: Boolean = false,
-    /** Preis und Datum kamen aus dem Bon und sollten nachgeprüft werden. */
+    /** Preis, Datum und Händler kamen aus dem Bon und sollten nachgeprüft werden. */
     val preisAusBon: Boolean = false,
     val datumAusBon: Boolean = false,
+    val haendlerAusBon: Boolean = false,
     /** Der Betrag hing an keinem Schlüsselwort, sondern ist der größte auf dem Bon. */
     val preisGeraten: Boolean = false,
     val notiz: String = "",
@@ -197,7 +198,8 @@ class ErfassenViewModel @Inject constructor(
 
     fun setzeKaufdatum(wert: LocalDate) =
         _uiState.update { it.copy(kaufdatum = wert, datumAusBon = false) }
-    fun setzeHaendler(wert: String) = _uiState.update { it.copy(haendler = wert) }
+    fun setzeHaendler(wert: String) =
+        _uiState.update { it.copy(haendler = wert, haendlerAusBon = false) }
     fun setzeNotiz(wert: String) = _uiState.update { it.copy(notiz = wert) }
     fun setzeStatus(wert: SubmissionStatus) = _uiState.update { it.copy(status = wert) }
 
@@ -299,11 +301,15 @@ class ErfassenViewModel @Inject constructor(
         val gelesenerHaendler = auswertung.haendler
 
         _uiState.update { zustand ->
-            val preisUebernehmen = gelesenerPreis != null && zustand.preis.isBlank()
+            // Ueberschrieben wird nur, was leer ist oder selbst aus einem Bon
+            // stammt. Wer wegen eines falschen Vorschlags ein besseres Foto
+            // macht, will den neuen Wert sehen — von Hand Eingetragenes bleibt.
+            val preisUebernehmen = gelesenerPreis != null &&
+                (zustand.preis.isBlank() || zustand.preisAusBon)
             val datumUebernehmen = gelesenesDatum != null &&
-                zustand.kaufdatum == LocalDate.now() &&
-                !zustand.datumAusBon
-            val haendlerUebernehmen = gelesenerHaendler != null && zustand.haendler.isBlank()
+                (zustand.kaufdatum == LocalDate.now() || zustand.datumAusBon)
+            val haendlerUebernehmen = gelesenerHaendler != null &&
+                (zustand.haendler.isBlank() || zustand.haendlerAusBon)
 
             zustand.copy(
                 liestBon = false,
@@ -313,6 +319,7 @@ class ErfassenViewModel @Inject constructor(
                 kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
                 datumAusBon = zustand.datumAusBon || datumUebernehmen,
                 haendler = if (haendlerUebernehmen) gelesenerHaendler else zustand.haendler,
+                haendlerAusBon = zustand.haendlerAusBon || haendlerUebernehmen,
                 // Jeder Ausgang bekommt seine eigene Meldung. Wer nur "es hat
                 // nicht geklappt" liest, weiss nicht, ob er naeher rangehen,
                 // mehr Licht machen oder von Hand tippen soll.

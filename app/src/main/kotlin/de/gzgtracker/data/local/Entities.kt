@@ -23,6 +23,8 @@ data class AccountEntity(
     val ort: String? = null,
     val telefon: String? = null,
     val email: String? = null,
+    val anrede: String? = null,
+    val geburtsdatum: LocalDate? = null,
     val createdAt: Instant,
 )
 

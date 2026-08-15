@@ -95,4 +95,11 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Abgebrochene Einreichung: "Nochmal einreichen" in der Detailansicht
 - [x] mydealz-Zwischenseite beim Sammeln auflösen
 - [x] "Speichern und einreichen" setzt den Status auf eingereicht
+- [x] Bonzeilen aus den Rahmen der Texterkennung zusammensetzen
+- [x] Händlerliste erweitert, Kopfbereich auf zwölf Zeilen
+- [x] Kamera in der Bildauswahl des Anbieterformulars
+- [x] Anrede und Geburtsdatum im Konto (Datenbank v6)
+- [x] Auswahlfelder im Formularskript
+- [x] Leiste unter dem Formular auf eine Zeile
+- [x] Leere Anbieterseite wird erkannt und gemeldet
 

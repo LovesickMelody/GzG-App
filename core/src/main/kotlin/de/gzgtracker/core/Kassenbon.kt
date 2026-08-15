@@ -99,11 +99,36 @@ object Kassenbon {
         )
     }
 
-    /** Haendlernamen, die auf einem deutschen Kassenbon oben stehen. */
+    /**
+     * Wertet einen Bon aus, dessen Zeilen aus der Lage auf dem Bild
+     * zusammengesetzt werden.
+     *
+     * Der Weg ueber [Bonlayout] ist der richtige, sobald die Texterkennung
+     * Rahmen mitliefert: Ohne ihn steht der Preis eines Artikels womoeglich
+     * zwanzig Zeilen von dessen Namen entfernt, und dann ist nichts zu holen.
+     */
+    fun auswerten(
+        stuecke: List<Textstueck>,
+        heute: LocalDate = LocalDate.now(),
+        produkt: String? = null,
+        haendlerliste: List<String> = BEKANNTE_HAENDLER,
+    ): Bonauswertung = auswerten(Bonlayout.zuText(stuecke), heute, produkt, haendlerliste)
+
+    /**
+     * Haendlernamen, die auf einem deutschen Kassenbon oben stehen.
+     *
+     * Bewusst nur eindeutige Namen: Ein zu kurzer oder zu gewoehnlicher Eintrag
+     * ("Hit", "Nah") faende sich in jeder zweiten Adresszeile wieder, und ein
+     * falscher Haendler ist schlechter als gar keiner.
+     */
     val BEKANNTE_HAENDLER = listOf(
-        "dm", "Rossmann", "Müller", "Edeka", "Rewe", "Kaufland", "Lidl", "Aldi",
-        "Netto", "Penny", "Norma", "Globus", "Budni", "tegut", "Combi", "Famila",
-        "Marktkauf", "Trinkgut", "Getränkeland", "Real",
+        "dm", "Rossmann", "Müller", "Budni", "Douglas",
+        "Edeka", "E-Center", "Rewe", "Penny", "Nahkauf",
+        "Kaufland", "Lidl", "Aldi", "Netto", "Norma",
+        "Globus", "Marktkauf", "Famila", "Combi", "tegut",
+        "Alnatura", "Denns", "Bio Company", "Real", "V-Markt",
+        "Wasgau", "Feneberg", "Diska", "Konsum", "Selgros",
+        "Metro", "Trinkgut", "Getränkeland", "Fristo", "Hol'ab",
     )
 
     /**
@@ -148,7 +173,10 @@ object Kassenbon {
      * denen ein Name zufaellig vorkommen kann.
      */
     fun leseHaendler(text: String, bekannte: List<String> = BEKANNTE_HAENDLER): String? {
-        val kopf = text.lines().take(8).joinToString(" ").lowercase()
+        // Zwölf Zeilen: Oben stehen oft Kundennummer, Filiale, Anschrift und
+        // Telefonnummer, bevor der Name auftaucht. Weiter runter zu gehen wird
+        // gefaehrlich — im Fussbereich stehen Werbetexte mit fremden Marken.
+        val kopf = text.lines().take(12).joinToString(" ").lowercase()
         // Laengste Uebereinstimmung zuerst, damit "Netto Marken-Discount" nicht
         // an "Netto" haengenbleibt, wenn beides in der Liste steht.
         return bekannte.sortedByDescending { it.length }.firstOrNull { name ->

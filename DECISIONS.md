@@ -329,6 +329,23 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   abgebrochener Vorgang nicht in eine Sackgasse: In der Detailansicht steht „Nochmal
   einreichen", und der Status lässt sich mit einem Tipp zurücksetzen.
 
+- **Bonzeilen werden aus der Lage auf dem Bild zusammengesetzt** — die Texterkennung liefert
+  Blöcke, keine Zeilen. Auf einem Kassenbon heisst das regelmäßig: erst alle Artikelnamen
+  untereinander, dann alle Beträge. Im Text steht dann `BOROTALCO DEO` zwanzig Zeilen über
+  `3,45`, und keine Auswertung kann daraus noch ablesen, was zusammengehört. Genau daran
+  scheiterten Produktpreis, Händler und Kaufdatum am Gerät. Jetzt gilt: Was auf gleicher
+  Höhe steht, stand auf dem Papier in einer Zeile.
+- **Aus dem Bon Gelesenes darf ein zweites Foto überschreiben** — von Hand Eingetragenes
+  nicht. Wer wegen eines falschen Vorschlags noch einmal fotografiert, will den neuen Wert
+  sehen; wer selbst korrigiert hat, will seine Korrektur behalten.
+- **Anrede und Geburtsdatum stehen am Konto** — beides verlangen die Formulare regelmäßig.
+  Für die Anrede füllt das Skript jetzt auch Auswahlfelder: Dort steht kein freier Text,
+  sondern eine Liste, und „Herr" muss auf den passenden Eintrag gelegt werden.
+- **Die Leiste unter dem Formular ist eine Zeile** — jede Zeile dort fehlt der Seite darüber,
+  und ein Anbieterformular, von dem man vier Felder sieht, ist mühsam.
+- **Eine leere Seite meldet sich selbst** — bleibt nach dem Laden kein Text übrig, sagt die
+  App das und bietet den Browser an, statt eine weisse Fläche stehenzulassen.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

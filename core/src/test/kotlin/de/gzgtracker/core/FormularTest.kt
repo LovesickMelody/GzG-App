@@ -126,6 +126,8 @@ class EinreichdatenTest {
         ort = "Musterstadt",
         telefon = "01701234567",
         email = "anna@example.org",
+        anrede = "Frau",
+        geburtsdatum = java.time.LocalDate.of(1985, 3, 7),
     )
 
     private fun daten(konto: Account? = this.konto) = Einreichdaten.aus(
@@ -135,6 +137,21 @@ class EinreichdatenTest {
         kaufdatum = "14.08.2026",
         haendler = "Rewe",
     )
+
+    @Test
+    fun `nimmt Anrede und Geburtsdatum mit`() {
+        val werte = daten()
+        assertEquals("Frau", werte[Formularfeld.ANREDE])
+        // Deutsche Schreibweise — so steht es in den Formularen.
+        assertEquals("07.03.1985", werte[Formularfeld.GEBURTSDATUM])
+    }
+
+    @Test
+    fun `ohne Anrede und Geburtsdatum bleiben die Felder weg`() {
+        val werte = daten(konto.copy(anrede = null, geburtsdatum = null))
+        assertEquals(null, werte[Formularfeld.ANREDE])
+        assertEquals(null, werte[Formularfeld.GEBURTSDATUM])
+    }
 
     @Test
     fun `nimmt die Person aus dem Konto und den Einkauf aus der Einreichung`() {

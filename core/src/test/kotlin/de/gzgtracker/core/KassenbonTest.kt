@@ -309,12 +309,18 @@ class KassenbonTest {
         val text = """
             Kiosk am Eck
             Musterstraße 1
+            12345 Musterstadt
+            Tel. 01234 56789
+            Filiale 0815
+            Kasse 3 Bediener 17
             14.08.2026
             ARTIKEL A              2,49
-            SUMME                  2,49
+            ARTIKEL B              1,19
+            SUMME                  3,68
             Geg. BAR               5,00
-            Rückgeld               2,51
+            Rückgeld               1,32
             MwSt A 19,00%          0,40
+            Vielen Dank für Ihren Einkauf
             Auch erhältlich bei Rossmann
         """.trimIndent()
         assertNull(Kassenbon.leseHaendler(text))
