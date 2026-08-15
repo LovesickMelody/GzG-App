@@ -103,3 +103,21 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Leiste unter dem Formular auf eine Zeile
 - [x] Leere Anbieterseite wird erkannt und gemeldet
 
+## Weg vom Portal-Scraping
+
+- [x] Pruefschicht `pruefung.py`: Betragsbeleg, Startdatum, Frist, Pflichtfelder
+- [x] Nutzungsvorbehalt nach § 44b UrhG erkennen (`tdmrep.json`, Meta, Prosa)
+- [x] Generische Extraktion: JSON-LD zuerst, Modell als Auffanglösung
+- [x] Entdeckung ueber Certificate-Transparency-Logs (crt.sh)
+- [x] Entdeckung ueber Sitemaps, inkl. Sitemap-Index
+- [x] Quellenart `erstanbieter` in `run.py` verdrahtet
+- [x] Tests gegen Fixtures, CI bleibt ohne API-Schluessel gruen
+- [ ] `ANTHROPIC_API_KEY` als GitHub-Secret hinterlegen
+- [ ] Probelauf `--only justsnap`: Legt JustSnap wirklich je Kampagne eine
+      Subdomain an? Ergebnis lesen, nicht nur zaehlen
+- [ ] JustSnap-Quelle auf `enabled: true` stellen, wenn der Probelauf taugt
+- [ ] Weitere Plattformen abklopfen (jolt, coreweb, Couponing House, DREI-D)
+- [ ] Erstanbieter mit eigener Aktionsuebersicht ergaenzen (P&G ForMe)
+- [ ] Websuche-Entdecker als Netz fuer unbekannte Plattformen
+- [ ] Wenn die Erstanbieter tragen: Portalquellen auf `enabled: false`
+

@@ -1,0 +1,62 @@
+[
+  {
+    "issuer_ca_id": 295815,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R11",
+    "common_name": "airwick.justsnap.eu",
+    "name_value": "airwick.justsnap.eu",
+    "id": 18000000001,
+    "entry_timestamp": "2026-04-02T09:14:33.111",
+    "not_before": "2026-04-02T08:14:32",
+    "not_after": "2026-07-01T08:14:31"
+  },
+  {
+    "issuer_ca_id": 295815,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R11",
+    "common_name": "airwick.justsnap.eu",
+    "name_value": "airwick.justsnap.eu\nwww.airwick.justsnap.eu",
+    "id": 18000000002,
+    "entry_timestamp": "2026-06-28T09:14:33.111",
+    "not_before": "2026-06-28T08:14:32",
+    "not_after": "2026-09-26T08:14:31"
+  },
+  {
+    "issuer_ca_id": 295815,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R11",
+    "common_name": "hoffmanns.justsnap.eu",
+    "name_value": "hoffmanns.justsnap.eu",
+    "id": 18000000003,
+    "entry_timestamp": "2026-08-01T11:02:10.500",
+    "not_before": "2026-08-01T10:02:09",
+    "not_after": "2026-10-30T10:02:08"
+  },
+  {
+    "issuer_ca_id": 295815,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R11",
+    "common_name": "*.justsnap.eu",
+    "name_value": "*.justsnap.eu\njustsnap.eu",
+    "id": 18000000004,
+    "entry_timestamp": "2026-01-05T00:00:00.000",
+    "not_before": "2026-01-05T00:00:00",
+    "not_after": "2026-04-05T00:00:00"
+  },
+  {
+    "issuer_ca_id": 295815,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R11",
+    "common_name": "www.justsnap.eu",
+    "name_value": "www.justsnap.eu\napi.justsnap.eu\nstaging.justsnap.eu",
+    "id": 18000000005,
+    "entry_timestamp": "2026-02-11T00:00:00.000",
+    "not_before": "2026-02-11T00:00:00",
+    "not_after": "2026-05-12T00:00:00"
+  },
+  {
+    "issuer_ca_id": 295815,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R11",
+    "common_name": "db.intern.justsnap.eu",
+    "name_value": "db.intern.justsnap.eu",
+    "id": 18000000006,
+    "entry_timestamp": "2026-03-03T00:00:00.000",
+    "not_before": "2026-03-03T00:00:00",
+    "not_after": "2026-06-01T00:00:00"
+  }
+]

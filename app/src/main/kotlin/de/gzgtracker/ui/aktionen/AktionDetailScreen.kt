@@ -175,6 +175,10 @@ fun AktionDetailScreen(
             aktion.retailers.takeIf { it.isNotEmpty() }?.let {
                 Angabe("Händler", it.joinToString(", "))
             }
+            // Vor dem Beginn zuerst: Wer zu frueh kauft, bekommt nichts erstattet.
+            aktion.validFrom?.takeIf { aktion.tageBisStart() != null }?.let {
+                Angabe("Startet erst am", it.deutsch())
+            }
             aktion.submissionDeadline?.let { Angabe("Einsendeschluss", it.deutsch()) }
             aktion.validTo?.takeIf { it != aktion.submissionDeadline }?.let {
                 Angabe("Aktion läuft bis", it.deutsch())

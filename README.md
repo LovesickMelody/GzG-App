@@ -18,6 +18,7 @@ die Einreichung machst du dort selbst, danach setzt du den Status in der App.
 - [APK aufs Handy bringen](#apk-aufs-handy-bringen)
 - [Wie die App aufgebaut ist](#wie-die-app-aufgebaut-ist)
 - [Der Aktions-Feed](#der-aktions-feed)
+- [Erstanbieter statt Portale](#erstanbieter-statt-portale)
 - [Einen kaputten Scraper reparieren](#einen-kaputten-scraper-reparieren)
 - [Eine neue Quelle hinzufügen](#eine-neue-quelle-hinzufügen)
 - [Entwickeln und Testen](#entwickeln-und-testen)
@@ -214,7 +215,124 @@ Quelle mehr etwas liefert.
 
 ---
 
+## Erstanbieter statt Portale
+
+Die Portalquellen oben haben zwei Schwächen, die zusammengehören: Jede
+Seitenumgestaltung bricht die Selektoren, und die Daten stammen aus einer
+fremden, redaktionell gepflegten Sammlung. Die Quellenart `erstanbieter` löst
+beides, indem sie die Kampagne dort liest, wo sie entsteht — beim Hersteller
+beziehungsweise bei seinem Abwickler.
+
+```
+Entdeckung (CT-Logs, Sitemap)  →  Kandidaten-Adressen   kein Portal beteiligt
+        ↓
+Abruf + Vorbehaltsprüfung
+        ↓
+Extraktion (JSON-LD, sonst Modell)                      kein Selektor beteiligt
+        ↓
+Prüfschicht                                             was nicht belegt ist, fliegt raus
+```
+
+### Entdeckung: Kampagnen finden sich von selbst
+
+Aktionsplattformen legen je Kampagne eine eigene Subdomain an — belegt für
+JustSnap durch die Air-Wick-Aktion, deren Kontaktadresse
+`kontakt@airwick.justsnap.eu` lautet. Jede neue Subdomain braucht ein
+TLS-Zertifikat, und jedes ausgestellte Zertifikat landet nach RFC 6962 in einem
+öffentlichen Protokoll. Eine Abfrage am Tag genügt:
+
+```
+https://crt.sh/?q=%25.justsnap.eu&output=json
+```
+
+Das ist rein passiv: öffentliche Register lesen, keine Anfrage an die
+Zielsysteme, kein Erraten von Namen. Plattformen, die ihre Kampagnen über
+*Pfade* statt Subdomains führen, fängt stattdessen die `sitemap.xml` ab —
+deshalb gibt es beide Entdecker.
+
+### Extraktion: ein Weg für alle Seiten
+
+1. **JSON-LD zuerst.** Viele Kampagnenseiten betten ihre Eckdaten als
+   `schema.org`-Daten für Suchmaschinen ein. Exakt, kostenlos, vom Anbieter
+   selbst gepflegt.
+2. **Modell als Auffanglösung.** Was kein JSON-LD hat, geht als Text an ein
+   Sprachmodell mit festem JSON-Schema. Ein Prompt für sämtliche Quellen.
+
+**Der Betrag kommt in beiden Wegen aus dem sichtbaren Seitentext**, gelesen von
+`parsing.betrag_in_cent` — derselben Funktion, die schon die Portale auswertet
+und die weiß, dass „0,75 l" kein Geldbetrag ist. Das Modell darf zitieren, aber
+nicht rechnen; JSON-LD liefert den *Laden*preis, nicht die Erstattung.
+
+### Die Prüfschicht
+
+`pruefung.py` entscheidet, was veröffentlicht wird. Jede Regel verhindert einen
+konkreten Schaden:
+
+| Regel | Was ohne sie passiert |
+|---|---|
+| `betrag_belegt` | „4,99 € zurück" steht im Feed, der Hersteller erstattet 2 €. Wer deshalb eingekauft hat, verliert Geld wegen unserer Angabe. |
+| `gestartet` | Die CT-Entdeckung findet Kampagnen, sobald ihr Zertifikat existiert — oft Wochen vor dem Start. Anzeigen verrät die Planung des Herstellers. Gilt **nur** für entdeckte Quellen — was mydealz ankündigt, ist veröffentlicht und darf in die Merkliste; die App weist es als „Startet in 2 Tagen" aus, damit niemand zu früh kauft. |
+| `kein_vorbehalt` | Wir werten eine Quelle aus, die das untersagt hat (§ 44b UrhG). |
+| `frist_plausibel` | Ein verlesenes Datum hält eine tote Aktion für immer in der Liste. |
+| `pflichtfelder` | Leere Zeile in der App, die sich nicht öffnen lässt. |
+
+Zur Vorbehaltsprüfung: Automatisiertes Auswerten ist nach § 44b UrhG erlaubt,
+solange der Rechteinhaber es nicht maschinenlesbar untersagt hat — und das
+LG Hamburg hat im Verfahren Kneschke ./. LAION entschieden, dass ein solcher
+Vorbehalt **auch in natürlicher Sprache** wirksam erklärt werden kann. Die
+`robots.txt` allein zu prüfen genügt seitdem nicht. `tdm.py` sieht deshalb
+zusätzlich in `/.well-known/tdmrep.json`, in den Meta-Angaben und im Seitentext
+nach. Die Erkennung ist bewusst schief eingestellt: Ein falscher Alarm kostet
+eine Quelle, ein übersehener Vorbehalt die Rechtsgrundlage.
+
+### Eine Erstanbieter-Quelle anlegen
+
+Kein Selektor, nur die Plattform:
+
+```yaml
+- name: justsnap
+  enabled: true
+  parser: erstanbieter
+  ct_logs:
+    - justsnap.eu            # nackte Domain; gefragt wird "%.justsnap.eu"
+  sitemaps:
+    - url: https://justsnap.eu/sitemap.xml
+      muster: "/aktion/"     # ohne Muster kommt die halbe Seite zurück
+  max_kandidaten: 40         # Abrufe je Lauf; neueste Zertifikate zuerst
+```
+
+Erst probelaufen lassen und **das Ergebnis lesen, nicht nur zählen**:
+
+```bash
+cd scraper
+python -m gzg_scraper.run --only justsnap --output /tmp/probe.json --delay 3
+```
+
+### Das Modell einrichten
+
+Ohne Schlüssel überspringt der Lauf die Modell-Extraktion, meldet das einmal und
+bleibt grün — Quellen mit JSON-LD laufen weiter. Für den vollen Umfang:
+
+*Settings → Secrets and variables → Actions → New repository secret* mit dem
+Namen `ANTHROPIC_API_KEY`. Modell und Denktiefe lassen sich über die
+*Variables* `GZG_MODELL` und `GZG_EFFORT` umstellen, ohne den Code anzufassen:
+
+```bash
+python -m gzg_scraper.run --modell claude-haiku-4-5 --effort low
+python -m gzg_scraper.run --ohne-modell     # nur JSON-LD, kostet nichts
+```
+
+Vorgabe ist `claude-opus-5` bei Denktiefe `low`. Das ist die teure, sichere
+Variante; ein kleineres Modell reicht für reines Abschreiben aus vorliegendem
+Text oft aus und kostet einen Bruchteil. Die Entscheidung gehört dir — die
+Prüfschicht dahinter ist dieselbe.
+
+---
+
 ## Einen kaputten Scraper reparieren
+
+> Gilt für die Portalquellen mit CSS-Selektoren. Erstanbieter-Quellen haben
+> keine Selektoren und damit auch nichts, was ein Seitenumbau brechen könnte.
 
 Typisches Symptom: Der Job ist grün, aber im Log steht
 
