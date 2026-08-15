@@ -247,7 +247,7 @@ fun ErfassenScreen(
 
                 if (treffer.isEmpty()) {
                     Text(
-                        text = "Keine Aktion passt zu „$aktionssuche".",
+                        text = "Keine Aktion passt zu „$aktionssuche“.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
