@@ -259,6 +259,14 @@ class ErfassenViewModel @Inject constructor(
         }
     }
 
+    fun entferneBeleg(art: Belegart) {
+        val pfad = pfadVon(_uiState.value, art) ?: return
+        viewModelScope.launch {
+            receipts.loeschen(pfad)
+            _uiState.update { mitPfad(it, art, null) }
+        }
+    }
+
     /**
      * Fuellt Preis und Kaufdatum aus dem Bon vor.
      *
