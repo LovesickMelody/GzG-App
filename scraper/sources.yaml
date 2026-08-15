@@ -120,6 +120,34 @@ sources:
       valid_from: "span.rgu-excerpt-short"
     bedingungen_von_aktionsseite: true
 
+  # --- Erstanbieter: Kampagnen beim Urheber lesen statt beim Portal ---------
+  #
+  # Diese Quellenart benutzt keine Selektoren. Sie findet Kampagnen selbst
+  # (Zertifikatsprotokolle, Sitemaps) und liest sie generisch aus (JSON-LD,
+  # sonst Modell). Ein Portalumbau kann sie nicht brechen, weil sie kein Portal
+  # anfasst — siehe README, "Erstanbieter statt Portale".
+  #
+  # Noch abgeschaltet: Erst muss ein Probelauf zeigen, dass die Plattform
+  # wirklich je Kampagne eine Subdomain anlegt und was dabei herauskommt.
+  #   python -m gzg_scraper.run --only justsnap --output /tmp/probe.json
+  - name: justsnap
+    enabled: false
+    parser: erstanbieter
+    base_url: https://justsnap.eu/
+    # Nackte Domain. Gefragt wird crt.sh nach "%.justsnap.eu" — belegt ist das
+    # Muster durch die Air-Wick-Aktion, deren Kontakt kontakt@airwick.justsnap.eu
+    # lautet.
+    ct_logs:
+      - justsnap.eu
+    # Faengt ab, was ueber Pfade statt Subdomains laeuft.
+    # sitemaps:
+    #   - url: https://justsnap.eu/sitemap.xml
+    #     muster: "/aktion/"
+    # Hoechstens so viele Kandidatenseiten je Lauf abrufen. Der Rest kommt
+    # beim naechsten Mal dran; sortiert wird nach Zertifikatsalter, neueste
+    # zuerst.
+    max_kandidaten: 40
+
   # Beispiel fuer eine abgeschaltete Quelle — als Vorlage fuer neue Portale.
   - name: beispiel-portal
     enabled: false

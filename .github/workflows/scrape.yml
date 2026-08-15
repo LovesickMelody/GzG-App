@@ -93,6 +93,14 @@ jobs:
         run: pip install -r scraper/requirements.txt
 
       - name: Aktionen sammeln
+        env:
+          # Nur fuer die Erstanbieter-Quellen: Seiten ohne JSON-LD wertet ein
+          # Modell aus. Fehlt das Secret, ueberspringt der Lauf diesen Schritt
+          # und meldet das einmal — der Job bleibt gruen, die Portalquellen
+          # laufen unveraendert weiter.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GZG_MODELL: ${{ vars.GZG_MODELL }}
+          GZG_EFFORT: ${{ vars.GZG_EFFORT }}
         run: |
           python -m gzg_scraper.run \
             --sources sources.yaml \

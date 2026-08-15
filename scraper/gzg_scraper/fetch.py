@@ -59,12 +59,12 @@ class Fetcher:
             return True
         return regeln.can_fetch(USER_AGENT, url)
 
-    def hole(self, url: str) -> str | None:
+    def hole(self, url: str, still: bool = False) -> str | None:
         """Gibt den HTML-Text zurueck oder ``None``, wenn es nicht geklappt hat."""
-        seite = self.hole_seite(url)
+        seite = self.hole_seite(url, still=still)
         return seite[0] if seite else None
 
-    def hole_seite(self, url: str) -> tuple[str, str] | None:
+    def hole_seite(self, url: str, still: bool = False) -> tuple[str, str] | None:
         """
         Wie [hole], gibt aber zusaetzlich die Adresse zurueck, bei der man
         wirklich gelandet ist.
@@ -73,9 +73,16 @@ class Fetcher:
         eigene Zwischenseite, und in der App sah man beim Einreichen erst das
         mydealz-Logo, statt gleich beim Hersteller zu sein. Wer die
         Zieladdresse kennt, kann sie speichern und die Zwischenseite ueberspringen.
+
+        [still] dreht das Melden eines Fehlschlags auf ``debug``. Gedacht fuer
+        Adressen, deren Fehlen der Normalfall ist — ``/.well-known/tdmrep.json``
+        gibt es auf den wenigsten Seiten, und eine Warnung je Host und Lauf
+        wuerde das Log zumuellen, in dem man die echten Probleme sucht.
         """
+        melde = log.debug if still else log.warning
+
         if not self.darf(url):
-            log.warning("robots.txt verbietet %s — übersprungen", url)
+            melde("robots.txt verbietet %s — übersprungen", url)
             return None
 
         self._warte(url)
@@ -83,11 +90,11 @@ class Fetcher:
         try:
             antwort = self.session.get(url, timeout=self.timeout)
         except requests.RequestException as fehler:
-            log.warning("Abruf von %s fehlgeschlagen: %s", url, fehler)
+            melde("Abruf von %s fehlgeschlagen: %s", url, fehler)
             return None
 
         if antwort.status_code != 200:
-            log.warning("%s antwortet mit %s", url, antwort.status_code)
+            melde("%s antwortet mit %s", url, antwort.status_code)
             return None
 
         # Ohne diese Zeile raet requests bei fehlendem Charset auf ISO-8859-1

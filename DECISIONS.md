@@ -194,6 +194,60 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   geschrieben** — mal ist es die Marke („Milka"), mal der Händler („ROSSMANN"), mal die
   Einreichplattform („scondoo"). Sonst hieße die Hälfte aller Aktionen „scondoo".
 
+## Erstanbieter-Quellen
+
+- **Kampagnen werden beim Urheber gelesen, nicht beim Portal** — ein Portal ist eine
+  redaktionell gepflegte Sammlung, und wer täglich deren Bestand abzieht, entnimmt einen
+  wesentlichen Teil einer fremden Datenbank (§ 87b UrhG). Von je einem Erstanbieter je
+  eine Kampagne zu nehmen ist etwas anderes: Die Aktionsseite des Herstellers hat den
+  einzigen Daseinszweck, gefunden zu werden. Nebeneffekt: Kein Portalumbau kann diese
+  Quellenart brechen, weil sie kein Portal anfasst.
+- **Entdeckung über Certificate-Transparency-Logs** — Aktionsplattformen legen je Kampagne
+  eine Subdomain an (belegt: `airwick.justsnap.eu`), jede Subdomain braucht ein Zertifikat,
+  jedes Zertifikat steht nach RFC 6962 in einem öffentlichen Protokoll. Eine Abfrage bei
+  crt.sh am Tag liefert damit jede neue Kampagne, rein passiv und ohne Anfrage an die
+  Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht auffindbar sind.
+- **Was das Zertifikat findet, ist noch keine laufende Aktion** — ein Zertifikat existiert
+  regelmäßig Wochen vor dem Kampagnenstart. Eine Aktion ohne erreichten Beginn zu
+  veröffentlichen wäre zweimal falsch: Es verrät die Marketingplanung des Herstellers, und
+  wer dem Hinweis folgt, steht vor einem Formular, das nichts annimmt. Deshalb die Regel
+  `gestartet` in `pruefung.py`.
+- **JSON-LD vor Modell** — was eine Seite ohnehin für Suchmaschinen veröffentlicht, ist
+  exakt, kostenlos und vom Anbieter gepflegt. Das Modell kommt nur dran, wo das nichts
+  hergibt; bei einer Plattform mit sauberem Markup läuft ein ganzer Lauf ohne einen
+  einzigen Modellaufruf.
+- **Der Preis aus JSON-LD wird nicht übernommen** — `offers.price` ist der Verkaufspreis
+  des Produkts, nicht die Erstattung. Bei „gratis testen" ist beides oft dasselbe, aber
+  eben nur oft: Sobald die Aktion bei „bis zu 4,99 €" deckelt, wären wir mit dem Ladenpreis
+  daneben, und zwar nach oben.
+- **Das Modell zitiert, unsere Parser rechnen** — es liefert Betrag und Frist als
+  wörtliches Zitat von der Seite („4,99 €"), nie als fertige Zahl. Die Umrechnung machen
+  `betrag_in_cent` und `datum_iso`, die seit jeher wissen, dass „0,75 l" kein Geldbetrag
+  ist und ein Datum kein Preis. Ein Modell erfindet einen Betrag lieber, als keinen zu
+  nennen, und der erfundene sieht genauso plausibel aus wie der echte.
+- **Der Betrag muss wörtlich im Seitentext stehen** — die wichtigste Regel der Prüfschicht.
+  Sie kostet gelegentlich einen korrekten Betrag, der nur als Bild vorliegt, und verhindert
+  dafür, dass jemand ein Produkt kauft, weil bei uns eine Zahl stand, die es nirgends gab.
+- **Nutzungsvorbehalte werden auch in Prosa gesucht** — § 44b UrhG erlaubt automatisiertes
+  Auswerten nur, solange kein maschinenlesbarer Vorbehalt erklärt ist, und das LG Hamburg
+  hat entschieden, dass dafür auch natürliche Sprache genügt. `robots.txt` allein zu prüfen
+  reicht seitdem nicht. Die Erkennung ist absichtlich schief eingestellt: Ein falscher
+  Alarm kostet eine Quelle, ein übersehener Vorbehalt die Rechtsgrundlage.
+- **Die Prüfschicht überspringt Regeln ohne Grundlage, statt zu scheitern** — die
+  gewachsenen Portalquellen haben keinen Seitentext, also läuft dort die Betragsprüfung
+  nicht. Eine Regel ohne Grundlage darf nicht raten, sonst verlören die Portalquellen
+  schlagartig alles.
+- **Jede Ablehnung steht mit Begründung im Log** — eine still verschwundene Aktion ist von
+  einer nie gefundenen nicht zu unterscheiden. Wer im Actions-Lauf nachsieht, soll lesen
+  können, *warum* eine Aktion fehlt.
+- **Vorgabe ist `claude-opus-5` bei Denktiefe `low`, beides umstellbar** — die Denktiefe,
+  weil Abschreiben aus vorliegendem Text keine Denkaufgabe ist. Das Modell bleibt bei der
+  Vorgabe für neue Anbindungen; ob ein kleineres reicht, ist eine Kostenentscheidung des
+  Betreibers und gehört nicht in den Code. `GZG_MODELL`, `GZG_EFFORT` und `--ohne-modell`
+  regeln das ohne Codeänderung.
+- **Ohne API-Schlüssel läuft alles weiter** — der Lauf meldet das einmal und wertet nur
+  JSON-LD aus. Sonst wäre die CI von einem Secret abhängig, das in keinem Fork existiert.
+
 ## Design
 
 - **Schriften liegen als Latin-Subset im APK statt als Downloadable Font** — rund

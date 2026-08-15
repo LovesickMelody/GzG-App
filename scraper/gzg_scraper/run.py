@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -22,10 +23,16 @@ from urllib.parse import urlparse
 
 import yaml
 
+from . import erstanbieter
 from .detail import reichere_an
+from .extract import Modellextraktor
+from .extract.modell import STANDARD_EFFORT as EFFORT_VORGABE
+from .extract.modell import STANDARD_MODELL as MODELL_VORGABE
 from .fetch import Fetcher
 from .models import Action
+from .pruefung import Kontext, pruefe_liste
 from .registry import hole as hole_parser
+from .tdm import Vorbehaltspruefer
 
 log = logging.getLogger("gzg_scraper")
 
@@ -110,7 +117,11 @@ def sammle_quelle(quelle: dict, fetcher: Fetcher) -> list[Action] | None:
 
     reichere_an(gesammelt, quelle, fetcher)
 
-    return gesammelt
+    # Zum Schluss die Eingangspruefung. Ohne Seitentext greifen hier nur die
+    # billigen Regeln (Pflichtfelder, Vorab-Start, absurde Frist) — die
+    # Betragspruefung braucht eine Seite und laeuft deshalb nur bei den
+    # Erstanbieter-Quellen, wo es eine gibt.
+    return pruefe_liste(gesammelt, quellenname=quelle["name"])
 
 
 def filtere_abgelaufene(
@@ -326,6 +337,26 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="robots.txt übergehen (nur für eigene Seiten sinnvoll)",
     )
+    # Bewusst `or` statt eines Vorgabewerts in .get(): Eine nicht gesetzte
+    # GitHub-Variable landet als *leerer* String in der Umgebung, nicht als
+    # fehlender Schluessel. Mit .get(name, vorgabe) liefe der Job dann gegen
+    # ein Modell namens "".
+    zerleger.add_argument(
+        "--modell",
+        default=os.environ.get("GZG_MODELL") or MODELL_VORGABE,
+        help="Modell für die Extraktion (Vorgabe: %(default)s)",
+    )
+    zerleger.add_argument(
+        "--effort",
+        default=os.environ.get("GZG_EFFORT") or EFFORT_VORGABE,
+        choices=["low", "medium", "high", "xhigh", "max"],
+        help="Denktiefe des Modells (Vorgabe: %(default)s)",
+    )
+    zerleger.add_argument(
+        "--ohne-modell",
+        action="store_true",
+        help="nur JSON-LD auswerten, kein Modell aufrufen",
+    )
     argumente = zerleger.parse_args(argv)
 
     logging.basicConfig(
@@ -344,13 +375,25 @@ def main(argv: list[str] | None = None) -> int:
 
     fetcher = Fetcher(delay=argumente.delay, respect_robots=not argumente.ignore_robots)
 
+    # Einmal je Lauf, nicht je Quelle: Der Vorbehaltspruefer merkt sich seine
+    # Ergebnisse je Host, und der Extraktor haelt eine Verbindung offen.
+    extraktor = (
+        None
+        if argumente.ohne_modell
+        else Modellextraktor(modell=argumente.modell, effort=argumente.effort)
+    )
+    pruefer = Vorbehaltspruefer()
+
     neu_je_quelle: dict[str, list[Action]] = {}
     ausgefallen: set[str] = set()
 
     for quelle in quellen:
         name = quelle["name"]
         log.info("--- Quelle %s ---", name)
-        ergebnis = sammle_quelle(quelle, fetcher)
+        if quelle.get("parser") == "erstanbieter":
+            ergebnis = erstanbieter.sammle(quelle, fetcher, extraktor, pruefer)
+        else:
+            ergebnis = sammle_quelle(quelle, fetcher)
         if ergebnis is None:
             ausgefallen.add(name)
         else:
