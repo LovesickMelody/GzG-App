@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T09:31:58Z",
+  "generated_at": "2026-08-15T11:51:26Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,7 +11,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBWU1pBUFdXNzhabFhJdERXbEtPY2Y1ZXFqUW1zbFJDUaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIERHMmdlSHNBWS1HMXRZMllEZE5nRU1FaGtRdzRKZU45o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SB0M1psM2hoV042UVFubFRzRGYyMldQSVVwbU5lTmlqMKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIGF5Um9QaGFock1LUk9wTTRZckJyc3pmTzhMdzc3NTg5o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -140,26 +140,6 @@
       "source": "mydealz"
     },
     {
-      "id": "002284343c3f",
-      "title": "Edgard & Cooper Katzen- oder Hundefutter Gratis Testen bis 10€",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 1000,
-      "valid_from": "2026-08-24",
-      "valid_to": "2026-09-27",
-      "submission_deadline": "2026-09-27",
-      "url": "https://www.mydealz.de/deals/gzg-ab-2408-edgard-cooper-katzen-oder-hundefutter-gratis-testen-bis-10eur-2821084",
-      "submit_url": "https://cashu-club.de/aktion/edgardcooper",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/fukzZ/2821084_1/re/150x150/qt/55/2821084_1.jpg",
-      "source": "mydealz"
-    },
-    {
       "id": "45cf5ca9f17b",
       "title": "Fazer Aito Haferdrink gratis testen nur bei REWE scondoo, personalisiert",
       "brand": null,
@@ -222,26 +202,6 @@
       "source": "mydealz"
     },
     {
-      "id": "b356ef205980",
-      "title": "Jacobs 3in1/2in1 gratis testen ab dem 17.08-26 - 30.09.26",
-      "brand": "JACOBS Kaffee",
-      "type": "gratis_testen",
-      "max_refund_cents": 1708,
-      "valid_from": "2026-08-17",
-      "valid_to": "2026-09-30",
-      "submission_deadline": "2026-09-30",
-      "url": "https://www.mydealz.de/deals/jacobs-3in12in1-gratis-testen-2823305",
-      "submit_url": "https://www.jacobskaffee-promotions.de",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/LkmY8/2823305_1/re/150x150/qt/55/2823305_1.jpg",
-      "source": "mydealz"
-    },
-    {
       "id": "87ff5f68e229",
       "title": "O2 Priority: O2 TV Classic gratis testen und optional Disney+ für 3 Monate sichern.",
       "brand": "o2",
@@ -251,7 +211,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NjM1NDk&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NjM1NDk&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NzE0MDA&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NzE0MDA&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -271,7 +231,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895193494",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895229493",
       "requirements": [],
       "retailers": [],
       "eans": [],
