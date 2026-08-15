@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T08:38:01Z",
+  "generated_at": "2026-08-15T11:47:57Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,13 +11,17 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBXVWVvQ2pjOFREUWJMS3FKajdqYXRRM1ZSc0NXUWZYdKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHZOajQ2NEVJMTZrWU45aU8wSG0yOWVNQjFOVktTQ19fo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SB4eXF5UG05RFg4eWhDdXpfZmEyRWxmYkdrZ3dhSjFraqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIERGMGRLQ29vaUR3RXI3Z0lEaVpmRl9PRjBRX3BDVlZ0o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1b1iF/2822183_1/re/150x150/qt/55/2822183_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -40,6 +44,10 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/Og83V/2818388_1/re/150x150/qt/55/2818388_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -59,6 +67,10 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/jpe9Q/2817904_1/re/150x150/qt/55/2817904_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -76,6 +88,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/GRcQJ/2818362_1/re/150x150/qt/55/2818362_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -95,6 +111,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/27nd5/2818169_1/re/150x150/qt/55/2818169_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -115,6 +135,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/vzctp/2806111_1/re/150x150/qt/55/2806111_1.jpg",
+      "limit_anzahl": 30652,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -137,6 +161,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/OWElM/2822886_1/re/150x150/qt/55/2822886_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -157,6 +185,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/fukzZ/2821084_1/re/150x150/qt/55/2821084_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -178,6 +210,10 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/JdZRr/2822915_1/re/150x150/qt/55/2822915_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -197,6 +233,10 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/9pOhE/2821392_1/re/150x150/qt/55/2821392_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
@@ -219,6 +259,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/x1jPB/2819890_1/re/150x150/qt/55/2819890_1.jpg",
+      "limit_anzahl": 25000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -239,6 +283,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/LkmY8/2823305_1/re/150x150/qt/55/2823305_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
@@ -251,7 +299,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NjEyMzE&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NjEyMzE&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NzExNTU&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NzExNTU&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -259,6 +307,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1JBZd/2818983_1/re/150x150/qt/55/2818983_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -271,11 +323,15 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895179978",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895228441",
       "requirements": [],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1WPP8/2819197_1/re/150x150/qt/55/2819197_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -296,6 +352,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/GlphY/2820057_1/re/150x150/qt/55/2820057_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -315,6 +375,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/Zy5fn/2805536_1/re/150x150/qt/55/2805536_1.jpg",
+      "limit_anzahl": 60000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -338,6 +402,10 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/VG2cr/2813750_1/re/150x150/qt/55/2813750_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -357,6 +425,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/6DlfQ/2822978_1/re/150x150/qt/55/2822978_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -377,6 +449,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/andros_gratistesten_mobile_header-768x651.webp",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     },
     {
@@ -397,6 +473,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/bb_packshots-1-768x522.webp",
+      "limit_anzahl": 333,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": true,
       "source": "rabattigel"
     },
     {
@@ -418,6 +498,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.couponplatz.de/banner/1785927156440_891_mobile.webp",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     },
     {
@@ -439,6 +523,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/06/kv_links-767x592.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": true,
       "source": "rabattigel"
     },
     {
@@ -462,6 +550,10 @@
       ],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/08/75e9b71d-9fc0-47d7-9df7-237ab1517d21-766x432.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     },
     {
@@ -483,6 +575,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://minusl-gratistesten.de/design-assets/10008/footer_1782731309.png",
+      "limit_anzahl": 1771,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     },
     {
@@ -502,6 +598,10 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/07/valess_gt26_packshot_crispy_sticks_2-767x906.webp",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "rabattigel"
     }
   ]
