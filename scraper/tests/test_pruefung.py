@@ -89,23 +89,35 @@ class TestBetragBelegt:
 
 
 class TestGestartet:
-    """Der Vorab-Leak: CT-Logs kennen Kampagnen vor ihrem Start."""
+    """Der Vorab-Leak: CT-Logs kennen Kampagnen, die niemand angekündigt hat."""
+
+    def entdeckt(self, **felder) -> Kontext:
+        return Kontext(heute=HEUTE, nur_gestartete=True, **felder)
 
     def test_kuenftiger_start_abgelehnt(self):
-        befund = pruefe(aktion(valid_from="2026-12-01"), Kontext(heute=HEUTE))
+        befund = pruefe(aktion(valid_from="2026-12-01"), self.entdeckt())
         assert not befund.darf_veroeffentlichen
         assert "startet erst" in befund.verstoesse[0]
 
     def test_laufende_aktion_geht_durch(self):
-        befund = pruefe(aktion(valid_from="2026-08-01"), Kontext(heute=HEUTE))
+        befund = pruefe(aktion(valid_from="2026-08-01"), self.entdeckt())
         assert befund.darf_veroeffentlichen
 
     def test_start_heute_geht_durch(self):
-        befund = pruefe(aktion(valid_from="2026-08-15"), Kontext(heute=HEUTE))
+        befund = pruefe(aktion(valid_from="2026-08-15"), self.entdeckt())
         assert befund.darf_veroeffentlichen
 
     def test_ohne_startdatum_keine_regel(self):
-        assert pruefe(aktion(), Kontext(heute=HEUTE)).darf_veroeffentlichen
+        assert pruefe(aktion(), self.entdeckt()).darf_veroeffentlichen
+
+    def test_portal_darf_vorab_ankuendigen(self):
+        """
+        mydealz kündigt Aktionen bewusst an — da gibt es nichts zu verraten,
+        und die Merkliste lebt davon. Ohne diese Ausnahme fielen zwei echte
+        Aktionen aus dem Feed, nur weil sie in zwei Tagen starten.
+        """
+        befund = pruefe(aktion(valid_from="2026-12-01"), Kontext(heute=HEUTE))
+        assert befund.darf_veroeffentlichen
 
 
 class TestFristPlausibel:
@@ -147,6 +159,6 @@ class TestListe:
         """Ein Lauf soll alle Gründe zeigen, nicht nur den ersten."""
         befund = pruefe(
             aktion(title="", valid_from="2026-12-01", max_refund_cents=1299),
-            Kontext(seitentext="nichts davon", heute=HEUTE),
+            Kontext(seitentext="nichts davon", heute=HEUTE, nur_gestartete=True),
         )
         assert len(befund.verstoesse) == 3

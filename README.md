@@ -271,7 +271,7 @@ konkreten Schaden:
 | Regel | Was ohne sie passiert |
 |---|---|
 | `betrag_belegt` | „4,99 € zurück" steht im Feed, der Hersteller erstattet 2 €. Wer deshalb eingekauft hat, verliert Geld wegen unserer Angabe. |
-| `gestartet` | Die CT-Entdeckung findet Kampagnen, sobald ihr Zertifikat existiert — oft Wochen vor dem Start. Anzeigen verrät die Planung des Herstellers und führt auf ein Formular, das nichts annimmt. |
+| `gestartet` | Die CT-Entdeckung findet Kampagnen, sobald ihr Zertifikat existiert — oft Wochen vor dem Start. Anzeigen verrät die Planung des Herstellers. Gilt **nur** für entdeckte Quellen — was mydealz ankündigt, ist veröffentlicht und darf in die Merkliste; die App weist es als „Startet in 2 Tagen" aus, damit niemand zu früh kauft. |
 | `kein_vorbehalt` | Wir werten eine Quelle aus, die das untersagt hat (§ 44b UrhG). |
 | `frist_plausibel` | Ein verlesenes Datum hält eine tote Aktion für immer in der Liste. |
 | `pflichtfelder` | Leere Zeile in der App, die sich nicht öffnen lässt. |

@@ -208,10 +208,21 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   crt.sh am Tag liefert damit jede neue Kampagne, rein passiv und ohne Anfrage an die
   Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht auffindbar sind.
 - **Was das Zertifikat findet, ist noch keine laufende Aktion** — ein Zertifikat existiert
-  regelmäßig Wochen vor dem Kampagnenstart. Eine Aktion ohne erreichten Beginn zu
-  veröffentlichen wäre zweimal falsch: Es verrät die Marketingplanung des Herstellers, und
-  wer dem Hinweis folgt, steht vor einem Formular, das nichts annimmt. Deshalb die Regel
-  `gestartet` in `pruefung.py`.
+  regelmäßig Wochen vor dem Kampagnenstart. So eine Aktion zu veröffentlichen verrät die
+  Marketingplanung des Herstellers, den *niemand* um eine Ankündigung gebeten hat. Deshalb
+  die Regel `gestartet` in `pruefung.py`.
+- **Für Portale gilt das ausdrücklich nicht** — mydealz kündigt Aktionen bewusst an, oft
+  mit dem Startdatum im Titel („ab dem 17.08."). Da gibt es nichts zu verraten, und die
+  Merkliste lebt genau davon. Die Regel greift deshalb nur bei entdeckten Quellen
+  (`Kontext.nur_gestartete`). Beim ersten Lauf mit der Prüfschicht fielen sonst zwei echte
+  Aktionen aus dem Feed, nur weil sie zwei Tage später starteten.
+- **Eine künftige Aktion zeigt ihren Beginn, nicht ihre Frist** — sie in den Feed zu lassen
+  genügt nicht: In der Liste stand bisher nur „Einsendeschluss 30.09.", und damit sieht
+  eine Aktion, die erst am 17.08. beginnt, aus wie eine laufende. Wer daraufhin kauft, hat
+  einen Kassenbon von heute — der liegt vor dem Aktionszeitraum, und die Erstattung fällt
+  aus. `PromoAction.tageBisStart` in `core` entscheidet das, die Liste schreibt „Startet in
+  2 Tagen", die Detailansicht „Startet erst am". Das ist dieselbe Haltung wie beim
+  Ablauf-Filter, nur am anderen Ende.
 - **JSON-LD vor Modell** — was eine Seite ohnehin für Suchmaschinen veröffentlicht, ist
   exakt, kostenlos und vom Anbieter gepflegt. Das Modell kommt nur dran, wo das nichts
   hergibt; bei einer Plattform mit sauberem Markup läuft ein ganzer Lauf ohne einen

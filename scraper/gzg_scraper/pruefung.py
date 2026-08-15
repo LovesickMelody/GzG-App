@@ -25,8 +25,9 @@ Regel                        Was ohne sie passiert
 ``gestartet``                Die CT-Log-Entdeckung findet Kampagnen an dem Tag,
                              an dem ihr Zertifikat ausgestellt wird — oft Wochen
                              vor dem Start. Wer sie dann anzeigt, verraet die
-                             Marketingplanung des Herstellers und zeigt eine
-                             Seite, auf der man noch nichts einreichen kann.
+                             Marketingplanung des Herstellers. Gilt **nur** fuer
+                             entdeckte Quellen: Was ein Portal ankuendigt, ist
+                             veroeffentlicht und darf vorgemerkt werden.
 ``kein_vorbehalt``           Wir werten eine Quelle aus, die das ausdruecklich
                              untersagt hat (§ 44b UrhG, siehe ``tdm.py``).
 ===========================  ==================================================
@@ -72,6 +73,12 @@ class Kontext:
     # Grund eines erkannten Nutzungsvorbehalts, sonst None (siehe tdm.py).
     vorbehalt: str | None = None
     heute: date | None = None
+    # Ob noch nicht gestartete Aktionen abgelehnt werden. Standard ist "nein":
+    # Ein Portal, das eine Aktion vorab ankuendigt, veroeffentlicht sie damit
+    # selbst — da gibt es nichts zu verraten, und wer vormerken will, soll das
+    # koennen. Nur die Entdeckung ueber Zertifikate sieht Dinge, die *niemand*
+    # angekuendigt hat; dort setzt ``erstanbieter`` das Feld auf True.
+    nur_gestartete: bool = False
 
 
 @dataclass
@@ -175,19 +182,24 @@ def _frist_plausibel(aktion: Action, kontext: Kontext) -> str | None:
 
 def _gestartet(aktion: Action, kontext: Kontext) -> str | None:
     """
-    Eine Aktion darf erst in den Feed, wenn sie laeuft.
+    Bei entdeckten Quellen darf eine Aktion erst in den Feed, wenn sie laeuft.
 
     Der Grund steht im Modulkopf: Die Entdeckung ueber Certificate-Transparency-
     Logs findet eine Kampagne, sobald ihr Zertifikat ausgestellt ist. Das ist
     regelmaessig Wochen vor dem Start — vor jeder Ankuendigung, vor jedem
-    Handelsgespraech. So eine Aktion anzuzeigen ist zweimal falsch: Man verraet
-    die Planung des Herstellers, und wer dem Hinweis folgt, steht vor einem
-    Formular, das noch nichts annimmt.
+    Handelsgespraech. So eine Aktion anzuzeigen verraet die Planung des
+    Herstellers.
 
-    Ohne ``valid_from`` greift die Regel nicht. "Kein Startdatum bekannt" heisst
-    bei allen gewachsenen Quellen schlicht, dass das Portal keins ausweist.
+    **Fuer Portale gilt das ausdruecklich nicht.** Was mydealz ankuendigt, ist
+    veroeffentlicht; die Aktion zu verschweigen nimmt der Merkliste ihren Zweck.
+    Dass man vor dem Start nicht kaufen darf, ist keine Frage des Feeds, sondern
+    der Anzeige — die App weist eine kuenftige Aktion als solche aus
+    (``PromoAction.startetErst``).
+
+    Ohne ``valid_from`` greift die Regel ohnehin nicht. "Kein Startdatum
+    bekannt" heisst bei den meisten Quellen schlicht, dass keins ausgewiesen ist.
     """
-    if not aktion.valid_from:
+    if not kontext.nur_gestartete or not aktion.valid_from:
         return None
 
     try:

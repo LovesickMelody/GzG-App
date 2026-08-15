@@ -128,7 +128,9 @@ def sammle(
 
         befunde = pruefe_liste(
             [aktion],
-            Kontext(seitentext=sichtbarer_text(html)),
+            # nur_gestartete: Hier — und nur hier — kennen wir Kampagnen aus
+            # Zertifikaten, die noch niemand angekuendigt hat.
+            Kontext(seitentext=sichtbarer_text(html), nur_gestartete=True),
             quellenname=name,
         )
         gesammelt.extend(befunde)

@@ -222,6 +222,7 @@ private fun AktionZeile(
     onImWagen: (Boolean) -> Unit,
 ) {
     val tage = aktion.tageBisFrist()
+    val bisStart = aktion.tageBisStart()
 
     Row(
         modifier = Modifier
@@ -307,7 +308,7 @@ private fun AktionZeile(
             )
 
             Text(
-                text = fristText(aktion, tage),
+                text = fristText(aktion, tage, bisStart),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -332,7 +333,19 @@ private fun AktionZeile(
     }
 }
 
-private fun fristText(aktion: PromoAction, tage: Long?): String {
+private fun fristText(aktion: PromoAction, tage: Long?, bisStart: Long? = null): String {
+    // Eine noch nicht gestartete Aktion zeigt ihren Beginn, nicht ihre Frist.
+    // Wer jetzt kauft, hat einen Bon von heute — der liegt vor dem Zeitraum,
+    // und die Erstattung faellt aus. Die Frist steht in der Detailansicht.
+    val beginn = aktion.validFrom
+    if (bisStart != null && beginn != null) {
+        return when {
+            bisStart == 1L -> "Startet morgen (${beginn.deutsch()})"
+            bisStart <= 14 -> "Startet in $bisStart Tagen (${beginn.deutsch()})"
+            else -> "Startet am ${beginn.deutsch()}"
+        }
+    }
+
     val frist = aktion.submissionDeadline ?: aktion.validTo ?: return "Ohne Frist"
     val bezeichnung = if (aktion.submissionDeadline != null) "Einsendeschluss" else "Läuft bis"
     return when {
