@@ -14,9 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.LocalOffer
-import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -42,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.border
@@ -64,14 +61,12 @@ import de.gzgtracker.ui.uebersicht.SucheFeld
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AktionenScreen(
-    onAktionErfassen: (String) -> Unit,
-    onAktionBearbeiten: (String) -> Unit,
+    onAktionOeffnen: (String) -> Unit,
     onAktionAnlegen: () -> Unit,
     viewModel: AktionenViewModel = hiltViewModel(),
 ) {
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
-    val uriHandler = LocalUriHandler.current
 
     LaunchedEffect(zustand.meldung) {
         val meldung = zustand.meldung ?: return@LaunchedEffect
@@ -202,11 +197,9 @@ fun AktionenScreen(
                                 gemerkt = aktion.id in zustand.gemerkt,
                                 imWagen = zustand.gemerkt[aktion.id] == true,
                                 einkaufsmodus = zustand.nurMerkliste,
-                                onErfassen = { onAktionErfassen(aktion.id) },
-                                onBearbeiten = { onAktionBearbeiten(aktion.id) },
+                                onOeffnen = { onAktionOeffnen(aktion.id) },
                                 onMerken = { viewModel.merkenUmschalten(aktion.id) },
                                 onImWagen = { viewModel.setzeImWagen(aktion.id, it) },
-                                onOeffnen = { aktion.besteAdresse?.let(uriHandler::openUri) },
                             )
                             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                         }
@@ -224,18 +217,16 @@ private fun AktionZeile(
     gemerkt: Boolean,
     imWagen: Boolean,
     einkaufsmodus: Boolean,
-    onErfassen: () -> Unit,
-    onBearbeiten: () -> Unit,
+    onOeffnen: () -> Unit,
     onMerken: () -> Unit,
     onImWagen: (Boolean) -> Unit,
-    onOeffnen: () -> Unit,
 ) {
     val tage = aktion.tageBisFrist()
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onErfassen)
+            .clickable(onClick = onOeffnen)
             .heightIn(min = 72.dp)
             .padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -258,7 +249,7 @@ private fun AktionZeile(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(56.dp)
+                    .size(88.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .border(
                         1.dp,
@@ -324,21 +315,9 @@ private fun AktionZeile(
             TeilnahmeKurz(aktion.requirements)
         }
 
-        if (aktion.besteAdresse != null) {
-            IconButton(onClick = onOeffnen) {
-                Icon(
-                    Icons.Outlined.OpenInNew,
-                    // Der Unterschied zählt: Bei der einen Quelle landet man
-                    // direkt im Formular, bei der anderen erst auf der
-                    // Portalseite. Wer das vorher weiß, klickt richtig.
-                    contentDescription = if (aktion.fuehrtDirektZumFormular) {
-                        "Zur Einreichung"
-                    } else {
-                        "Aktionsseite öffnen"
-                    },
-                )
-            }
-        }
+        // Nur noch das Lesezeichen. Oeffnen, Bearbeiten und Einreichen stehen
+        // auf der Aktionsseite, wo Platz fuer Beschriftungen ist — in der Liste
+        // haben sie mehr Raum gefressen als Bild und Text zusammen.
         IconButton(onClick = onMerken) {
             Icon(
                 if (gemerkt) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
@@ -349,11 +328,6 @@ private fun AktionZeile(
                 },
                 tint = MaterialTheme.colorScheme.onSurface,
             )
-        }
-        if (!einkaufsmodus) {
-            IconButton(onClick = onBearbeiten) {
-                Icon(Icons.Outlined.Edit, contentDescription = "Aktion bearbeiten")
-            }
         }
     }
 }

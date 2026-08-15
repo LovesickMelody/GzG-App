@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import de.gzgtracker.ui.aktionen.AktionBearbeitenScreen
+import de.gzgtracker.ui.aktionen.AktionDetailScreen
 import de.gzgtracker.ui.aktionen.AktionenScreen
 import de.gzgtracker.ui.detail.DetailScreen
 import de.gzgtracker.ui.einstellungen.EinstellungenScreen
@@ -46,8 +47,11 @@ object Routes {
     const val DETAIL = "detail/{id}"
     const val ERFASSEN = "erfassen?actionId={actionId}&ean={ean}&submissionId={submissionId}"
     const val AKTION_BEARBEITEN = "aktion-bearbeiten?actionId={actionId}"
+    const val AKTION = "aktion/{actionId}"
 
     fun detail(id: Long) = "detail/$id"
+
+    fun aktion(actionId: String) = "aktion/$actionId"
 
     fun erfassen(actionId: String? = null, ean: String? = null, submissionId: Long? = null): String =
         "erfassen?actionId=${actionId.orEmpty()}&ean=${ean.orEmpty()}" +
@@ -130,13 +134,25 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
 
             composable(Routes.AKTIONEN) {
                 AktionenScreen(
-                    onAktionErfassen = { actionId ->
-                        navController.navigate(Routes.erfassen(actionId = actionId))
-                    },
-                    onAktionBearbeiten = { actionId ->
-                        navController.navigate(Routes.aktionBearbeiten(actionId))
+                    onAktionOeffnen = { actionId ->
+                        navController.navigate(Routes.aktion(actionId))
                     },
                     onAktionAnlegen = { navController.navigate(Routes.aktionBearbeiten(null)) },
+                )
+            }
+
+            composable(
+                route = Routes.AKTION,
+                arguments = listOf(navArgument("actionId") { type = NavType.StringType }),
+            ) {
+                AktionDetailScreen(
+                    onZurueck = { navController.popBackStack() },
+                    onEinreichen = { actionId ->
+                        navController.navigate(Routes.erfassen(actionId = actionId))
+                    },
+                    onBearbeiten = { actionId ->
+                        navController.navigate(Routes.aktionBearbeiten(actionId))
+                    },
                 )
             }
 

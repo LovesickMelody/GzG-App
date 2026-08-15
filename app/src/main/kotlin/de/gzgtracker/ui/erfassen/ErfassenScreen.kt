@@ -64,6 +64,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -101,6 +103,10 @@ fun ErfassenScreen(
     // Ziel der naechsten Aufnahme. Die Kamera-App meldet nur "hat geklappt",
     // nicht wohin sie geschrieben hat — die Adresse muessen wir uns merken.
     var aufnahmeZiel by remember { mutableStateOf<Uri?>(null) }
+
+    // Die Aktionswahl bleibt zugeklappt, solange eine Aktion feststeht.
+    var aktionswahlOffen by remember { mutableStateOf(false) }
+    var aktionssuche by remember { mutableStateOf("") }
 
     val kamera = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
@@ -203,14 +209,68 @@ fun ErfassenScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            } else if (zustand.gewaehlteAktion != null && !aktionswahlOffen) {
+                // Steht die Aktion fest, nimmt sie eine Zeile ein statt des
+                // halben Bildschirms — geaendert wird selten.
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = zustand.gewaehlteAktion!!.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 2,
+                        modifier = Modifier.weight(1f),
+                    )
+                    TextButton(onClick = { aktionswahlOffen = true }) { Text("Ändern") }
+                }
             } else {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(zustand.aktionen, key = { it.id }) { aktion ->
-                        FilterChip(
-                            selected = zustand.aktionId == aktion.id,
-                            onClick = { viewModel.setzeAktion(aktion.id) },
-                            label = { Text(aktion.title) },
-                        )
+                // Ohne vorgewaehlte Aktion muss man suchen koennen: Bei drei
+                // Dutzend Aktionen war die Reihe zum Durchwischen unbrauchbar,
+                // und der erste Eintrag sah aus wie eine Auswahl.
+                OutlinedTextField(
+                    value = aktionssuche,
+                    onValueChange = { aktionssuche = it },
+                    label = { Text("Aktion suchen") },
+                    placeholder = { Text("Produkt oder Marke") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                val treffer = zustand.aktionen.filter { aktion ->
+                    aktionssuche.isBlank() ||
+                        aktion.title.contains(aktionssuche, ignoreCase = true) ||
+                        aktion.brand?.contains(aktionssuche, ignoreCase = true) == true
+                }
+
+                if (treffer.isEmpty()) {
+                    Text(
+                        text = "Keine Aktion passt zu „$aktionssuche".",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier.heightIn(max = 240.dp).verticalScroll(rememberScrollState()),
+                    ) {
+                        treffer.forEach { aktion ->
+                            Text(
+                                text = aktion.title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        viewModel.setzeAktion(aktion.id)
+                                        aktionswahlOffen = false
+                                        aktionssuche = ""
+                                    }
+                                    .padding(vertical = 12.dp),
+                            )
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                        }
                     }
                 }
             }
