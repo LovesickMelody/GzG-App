@@ -77,10 +77,10 @@ class KontenViewModel @Inject constructor(
         initialValue = KontenUiState(),
     )
 
-    fun anlegen(name: String, ibanLast4: String?, colorHex: String) {
+    fun anlegen(entwurf: Account) {
         viewModelScope.launch {
-            accounts.anlegen(name, ibanLast4, colorHex)
-            meldung.value = "Konto „${name.trim()}“ angelegt."
+            accounts.anlegen(entwurf)
+            meldung.value = "Konto „${entwurf.name.trim()}“ angelegt."
         }
     }
 
