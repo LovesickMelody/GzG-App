@@ -8,4 +8,9 @@
     <cache-path
         name="export"
         path="export/" />
+    <!-- Frisch aufgenommene Fotos: Die Kamera-App schreibt hierher, danach
+         wandern sie verkleinert nach files/receipts und werden hier geloescht. -->
+    <cache-path
+        name="kamera"
+        path="kamera/" />
 </paths>

@@ -54,6 +54,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType
+import android.Manifest
+import android.content.pm.PackageManager
+import android.net.Uri
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -80,11 +92,63 @@ fun ErfassenScreen(
     val snackbar = remember { SnackbarHostState() }
     val uriHandler = LocalUriHandler.current
 
+    val context = LocalContext.current
+
     val bildWaehler = rememberLauncherForActivityResult(
         // Photo Picker: kein Speicherzugriff noetig, der Nutzer gibt genau ein Bild frei.
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri -> uri?.let(viewModel::setzeBeleg) },
     )
+
+    // Ziel der naechsten Aufnahme. Die Kamera-App meldet nur "hat geklappt",
+    // nicht wohin sie geschrieben hat — die Adresse muessen wir uns merken.
+    var aufnahmeZiel by remember { mutableStateOf<Uri?>(null) }
+
+    // Die Aktionswahl bleibt zugeklappt, solange eine Aktion feststeht.
+    var aktionswahlOffen by remember { mutableStateOf(false) }
+    var aktionssuche by remember { mutableStateOf("") }
+
+    val kamera = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = { erfolg ->
+            aufnahmeZiel?.takeIf { erfolg }?.let(viewModel::setzeBeleg)
+            aufnahmeZiel = null
+        },
+    )
+
+    val kameraErlaubnis = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { erlaubt ->
+            if (erlaubt) {
+                aufnahmeZiel?.let(kamera::launch)
+            } else {
+                aufnahmeZiel = null
+                viewModel.zeigeMeldung("Ohne Kamerazugriff geht nur die Galerie.")
+            }
+        },
+    )
+
+    fun fotografiere() {
+        val ziel = kameraZiel(context)
+        aufnahmeZiel = ziel
+        // Weil die App die Kamera-Berechtigung im Manifest fuehrt (fuer den
+        // Barcode-Scan), verlangt Android sie auch fuer den Aufruf der
+        // Kamera-App — sonst bricht die Aufnahme wortlos ab.
+        if (
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            kamera.launch(ziel)
+        } else {
+            kameraErlaubnis.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    fun waehleAusGalerie() {
+        bildWaehler.launch(
+            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+        )
+    }
 
     LaunchedEffect(zustand.gespeichert) {
         if (zustand.gespeichert) onFertig()
@@ -145,14 +209,68 @@ fun ErfassenScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            } else if (zustand.gewaehlteAktion != null && !aktionswahlOffen) {
+                // Steht die Aktion fest, nimmt sie eine Zeile ein statt des
+                // halben Bildschirms — geaendert wird selten.
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = zustand.gewaehlteAktion!!.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 2,
+                        modifier = Modifier.weight(1f),
+                    )
+                    TextButton(onClick = { aktionswahlOffen = true }) { Text("Ändern") }
+                }
             } else {
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(zustand.aktionen, key = { it.id }) { aktion ->
-                        FilterChip(
-                            selected = zustand.aktionId == aktion.id,
-                            onClick = { viewModel.setzeAktion(aktion.id) },
-                            label = { Text(aktion.title) },
-                        )
+                // Ohne vorgewaehlte Aktion muss man suchen koennen: Bei drei
+                // Dutzend Aktionen war die Reihe zum Durchwischen unbrauchbar,
+                // und der erste Eintrag sah aus wie eine Auswahl.
+                OutlinedTextField(
+                    value = aktionssuche,
+                    onValueChange = { aktionssuche = it },
+                    label = { Text("Aktion suchen") },
+                    placeholder = { Text("Produkt oder Marke") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                val treffer = zustand.aktionen.filter { aktion ->
+                    aktionssuche.isBlank() ||
+                        aktion.title.contains(aktionssuche, ignoreCase = true) ||
+                        aktion.brand?.contains(aktionssuche, ignoreCase = true) == true
+                }
+
+                if (treffer.isEmpty()) {
+                    Text(
+                        text = "Keine Aktion passt zu „$aktionssuche“.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier.heightIn(max = 240.dp).verticalScroll(rememberScrollState()),
+                    ) {
+                        treffer.forEach { aktion ->
+                            Text(
+                                text = aktion.title,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        viewModel.setzeAktion(aktion.id)
+                                        aktionswahlOffen = false
+                                        aktionssuche = ""
+                                    }
+                                    .padding(vertical = 12.dp),
+                            )
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                        }
                     }
                 }
             }
@@ -198,6 +316,25 @@ fun ErfassenScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            // Artikelzeilen aus dem Bon zum Antippen. Welche Position die Aktion
+            // betrifft, weiss nur der Mensch davor — deshalb zur Auswahl statt
+            // geraten.
+            if (zustand.artikelvorschlaege.isNotEmpty()) {
+                Text(
+                    text = "Aus dem Bon:",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(zustand.artikelvorschlaege) { vorschlag ->
+                        SuggestionChip(
+                            onClick = { viewModel.setzeProduktname(vorschlag) },
+                            label = { Text(vorschlag) },
+                        )
+                    }
+                }
+            }
+
             OutlinedTextField(
                 value = zustand.ean,
                 onValueChange = viewModel::setzeEan,
@@ -208,6 +345,12 @@ fun ErfassenScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            val preishinweis = when {
+                zustand.preisGeraten -> "Geraten — prüfen"
+                zustand.preisAusBon -> "Aus dem Bon — prüfen"
+                else -> null
+            }
+
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = zustand.preis,
@@ -216,6 +359,12 @@ fun ErfassenScreen(
                     suffix = { Text("€") },
                     singleLine = true,
                     isError = zustand.preis.isNotEmpty() && !zustand.preisOk,
+                    // Der Hinweis steht unter dem Feld, nicht als Meldung, die
+                    // wieder verschwindet: Ein falsch gelesener Betrag faellt
+                    // sonst erst auf, wenn die Erstattung ausbleibt.
+                    // Der Unterschied zaehlt: "an der Summe abgelesen" ist etwas
+                    // anderes als "groesster Betrag auf dem Bon".
+                    supportingText = preishinweis?.let { text -> { Text(text) } },
                     textStyle = MoneyTextStyle,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.weight(1f),
@@ -224,8 +373,23 @@ fun ErfassenScreen(
                     label = "Kaufdatum",
                     wert = zustand.kaufdatum,
                     onWert = viewModel::setzeKaufdatum,
+                    hinweis = if (zustand.datumAusBon) "Aus dem Bon — prüfen" else null,
                     modifier = Modifier.weight(1f),
                 )
+            }
+
+            if (zustand.liestBon) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                    Text(
+                        text = "Bon wird gelesen …",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
 
             OutlinedTextField(
@@ -285,13 +449,13 @@ fun ErfassenScreen(
                     // hervorgehoben — die anderen bleiben trotzdem benutzbar, denn
                     // die Checkliste ist nicht immer vollstaendig.
                     verlangt = art.wirdVerlangt(zustand.gewaehlteAktion?.requirements),
-                    onWaehlen = {
+                    onFotografieren = {
                         viewModel.waehleBeleg(art)
-                        bildWaehler.launch(
-                            PickVisualMediaRequest(
-                                ActivityResultContracts.PickVisualMedia.ImageOnly,
-                            ),
-                        )
+                        fotografiere()
+                    },
+                    onAusGalerie = {
+                        viewModel.waehleBeleg(art)
+                        waehleAusGalerie()
                     },
                     onEntfernen = { viewModel.entferneBeleg(art) },
                 )
@@ -404,7 +568,8 @@ private fun BelegFeld(
     art: Belegart,
     pfad: String?,
     verlangt: Boolean,
-    onWaehlen: () -> Unit,
+    onFotografieren: () -> Unit,
+    onAusGalerie: () -> Unit,
     onEntfernen: () -> Unit,
 ) {
     Text(
@@ -443,16 +608,35 @@ private fun BelegFeld(
                 )
             }
         }
-        TextButton(onClick = onWaehlen) { Text("Anderes Bild wählen") }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TextButton(onClick = onFotografieren) { Text("Neu aufnehmen") }
+            TextButton(onClick = onAusGalerie) { Text("Aus Galerie") }
+        }
     } else {
-        OutlinedButton(
-            onClick = onWaehlen,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(96.dp),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
-            Text("  ${art.label} fotografieren oder auswählen")
+            // Fotografieren steht links und traegt das Kamerasymbol: Das ist der
+            // Regelfall — man kommt vom Einkauf und hat den Bon in der Hand.
+            OutlinedButton(
+                onClick = onFotografieren,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(72.dp),
+            ) {
+                Icon(Icons.Outlined.PhotoCamera, contentDescription = null)
+                Text("  Fotografieren")
+            }
+            OutlinedButton(
+                onClick = onAusGalerie,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(72.dp),
+            ) {
+                Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
+                Text("  Galerie")
+            }
         }
     }
 }

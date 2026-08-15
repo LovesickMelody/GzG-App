@@ -13,6 +13,7 @@ import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoAction
 import de.gzgtracker.core.Submission
 import de.gzgtracker.core.SubmissionStatus
+import de.gzgtracker.data.receipt.BonLeser
 import de.gzgtracker.data.receipt.ReceiptStorage
 import de.gzgtracker.data.repository.AccountRepository
 import de.gzgtracker.data.repository.ActionRepository
@@ -47,6 +48,15 @@ data class ErfassenUiState(
     val zusammenPfad: String? = null,
     /** Welcher Belegplatz gerade gefuellt wird — gesetzt, solange der Bildwähler offen ist. */
     val offeneBelegart: Belegart? = null,
+    /** Läuft gerade die Texterkennung auf einem frisch gewählten Bon? */
+    val liestBon: Boolean = false,
+    /** Preis und Datum kamen aus dem Bon und sollten nachgeprüft werden. */
+    val preisAusBon: Boolean = false,
+    val datumAusBon: Boolean = false,
+    /** Der Betrag hing an keinem Schlüsselwort, sondern ist der größte auf dem Bon. */
+    val preisGeraten: Boolean = false,
+    /** Artikelzeilen aus dem Bon, zum Antippen statt Abtippen. */
+    val artikelvorschlaege: List<String> = emptyList(),
     val notiz: String = "",
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
 
@@ -85,6 +95,7 @@ class ErfassenViewModel @Inject constructor(
     private val accounts: AccountRepository,
     private val settings: SettingsRepository,
     private val receipts: ReceiptStorage,
+    private val bonLeser: BonLeser,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -179,8 +190,13 @@ class ErfassenViewModel @Inject constructor(
 
     fun setzeProduktname(wert: String) = _uiState.update { it.copy(produktname = wert) }
     fun setzeEan(wert: String) = _uiState.update { it.copy(ean = wert.filter(Char::isDigit)) }
-    fun setzePreis(wert: String) = _uiState.update { it.copy(preis = wert) }
-    fun setzeKaufdatum(wert: LocalDate) = _uiState.update { it.copy(kaufdatum = wert) }
+    // Von Hand geaendert heisst: nicht mehr "aus dem Bon". Der Hinweis
+    // "bitte prüfen" verschwindet damit genau dann, wenn er erledigt ist.
+    fun setzePreis(wert: String) =
+        _uiState.update { it.copy(preis = wert, preisAusBon = false, preisGeraten = false) }
+
+    fun setzeKaufdatum(wert: LocalDate) =
+        _uiState.update { it.copy(kaufdatum = wert, datumAusBon = false) }
     fun setzeHaendler(wert: String) = _uiState.update { it.copy(haendler = wert) }
     fun setzeNotiz(wert: String) = _uiState.update { it.copy(notiz = wert) }
     fun setzeStatus(wert: SubmissionStatus) = _uiState.update { it.copy(status = wert) }
@@ -195,6 +211,8 @@ class ErfassenViewModel @Inject constructor(
         val vorschlag = _uiState.value.kontoKonflikt?.vorschlag ?: return
         setzeKonto(vorschlag.id)
     }
+
+    fun zeigeMeldung(text: String) = _uiState.update { it.copy(meldung = text) }
 
     /** Merkt sich, welcher Belegplatz gemeint ist, bevor der Bildwähler aufgeht. */
     fun waehleBeleg(art: Belegart) {
@@ -232,6 +250,12 @@ class ErfassenViewModel @Inject constructor(
             // Fehlschlag das alte Bild weg und das neue nicht da.
             if (alt != null && alt != neu) receipts.loeschen(alt)
             _uiState.update { mitPfad(it, art, neu).copy(offeneBelegart = null) }
+
+            // Nur Bilder, auf denen ein Bon zu sehen ist. Ein Produktfoto
+            // enthaelt keinen Betrag — es zu durchsuchen kostet nur Zeit.
+            if (art == Belegart.BON || art == Belegart.ZUSAMMEN) {
+                werteBonAus(neu)
+            }
         }
     }
 
@@ -240,6 +264,51 @@ class ErfassenViewModel @Inject constructor(
         viewModelScope.launch {
             receipts.loeschen(pfad)
             _uiState.update { mitPfad(it, art, null) }
+        }
+    }
+
+    /**
+     * Fuellt Preis und Kaufdatum aus dem Bon vor.
+     *
+     * Bereits Eingetragenes wird nicht ueberschrieben: Wer den Preis von Hand
+     * korrigiert und danach ein besseres Foto macht, will seine Korrektur
+     * behalten. Das Kaufdatum steht anfangs auf heute — das gilt als "noch
+     * nicht gesetzt", weil es der Startwert ist.
+     */
+    private suspend fun werteBonAus(pfad: String) {
+        _uiState.update { it.copy(liestBon = true) }
+        val ergebnis = bonLeser.auswerten(pfad)
+        // In eigene Variablen, bevor sie gelesen werden: Werte aus einem anderen
+        // Modul behandelt Kotlin nach einer Null-Pruefung nicht automatisch als
+        // "nicht null", weil sie sich zwischendurch geaendert haben koennten.
+        val gelesenerPreis = ergebnis.preisCents
+        val gelesenesDatum = ergebnis.datum
+
+        _uiState.update { zustand ->
+            val preisUebernehmen = gelesenerPreis != null && zustand.preis.isBlank()
+            val datumUebernehmen = gelesenesDatum != null &&
+                zustand.kaufdatum == LocalDate.now() &&
+                !zustand.datumAusBon
+
+            zustand.copy(
+                liestBon = false,
+                preis = if (preisUebernehmen) Money.formatPlain(gelesenerPreis) else zustand.preis,
+                preisAusBon = zustand.preisAusBon || preisUebernehmen,
+                preisGeraten = if (preisUebernehmen) ergebnis.preisGeraten else zustand.preisGeraten,
+                kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
+                datumAusBon = zustand.datumAusBon || datumUebernehmen,
+                artikelvorschlaege = ergebnis.artikel,
+                // Jeder Ausgang bekommt seine eigene Meldung. Beim ersten
+                // Versuch am Geraet passierte schlicht nichts, und daran war
+                // nicht zu erkennen, ob die Erkennung gelaufen ist, nichts
+                // gefunden hat oder das Bild nicht lesbar war.
+                meldung = when {
+                    !ergebnis.textErkannt -> "Auf dem Bild war kein Text zu erkennen."
+                    preisUebernehmen || datumUebernehmen -> "Aus dem Bon gelesen — bitte prüfen"
+                    gelesenerPreis != null -> "Bon gelesen, Preis stand aber schon da."
+                    else -> "Im Bon war kein Betrag zu erkennen. Bitte von Hand eintragen."
+                },
+            )
         }
     }
 

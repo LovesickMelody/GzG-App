@@ -169,3 +169,45 @@ class TestAnbieterfeld:
         aktion = self._parse("scondoo")
         assert aktion.brand is None
         assert aktion.retailers == []
+
+
+class TestEinreichungslinkAusAdresse:
+    """
+    mydealz haelt keinen Anbieterlink im Feed, hat aber eine eigene
+    Weiterleitung: /visit/threadmain/<id> landet direkt auf der Aktionsseite.
+    """
+
+    QUELLE = {
+        "name": "mydealz",
+        "parser": "feed",
+        "submit_url_aus_link": {
+            "muster": r"-(\d+)/?$",
+            "vorlage": "https://www.mydealz.de/visit/threadmain/{}",
+        },
+    }
+
+    def _parse(self, link: str, quelle: dict | None = None):
+        xml = f"""<?xml version="1.0"?>
+        <rss><channel><item>
+          <title>Produkt gratis testen</title>
+          <description>Kaufpreis erstattet.</description>
+          <link>{link}</link>
+        </item></channel></rss>"""
+        return parse(xml, quelle or self.QUELLE)[0]
+
+    def test_baut_die_weiterleitung_aus_der_kennnummer(self):
+        aktion = self._parse("https://www.mydealz.de/deals/jacobs-gratis-testen-2823305")
+        assert aktion.submit_url == "https://www.mydealz.de/visit/threadmain/2823305"
+        # Die Portaladresse bleibt daneben stehen — dorthin gehören Kommentare
+        # und Rückfragen der Gemeinschaft.
+        assert aktion.url == "https://www.mydealz.de/deals/jacobs-gratis-testen-2823305"
+
+    def test_ohne_kennnummer_bleibt_es_leer(self):
+        assert self._parse("https://www.mydealz.de/deals/ohne-nummer").submit_url is None
+
+    def test_ohne_regel_passiert_nichts(self):
+        aktion = self._parse(
+            "https://www.mydealz.de/deals/jacobs-2823305",
+            {"name": "roh", "parser": "feed"},
+        )
+        assert aktion.submit_url is None

@@ -39,6 +39,8 @@ fun DatumFeld(
     onWert: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
     platzhalter: String = "Datum wählen",
+    /** Steht unter dem Feld, etwa wenn der Wert aus einem Bon gelesen wurde. */
+    hinweis: String? = null,
 ) {
     var dialogOffen by remember { mutableStateOf(false) }
 
@@ -56,6 +58,7 @@ fun DatumFeld(
             // readOnly-Felder bekommen keinen Klick vom Textfeld selbst.
             .clickable { dialogOffen = true }
             .onFocusChanged { if (it.isFocused) dialogOffen = true },
+        supportingText = hinweis?.let { text -> { Text(text) } },
         enabled = false,
         colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
             disabledTextColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
@@ -65,7 +68,7 @@ fun DatumFeld(
                 androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
             disabledPlaceholderColor =
                 androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
+    ),
     )
 
     if (dialogOffen) {

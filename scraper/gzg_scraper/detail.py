@@ -66,7 +66,8 @@ def reichere_an(aktionen: list[Action], quelle: dict, fetcher: Fetcher) -> None:
     weiterverarbeitet werden — nur eben vollstaendiger.
     """
     einstellungen = quelle.get("detail") or {}
-    if not einstellungen.get("enabled"):
+    von_aktionsseite = bool(quelle.get("bedingungen_von_aktionsseite"))
+    if not einstellungen.get("enabled") and not von_aktionsseite:
         return
 
     link_selektor = einstellungen.get("submit_link")
@@ -76,24 +77,25 @@ def reichere_an(aktionen: list[Action], quelle: dict, fetcher: Fetcher) -> None:
 
     ergaenzt = 0
     for aktion in aktionen:
-        if not aktion.url:
-            continue
+        if einstellungen.get("enabled") and aktion.url:
+            html = fetcher.hole(aktion.url)
+            if html is not None:
+                suppe = BeautifulSoup(html, "lxml")
 
-        html = fetcher.hole(aktion.url)
-        if html is None:
-            continue
+                if link_selektor and not aktion.submit_url:
+                    ziel = _finde_link(suppe, link_selektor, link_text)
+                    if ziel:
+                        aktion.submit_url = urljoin(basis, ziel)
 
-        suppe = BeautifulSoup(html, "lxml")
+                if not aktion.requirements:
+                    bereich = suppe.select_one(text_selektor) if text_selektor else suppe
+                    if bereich is not None:
+                        aktion.requirements = anforderungen_aus(
+                            bereich.get_text(" ", strip=True)
+                        )
 
-        if link_selektor and not aktion.submit_url:
-            ziel = _finde_link(suppe, link_selektor, link_text)
-            if ziel:
-                aktion.submit_url = urljoin(basis, ziel)
-
-        if not aktion.requirements:
-            bereich = suppe.select_one(text_selektor) if text_selektor else suppe
-            if bereich is not None:
-                aktion.requirements = anforderungen_aus(bereich.get_text(" ", strip=True))
+        if von_aktionsseite:
+            _lies_bedingungen_von_aktionsseite(aktion, fetcher)
 
         if aktion.submit_url or aktion.requirements:
             ergaenzt += 1
@@ -104,3 +106,41 @@ def reichere_an(aktionen: list[Action], quelle: dict, fetcher: Fetcher) -> None:
         ergaenzt,
         len(aktionen),
     )
+
+
+def _lies_bedingungen_von_aktionsseite(aktion: Action, fetcher: Fetcher) -> None:
+    """
+    Holt die Teilnahmebedingungen dort, wo sie wirklich stehen.
+
+    Die Portalbeschreibung sagt meist nur, *dass* es Geld zurueck gibt. Ob man
+    das Produkt, den Bon oder beides zusammen fotografieren muss und ob vorher
+    eine Handynummer bestaetigt wird, steht auf der Seite des Anbieters — also
+    genau dort, wohin ``submit_url`` fuehrt.
+
+    Genau daran krankte die Checkliste vorher: Sie sah bei jeder Aktion gleich
+    aus, weil sie aus immer gleichem Portaltext kam.
+
+    Was hier gefunden wird, ersetzt die schwaechere Angabe aus dem Portal.
+    Findet sich nichts, bleibt die alte stehen — schlechter wird es nie.
+    """
+    if not aktion.submit_url:
+        return
+
+    html = fetcher.hole(aktion.submit_url)
+    if html is None:
+        return
+
+    suppe = BeautifulSoup(html, "lxml")
+    # Skripte und Stilbloecke raus: Ihr Inhalt ist kein Text fuer Menschen und
+    # bringt die Worterkennung durcheinander.
+    for stoerer in suppe(["script", "style", "noscript"]):
+        stoerer.decompose()
+
+    gefunden = anforderungen_aus(suppe.get_text(" ", strip=True))
+    if gefunden:
+        log.info(
+            "Aktion %r: Bedingungen von der Aktionsseite — %s",
+            aktion.title[:40],
+            ", ".join(gefunden),
+        )
+        aktion.requirements = gefunden
