@@ -5,7 +5,12 @@ from __future__ import annotations
 import json
 
 from gzg_scraper.models import Action, stable_id
-from gzg_scraper.run import fuehre_zusammen, lade_bestand, schreibe_wenn_geaendert
+from gzg_scraper.run import (
+    fuehre_zusammen,
+    lade_bestand,
+    lade_quellen,
+    schreibe_wenn_geaendert,
+)
 
 
 def aktion(titel: str, quelle: str = "portal-a", frist: str | None = "2026-10-14") -> Action:
@@ -155,3 +160,36 @@ class TestJsonForm:
         ).to_json()
         assert eintrag["retailers"] == ["Rossmann", "dm"]
         assert eintrag["eans"] == ["4005900123456", "96385074"]
+
+
+class TestQuellenLaden:
+    """
+    ``--only`` muss auch eine abgeschaltete Quelle starten.
+
+    Sonst laesst sich eine neue Quelle nie probelaufen lassen, bevor sie scharf
+    geschaltet wird — und genau diesen Weg schreibt die README fuer jede neue
+    Quelle vor.
+    """
+
+    def datei(self, tmp_path):
+        pfad = tmp_path / "sources.yaml"
+        pfad.write_text(
+            "sources:\n"
+            "  - name: laeuft\n"
+            "    enabled: true\n"
+            "  - name: abgeschaltet\n"
+            "    enabled: false\n",
+            encoding="utf-8",
+        )
+        return pfad
+
+    def test_ohne_only_nur_aktive(self, tmp_path):
+        quellen = lade_quellen(self.datei(tmp_path))
+        assert [q["name"] for q in quellen] == ["laeuft"]
+
+    def test_only_startet_auch_abgeschaltete(self, tmp_path):
+        quellen = lade_quellen(self.datei(tmp_path), nur="abgeschaltet")
+        assert [q["name"] for q in quellen] == ["abgeschaltet"]
+
+    def test_only_auf_unbekannte_quelle_gibt_nichts(self, tmp_path):
+        assert lade_quellen(self.datei(tmp_path), nur="gibtsnicht") == []

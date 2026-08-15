@@ -41,10 +41,23 @@ STANDARD_QUELLEN = WURZEL / "scraper" / "sources.yaml"
 STANDARD_AUSGABE = WURZEL / "data" / "actions.json"
 
 
-def lade_quellen(pfad: Path) -> list[dict]:
+def lade_quellen(pfad: Path, nur: str | None = None) -> list[dict]:
+    """
+    Liest die aktiven Quellen aus ``sources.yaml``.
+
+    ``nur`` uebergeht dabei ``enabled``. Wer eine Quelle ausdruecklich benennt,
+    meint sie auch — sonst liesse sich eine neue Quelle nie probelaufen lassen,
+    bevor sie scharf geschaltet ist, und genau das ist der Weg, den die README
+    fuer jede neue Quelle vorschreibt.
+    """
     with pfad.open(encoding="utf-8") as datei:
         inhalt = yaml.safe_load(datei) or {}
-    return [q for q in inhalt.get("sources", []) if q.get("enabled", True)]
+    quellen = inhalt.get("sources", [])
+
+    if nur:
+        return [q for q in quellen if q.get("name") == nur]
+
+    return [q for q in quellen if q.get("enabled", True)]
 
 
 def lade_bestand(pfad: Path) -> dict:
@@ -365,13 +378,22 @@ def main(argv: list[str] | None = None) -> int:
         stream=sys.stdout,
     )
 
-    quellen = lade_quellen(argumente.sources)
-    if argumente.only:
-        quellen = [q for q in quellen if q["name"] == argumente.only]
+    quellen = lade_quellen(argumente.sources, argumente.only)
 
     if not quellen:
-        log.error("Keine aktive Quelle in %s", argumente.sources)
+        if argumente.only:
+            log.error("Quelle %r steht nicht in %s", argumente.only, argumente.sources)
+        else:
+            log.error("Keine aktive Quelle in %s", argumente.sources)
         return 1
+
+    for quelle in quellen:
+        if not quelle.get("enabled", True):
+            log.info(
+                "Quelle %s ist abgeschaltet und läuft nur, weil sie mit --only "
+                "ausdrücklich genannt wurde",
+                quelle["name"],
+            )
 
     fetcher = Fetcher(delay=argumente.delay, respect_robots=not argumente.ignore_robots)
 
