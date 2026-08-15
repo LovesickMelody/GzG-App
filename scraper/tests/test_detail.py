@@ -142,3 +142,71 @@ class TestAbgelaufeneFilter:
     def test_unlesbares_datum_wirft_nichts_weg(self):
         aktionen = [Action(title="Krumm", source="q", submission_deadline="demnächst")]
         assert len(filtere_abgelaufene(aktionen, "q", heute=self.HEUTE)) == 1
+
+
+class TestBedingungenVonDerAktionsseite:
+    """
+    Die Checkliste sah bei jeder Aktion gleich aus, weil sie aus immer gleichem
+    Portaltext kam. Die echten Bedingungen stehen beim Anbieter.
+    """
+
+    AKTIONSSEITE = """
+    <html><body>
+      <script>var egal = "produktfoto";</script>
+      <h1>Jacobs gratis testen</h1>
+      <p>Kaufe das Produkt und fotografiere Produkt und Kassenbon zusammen.</p>
+      <p>Wir senden dir einen Bestätigungscode per SMS an deine Handynummer.</p>
+      <p>Anschließend IBAN angeben.</p>
+    </body></html>
+    """
+
+    QUELLE = {"name": "testportal", "bedingungen_von_aktionsseite": True}
+
+    def test_liest_die_bedingungen_beim_anbieter(self):
+        aktionen = [aktion()]
+        aktionen[0].submit_url = "https://anbieter.example/aktion"
+        reichere_an(aktionen, self.QUELLE, FetcherAttrappe(html=self.AKTIONSSEITE))
+        assert aktionen[0].requirements == [
+            "produktfoto",
+            "bonfoto",
+            "zusammen_fotografieren",
+            "handy_verifizierung",
+            "iban",
+        ]
+
+    def test_ruft_die_aktionsseite_ab_nicht_die_portalseite(self):
+        fetcher = FetcherAttrappe(html=self.AKTIONSSEITE)
+        eintrag = aktion(url="https://portal.example/artikel")
+        eintrag.submit_url = "https://anbieter.example/aktion"
+        reichere_an([eintrag], self.QUELLE, fetcher)
+        assert fetcher.abgerufen == ["https://anbieter.example/aktion"]
+
+    def test_ersetzt_die_schwaechere_angabe_aus_dem_portal(self):
+        eintrag = aktion()
+        eintrag.submit_url = "https://anbieter.example/aktion"
+        eintrag.requirements = ["bonfoto"]
+        reichere_an([eintrag], self.QUELLE, FetcherAttrappe(html=self.AKTIONSSEITE))
+        assert "zusammen_fotografieren" in eintrag.requirements
+
+    def test_ohne_treffer_bleibt_die_alte_angabe_stehen(self):
+        # Schlechter darf es nie werden.
+        eintrag = aktion()
+        eintrag.submit_url = "https://anbieter.example/aktion"
+        eintrag.requirements = ["bonfoto"]
+        reichere_an([eintrag], self.QUELLE, FetcherAttrappe(html="<html><body>Hallo</body></html>"))
+        assert eintrag.requirements == ["bonfoto"]
+
+    def test_ohne_einreichungslink_wird_nichts_abgerufen(self):
+        fetcher = FetcherAttrappe(html=self.AKTIONSSEITE)
+        reichere_an([aktion()], self.QUELLE, fetcher)
+        assert fetcher.abgerufen == []
+
+    def test_skripte_zaehlen_nicht_als_text(self):
+        # Im <script> steht "produktfoto" — als Wort fuer Maschinen, nicht fuer
+        # Menschen. Es darf keinen Haken ausloesen.
+        eintrag = aktion()
+        eintrag.submit_url = "https://anbieter.example/aktion"
+        seite = '<html><body><script>var x = "Produkt fotografieren";</script>' \
+                '<p>Nur den Kassenbon hochladen.</p></body></html>'
+        reichere_an([eintrag], self.QUELLE, FetcherAttrappe(html=seite))
+        assert eintrag.requirements == ["bonfoto"]

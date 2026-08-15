@@ -53,6 +53,8 @@ sources:
     submit_url_aus_link:
       muster: '-(\d+)/?$'
       vorlage: 'https://www.mydealz.de/visit/threadmain/{}'
+    # Die Bedingungen stehen auf der Seite des Anbieters, nicht im Portaltext.
+    bedingungen_von_aktionsseite: true
     ausschluss:
       - gewinnspiel
       - verlosung
@@ -88,6 +90,7 @@ sources:
       enabled: true
       submit_link: "a.button@href"
       submit_link_text: "Zur Aktion"
+    bedingungen_von_aktionsseite: true
 
   # Zweite Quelle, damit ein Ausfall nicht den ganzen Feed leert. Fuehrt echte
   # Datumsangaben mit und ergaenzt damit, was geldzurueck.deals fehlt.
@@ -115,6 +118,7 @@ sources:
       # Der Kurztext beginnt mit "Zeitraum: 10.08.2026 – 30.08.2026"; das erste
       # Datum darin ist der Aktionsbeginn.
       valid_from: "span.rgu-excerpt-short"
+    bedingungen_von_aktionsseite: true
 
   # Beispiel fuer eine abgeschaltete Quelle — als Vorlage fuer neue Portale.
   - name: beispiel-portal

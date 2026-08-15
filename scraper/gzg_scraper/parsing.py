@@ -220,15 +220,18 @@ _ANFORDERUNGEN: list[tuple[str, tuple[str, ...]]] = [
         "produktfoto",
         (
             "produkt fotografieren", "produkte fotografieren", "produktfoto",
-            "foto des produkts", "foto vom produkt", "artikel fotografieren",
-            "produkt abfotografieren",
+            "foto des produkts", "foto vom produkt", "bild des produkts",
+            "artikel fotografieren", "produkt abfotografieren",
+            "verpackung fotografieren", "produktverpackung",
         ),
     ),
     (
         "bonfoto",
         (
-            "kassenbon", "kaufbeleg", "kassenzettel", "beleg hochladen",
-            "bon hochladen", "bon fotografieren", "originalbon", "original-kassenbon",
+            "kassenbon", "kaufbeleg", "kassenzettel", "kassenbeleg",
+            "beleg hochladen", "bon hochladen", "bon fotografieren",
+            "beleg fotografieren", "originalbon", "original-kassenbon",
+            "foto des belegs", "foto vom beleg",
         ),
     ),
     (
@@ -237,15 +240,32 @@ _ANFORDERUNGEN: list[tuple[str, tuple[str, ...]]] = [
             "zusammen mit dem kassenbon", "zusammen fotografieren",
             "alles zusammen", "gemeinsam fotografieren", "zusammen mit dem beleg",
             "produkt und kassenbon", "produkt mit kassenbon",
+            "produkt und bon", "auf einem foto", "auf einem bild",
+            "gemeinsam auf einem",
         ),
     ),
     (
         "strichcode",
-        ("strichcode", "barcode", "ean ausschneiden", "ean-code ausschneiden"),
+        (
+            "strichcode", "barcode", "ean ausschneiden", "ean-code ausschneiden",
+            "ean-code", "strichcode ausschneiden",
+        ),
     ),
     (
         "verpackung_aufbewahren",
         ("verpackung aufbewahren", "verpackung aufheben", "verpackung einsenden"),
+    ),
+    (
+        "handy_verifizierung",
+        (
+            # Viele Aktionen schicken einen Code aufs Handy, bevor ueberhaupt
+            # etwas eingereicht werden kann. Wer das nicht weiss, steht mit dem
+            # Bon da und kommt nicht weiter.
+            "handynummer", "mobilfunknummer", "mobilnummer",
+            "per sms", "sms-code", "sms zugesendet", "sms mit",
+            "verifizierungscode", "bestätigungscode", "bestaetigungscode",
+            "telefonnummer bestätigen", "nummer verifizieren",
+        ),
     ),
     (
         "app",
@@ -257,7 +277,7 @@ _ANFORDERUNGEN: list[tuple[str, tuple[str, ...]]] = [
     ),
     (
         "iban",
-        ("iban", "kontodaten", "bankverbindung", "bankdaten"),
+        ("iban", "kontodaten", "bankverbindung", "bankdaten", "kontoinhaber"),
     ),
 ]
 
