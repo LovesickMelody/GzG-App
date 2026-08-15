@@ -20,3 +20,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Kotlin-Compiler-Logs (Build-Artefakt)
+.kotlin/
