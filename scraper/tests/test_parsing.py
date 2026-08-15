@@ -10,6 +10,7 @@ from gzg_scraper.parsing import (
     datum_iso,
     eans_aus,
     haendler_aus,
+    kontingent_aus,
     pruefziffer_stimmt,
     saeubere,
 )
@@ -167,3 +168,69 @@ class TestHilfen:
 
     def test_ohne_text_keine_haendler(self):
         assert haendler_aus(None, ["dm"]) == []
+
+
+class TestKontingent:
+    """
+    Viele Aktionen sind gedeckelt und werden zu einem festen Zeitpunkt
+    zurueckgesetzt. Wer das nicht weiss, kauft das Produkt und stellt beim
+    Einreichen fest, dass er zu spaet dran war.
+    """
+
+    def test_liest_anzahl_und_zeitraum(self):
+        angaben = kontingent_aus(
+            "Die Aktion ist auf 1.000 Teilnahmen pro Woche begrenzt."
+        )
+        assert angaben["anzahl"] == 1000
+        assert angaben["zeitraum"] == "woche"
+
+    def test_liest_den_zeitpunkt_der_zuruecksetzung(self):
+        angaben = kontingent_aus(
+            "Das Kontingent wird jeden Montag um 09:00 Uhr zurückgesetzt."
+        )
+        assert angaben["zuruecksetzung"] == "Montags um 09:00 Uhr"
+
+    def test_versteht_taegliche_zuruecksetzung(self):
+        angaben = kontingent_aus(
+            "Täglich um 0 Uhr wird das Kontingent neu freigeschaltet."
+        )
+        assert angaben["zuruecksetzung"] == "Täglich um 00:00 Uhr"
+
+    def test_ohne_uhrzeit_bleibt_der_tag(self):
+        angaben = kontingent_aus("Montags wird das Kontingent zurückgesetzt.")
+        assert angaben["zuruecksetzung"] == "Montags"
+
+    def test_haelt_oeffnungszeiten_heraus(self):
+        # "Montag 9 Uhr" ohne ein Wort vom Zuruecksetzen ist keine Angabe zum
+        # Kontingent, sondern meistens eine Oeffnungszeit.
+        angaben = kontingent_aus("Unsere Hotline erreichen Sie Montag ab 9 Uhr.")
+        assert angaben["zuruecksetzung"] is None
+
+    def test_ignoriert_kleine_zahlen(self):
+        # "2 Teilnahmen je Haushalt" ist eine andere Aussage als ein Kontingent.
+        angaben = kontingent_aus("Pro Haushalt sind 2 Teilnahmen möglich.")
+        assert angaben["anzahl"] is None
+
+    def test_erkennt_ein_erschoepftes_kontingent(self):
+        assert kontingent_aus("Das Kontingent ist für heute erschöpft.")["erschoepft"] is True
+
+    def test_haelt_die_bedingung_aus_dem_zustand_heraus(self):
+        # Dieser Satz steht in fast jeden Teilnahmebedingungen und bedeutet das
+        # Gegenteil: Die Aktion laeuft noch.
+        angaben = kontingent_aus(
+            "Sobald das Kontingent erschöpft ist, endet die Aktion vorzeitig."
+        )
+        assert angaben["erschoepft"] is False
+
+    def test_solange_der_vorrat_reicht_ist_keine_aussage(self):
+        angaben = kontingent_aus("Gratis testen, solange der Vorrat reicht.")
+        assert angaben["erschoepft"] is False
+        assert angaben["anzahl"] is None
+
+    def test_leerer_text_ergibt_leere_angaben(self):
+        assert kontingent_aus("") == {
+            "anzahl": None,
+            "zeitraum": None,
+            "zuruecksetzung": None,
+            "erschoepft": False,
+        }

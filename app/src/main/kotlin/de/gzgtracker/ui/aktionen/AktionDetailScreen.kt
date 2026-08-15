@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -60,6 +61,7 @@ import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoActionType
 import de.gzgtracker.ui.components.Teilnahmeliste
 import de.gzgtracker.ui.format.deutsch
+import de.gzgtracker.ui.theme.GzgTheme
 import de.gzgtracker.ui.theme.MoneyTextStyle
 
 /**
@@ -259,6 +261,39 @@ fun AktionDetailScreen(
             Angabe("Quelle", if (aktion.isManual) "selbst angelegt" else aktion.source)
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+            // Das Kontingent gehoert weit nach oben: Es entscheidet, ob sich der
+            // Einkauf ueberhaupt lohnt.
+            if (aktion.hatKontingent) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        Icons.Outlined.Schedule,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = if (aktion.limitErschoepft) {
+                            GzgTheme.status.dringend
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                    )
+                    Text(
+                        text = listOfNotNull(
+                            if (aktion.limitErschoepft) "Kontingent zuletzt erschöpft" else null,
+                            aktion.kontingentText,
+                        ).joinToString(" · "),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (aktion.limitErschoepft) {
+                            GzgTheme.status.dringend
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
+                    )
+                }
+            }
 
             Teilnahmeliste(aktion.requirements)
 

@@ -122,4 +122,10 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [ ] Karten als dritte Papierstufe in Erfassen und Detail
 - [ ] Checkliste als Icon-Reihe statt Textzeile
 - [ ] Kontrastwerte nachrechnen
+- [x] Filtersymbol auch in der Aktionsliste
+- [x] Barcode-Scanner entfernt
+- [x] Reiter getauscht, "Optionen" statt "Einstellungen"
+- [x] Standanzeige auf eigener Zeile
+- [x] Erinnerungen an Fristen (Datenbank v8)
+- [x] Kontingent aus den Teilnahmebedingungen (Datenbank v9)
 

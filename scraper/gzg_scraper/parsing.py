@@ -350,3 +350,144 @@ def haendler_aus(text: str | None, bekannte: list[str]) -> list[str]:
         return []
     inhalt = text.casefold()
     return [name for name in bekannte if name.casefold() in inhalt]
+
+
+# --- Kontingent ------------------------------------------------------------
+# Viele Aktionen sind gedeckelt: "1.000 Teilnahmen pro Woche", "solange der
+# Vorrat reicht", und montags um 9 Uhr faengt es von vorn an. Wer das nicht
+# weiss, kauft das Produkt und stellt beim Einreichen fest, dass er zu spaet
+# dran war — auf dem Kassenbon steht dann ein Betrag, den niemand erstattet.
+
+_ZAHL = r"(\d{1,3}(?:[. \s]\d{3})+|\d+)"
+
+_EINHEITEN = (
+    "teilnahmen", "teilnehmer", "einlösungen", "einloesungen", "einreichungen",
+    "erstattungen", "cashbacks", "cashback", "codes", "gutscheine", "pakete",
+)
+
+_LIMIT = re.compile(
+    rf"{_ZAHL}\s*(?:x\s*)?(?:{'|'.join(_EINHEITEN)})",
+    re.IGNORECASE,
+)
+
+_ZEITRAEUME: list[tuple[str, tuple[str, ...]]] = [
+    ("tag", ("pro tag", "je tag", "täglich", "taeglich", "am tag", "pro kalendertag")),
+    ("woche", ("pro woche", "je woche", "wöchentlich", "woechentlich", "pro kalenderwoche",
+               "je kalenderwoche", "in der woche")),
+    ("monat", ("pro monat", "je monat", "monatlich", "im monat")),
+]
+
+_WOCHENTAGE = (
+    "montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag",
+)
+
+_RESETWOERTER = (
+    "zurückgesetzt", "zurueckgesetzt", "zurückgestellt", "neues kontingent",
+    "neu freigeschaltet", "wieder verfügbar", "wieder verfuegbar", "neue teilnahmen",
+    "startet neu", "beginnt neu", "erneut teilnehmen", "aufgefüllt", "aufgefuellt",
+)
+
+_ERSCHOEPFT = (
+    "erschöpft", "erschoepft", "ausgeschöpft", "ausgeschoepft", "vergriffen",
+    "teilnahmelimit erreicht", "maximale teilnehmerzahl erreicht",
+    "alle codes vergeben",
+)
+
+# Woerter, die aus einer Aussage eine Bedingung machen. "Sobald das Kontingent
+# erschoepft ist, endet die Aktion" steht in fast jeden Teilnahmebedingungen —
+# das heisst gerade *nicht*, dass es jetzt erschoepft ist.
+_BEDINGT = ("sobald", "wenn", "falls", "sollte", "solange", "bis das", "kann es")
+
+_ZEITANGABE = re.compile(r"(?:um|ab)\s*(\d{1,2})(?::(\d{2}))?\s*uhr", re.IGNORECASE)
+
+
+def kontingent_aus(text: str | None) -> dict:
+    """
+    Liest aus den Teilnahmebedingungen, wie stark eine Aktion gedeckelt ist.
+
+    Zurueck kommt immer ein Dictionary; fehlt eine Angabe, steht dort ``None``.
+    Bewusst vorsichtig: Eine falsche Zahl waere schlimmer als gar keine, denn
+    sie klaenge nach einer verlaesslichen Auskunft.
+
+    - ``anzahl``: die genannte Obergrenze, etwa 1000
+    - ``zeitraum``: "tag", "woche", "monat" oder ``None`` fuer "insgesamt"
+    - ``zuruecksetzung``: wann es von vorn losgeht, als lesbarer Text
+    - ``erschoepft``: True, wenn die Seite gerade sagt, dass nichts mehr geht
+    """
+    leer = {"anzahl": None, "zeitraum": None, "zuruecksetzung": None, "erschoepft": False}
+    if not text:
+        return leer
+
+    inhalt = re.sub(r"\s+", " ", text)
+    klein = inhalt.casefold()
+
+    ergebnis = dict(leer)
+    ergebnis["erschoepft"] = _erschoepft_aus(inhalt)
+
+    treffer = _LIMIT.search(inhalt)
+    if treffer:
+        roh = re.sub(r"[. \s]", "", treffer.group(1))
+        anzahl = int(roh)
+        # Unter zehn ist keine Kontingentangabe, sondern meist "2 Teilnahmen je
+        # Haushalt" — eine andere Aussage, die hier nur verwirren wuerde.
+        if 10 <= anzahl <= 10_000_000:
+            ergebnis["anzahl"] = anzahl
+            # Der Zeitraum steht im selben Satzteil, davor oder dahinter.
+            fenster = klein[max(0, treffer.start() - 60):treffer.end() + 60]
+            for schluessel, woerter in _ZEITRAEUME:
+                if any(wort in fenster for wort in woerter):
+                    ergebnis["zeitraum"] = schluessel
+                    break
+
+    ergebnis["zuruecksetzung"] = _zuruecksetzung_aus(inhalt)
+    return ergebnis
+
+
+def _erschoepft_aus(inhalt: str) -> bool:
+    """
+    True, wenn die Seite sagt, dass gerade nichts mehr geht.
+
+    Nur eindeutige Aussagen zaehlen. "Sobald das Kontingent erschoepft ist,
+    endet die Aktion" steht in fast jeden Teilnahmebedingungen und bedeutet das
+    Gegenteil — naemlich dass es jetzt noch laeuft.
+    """
+    for satz in re.split(r"(?<=[.!?])\s+", inhalt):
+        klein = satz.casefold()
+        if not any(wort in klein for wort in _ERSCHOEPFT):
+            continue
+        if any(wort in klein for wort in _BEDINGT):
+            continue
+        return True
+    return False
+
+
+def _zuruecksetzung_aus(inhalt: str) -> str | None:
+    """
+    Sucht den Satz, der sagt, wann das Kontingent von vorn beginnt.
+
+    Nur Saetze, in denen auch wirklich vom Zuruecksetzen die Rede ist: "Montag
+    9 Uhr" allein waere sonst genauso gut eine Oeffnungszeit.
+    """
+    for satz in re.split(r"(?<=[.!?])\s+", inhalt):
+        klein = satz.casefold()
+        if not any(wort in klein for wort in _RESETWOERTER):
+            continue
+
+        zeit = _ZEITANGABE.search(satz)
+        uhrzeit = None
+        if zeit:
+            stunde = int(zeit.group(1))
+            minute = int(zeit.group(2) or 0)
+            if 0 <= stunde <= 23 and 0 <= minute <= 59:
+                uhrzeit = f"{stunde:02d}:{minute:02d} Uhr"
+
+        tag = next((t for t in _WOCHENTAGE if t in klein), None)
+        if tag:
+            benennung = tag.capitalize() + "s"
+            return f"{benennung} um {uhrzeit}" if uhrzeit else benennung
+        if any(wort in klein for wort in ("täglich", "taeglich", "jeden tag")):
+            return f"Täglich um {uhrzeit}" if uhrzeit else "Täglich"
+        if any(wort in klein for wort in ("monatlich", "jeden monat", "zum monatsanfang")):
+            return "Monatlich"
+
+    return None

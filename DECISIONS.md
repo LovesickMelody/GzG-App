@@ -388,6 +388,24 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Nebenhandlung sah aus wie die Hauptsache der Seite. Gestrichelt heißt überall „hier
   gehört etwas hin", die Galerie steht leise daneben.
 
+- **Kontingente werden aus den Teilnahmebedingungen gelesen** — viele Aktionen sind
+  gedeckelt („1.000 Teilnahmen pro Woche") und werden zu einem festen Zeitpunkt
+  zurückgesetzt. Wer das nicht weiß, kauft das Produkt und merkt beim Einreichen, dass er
+  zu spät dran war. Gelesen werden Zahl, Zeitraum und Zurücksetzung; einen *Live-Zähler*
+  gibt es nicht, weil die Seiten ihn nicht hergeben.
+- **„Sobald das Kontingent erschöpft ist …" heißt nicht, dass es erschöpft ist** — dieser
+  Satz steht in fast jeden Teilnahmebedingungen. Als „erschöpft" zählt nur eine Aussage
+  ohne Bedingungswort davor; sonst wären alle Aktionen dauerhaft als tot markiert.
+- **Erinnerungen mit dem AlarmManager, ungenau gestellt** — für eine Meldung zu einem
+  Zeitpunkt braucht es keine Bibliothek, und ein ungenauer Alarm erspart die
+  Sonderberechtigung für exakte Wecker. Das System darf ihn um bis zu eine Stunde
+  verschieben; bei einer Frist, die noch Tage läuft, ist das ohne Belang. Gestellte
+  Erinnerungen liegen in der Datenbank und werden beim App-Start neu gestellt — Wecker
+  überleben keinen Neustart des Telefons.
+- **Der Barcode-Scanner ist entfallen** — mit ihm CameraX und die Barcode-Bibliothek. Er
+  löste einen Sonderfall („steht im Laden vor einem Produkt"), den der tägliche Weg nicht
+  braucht, und kostete zwei Bibliotheken.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

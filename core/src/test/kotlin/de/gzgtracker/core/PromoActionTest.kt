@@ -44,3 +44,56 @@ class PromoActionTest {
         assertTrue(aktion().requirements.isEmpty())
     }
 }
+
+/**
+ * Das Kontingent in einem Satz. Viele Aktionen sind gedeckelt, und wer das
+ * nicht weiss, kauft das Produkt und reicht zu spaet ein.
+ */
+class KontingentTextTest {
+
+    private fun aktion(
+        anzahl: Int? = null,
+        zeitraum: String? = null,
+        reset: String? = null,
+        erschoepft: Boolean = false,
+    ) = PromoAction(
+        id = "a",
+        title = "Test",
+        limitAnzahl = anzahl,
+        limitZeitraum = zeitraum,
+        limitReset = reset,
+        limitErschoepft = erschoepft,
+    )
+
+    @Test
+    fun `nennt Anzahl und Zeitraum`() {
+        assertEquals("1000 Teilnahmen pro Woche", aktion(1000, "woche").kontingentText)
+    }
+
+    @Test
+    fun `ohne Zeitraum gilt insgesamt`() {
+        assertEquals("500 Teilnahmen insgesamt", aktion(500).kontingentText)
+    }
+
+    @Test
+    fun `haengt die Zuruecksetzung an`() {
+        val text = aktion(1000, "woche", "Montags um 09:00 Uhr").kontingentText
+        assertEquals("1000 Teilnahmen pro Woche, neu Montags um 09:00 Uhr", text)
+    }
+
+    @Test
+    fun `nur die Zuruecksetzung reicht auch`() {
+        assertEquals("neu Montags", aktion(reset = "Montags").kontingentText)
+    }
+
+    @Test
+    fun `ohne Angaben gibt es keinen Text`() {
+        assertEquals(null, aktion().kontingentText)
+        assertEquals(false, aktion().hatKontingent)
+    }
+
+    @Test
+    fun `erschoepft zaehlt als Angabe`() {
+        assertEquals(true, aktion(erschoepft = true).hatKontingent)
+    }
+}

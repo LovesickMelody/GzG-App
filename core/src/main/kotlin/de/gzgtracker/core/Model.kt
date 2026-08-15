@@ -120,6 +120,21 @@ data class PromoAction(
      */
     val submitUrl: String? = null,
     /**
+     * Wie stark die Aktion gedeckelt ist — aus den Teilnahmebedingungen gelesen.
+     *
+     * Viele Anbieter geben nur ein Kontingent frei ("1.000 Teilnahmen pro
+     * Woche") und setzen es zu einem festen Zeitpunkt zurueck. Wer das nicht
+     * weiss, kauft das Produkt und stellt beim Einreichen fest, dass er zu spaet
+     * dran war.
+     */
+    val limitAnzahl: Int? = null,
+    /** "tag", "woche", "monat" — oder `null` fuer "insgesamt". */
+    val limitZeitraum: String? = null,
+    /** Wann es von vorn losgeht, als lesbarer Text: "Montags um 09:00 Uhr". */
+    val limitReset: String? = null,
+    /** True, wenn die Aktionsseite beim letzten Abruf sagte, dass nichts mehr geht. */
+    val limitErschoepft: Boolean = false,
+    /**
      * Was man zum Mitmachen braucht, als Schluessel aus dem Feed. Leer heisst
      * "nicht bekannt", nicht "nichts noetig" — die App sagt das auch so.
      */
@@ -135,6 +150,33 @@ data class PromoAction(
 
     /** True, wenn [besteAdresse] direkt zum Formular fuehrt und nicht nur zum Portal. */
     val fuehrtDirektZumFormular: Boolean get() = submitUrl != null
+
+    /**
+     * Das Kontingent in einem Satz — oder `null`, wenn nichts bekannt ist.
+     *
+     * Zusammengesetzt statt vorformuliert im Feed: So laesst sich die Formulierung
+     * aendern, ohne den Sammellauf abzuwarten, und die Rohwerte bleiben fuer
+     * Filter und Sortierung brauchbar.
+     */
+    val kontingentText: String?
+        get() {
+            val teile = mutableListOf<String>()
+            limitAnzahl?.let { anzahl ->
+                val zeitraum = when (limitZeitraum) {
+                    "tag" -> " pro Tag"
+                    "woche" -> " pro Woche"
+                    "monat" -> " pro Monat"
+                    else -> " insgesamt"
+                }
+                teile += "$anzahl Teilnahmen$zeitraum"
+            }
+            limitReset?.let { teile += "neu $it" }
+            return teile.joinToString(", ").takeIf { it.isNotBlank() }
+        }
+
+    /** True, wenn es ueberhaupt etwas ueber das Kontingent zu sagen gibt. */
+    val hatKontingent: Boolean
+        get() = limitAnzahl != null || limitReset != null || limitErschoepft
 }
 
 /** Ein gekauftes Produkt und der Stand seiner Erstattung. */

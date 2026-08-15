@@ -115,7 +115,10 @@ fun AktionenScreen(
 
                     Box {
                         IconButton(onClick = { sortiermenue = true }) {
-                            Icon(Icons.Outlined.FilterList, contentDescription = "Sortieren und filtern")
+                            Icon(
+                                Icons.Outlined.FilterList,
+                                contentDescription = "Sortieren und filtern",
+                            )
                         }
                         DropdownMenu(
                             expanded = sortiermenue,
@@ -211,7 +214,7 @@ fun AktionenScreen(
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp, bottom = 4.dp),
+                                .padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
                             textAlign = TextAlign.End,
                         )
                     }
@@ -402,6 +405,26 @@ private fun AktionZeile(
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     },
+                )
+            }
+
+            // Ein gedeckeltes Kontingent entscheidet darueber, ob sich der Kauf
+            // ueberhaupt lohnt — das gehoert in die Liste, nicht nur auf die
+            // Aktionsseite.
+            if (aktion.hatKontingent) {
+                Text(
+                    text = listOfNotNull(
+                        if (aktion.limitErschoepft) "Zuletzt erschöpft" else null,
+                        aktion.kontingentText,
+                    ).joinToString(" · "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (aktion.limitErschoepft) {
+                        GzgTheme.status.dringend
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 

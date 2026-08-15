@@ -143,7 +143,9 @@ class TestJsonForm:
         assert schluessel == [
             "id", "title", "brand", "type", "max_refund_cents",
             "valid_from", "valid_to", "submission_deadline", "url", "submit_url",
-            "requirements", "retailers", "eans", "image_url", "source",
+            "requirements", "retailers", "eans", "image_url",
+            "limit_anzahl", "limit_zeitraum", "limit_reset", "limit_erschoepft",
+            "source",
         ]
 
     def test_sortiert_listen(self):
