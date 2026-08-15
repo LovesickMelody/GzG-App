@@ -26,6 +26,8 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -124,8 +126,8 @@ fun KontenScreen(viewModel: KontenViewModel = hiltViewModel()) {
         KontoDialog(
             titel = "Konto anlegen",
             konto = null,
-            onSpeichern = { name, iban, farbe ->
-                viewModel.anlegen(name, iban, farbe)
+            onSpeichern = { entwurf ->
+                viewModel.anlegen(entwurf)
                 neuOffen = false
             },
             onAbbrechen = { neuOffen = false },
@@ -136,10 +138,8 @@ fun KontenScreen(viewModel: KontenViewModel = hiltViewModel()) {
         KontoDialog(
             titel = "Konto bearbeiten",
             konto = konto,
-            onSpeichern = { name, iban, farbe ->
-                viewModel.aktualisieren(
-                    konto.copy(name = name, ibanLast4 = iban, colorHex = farbe),
-                )
+            onSpeichern = { geaendert ->
+                viewModel.aktualisieren(geaendert.copy(id = konto.id))
                 bearbeite = null
             },
             onAbbrechen = { bearbeite = null },
@@ -183,7 +183,8 @@ private fun KontoZeileAnsicht(
                 )
                 Text(
                     text = listOfNotNull(
-                        konto.ibanLast4?.let { "IBAN …$it" },
+                        konto.endziffern?.let { "IBAN …$it" },
+                        konto.vollerName,
                         "${zeile.anzahlEinreichungen} Einreichungen",
                         if (!konto.isActive) "deaktiviert" else null,
                     ).joinToString(" · "),
@@ -236,23 +237,39 @@ private fun KontoZeileAnsicht(
 private fun KontoDialog(
     titel: String,
     konto: Account?,
-    onSpeichern: (name: String, ibanLast4: String?, colorHex: String) -> Unit,
+    onSpeichern: (Account) -> Unit,
     onAbbrechen: () -> Unit,
     onLoeschen: (() -> Unit)? = null,
     loeschbar: Boolean = false,
 ) {
     var name by remember { mutableStateOf(konto?.name.orEmpty()) }
-    var iban by remember { mutableStateOf(konto?.ibanLast4.orEmpty()) }
+    var iban by remember { mutableStateOf(konto?.iban.orEmpty()) }
     var farbe by remember { mutableStateOf(konto?.colorHex ?: KONTO_FARBEN.first()) }
+    var vorname by remember { mutableStateOf(konto?.vorname.orEmpty()) }
+    var nachname by remember { mutableStateOf(konto?.nachname.orEmpty()) }
+    var strasse by remember { mutableStateOf(konto?.strasse.orEmpty()) }
+    var hausnummer by remember { mutableStateOf(konto?.hausnummer.orEmpty()) }
+    var plz by remember { mutableStateOf(konto?.plz.orEmpty()) }
+    var ort by remember { mutableStateOf(konto?.ort.orEmpty()) }
+    var telefon by remember { mutableStateOf(konto?.telefon.orEmpty()) }
+    var email by remember { mutableStateOf(konto?.email.orEmpty()) }
 
     val nameOk = name.isNotBlank()
-    val ibanOk = iban.isEmpty() || (iban.length == 4 && iban.all(Char::isDigit))
+    // Eine deutsche IBAN hat 22 Zeichen, international bis 34. Geprueft wird
+    // nur die Laenge — eine echte Pruefsummenrechnung waere hier Ballast, und
+    // ein Tippfehler faellt beim Einreichen ohnehin auf.
+    val ibanRoh = iban.filter { !it.isWhitespace() }
+    val ibanOk = ibanRoh.isEmpty() || ibanRoh.length in 15..34
 
     AlertDialog(
         onDismissRequest = onAbbrechen,
         title = { Text(titel) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            // Mit dem Profil passt der Inhalt nicht mehr auf einen Bildschirm.
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
@@ -264,15 +281,96 @@ private fun KontoDialog(
                 )
                 OutlinedTextField(
                     value = iban,
-                    onValueChange = { neu -> iban = neu.filter(Char::isDigit).take(4) },
-                    label = { Text("Letzte 4 IBAN-Stellen") },
-                    placeholder = { Text("optional") },
+                    onValueChange = { iban = it.uppercase() },
+                    label = { Text("IBAN") },
+                    placeholder = { Text("DE00 0000 0000 0000 0000 00") },
                     singleLine = true,
                     isError = !ibanOk,
-                    supportingText = { Text("Die volle IBAN braucht die App nicht.") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    supportingText = {
+                        Text("Bleibt auf dem Gerät. Wird beim Einreichen ins Formular gesetzt.")
+                    },
                     modifier = Modifier.fillMaxWidth(),
                 )
+
+                Text(
+                    text = "Angaben für die Einreichung",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    text = "Alles freiwillig. Was hier steht, trägt die App beim " +
+                        "Einreichen ins Formular des Anbieters ein.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = vorname,
+                        onValueChange = { vorname = it },
+                        label = { Text("Vorname") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f),
+                    )
+                    OutlinedTextField(
+                        value = nachname,
+                        onValueChange = { nachname = it },
+                        label = { Text("Nachname") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = strasse,
+                        onValueChange = { strasse = it },
+                        label = { Text("Straße") },
+                        singleLine = true,
+                        modifier = Modifier.weight(0.65f),
+                    )
+                    OutlinedTextField(
+                        value = hausnummer,
+                        onValueChange = { hausnummer = it },
+                        label = { Text("Nr.") },
+                        singleLine = true,
+                        modifier = Modifier.weight(0.35f),
+                    )
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = plz,
+                        onValueChange = { plz = it.filter(Char::isDigit).take(5) },
+                        label = { Text("PLZ") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.weight(0.35f),
+                    )
+                    OutlinedTextField(
+                        value = ort,
+                        onValueChange = { ort = it },
+                        label = { Text("Ort") },
+                        singleLine = true,
+                        modifier = Modifier.weight(0.65f),
+                    )
+                }
+                OutlinedTextField(
+                    value = telefon,
+                    onValueChange = { telefon = it },
+                    label = { Text("Telefon") },
+                    placeholder = { Text("für Aktionen mit SMS-Code") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("E-Mail") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
                 Text(
                     text = "Farbe",
                     style = MaterialTheme.typography.labelLarge,
@@ -291,7 +389,23 @@ private fun KontoDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onSpeichern(name.trim(), iban.ifBlank { null }, farbe) },
+                onClick = {
+                    onSpeichern(
+                        (konto ?: Account(id = 0, name = "")).copy(
+                            name = name.trim(),
+                            iban = ibanRoh.ifBlank { null },
+                            colorHex = farbe,
+                            vorname = vorname.trim().ifBlank { null },
+                            nachname = nachname.trim().ifBlank { null },
+                            strasse = strasse.trim().ifBlank { null },
+                            hausnummer = hausnummer.trim().ifBlank { null },
+                            plz = plz.trim().ifBlank { null },
+                            ort = ort.trim().ifBlank { null },
+                            telefon = telefon.trim().ifBlank { null },
+                            email = email.trim().ifBlank { null },
+                        ),
+                    )
+                },
                 enabled = nameOk && ibanOk,
             ) {
                 Text("Speichern")

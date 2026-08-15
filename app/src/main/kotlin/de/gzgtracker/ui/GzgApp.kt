@@ -28,6 +28,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import de.gzgtracker.ui.aktionen.AktionBearbeitenScreen
 import de.gzgtracker.ui.aktionen.AktionDetailScreen
+import de.gzgtracker.ui.formular.WebFormularScreen
 import de.gzgtracker.ui.aktionen.AktionenScreen
 import de.gzgtracker.ui.detail.DetailScreen
 import de.gzgtracker.ui.einstellungen.EinstellungenScreen
@@ -48,10 +49,13 @@ object Routes {
     const val ERFASSEN = "erfassen?actionId={actionId}&ean={ean}&submissionId={submissionId}"
     const val AKTION_BEARBEITEN = "aktion-bearbeiten?actionId={actionId}"
     const val AKTION = "aktion/{actionId}"
+    const val WEBFORMULAR = "webformular/{submissionId}"
 
     fun detail(id: Long) = "detail/$id"
 
     fun aktion(actionId: String) = "aktion/$actionId"
+
+    fun webformular(submissionId: Long) = "webformular/$submissionId"
 
     fun erfassen(actionId: String? = null, ean: String? = null, submissionId: Long? = null): String =
         "erfassen?actionId=${actionId.orEmpty()}&ean=${ean.orEmpty()}" +
@@ -156,6 +160,13 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
                 )
             }
 
+            composable(
+                route = Routes.WEBFORMULAR,
+                arguments = listOf(navArgument("submissionId") { type = NavType.LongType }),
+            ) {
+                WebFormularScreen(onZurueck = { navController.popBackStack() })
+            }
+
             composable(Routes.KONTEN) { KontenScreen() }
 
             composable(Routes.EINSTELLUNGEN) { EinstellungenScreen() }
@@ -195,6 +206,14 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
                     onFertig = { navController.popBackStack() },
                     onAbbrechen = { navController.popBackStack() },
                     onScannen = { navController.navigate(Routes.SCAN) },
+                    onEinreichen = { submissionId ->
+                        // Das Formular ersetzt die Erfassung im Verlauf: Zurueck
+                        // fuehrt dann zur Liste, nicht in ein Formular, das man
+                        // gerade abgeschickt hat.
+                        navController.navigate(Routes.webformular(submissionId)) {
+                            popUpTo(Routes.ERFASSEN) { inclusive = true }
+                        }
+                    },
                 )
             }
 

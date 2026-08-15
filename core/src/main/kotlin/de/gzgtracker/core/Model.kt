@@ -57,9 +57,45 @@ data class Account(
     val id: Long,
     val name: String,
     val ibanLast4: String? = null,
-    val colorHex: String,
+    val colorHex: String = "#16181C",
     val isActive: Boolean = true,
-)
+    // --- Angaben fuer die Einreichungsformulare -------------------------
+    // Sie stehen am Konto, weil bei einer Erstattung ohnehin Konto und Person
+    // zusammengehoeren: Das Geld geht auf dieses Konto, also traegt man auch
+    // dessen Inhaber ins Formular ein. Alles davon ist freiwillig — wer nichts
+    // eintraegt, fuellt eben ein Feld mehr von Hand.
+    /** Vollstaendige IBAN. Bleibt wie alles andere auf dem Geraet. */
+    val iban: String? = null,
+    val vorname: String? = null,
+    val nachname: String? = null,
+    val strasse: String? = null,
+    val hausnummer: String? = null,
+    val plz: String? = null,
+    val ort: String? = null,
+    val telefon: String? = null,
+    val email: String? = null,
+) {
+    /** Was in der Liste unter dem Namen steht. */
+    val vollerName: String?
+        get() = listOfNotNull(vorname, nachname)
+            .filter { it.isNotBlank() }
+            .joinToString(" ")
+            .takeIf { it.isNotBlank() }
+
+    /**
+     * Die letzten vier Stellen — aus der vollen IBAN, wenn sie da ist.
+     *
+     * So muss niemand beides pflegen, und die Anzeige stimmt automatisch,
+     * sobald die IBAN eingetragen wird.
+     */
+    val endziffern: String?
+        get() = iban?.filter { !it.isWhitespace() }?.takeLast(4)?.takeIf { it.length == 4 }
+            ?: ibanLast4
+
+    /** Wie viel vom Profil ausgefuellt ist — fuer den Hinweis in der Kontoliste. */
+    val profilVollstaendig: Boolean
+        get() = !iban.isNullOrBlank() && !vorname.isNullOrBlank() && !nachname.isNullOrBlank()
+}
 
 /** Eine Geld-zurueck-Aktion, entweder aus `actions.json` oder von Hand angelegt. */
 data class PromoAction(

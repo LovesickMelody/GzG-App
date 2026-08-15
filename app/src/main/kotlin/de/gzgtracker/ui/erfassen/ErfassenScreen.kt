@@ -86,6 +86,7 @@ fun ErfassenScreen(
     onFertig: () -> Unit,
     onAbbrechen: () -> Unit,
     onScannen: () -> Unit,
+    onEinreichen: (Long) -> Unit,
     viewModel: ErfassenViewModel = hiltViewModel(),
 ) {
     val zustand by viewModel.uiState.collectAsStateWithLifecycle()
@@ -151,7 +152,9 @@ fun ErfassenScreen(
     }
 
     LaunchedEffect(zustand.gespeichert) {
-        if (zustand.gespeichert) onFertig()
+        if (!zustand.gespeichert) return@LaunchedEffect
+        val id = zustand.submissionId
+        if (zustand.weiterZumFormular && id != null) onEinreichen(id) else onFertig()
     }
 
     LaunchedEffect(zustand.meldung) {
@@ -481,14 +484,26 @@ fun ErfassenScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
+            // Speichern und Einreichen sind zwei Schritte, aber fast immer
+            // hintereinander. Der obere Knopf macht beides; der untere bleibt
+            // fuer den Fall, dass man spaeter einreichen will.
             Button(
-                onClick = viewModel::speichern,
+                onClick = { viewModel.speichern(dannEinreichen = true) },
                 enabled = zustand.speicherbar,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 32.dp),
+                    .padding(top = 8.dp),
             ) {
-                Text(if (zustand.istNeu) "Einreichung speichern" else "Änderungen speichern")
+                Text("Speichern und einreichen")
+            }
+            OutlinedButton(
+                onClick = { viewModel.speichern(dannEinreichen = false) },
+                enabled = zustand.speicherbar,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
+            ) {
+                Text(if (zustand.istNeu) "Nur speichern" else "Änderungen speichern")
             }
         }
     }
