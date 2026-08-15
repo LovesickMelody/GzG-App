@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T08:33:42Z",
+  "generated_at": "2026-08-15T08:38:01Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,7 +11,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SA1bkhDT0JibHU2VEJDWTRhWUJzS1FrVXlTMjk0RTR0b6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEY3WVNOdXhQREhpOXd2OVZNRElld1U1eWpHV1hwRVByo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBXVWVvQ2pjOFREUWJMS3FKajdqYXRRM1ZSc0NXUWZYdKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHZOajQ2NEVJMTZrWU45aU8wSG0yOWVNQjFOVktTQ19fo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -52,7 +52,7 @@
       "valid_to": "2026-08-16",
       "submission_deadline": "2026-08-16",
       "url": "https://www.mydealz.de/deals/gzg-100-cashback-auf-borotalco-deo-2817904",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2817904",
+      "submit_url": null,
       "requirements": [],
       "retailers": [
         "dm"
@@ -127,7 +127,7 @@
       "valid_to": "2026-08-30",
       "submission_deadline": "2026-08-30",
       "url": "https://www.mydealz.de/deals/gzg-bonduelle-salat-gratis-testen-via-scondoo-2822886",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2822886",
+      "submit_url": null,
       "requirements": [
         "produktfoto",
         "bonfoto",
@@ -169,7 +169,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/fazer-aito-haferdrink-gratis-testen-nur-bei-rewe-scondoo-2822915",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2822915",
+      "submit_url": null,
       "requirements": [
         "app"
       ],
@@ -251,7 +251,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NjEwNTI&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NjEwNTI&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA0NjEyMzE&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA0NjEyMzE&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -271,7 +271,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895178985",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895179978",
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -350,7 +350,7 @@
       "valid_to": "2026-11-01",
       "submission_deadline": "2026-11-01",
       "url": "https://www.mydealz.de/deals/gzg-ab-3108-endori-gratis-testen-aktion-2822978",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2822978",
+      "submit_url": null,
       "requirements": [
         "bonfoto"
       ],
