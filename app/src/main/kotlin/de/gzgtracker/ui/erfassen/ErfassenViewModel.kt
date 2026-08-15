@@ -64,6 +64,8 @@ data class ErfassenUiState(
     val regel: DuplicateAccountRule = DuplicateAccountRule.DEFAULT,
     val meldung: String? = null,
     val gespeichert: Boolean = false,
+    /** Nach dem Speichern direkt zum Formular des Anbieters weitergehen. */
+    val weiterZumFormular: Boolean = false,
 ) {
     val gewaehlteAktion: PromoAction?
         get() = aktionen.firstOrNull { it.id == aktionId }
@@ -331,7 +333,12 @@ class ErfassenViewModel @Inject constructor(
         }
     }
 
-    fun speichern() {
+    /**
+     * @param dannEinreichen true, wenn nach dem Speichern gleich das Formular
+     *   des Anbieters aufgehen soll. Gespeichert wird in beiden Faellen zuerst —
+     *   wer den Browser wegwischt, hat seine Eingaben trotzdem sicher.
+     */
+    fun speichern(dannEinreichen: Boolean = false) {
         val zustand = _uiState.value
         if (!zustand.speicherbar) return
         val preisCents = Money.parseOrNull(zustand.preis) ?: return
@@ -358,12 +365,14 @@ class ErfassenViewModel @Inject constructor(
                 note = zustand.notiz.trim().takeIf { it.isNotBlank() },
             )
 
+            val gespeicherteId: Long
             if (zustand.istNeu) {
-                submissions.anlegen(eintrag)
+                gespeicherteId = submissions.anlegen(eintrag)
                 // Was gekauft und eingetragen ist, gehoert nicht mehr auf den
                 // Einkaufszettel — sonst haekt man dieselbe Zeile zweimal ab.
                 actions.vergiss(eintrag.actionId)
             } else {
+                gespeicherteId = zustand.submissionId ?: 0L
                 val bestehend = submissions.ladeAlle()
                     .firstOrNull { it.id == zustand.submissionId }
                 submissions.aktualisieren(
@@ -376,7 +385,13 @@ class ErfassenViewModel @Inject constructor(
                 )
             }
 
-            _uiState.update { it.copy(gespeichert = true) }
+            _uiState.update {
+                it.copy(
+                    gespeichert = true,
+                    submissionId = gespeicherteId,
+                    weiterZumFormular = dannEinreichen,
+                )
+            }
         }
     }
 
