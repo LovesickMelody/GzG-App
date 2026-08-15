@@ -54,10 +54,17 @@ class BonLeser @Inject constructor(
     /**
      * Wertet das Bild unter [pfad] aus.
      *
+     * [produkt] ist der Name des Aktionsprodukts. Steht er da, sucht die
+     * Auswertung den Posten dieses Produkts statt der Bonsumme — erstattet wird
+     * das Produkt, nicht der ganze Einkauf.
+     *
      * Gibt eine leere [Bonauswertung] zurueck, wenn nichts Brauchbares
      * herauskommt — ein fehlender Vorschlag ist harmlos, ein falscher nicht.
      */
-    suspend fun auswerten(pfad: String): Bonergebnis = withContext(Dispatchers.Default) {
+    suspend fun auswerten(
+        pfad: String,
+        produkt: String? = null,
+    ): Bonergebnis = withContext(Dispatchers.Default) {
         val datei = File(pfad)
         if (!datei.exists()) {
             return@withContext Bonergebnis(fehler = "Das Bild wurde nicht gefunden.")
@@ -89,7 +96,7 @@ class BonLeser @Inject constructor(
         }
 
         Log.i(TAG, "Bon gelesen: ${text.length} Zeichen, ${text.lines().size} Zeilen")
-        Bonergebnis(auswertung = Kassenbon.auswerten(text))
+        Bonergebnis(auswertung = Kassenbon.auswerten(text, produkt = produkt))
     }
 
     private suspend fun erkenneText(bitmap: Bitmap): String =

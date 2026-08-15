@@ -55,8 +55,6 @@ data class ErfassenUiState(
     val datumAusBon: Boolean = false,
     /** Der Betrag hing an keinem Schlüsselwort, sondern ist der größte auf dem Bon. */
     val preisGeraten: Boolean = false,
-    /** Artikelzeilen aus dem Bon, zum Antippen statt Abtippen. */
-    val artikelvorschlaege: List<String> = emptyList(),
     val notiz: String = "",
     val status: SubmissionStatus = SubmissionStatus.GEKAUFT,
 
@@ -270,7 +268,11 @@ class ErfassenViewModel @Inject constructor(
     }
 
     /**
-     * Fuellt Preis und Kaufdatum aus dem Bon vor.
+     * Fuellt Preis, Kaufdatum und Haendler aus dem Bon vor.
+     *
+     * Gesucht wird der Posten des Aktionsprodukts, nicht die Bonsumme: Erstattet
+     * wird das eine Produkt, und wer den Gesamtbetrag eines Wocheneinkaufs
+     * einreicht, bekommt nichts.
      *
      * Bereits Eingetragenes wird nicht ueberschrieben: Wer den Preis von Hand
      * korrigiert und danach ein besseres Foto macht, will seine Korrektur
@@ -279,19 +281,29 @@ class ErfassenViewModel @Inject constructor(
      */
     private suspend fun werteBonAus(pfad: String) {
         _uiState.update { it.copy(liestBon = true) }
-        val ergebnis = bonLeser.auswerten(pfad)
+
+        // Der Produktname aus dem Feld, sonst der Titel der Aktion — irgendetwas
+        // steht praktisch immer da, weil die Aktionswahl ihn vorbelegt.
+        val vorherigerZustand = _uiState.value
+        val gesuchtesProdukt = vorherigerZustand.produktname
+            .ifBlank { vorherigerZustand.gewaehlteAktion?.title.orEmpty() }
+            .takeIf { it.isNotBlank() }
+
+        val ergebnis = bonLeser.auswerten(pfad, produkt = gesuchtesProdukt)
         val auswertung = ergebnis.auswertung
         // In eigene Variablen, bevor sie gelesen werden: Werte aus einem anderen
         // Modul behandelt Kotlin nach einer Null-Pruefung nicht automatisch als
         // "nicht null", weil sie sich zwischendurch geaendert haben koennten.
         val gelesenerPreis = auswertung.preisCents
         val gelesenesDatum = auswertung.datum
+        val gelesenerHaendler = auswertung.haendler
 
         _uiState.update { zustand ->
             val preisUebernehmen = gelesenerPreis != null && zustand.preis.isBlank()
             val datumUebernehmen = gelesenesDatum != null &&
                 zustand.kaufdatum == LocalDate.now() &&
                 !zustand.datumAusBon
+            val haendlerUebernehmen = gelesenerHaendler != null && zustand.haendler.isBlank()
 
             zustand.copy(
                 liestBon = false,
@@ -300,13 +312,14 @@ class ErfassenViewModel @Inject constructor(
                 preisGeraten = if (preisUebernehmen) auswertung.preisGeraten else zustand.preisGeraten,
                 kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
                 datumAusBon = zustand.datumAusBon || datumUebernehmen,
-                artikelvorschlaege = auswertung.artikel,
+                haendler = if (haendlerUebernehmen) gelesenerHaendler else zustand.haendler,
                 // Jeder Ausgang bekommt seine eigene Meldung. Wer nur "es hat
                 // nicht geklappt" liest, weiss nicht, ob er naeher rangehen,
                 // mehr Licht machen oder von Hand tippen soll.
                 meldung = when {
                     ergebnis.fehler != null -> ergebnis.fehler
-                    preisUebernehmen || datumUebernehmen -> "Aus dem Bon gelesen — bitte prüfen"
+                    preisUebernehmen || datumUebernehmen || haendlerUebernehmen ->
+                        "Aus dem Bon gelesen — bitte prüfen"
                     gelesenerPreis != null -> "Bon gelesen, Preis stand aber schon da."
                     else -> "Bon gelesen, aber kein Betrag gefunden. Bitte eintragen."
                 },

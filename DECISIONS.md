@@ -301,6 +301,19 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   `javascript:`- oder `intent:`-Link daraus würde beim Antippen in einer anderen App
   landen; das gehört gar nicht erst in die Datenbank.
 
+- **Aus dem Bon zählt der Posten des Aktionsprodukts, nicht die Summe** — erstattet wird das
+  eine Produkt. Wer den Gesamtbetrag eines Wocheneinkaufs einreicht, bekommt nichts oder
+  fällt unangenehm auf. Gesucht wird deshalb die Zeile mit den meisten Wortübereinstimmungen
+  zum Produktnamen; Bons kürzen ab ("BIFI TASTY B."), also zählt schon ein Wortanfang.
+  Erst wenn keine Zeile passt, gilt wieder die ausgewiesene Summe, danach der größte Betrag.
+- **Der Händler kommt aus den ersten acht Zeilen** — weiter unten stehen Werbetexte
+  ("Auch erhältlich bei Rossmann") und Adressen, in denen ein Marktname zufällig vorkommt.
+  Der Abgleich läuft über Wortgrenzen, sonst fände "dm" sich in "Admiralstraße" wieder.
+- **Der eingebaute Browser meldet sich ohne „wv"** — die Standard-Kennung einer
+  WebView enthält dieses Kürzel, und einige Anbieter liefern darauf eine leere Seite aus.
+  Dazu Ladebalken, sichtbare Fehlermeldung und „Im Browser öffnen": Vor einer weißen Fläche
+  zu stehen, ohne zu wissen warum, ist der schlechteste Ausgang.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

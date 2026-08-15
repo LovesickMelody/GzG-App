@@ -82,3 +82,11 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Tests gruen, CI gruen
 - [x] README: Setup, Architektur, APK installieren, Scraper reparieren, Quelle ergaenzen
 - [x] `DECISIONS.md` vollstaendig
+
+## Nachbesserungen aus dem Gerätetest
+
+- [x] Preis: Posten des Aktionsprodukts statt Bonsumme
+- [x] Händler aus der Bon-Kopfzeile vorbelegen
+- [x] Leere Seite nach "Speichern und einreichen": Ladebalken, Fehlermeldung,
+      Browser-Kennung ohne "wv", Ausweg "Im Browser öffnen"
+- [x] "Zur Einreichung"-Knopf und die Artikelvorschläge aus der Erfassung entfernt

@@ -201,4 +201,127 @@ class KassenbonTest {
         assertEquals(LocalDate.of(2026, 8, 14), ergebnis.datum)
         assertEquals(true, ergebnis.hatVorschlag)
     }
+
+    // --- Der Preis des Aktionsprodukts, nicht der des ganzen Einkaufs -------
+
+    private val grosseinkauf = """
+        REWE Markt GmbH
+        Musterstraße 1, 12345 Musterstadt
+        14.08.2026 17:42 Bon-Nr. 4711
+
+        BOROTALCO DEO 150ML    3,45 A
+        WASCHMITTEL 20WL      12,99 A
+        BONDUELLE SALAT        2,49 A
+        MILCH 1,5%             1,19 B
+        KISTE WASSER          58,88 B
+
+        SUMME EUR             79,00
+        Geg. BAR              90,00
+        Rückgeld              11,00
+    """.trimIndent()
+
+    @Test
+    fun `nimmt den Posten des Aktionsprodukts statt der Summe`() {
+        // Erstattet wird das Aktionsprodukt. Wer 79,00 € einreicht, weil auf
+        // demselben Bon auch Waschmittel und Wasser stehen, bekommt nichts.
+        assertEquals(345, Kassenbon.lesePreisFuerProdukt(grosseinkauf, "Borotalco Deo Invisible"))
+    }
+
+    @Test
+    fun `versteht die Abkuerzungen auf dem Bon`() {
+        val text = """
+            BIFI TASTY B.          1,29 A
+            SUMME                 24,80
+        """.trimIndent()
+        assertEquals(129, Kassenbon.lesePreisFuerProdukt(text, "BiFi Tasty Barbecue"))
+    }
+
+    @Test
+    fun `nimmt die Zeile mit den meisten Treffern`() {
+        val text = """
+            DEO SPRAY FREMD        1,95 A
+            BOROTALCO DEO 150ML    3,45 A
+        """.trimIndent()
+        assertEquals(345, Kassenbon.lesePreisFuerProdukt(text, "Borotalco Deo"))
+    }
+
+    @Test
+    fun `verwechselt den Produktposten nicht mit der Summenzeile`() {
+        // "Summe Borotalco-Aktion" gaebe es zwar selten, aber die Endbetragszeile
+        // darf nie als Posten durchgehen.
+        val text = """
+            SUMME BOROTALCO       79,00
+            BOROTALCO DEO          3,45 A
+        """.trimIndent()
+        assertEquals(345, Kassenbon.lesePreisFuerProdukt(text, "Borotalco"))
+    }
+
+    @Test
+    fun `ohne passenden Posten gibt es keinen Produktpreis`() {
+        assertNull(Kassenbon.lesePreisFuerProdukt(grosseinkauf, "Landliebe Pudding"))
+    }
+
+    @Test
+    fun `ohne Produktnamen gibt es keinen Produktpreis`() {
+        assertNull(Kassenbon.lesePreisFuerProdukt(grosseinkauf, "  "))
+    }
+
+    @Test
+    fun `auswerten bevorzugt den Produktposten vor der Summe`() {
+        val ergebnis = Kassenbon.auswerten(grosseinkauf, heute, produkt = "Borotalco Deo")
+        assertEquals(345, ergebnis.preisCents)
+        assertEquals(false, ergebnis.preisGeraten)
+    }
+
+    @Test
+    fun `auswerten faellt ohne Treffer auf die Summe zurueck`() {
+        val ergebnis = Kassenbon.auswerten(grosseinkauf, heute, produkt = "Landliebe Pudding")
+        assertEquals(7900, ergebnis.preisCents)
+        assertEquals(false, ergebnis.preisGeraten)
+    }
+
+    // --- Händler ------------------------------------------------------------
+
+    @Test
+    fun `liest den Haendler aus der Kopfzeile`() {
+        assertEquals("Rewe", Kassenbon.leseHaendler(rewe))
+    }
+
+    @Test
+    fun `erkennt dm trotz Bindestrich`() {
+        val text = """
+            dm-drogerie markt GmbH + Co. KG
+            Musterstraße 1
+            14.08.2026
+        """.trimIndent()
+        assertEquals("dm", Kassenbon.leseHaendler(text))
+    }
+
+    @Test
+    fun `haelt dm aus einem anderen Wort heraus`() {
+        // "Admiral" enthaelt "dm" — ein Haendlername ist das nicht.
+        assertNull(Kassenbon.leseHaendler("Admiralstraße 3\nKiosk am Eck"))
+    }
+
+    @Test
+    fun `sucht den Haendler nicht in der Fusszeile`() {
+        // Weiter unten stehen Werbetexte, in denen ein Name zufaellig vorkommt.
+        val text = """
+            Kiosk am Eck
+            Musterstraße 1
+            14.08.2026
+            ARTIKEL A              2,49
+            SUMME                  2,49
+            Geg. BAR               5,00
+            Rückgeld               2,51
+            MwSt A 19,00%          0,40
+            Auch erhältlich bei Rossmann
+        """.trimIndent()
+        assertNull(Kassenbon.leseHaendler(text))
+    }
+
+    @Test
+    fun `gibt den Haendler mit auswerten zurueck`() {
+        assertEquals("Rewe", Kassenbon.auswerten(rewe, heute).haendler)
+    }
 }
