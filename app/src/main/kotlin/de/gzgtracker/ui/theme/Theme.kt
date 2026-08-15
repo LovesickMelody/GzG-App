@@ -19,8 +19,9 @@ import de.gzgtracker.core.SubmissionStatus
 
 /**
  * Statusfarben liegen bewusst neben dem Material-Farbschema. Material haette sie in
- * primary/secondary/tertiary gepresst — genau das soll hier nicht passieren, weil
- * Farbe ausschliesslich Status bedeutet.
+ * primary/secondary/tertiary gepresst — dort sitzt aber der Akzent, der "das kannst
+ * du antippen" bedeutet. Beides im selben Topf haette genau die Verwechslung erzeugt,
+ * die dieses Farbsystem vermeiden soll.
  */
 @Immutable
 data class StatusPalette(
@@ -32,6 +33,14 @@ data class StatusPalette(
     val onRefunded: Color,
     val rejected: Color,
     val onRejected: Color,
+    /**
+     * Fuer eine Frist, die heute oder morgen ablaeuft.
+     *
+     * Derselbe Rotton wie "abgelehnt", aber ausschliesslich als **Textfarbe**.
+     * Flaechen bleiben dem Status vorbehalten, sonst saehe eine ablaufende Aktion
+     * aus wie eine abgelehnte Einreichung.
+     */
+    val dringend: Color,
 ) {
     /** Flaechenfarbe des Stempels. */
     fun background(status: SubmissionStatus): Color = when (status) {
@@ -59,6 +68,7 @@ private val LightStatusPalette = StatusPalette(
     onRefunded = Paper,
     rejected = StatusRejected,
     onRejected = Paper,
+    dringend = StatusRejected,
 )
 
 private val DarkStatusPalette = StatusPalette(
@@ -70,6 +80,7 @@ private val DarkStatusPalette = StatusPalette(
     onRefunded = PaperOnInk,
     rejected = StatusRejectedOnInk,
     onRejected = PaperOnInk,
+    dringend = StatusRejectedOnInk,
 )
 
 val LocalStatusPalette = staticCompositionLocalOf { LightStatusPalette }
@@ -80,16 +91,17 @@ val LocalStatusPalette = staticCompositionLocalOf { LightStatusPalette }
  */
 val LocalReducedMotion = staticCompositionLocalOf { false }
 
-// Buttons und Navigation bleiben `ink` — kein bunter Akzent im Schema.
+// `primary` traegt ab jetzt den Akzent: Was man antippen kann, sieht auch danach
+// aus. `secondary` bleibt Tinte — das sind die zurueckhaltenden Handlungen.
 private val LightScheme = lightColorScheme(
-    primary = Ink,
-    onPrimary = Paper,
-    primaryContainer = Ink,
-    onPrimaryContainer = Paper,
+    primary = Accent,
+    onPrimary = OnAccent,
+    primaryContainer = AccentSoft,
+    onPrimaryContainer = OnAccentSoft,
     secondary = Ink,
     onSecondary = Paper,
-    secondaryContainer = PaperDim,
-    onSecondaryContainer = Ink,
+    secondaryContainer = AccentSoft,
+    onSecondaryContainer = OnAccentSoft,
     tertiary = Ink,
     onTertiary = Paper,
     background = Paper,
@@ -99,8 +111,8 @@ private val LightScheme = lightColorScheme(
     surfaceVariant = PaperDim,
     onSurfaceVariant = InkMuted,
     surfaceContainerLowest = Paper,
-    surfaceContainerLow = Paper,
-    surfaceContainer = Paper,
+    surfaceContainerLow = PaperCard,
+    surfaceContainer = PaperCard,
     surfaceContainerHigh = PaperDim,
     surfaceContainerHighest = PaperDim,
     outline = InkMuted,
@@ -115,13 +127,13 @@ private val LightScheme = lightColorScheme(
 )
 
 private val DarkScheme = darkColorScheme(
-    primary = PaperOnInk,
+    primary = AccentOnInk,
     onPrimary = InkPaper,
-    primaryContainer = PaperOnInk,
-    onPrimaryContainer = InkPaper,
+    primaryContainer = AccentSoftOnInk,
+    onPrimaryContainer = PaperOnInk,
     secondary = PaperOnInk,
     onSecondary = InkPaper,
-    secondaryContainer = InkPaperRaised,
+    secondaryContainer = AccentSoftOnInk,
     onSecondaryContainer = PaperOnInk,
     tertiary = PaperOnInk,
     onTertiary = InkPaper,
@@ -132,8 +144,8 @@ private val DarkScheme = darkColorScheme(
     surfaceVariant = InkPaperRaised,
     onSurfaceVariant = InkMutedOnInk,
     surfaceContainerLowest = InkPaper,
-    surfaceContainerLow = InkPaper,
-    surfaceContainer = InkPaper,
+    surfaceContainerLow = InkPaperCard,
+    surfaceContainer = InkPaperCard,
     surfaceContainerHigh = InkPaperRaised,
     surfaceContainerHighest = InkPaperRaised,
     outline = InkMutedOnInk,
@@ -150,7 +162,8 @@ private val DarkScheme = darkColorScheme(
 /**
  * Material You Dynamic Color ist **nicht** eingebaut — bewusst. Ein aus dem
  * Hintergrundbild abgeleitetes Schema wuerde Gelb und Gruen umfaerben und damit die
- * Statussemantik zerstoeren.
+ * Statussemantik zerstoeren; es wuerde ausserdem den Akzent ersetzen, der hier
+ * ausschliesslich "das kannst du antippen" bedeutet.
  */
 @Composable
 fun GzgTrackerTheme(

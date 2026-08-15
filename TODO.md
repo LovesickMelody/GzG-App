@@ -111,3 +111,15 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Feed-Adresse aus den Einstellungen entfernt
 - [x] "Manuell eintragen" und eigene Aktion beim Erfassen anlegen
 
+## Design
+
+- [x] Farbrollen festgelegt, Akzent eingeführt, Regel in CLAUDE.md geändert
+- [x] Belegplatz als Ablagefeld statt zweier zu großer Knöpfe
+- [x] Statusstreifen in der Belegliste
+- [x] Ablaufende Fristen hervorgehoben
+- [x] Aktiver Reiter, Lesezeichen und Auswahl im Akzent
+- [x] Abschnittsüberschriften mit Akzentstrich
+- [ ] Karten als dritte Papierstufe in Erfassen und Detail
+- [ ] Checkliste als Icon-Reihe statt Textzeile
+- [ ] Kontrastwerte nachrechnen
+

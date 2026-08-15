@@ -51,6 +51,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import android.Manifest
@@ -64,6 +69,7 @@ import androidx.core.content.ContextCompat
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,6 +77,7 @@ import coil.compose.AsyncImage
 import de.gzgtracker.core.Belegart
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.SubmissionStatus
+import de.gzgtracker.ui.components.Abschnittstitel
 import de.gzgtracker.ui.components.DatumFeld
 import de.gzgtracker.ui.components.label
 import de.gzgtracker.ui.konten.FarbPunkt
@@ -490,14 +497,7 @@ fun ErfassenScreen(
 }
 
 @Composable
-private fun Abschnitt(titel: String) {
-    Text(
-        text = titel,
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.padding(top = 8.dp),
-    )
-}
+private fun Abschnitt(titel: String) = Abschnittstitel(titel)
 
 /**
  * Die Warnung zur Kontoregel. Sie nutzt Rot bewusst nicht als Flaeche — Rot ist im
@@ -571,7 +571,7 @@ private fun BelegFeld(
         text = if (verlangt) "${art.label} — von dieser Aktion verlangt" else art.label,
         style = MaterialTheme.typography.labelLarge,
         color = if (verlangt) {
-            MaterialTheme.colorScheme.onSurface
+            MaterialTheme.colorScheme.primary
         } else {
             MaterialTheme.colorScheme.onSurfaceVariant
         },
@@ -608,30 +608,73 @@ private fun BelegFeld(
             TextButton(onClick = onAusGalerie) { Text("Aus Galerie") }
         }
     } else {
+        // Ein Ablageplatz statt zweier klobiger Knoepfe: Vorher standen hier zwei
+        // 72 dp hohe Kaesten nebeneinander, in denen "Fotografieren" mitten im
+        // Wort umbrach — und eine Nebenhandlung sah aus wie die Hauptsache der
+        // Seite. Jetzt fuehrt eine grosse Flaeche zum Regelfall (fotografieren),
+        // die Galerie steht leise daneben.
+        val rahmenfarbe = if (verlangt) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.outline
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .gestrichelt(rahmenfarbe, 8.dp)
+                .clickable(onClick = onFotografieren),
+            contentAlignment = Alignment.Center,
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Outlined.PhotoCamera,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = "Fotografieren",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                )
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.End,
         ) {
-            // Fotografieren steht links und traegt das Kamerasymbol: Das ist der
-            // Regelfall — man kommt vom Einkauf und hat den Bon in der Hand.
-            OutlinedButton(
-                onClick = onFotografieren,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(72.dp),
-            ) {
-                Icon(Icons.Outlined.PhotoCamera, contentDescription = null)
-                Text("  Fotografieren")
-            }
-            OutlinedButton(
-                onClick = onAusGalerie,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(72.dp),
-            ) {
-                Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
-                Text("  Galerie")
+            TextButton(onClick = onAusGalerie) {
+                Icon(
+                    Icons.Outlined.AddAPhoto,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                )
+                Text("  Aus Galerie")
             }
         }
     }
+}
+
+/**
+ * Gestrichelter Rahmen — die uebliche Form fuer "hier gehoert etwas hin".
+ *
+ * Ein durchgezogener Rahmen sieht aus wie ein Feld mit Inhalt; gestrichelt heisst
+ * ueberall: noch leer, hier ablegen.
+ */
+private fun Modifier.gestrichelt(farbe: Color, radius: Dp): Modifier = drawBehind {
+    drawRoundRect(
+        color = farbe,
+        cornerRadius = CornerRadius(radius.toPx()),
+        style = Stroke(
+            width = 1.5.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                floatArrayOf(9.dp.toPx(), 6.dp.toPx()),
+            ),
+        ),
+    )
 }

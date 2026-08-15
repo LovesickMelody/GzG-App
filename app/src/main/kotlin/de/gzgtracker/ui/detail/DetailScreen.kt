@@ -60,6 +60,7 @@ import coil.compose.AsyncImage
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.Submission
 import de.gzgtracker.core.SubmissionStatus
+import de.gzgtracker.ui.components.Abschnittstitel
 import de.gzgtracker.ui.components.DottedRule
 import de.gzgtracker.ui.components.ReceiptLine
 import de.gzgtracker.ui.components.StatusStamp
@@ -262,7 +263,10 @@ fun DetailScreen(
                 }
             }
             if (eintrag.status != SubmissionStatus.ERSTATTET) {
-                Button(
+                // Zurueckhaltend: Auf dieser Seite ist "Einreichen" die
+                // Hauptsache. Zwei gefuellte Knoepfe untereinander heben sich
+                // gegenseitig auf, dann fuehrt keiner mehr.
+                OutlinedButton(
                     onClick = { erstattungOffen = true },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
@@ -358,14 +362,7 @@ private fun Beschriftung(text: String) {
 }
 
 @Composable
-private fun Ueberschrift(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.padding(top = 10.dp),
-    )
-}
+private fun Ueberschrift(text: String) = Abschnittstitel(text)
 
 @Composable
 private fun Angabe(label: String, wert: String) {

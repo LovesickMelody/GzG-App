@@ -48,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.background
@@ -64,6 +65,7 @@ import de.gzgtracker.core.PromoAction
 import de.gzgtracker.ui.components.TeilnahmeKurz
 import de.gzgtracker.ui.format.deutsch
 import de.gzgtracker.ui.format.relativeKurz
+import de.gzgtracker.ui.theme.GzgTheme
 import de.gzgtracker.ui.theme.MoneyTextStyle
 import de.gzgtracker.ui.uebersicht.SucheFeld
 
@@ -366,10 +368,18 @@ private fun AktionZeile(
                 overflow = TextOverflow.Ellipsis,
             )
 
+            // Die Frist ist die kritischste Angabe der ganzen Liste. Vorher sah
+            // "Einsendeschluss morgen" genauso aus wie "in acht Tagen".
+            val dringend = tage != null && tage <= 2
             Text(
                 text = fristText(aktion, tage),
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = if (dringend) FontWeight.SemiBold else null,
+                color = if (dringend) {
+                    GzgTheme.status.dringend
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
             )
 
             TeilnahmeKurz(aktion.requirements)
@@ -386,7 +396,12 @@ private fun AktionZeile(
                 } else {
                     "Auf die Merkliste setzen"
                 },
-                tint = MaterialTheme.colorScheme.onSurface,
+                // Gesetzt heisst ausgewaehlt, und Ausgewaehltes traegt den Akzent.
+                tint = if (gemerkt) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
             )
         }
     }

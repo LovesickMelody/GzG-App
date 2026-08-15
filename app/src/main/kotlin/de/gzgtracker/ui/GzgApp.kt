@@ -109,11 +109,13 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
                             },
                             icon = { Icon(tab.icon, contentDescription = null) },
                             label = { Text(tab.label) },
-                            // Navigation bleibt `ink` — kein farbiger Indikator.
+                            // Wo man ist, traegt den Akzent. Vorher unterschieden
+                            // sich aktiver und schlafender Reiter nur durch einen
+                            // Grauton — auf dem Geraet kaum zu sehen.
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onSurface,
-                                selectedTextColor = MaterialTheme.colorScheme.onSurface,
-                                indicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
                                 unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                             ),

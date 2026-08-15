@@ -366,6 +366,28 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   App, keine des Nutzers. Wer sie versehentlich ändert, sieht keine Aktionen mehr und weiß
   nicht, warum.
 
+## Farbe und Hierarchie
+
+- **Farbe hat drei Rollen: Status, Interaktion, Struktur** — vorher galt „Farbe nur für
+  Status", alles Bedienbare war `ink`. Das Ergebnis war eine Oberfläche, auf der ein Knopf
+  aussah wie eine Überschrift und die Statusfarben zwar auffielen, aber außerhalb des
+  Stempels nichts trugen. Der Akzent ist ein tiefes Tintenblau — die einzige kräftige
+  Farbe, die Gelb, Grün und Rot nicht ins Gehege kommt, auch nicht bei Rot-Grün-Schwäche.
+- **Rot markiert ablaufende Fristen — als Textfarbe, nie als Fläche** — Flächen bleiben dem
+  Status vorbehalten, sonst sähe eine Aktion, die morgen endet, aus wie eine abgelehnte
+  Einreichung. „Einsendeschluss morgen" sah vorher aus wie „in acht Tagen", und das ist die
+  kritischste Angabe der ganzen Liste.
+- **Der Statusstreifen macht die Statusfarbe erst nützlich** — beim Überfliegen einer langen
+  Liste liest niemand jeden Stempel. Eine durchgehende Farbkante am linken Rand sieht man,
+  ohne hinzusehen. Gezeichnet statt gelegt: In einer Liste steht die Zeilenhöhe erst beim
+  Zeichnen fest, ein Element mit „voller Höhe" hätte darin keine bekommen.
+- **Pro Bildschirm genau eine primäre Handlung** — zwei gefüllte Knöpfe untereinander heben
+  sich gegenseitig auf, dann führt keiner mehr.
+- **Der Belegplatz ist ein Ablagefeld, kein Knopfpaar** — vorher standen dort zwei 72 dp
+  hohe Kästen nebeneinander, in denen „Fotografieren" mitten im Wort umbrach; eine
+  Nebenhandlung sah aus wie die Hauptsache der Seite. Gestrichelt heißt überall „hier
+  gehört etwas hin", die Galerie steht leise daneben.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege
