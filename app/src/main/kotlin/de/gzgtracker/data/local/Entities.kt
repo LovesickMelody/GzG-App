@@ -14,6 +14,15 @@ data class AccountEntity(
     val ibanLast4: String?,
     val colorHex: String,
     val isActive: Boolean = true,
+    val iban: String? = null,
+    val vorname: String? = null,
+    val nachname: String? = null,
+    val strasse: String? = null,
+    val hausnummer: String? = null,
+    val plz: String? = null,
+    val ort: String? = null,
+    val telefon: String? = null,
+    val email: String? = null,
     val createdAt: Instant,
 )
 

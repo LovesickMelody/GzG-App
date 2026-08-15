@@ -278,11 +278,12 @@ class ErfassenViewModel @Inject constructor(
     private suspend fun werteBonAus(pfad: String) {
         _uiState.update { it.copy(liestBon = true) }
         val ergebnis = bonLeser.auswerten(pfad)
+        val auswertung = ergebnis.auswertung
         // In eigene Variablen, bevor sie gelesen werden: Werte aus einem anderen
         // Modul behandelt Kotlin nach einer Null-Pruefung nicht automatisch als
         // "nicht null", weil sie sich zwischendurch geaendert haben koennten.
-        val gelesenerPreis = ergebnis.preisCents
-        val gelesenesDatum = ergebnis.datum
+        val gelesenerPreis = auswertung.preisCents
+        val gelesenesDatum = auswertung.datum
 
         _uiState.update { zustand ->
             val preisUebernehmen = gelesenerPreis != null && zustand.preis.isBlank()
@@ -294,19 +295,18 @@ class ErfassenViewModel @Inject constructor(
                 liestBon = false,
                 preis = if (preisUebernehmen) Money.formatPlain(gelesenerPreis) else zustand.preis,
                 preisAusBon = zustand.preisAusBon || preisUebernehmen,
-                preisGeraten = if (preisUebernehmen) ergebnis.preisGeraten else zustand.preisGeraten,
+                preisGeraten = if (preisUebernehmen) auswertung.preisGeraten else zustand.preisGeraten,
                 kaufdatum = if (datumUebernehmen) gelesenesDatum else zustand.kaufdatum,
                 datumAusBon = zustand.datumAusBon || datumUebernehmen,
-                artikelvorschlaege = ergebnis.artikel,
-                // Jeder Ausgang bekommt seine eigene Meldung. Beim ersten
-                // Versuch am Geraet passierte schlicht nichts, und daran war
-                // nicht zu erkennen, ob die Erkennung gelaufen ist, nichts
-                // gefunden hat oder das Bild nicht lesbar war.
+                artikelvorschlaege = auswertung.artikel,
+                // Jeder Ausgang bekommt seine eigene Meldung. Wer nur "es hat
+                // nicht geklappt" liest, weiss nicht, ob er naeher rangehen,
+                // mehr Licht machen oder von Hand tippen soll.
                 meldung = when {
-                    !ergebnis.textErkannt -> "Auf dem Bild war kein Text zu erkennen."
+                    ergebnis.fehler != null -> ergebnis.fehler
                     preisUebernehmen || datumUebernehmen -> "Aus dem Bon gelesen — bitte prüfen"
                     gelesenerPreis != null -> "Bon gelesen, Preis stand aber schon da."
-                    else -> "Im Bon war kein Betrag zu erkennen. Bitte von Hand eintragen."
+                    else -> "Bon gelesen, aber kein Betrag gefunden. Bitte eintragen."
                 },
             )
         }

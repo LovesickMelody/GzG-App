@@ -66,5 +66,27 @@ object Migrationen {
         }
     }
 
-    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4)
+    /**
+     * v5: Das Konto traegt jetzt auch die Angaben zur Person.
+     *
+     * Bei einer Erstattung gehoeren Konto und Person ohnehin zusammen — das
+     * Geld geht auf dieses Konto, also traegt man auch dessen Inhaber ins
+     * Formular ein. Alle Spalten sind freiwillig und bleiben leer, bis jemand
+     * sie fuellt.
+     */
+    val VON_4_AUF_5 = object : Migration(4, 5) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE accounts ADD COLUMN iban TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN vorname TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN nachname TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN strasse TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN hausnummer TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN plz TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN ort TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN telefon TEXT")
+            db.execSQL("ALTER TABLE accounts ADD COLUMN email TEXT")
+        }
+    }
+
+    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5)
 }

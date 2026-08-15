@@ -111,3 +111,80 @@ class FormularTest {
         assertEquals(null, Formularfeld.vonSchluessel("gibtsnicht"))
     }
 }
+
+class EinreichdatenTest {
+
+    private val konto = Account(
+        id = 1,
+        name = "DKB Giro",
+        iban = "DE02 1203 0000 0000 2020 51",
+        vorname = "Anna",
+        nachname = "Muster",
+        strasse = "Musterweg",
+        hausnummer = "7a",
+        plz = "12345",
+        ort = "Musterstadt",
+        telefon = "01701234567",
+        email = "anna@example.org",
+    )
+
+    private fun daten(konto: Account? = this.konto) = Einreichdaten.aus(
+        konto = konto,
+        produktname = "Bonduelle Salat",
+        preis = "2,49",
+        kaufdatum = "14.08.2026",
+        haendler = "Rewe",
+    )
+
+    @Test
+    fun `nimmt die Person aus dem Konto und den Einkauf aus der Einreichung`() {
+        val werte = daten()
+        assertEquals("Anna", werte[Formularfeld.VORNAME])
+        assertEquals("Muster", werte[Formularfeld.NACHNAME])
+        assertEquals("Bonduelle Salat", werte[Formularfeld.PRODUKT])
+        assertEquals("2,49", werte[Formularfeld.BETRAG])
+        assertEquals("14.08.2026", werte[Formularfeld.KAUFDATUM])
+        assertEquals("Rewe", werte[Formularfeld.HAENDLER])
+    }
+
+    @Test
+    fun `schreibt die IBAN ohne Leerzeichen`() {
+        // Viele Formulare pruefen die Laenge und stolpern ueber Gruppierungen.
+        assertEquals("DE02120300000000202051", daten()[Formularfeld.IBAN])
+    }
+
+    @Test
+    fun `setzt den Kontoinhaber aus Vor- und Nachname zusammen`() {
+        assertEquals("Anna Muster", daten()[Formularfeld.KONTOINHABER])
+    }
+
+    @Test
+    fun `ohne Konto bleibt der Einkauf uebrig`() {
+        val werte = daten(konto = null)
+        assertEquals(null, werte[Formularfeld.IBAN])
+        assertEquals("Bonduelle Salat", werte[Formularfeld.PRODUKT])
+    }
+
+    @Test
+    fun `leere Angaben fallen weg`() {
+        // Sonst zaehlte die App Felder mit, die sie gar nicht fuellen kann.
+        val werte = Einreichdaten.aus(
+            konto = Account(id = 1, name = "Ohne Profil"),
+            produktname = "Salat",
+            preis = "2,49",
+            kaufdatum = "14.08.2026",
+            haendler = null,
+        )
+        assertEquals(3, werte.size)
+    }
+
+    @Test
+    fun `endziffern kommen aus der vollen IBAN`() {
+        assertEquals("2051", konto.endziffern)
+    }
+
+    @Test
+    fun `ohne IBAN gelten die getrennt gespeicherten Endziffern`() {
+        assertEquals("9876", Account(id = 1, name = "Alt", ibanLast4 = "9876").endziffern)
+    }
+}

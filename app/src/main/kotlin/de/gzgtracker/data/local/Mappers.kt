@@ -21,6 +21,15 @@ fun AccountEntity.toDomain() = Account(
     ibanLast4 = ibanLast4,
     colorHex = colorHex,
     isActive = isActive,
+    iban = iban,
+    vorname = vorname,
+    nachname = nachname,
+    strasse = strasse,
+    hausnummer = hausnummer,
+    plz = plz,
+    ort = ort,
+    telefon = telefon,
+    email = email,
 )
 
 fun Account.toEntity(createdAt: Instant) = AccountEntity(
@@ -29,6 +38,15 @@ fun Account.toEntity(createdAt: Instant) = AccountEntity(
     ibanLast4 = ibanLast4,
     colorHex = colorHex,
     isActive = isActive,
+    iban = iban,
+    vorname = vorname,
+    nachname = nachname,
+    strasse = strasse,
+    hausnummer = hausnummer,
+    plz = plz,
+    ort = ort,
+    telefon = telefon,
+    email = email,
     createdAt = createdAt,
 )
 

@@ -47,6 +47,11 @@ enum class Formularfeld(
         "Produkt",
         listOf("produkt", "artikel", "product"),
     ),
+    STRASSE("strasse", "Straße", listOf("straße", "strasse", "street", "adresse")),
+    HAUSNUMMER("hausnummer", "Hausnummer", listOf("hausnummer", "hausnr", "nummer")),
+    PLZ("plz", "PLZ", listOf("plz", "postleitzahl", "zip", "postcode")),
+    ORT("ort", "Ort", listOf("ort", "stadt", "wohnort", "city")),
+    TELEFON("telefon", "Telefon", listOf("telefon", "handy", "mobil", "phone", "rufnummer")),
     ;
 
     companion object {
@@ -161,5 +166,50 @@ $eintraege
                 else -> append(zeichen)
             }
         }
+    }
+}
+
+
+/**
+ * Stellt zusammen, was in ein Einreichungsformular gehoert.
+ *
+ * Bewusst hier und nicht im Bildschirm: Welche Angabe in welches Feld gehoert,
+ * ist eine Regel der Sache und keine der Oberflaeche — und so laesst sie sich
+ * ohne Android pruefen.
+ *
+ * Die Reihenfolge der Quellen ist Absicht: Das Konto liefert die Person, die
+ * Einreichung den Einkauf. Leere Angaben fallen weg, damit die Trefferzahl
+ * ehrlich bleibt.
+ */
+object Einreichdaten {
+
+    fun aus(
+        konto: Account?,
+        produktname: String,
+        preis: String,
+        kaufdatum: String,
+        haendler: String?,
+    ): Map<Formularfeld, String> {
+        val werte = mutableMapOf<Formularfeld, String>()
+
+        konto?.let {
+            it.iban?.let { wert -> werte[Formularfeld.IBAN] = wert.filter { z -> !z.isWhitespace() } }
+            it.vollerName?.let { wert -> werte[Formularfeld.KONTOINHABER] = wert }
+            it.vorname?.let { wert -> werte[Formularfeld.VORNAME] = wert }
+            it.nachname?.let { wert -> werte[Formularfeld.NACHNAME] = wert }
+            it.email?.let { wert -> werte[Formularfeld.EMAIL] = wert }
+            it.strasse?.let { wert -> werte[Formularfeld.STRASSE] = wert }
+            it.hausnummer?.let { wert -> werte[Formularfeld.HAUSNUMMER] = wert }
+            it.plz?.let { wert -> werte[Formularfeld.PLZ] = wert }
+            it.ort?.let { wert -> werte[Formularfeld.ORT] = wert }
+            it.telefon?.let { wert -> werte[Formularfeld.TELEFON] = wert }
+        }
+
+        werte[Formularfeld.PRODUKT] = produktname
+        werte[Formularfeld.BETRAG] = preis
+        werte[Formularfeld.KAUFDATUM] = kaufdatum
+        haendler?.let { werte[Formularfeld.HAENDLER] = it }
+
+        return werte.filterValues { it.isNotBlank() }
     }
 }
