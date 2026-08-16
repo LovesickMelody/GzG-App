@@ -4,9 +4,14 @@ Android-App, um Geld-zurück-Garantie-Aktionen („gratis testen“) zu finden u
 Erstattungsstatus der eigenen Einreichungen zu verfolgen.
 
 Alles bleibt auf dem Gerät: kein Backend, keine Konten, keine Analyse, keine Tracker.
-Nur zwei Berechtigungen — Kamera für den Barcode-Scan und Internet für den Aktions-Feed.
-Bonfotos kommen über den Photo Picker herein, deshalb braucht die App keinen
-Speicherzugriff.
+Vier Berechtigungen — Internet für den Aktions-Feed, Kamera für das Bonfoto, Meldungen
+für die Fristerinnerung und „nach Neustart starten“, damit gestellte Erinnerungen einen
+Neustart überleben. Bonfotos aus der Galerie kommen über den Photo Picker herein,
+deshalb braucht die App keinen Speicherzugriff.
+
+Auch die Sicherung hält sich daran: Einreichungen, Konten und Bonfotos gehen **nicht**
+in die Google-Cloud-Sicherung. Ab Android 12 nimmt sie der direkte Weg von Gerät zu
+Gerät trotzdem mit.
 
 **Die App reicht nichts automatisch bei Anbietern ein.** Sie öffnet die Aktionsseite,
 die Einreichung machst du dort selbst, danach setzt du den Status in der App.

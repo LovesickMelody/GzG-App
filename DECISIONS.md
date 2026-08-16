@@ -239,6 +239,13 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Der Betrag muss wörtlich im Seitentext stehen** — die wichtigste Regel der Prüfschicht.
   Sie kostet gelegentlich einen korrekten Betrag, der nur als Bild vorliegt, und verhindert
   dafür, dass jemand ein Produkt kauft, weil bei uns eine Zahl stand, die es nirgends gab.
+- **Der Einreichungslink muss zur Aktionsseite gehören** — `submit_url` stammt aus dem
+  Seitentext, und den schreibt der Betreiber der Seite, nicht wir. Auf genau diesen Link
+  führt die App zum Einreichen, und dort füllt sie auf Knopfdruck IBAN, Bankverbindung
+  und Anschrift in die Formularfelder. Ein untergeschobenes Ziel bekäme das geschenkt.
+  Deshalb die Regel `einreichung_am_ort` bei entdeckten Quellen: gleicher Host oder
+  Unterdomäne. Für Portale gilt sie nicht — dort *ist* der Wechsel vom Artikel zum
+  Herstellerformular der Zweck.
 - **Nutzungsvorbehalte werden auch in Prosa gesucht** — § 44b UrhG erlaubt automatisiertes
   Auswerten nur, solange kein maschinenlesbarer Vorbehalt erklärt ist, und das LG Hamburg
   hat entschieden, dass dafür auch natürliche Sprache genügt. `robots.txt` allein zu prüfen
@@ -490,14 +497,36 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   verschieben; bei einer Frist, die noch Tage läuft, ist das ohne Belang. Gestellte
   Erinnerungen liegen in der Datenbank und werden beim App-Start neu gestellt — Wecker
   überleben keinen Neustart des Telefons.
+- **Wecker werden von einem Empfänger neu gestellt, nicht erst beim App-Start** — die
+  Zeile darüber stand schon länger so da, gerufen hat `stelleErinnerungenNeu()` aber
+  niemand. Eine Erinnerung fiel damit beim nächsten Neustart still aus, und gemerkt hat
+  man es erst nach der Frist. Jetzt hängt ein Empfänger an `BOOT_COMPLETED` und
+  `MY_PACKAGE_REPLACED` — ein App-Update räumt die Wecker genauso ab. Der Aufruf beim
+  App-Start bleibt zusätzlich stehen, für die Fälle, in denen der Empfänger übergangen
+  wird; erneutes Stellen ersetzt den Wecker nur.
+- **Der eingebettete Browser zeigt seinen Gastgeber, und bei fremder Domain fragt die App
+  nach** — „Daten einfügen" schreibt IBAN, Bankverbindung, Geburtsdatum und Anschrift in
+  die Felder der *gerade geladenen* Seite, und der Browser folgt jeder Weiterleitung.
+  Ohne Angabe sieht eine fremde Domain aus wie die Aktionsseite selbst. Unterdomänen
+  gelten als dieselbe Herkunft (`airwick.justsnap.eu` und `justsnap.eu` sind eine
+  Kampagne), eine nackte Endung nicht — sonst wäre jeder `.de`-Host mit jedem anderen
+  verwandt. Ohne geladene Seite wird **nicht** gewarnt: Eine Warnung ohne Grundlage lehrt
+  nur, sie wegzuklicken.
 - **Der Barcode-Scanner ist entfallen** — mit ihm CameraX und die Barcode-Bibliothek. Er
   löste einen Sonderfall („steht im Laden vor einem Produkt"), den der tägliche Weg nicht
   braucht, und kostete zwei Bibliotheken.
 
 ## Sonstiges
 
-- **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege
-  mitkommen; der Export-Cache ist ausgenommen.
+- **Backup nur noch für die Einstellungen, Datenbank und Belege bleiben auf dem Gerät** —
+  die frühere Regel nahm alles mit, auch in die Cloud-Sicherung. In der Datenbank stehen
+  aber IBAN, BIC, Geburtsdatum, Anschrift, Telefon und E-Mail; in `receipts/` liegen die
+  Bonfotos. Das ist genau das, was der erste Satz der README ausschließt. Ab Android 12
+  trennt `data-extraction-rules` beides: `cloud-backup` bekommt nur die
+  Einstellungsdatei, `device-transfer` weiterhin alles — ein Geräteswechsel kostet dort
+  also keine Einreichung. Auf Android 8 bis 11 gibt es diese Trennung nicht, dort steht
+  nur die Einstellungsdatei drin; der Preis ist ein Geräteswechsel ohne Einreichungen,
+  und das ist die günstigere Seite der Abwägung.
 - **Deutsche Bezeichner in der App-eigenen Fachlogik, englische in Framework-Nähe** —
   `pruefeKonto`, `belegteKonten`, `vorschlag` lesen sich in der Domäne natürlicher;
   Room-Entities und Compose-Signaturen bleiben beim üblichen Englisch.

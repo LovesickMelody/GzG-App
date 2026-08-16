@@ -149,3 +149,15 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [ ] Websuche-Entdecker als Netz fuer unbekannte Plattformen
 - [ ] Wenn die Erstanbieter tragen: Portalquellen auf `enabled: false`
 
+## Aus dem Repo-Review
+
+- [x] Datenbank und Bonfotos aus der Cloud-Sicherung nehmen
+- [x] Erinnerungen nach Neustart und App-Update wieder stellen
+- [x] Einreichungsziel gegen die Aktionsseite prüfen (Pipeline und App)
+- [ ] `manager.set()` auf `setWindow()` umstellen — die Erinnerung darf derzeit um bis
+      zu eine Stunde verrutschen, was am Fristtag zu viel ist
+- [ ] Antwortgröße in `fetch.py` deckeln
+- [ ] Kontrastwerte gegen WCAG nachrechnen (steht auch oben unter Design)
+- [ ] Verschlüsselung der Room-Datenbank abwägen (SQLCipher gegen eine Abhängigkeit
+      mehr und den Schlüssel, der auch irgendwo liegen muss)
+
