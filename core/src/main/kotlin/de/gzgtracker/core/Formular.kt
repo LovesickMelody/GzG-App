@@ -21,6 +21,7 @@ enum class Formularfeld(
     val muster: List<String>,
 ) {
     IBAN("iban", "IBAN", listOf("iban", "kontonummer", "bankverbindung")),
+    BIC("bic", "BIC", listOf("bic", "swift", "bankleitzahl")),
     KONTOINHABER(
         "kontoinhaber",
         "Kontoinhaber",
@@ -240,6 +241,7 @@ object Einreichdaten {
 
         konto?.let {
             it.iban?.let { wert -> werte[Formularfeld.IBAN] = wert.filter { z -> !z.isWhitespace() } }
+            it.bic?.let { wert -> werte[Formularfeld.BIC] = wert.filter { z -> !z.isWhitespace() } }
             it.vollerName?.let { wert -> werte[Formularfeld.KONTOINHABER] = wert }
             it.vorname?.let { wert -> werte[Formularfeld.VORNAME] = wert }
             it.nachname?.let { wert -> werte[Formularfeld.NACHNAME] = wert }

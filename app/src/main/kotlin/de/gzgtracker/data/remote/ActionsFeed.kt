@@ -34,6 +34,10 @@ data class PromoActionDto(
     val retailers: List<String> = emptyList(),
     val eans: List<String> = emptyList(),
     @SerialName("image_url") val imageUrl: String? = null,
+    @SerialName("limit_anzahl") val limitAnzahl: Int? = null,
+    @SerialName("limit_zeitraum") val limitZeitraum: String? = null,
+    @SerialName("limit_reset") val limitReset: String? = null,
+    @SerialName("limit_erschoepft") val limitErschoepft: Boolean = false,
     val source: String? = null,
 )
 
@@ -67,6 +71,10 @@ fun PromoActionDto.toEntity(gesehenAm: Instant) = PromoActionEntity(
     // Nur plausible EANs uebernehmen — EAN-8 und EAN-13, reine Ziffern.
     eans = eans.map { it.trim() }.filter { (it.length == 8 || it.length == 13) && it.all(Char::isDigit) },
     imageUrl = imageUrl?.takeIf { it.isNotBlank() },
+    limitAnzahl = limitAnzahl?.takeIf { it > 0 },
+    limitZeitraum = limitZeitraum?.takeIf { it in setOf("tag", "woche", "monat") },
+    limitReset = limitReset?.takeIf { it.isNotBlank() }?.take(60),
+    limitErschoepft = limitErschoepft,
     source = source?.takeIf { it.isNotBlank() } ?: "unbekannt",
     isManual = false,
     lastSeenAt = gesehenAm,

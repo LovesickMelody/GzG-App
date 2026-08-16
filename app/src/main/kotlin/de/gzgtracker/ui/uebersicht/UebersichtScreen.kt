@@ -65,7 +65,6 @@ import de.gzgtracker.ui.components.label
 @Composable
 fun UebersichtScreen(
     onEintragOeffnen: (Long) -> Unit,
-    onScannen: () -> Unit,
     onErfassen: () -> Unit,
     viewModel: UebersichtViewModel = hiltViewModel(),
 ) {
@@ -136,12 +135,6 @@ fun UebersichtScreen(
                         IconButton(onClick = { filterOffen = true }) {
                             Icon(Icons.Outlined.FilterList, contentDescription = "Filtern")
                         }
-                    }
-                    IconButton(onClick = onScannen) {
-                        Icon(
-                            Icons.Outlined.QrCodeScanner,
-                            contentDescription = "Produkt scannen",
-                        )
                     }
                 },
             )
@@ -395,7 +388,7 @@ private fun LeererZustand(
         androidx.compose.material3.TextButton(
             onClick = if (gefiltert) onZuruecksetzen else onErfassen,
         ) {
-            Text(if (gefiltert) "Filter zurücksetzen" else "Von Hand eintragen")
+            Text(if (gefiltert) "Filter zurücksetzen" else "Manuell eintragen")
         }
     }
 }

@@ -32,6 +32,14 @@ class Action:
     retailers: list[str] = field(default_factory=list)
     eans: list[str] = field(default_factory=list)
     image_url: str | None = None
+    # Wie stark die Aktion gedeckelt ist. Viele Anbieter geben nur ein
+    # Kontingent frei ("1.000 Teilnahmen pro Woche") und setzen es zu einem
+    # festen Zeitpunkt zurueck. Wer das nicht weiss, kauft das Produkt und
+    # stellt beim Einreichen fest, dass er zu spaet dran war.
+    limit_anzahl: int | None = None
+    limit_zeitraum: str | None = None
+    limit_reset: str | None = None
+    limit_erschoepft: bool = False
 
     @property
     def id(self) -> str:
@@ -56,6 +64,10 @@ class Action:
             "retailers": sorted(set(daten["retailers"])),
             "eans": sorted(set(daten["eans"])),
             "image_url": daten["image_url"],
+            "limit_anzahl": daten["limit_anzahl"],
+            "limit_zeitraum": daten["limit_zeitraum"],
+            "limit_reset": daten["limit_reset"],
+            "limit_erschoepft": daten["limit_erschoepft"],
             "source": daten["source"],
         }
 

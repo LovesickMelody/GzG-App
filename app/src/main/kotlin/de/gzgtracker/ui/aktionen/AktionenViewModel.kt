@@ -18,6 +18,14 @@ import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
 
+/** Wonach die Aktionsliste sortiert wird. */
+enum class Sortierung(val label: String) {
+    /** Frist zuerst, ohne Frist ans Ende — so kommt die Datenbank sie ohnehin. */
+    FRIST("Frist zuerst"),
+    BETRAG("Höchste Erstattung"),
+    NAME("Name A–Z"),
+}
+
 data class AktionenUiState(
     val laedt: Boolean = true,
     val aktionen: List<PromoAction> = emptyList(),
@@ -25,8 +33,11 @@ data class AktionenUiState(
     val nurLaufende: Boolean = true,
     /** Zeigt nur die gemerkten Aktionen — der Einkaufszettel. */
     val nurMerkliste: Boolean = false,
+    val sortierung: Sortierung = Sortierung.FRIST,
     /** Aktions-Id -> schon im Wagen. Enthaelt genau die gemerkten Aktionen. */
     val gemerkt: Map<String, Boolean> = emptyMap(),
+    /** Aktionen, zu denen eine Erinnerung gestellt ist. */
+    val erinnert: Set<String> = emptySet(),
     val aktualisiertGerade: Boolean = false,
     val letzterSync: Instant? = null,
     val meldung: String? = null,
@@ -52,9 +63,10 @@ class AktionenViewModel @Inject constructor(
     val uiState: StateFlow<AktionenUiState> = combine(
         actions.alle,
         actions.gemerkt,
+        actions.erinnert,
         eingaben,
         settings.settings,
-    ) { alle, gemerkt, eingabe, einstellungen ->
+    ) { alle, gemerkt, erinnert, eingabe, einstellungen ->
         val heute = LocalDate.now()
         val begriff = eingabe.suche.trim().lowercase()
 
@@ -75,11 +87,14 @@ class AktionenViewModel @Inject constructor(
                         aktion.brand?.lowercase()?.contains(begriff) == true ||
                         aktion.retailers.any { it.lowercase().contains(begriff) } ||
                         aktion.eans.any { it.contains(begriff) }
-                },
+                }
+                .let { gefiltert -> sortiere(gefiltert, eingabe.sortierung) },
             suche = eingabe.suche,
             nurLaufende = eingabe.nurLaufende,
             nurMerkliste = eingabe.nurMerkliste,
+            sortierung = eingabe.sortierung,
             gemerkt = gemerkt,
+            erinnert = erinnert,
             aktualisiertGerade = eingabe.aktualisiert,
             letzterSync = einstellungen.lastSyncAt,
             meldung = eingabe.meldung,
@@ -90,11 +105,20 @@ class AktionenViewModel @Inject constructor(
         initialValue = AktionenUiState(),
     )
 
+    init {
+        // Wecker des Systems ueberleben keinen Neustart des Telefons. Weil die App
+        // nicht mitbekommt, wann neu gestartet wurde, stellt sie sie bei jedem
+        // Start neu — doppelt stellen schadet nicht.
+        viewModelScope.launch { actions.stelleErinnerungenNeu() }
+    }
+
     fun setzeSuche(begriff: String) = eingaben.update { it.copy(suche = begriff) }
 
     fun setzeNurLaufende(nur: Boolean) = eingaben.update { it.copy(nurLaufende = nur) }
 
     fun setzeNurMerkliste(nur: Boolean) = eingaben.update { it.copy(nurMerkliste = nur) }
+
+    fun setzeSortierung(wahl: Sortierung) = eingaben.update { it.copy(sortierung = wahl) }
 
     fun merkenUmschalten(aktionId: String) {
         viewModelScope.launch { actions.merkenUmschalten(aktionId) }
@@ -142,10 +166,25 @@ class AktionenViewModel @Inject constructor(
         val suche: String = "",
         val nurLaufende: Boolean = true,
         val nurMerkliste: Boolean = false,
+        val sortierung: Sortierung = Sortierung.FRIST,
         val aktualisiert: Boolean = false,
         val meldung: String? = null,
     )
 }
+
+/**
+ * Bringt die Liste in die gewuenschte Reihenfolge.
+ *
+ * Aktionen ohne Angabe landen jeweils hinten: Eine fehlende Frist ist kein
+ * Grund, ganz oben zu stehen, und ein unbekannter Hoechstbetrag auch nicht.
+ */
+private fun sortiere(aktionen: List<PromoAction>, wahl: Sortierung): List<PromoAction> =
+    when (wahl) {
+        // Kommt so schon aus der Datenbank — nichts zu tun.
+        Sortierung.FRIST -> aktionen
+        Sortierung.BETRAG -> aktionen.sortedByDescending { it.maxRefundCents ?: -1 }
+        Sortierung.NAME -> aktionen.sortedBy { it.title.lowercase() }
+    }
 
 /**
  * Laeuft die Aktion heute noch? Massgeblich ist die Einreichefrist, sonst das

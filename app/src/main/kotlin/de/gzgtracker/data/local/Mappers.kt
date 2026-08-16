@@ -32,6 +32,7 @@ fun AccountEntity.toDomain() = Account(
     email = email,
     anrede = anrede,
     geburtsdatum = geburtsdatum,
+    bic = bic,
 )
 
 fun Account.toEntity(createdAt: Instant) = AccountEntity(
@@ -51,6 +52,7 @@ fun Account.toEntity(createdAt: Instant) = AccountEntity(
     email = email,
     anrede = anrede,
     geburtsdatum = geburtsdatum,
+    bic = bic,
     createdAt = createdAt,
 )
 
@@ -69,6 +71,10 @@ fun PromoActionEntity.toDomain() = PromoAction(
     retailers = retailers,
     eans = eans,
     imageUrl = imageUrl,
+    limitAnzahl = limitAnzahl,
+    limitZeitraum = limitZeitraum,
+    limitReset = limitReset,
+    limitErschoepft = limitErschoepft,
     source = source,
     isManual = isManual,
 )
@@ -88,6 +94,10 @@ fun PromoAction.toEntity(lastSeenAt: Instant? = null) = PromoActionEntity(
     retailers = retailers,
     eans = eans,
     imageUrl = imageUrl,
+    limitAnzahl = limitAnzahl,
+    limitZeitraum = limitZeitraum,
+    limitReset = limitReset,
+    limitErschoepft = limitErschoepft,
     source = source,
     isManual = isManual,
     lastSeenAt = lastSeenAt,

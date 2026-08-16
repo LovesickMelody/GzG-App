@@ -189,6 +189,34 @@ class ErfassenViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Legt eine Aktion an, die es im Feed nicht gibt, und waehlt sie gleich aus.
+     *
+     * Der Feed kennt nicht alles: Manches steht nur auf der Packung, im
+     * Prospekt oder auf einem Aufsteller im Laden. Ohne diesen Weg liesse sich
+     * so ein Kauf ueberhaupt nicht erfassen — und genau dafuer ist die App da.
+     *
+     * Weitere Angaben (Frist, Hoechstbetrag, Adresse) kommen bei Bedarf ueber
+     * "Aktion bearbeiten" dazu; hier zaehlt, dass es schnell geht.
+     */
+    fun legeEigeneAktionAn(titel: String) {
+        val name = titel.trim()
+        if (name.isBlank()) return
+        viewModelScope.launch {
+            val id = actions.legeManuellAn(PromoAction(id = "", title = name))
+            val neu = actions.ladeAlle()
+            _uiState.update { zustand ->
+                zustand.copy(
+                    aktionen = neu,
+                    aktionId = id,
+                    produktname = zustand.produktname.ifBlank { name },
+                    meldung = "Aktion „$name“ angelegt.",
+                )
+            }
+            pruefeKonto()
+        }
+    }
+
     fun setzeProduktname(wert: String) = _uiState.update { it.copy(produktname = wert) }
     fun setzeEan(wert: String) = _uiState.update { it.copy(ean = wert.filter(Char::isDigit)) }
     // Von Hand geaendert heisst: nicht mehr "aus dem Bon". Der Hinweis

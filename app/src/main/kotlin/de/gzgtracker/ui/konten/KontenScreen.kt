@@ -247,6 +247,7 @@ private fun KontoDialog(
 ) {
     var name by remember { mutableStateOf(konto?.name.orEmpty()) }
     var iban by remember { mutableStateOf(konto?.iban.orEmpty()) }
+    var bic by remember { mutableStateOf(konto?.bic.orEmpty()) }
     var farbe by remember { mutableStateOf(konto?.colorHex ?: KONTO_FARBEN.first()) }
     var vorname by remember { mutableStateOf(konto?.vorname.orEmpty()) }
     var nachname by remember { mutableStateOf(konto?.nachname.orEmpty()) }
@@ -301,6 +302,15 @@ private fun KontoDialog(
                     supportingText = {
                         Text("Bleibt auf dem Gerät. Wird beim Einreichen ins Formular gesetzt.")
                     },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                OutlinedTextField(
+                    value = bic,
+                    onValueChange = { bic = it.uppercase() },
+                    label = { Text("BIC") },
+                    placeholder = { Text("optional") },
+                    singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -427,6 +437,7 @@ private fun KontoDialog(
                         (konto ?: Account(id = 0, name = "")).copy(
                             name = name.trim(),
                             iban = ibanRoh.ifBlank { null },
+                            bic = bic.filter { !it.isWhitespace() }.ifBlank { null },
                             colorHex = farbe,
                             vorname = vorname.trim().ifBlank { null },
                             nachname = nachname.trim().ifBlank { null },

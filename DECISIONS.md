@@ -428,6 +428,72 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Eine leere Seite meldet sich selbst** — bleibt nach dem Laden kein Text übrig, sagt die
   App das und bietet den Browser an, statt eine weisse Fläche stehenzulassen.
 
+- **Lange Bons werden in überlappenden Streifen gelesen** — die Texterkennung arbeitet mit
+  einer festen inneren Größe. Ein ganzer Kassenbon auf einem Bild heißt deshalb wenige
+  Bildpunkte je Zeile, und dann liest sie nur noch aus nächster Nähe etwas. Nur lässt sich
+  ein Bon, der vollständig zu sehen sein muss, nicht aus nächster Nähe fotografieren. Jeder
+  Streifen bekommt ein Vielfaches an Bildpunkten je Zeile; die Rahmen werden zurückgerechnet,
+  und was doppelt aus dem Überlappungsbereich kommt, fliegt raus — sonst würde aus zwei mal
+  `3,45` ein zweiter Posten. Dazu 3200 statt 2000 Bildpunkte beim Speichern.
+- **Die Suche ist eine Lupe** — die Suchleiste stand dauerhaft im Bild und nahm ein Sechstel
+  des Bildschirms, obwohl man selten sucht.
+- **Sortiert wird nach Frist, Betrag oder Name** — die Frist bleibt der Standard: Was morgen
+  abläuft, muss oben stehen.
+- **Produktbilder werden vollständig gezeigt, nicht zugeschnitten** — bei „Crop" fehlte
+  regelmäßig die halbe Packung, und im Laden erkennt man sie dann nicht wieder.
+- **Eigene Aktionen lassen sich beim Erfassen anlegen** — der Feed kennt nicht alles. Manches
+  steht nur auf der Packung, im Prospekt oder auf einem Aufsteller. Ohne diesen Weg ließe sich
+  so ein Kauf überhaupt nicht erfassen, und genau dafür ist die App da.
+- **Die Feed-Adresse steht nicht mehr in den Einstellungen** — sie ist eine Einstellung der
+  App, keine des Nutzers. Wer sie versehentlich ändert, sieht keine Aktionen mehr und weiß
+  nicht, warum.
+
+## Farbe und Hierarchie
+
+- **Farbe hat drei Rollen: Status, Interaktion, Struktur** — vorher galt „Farbe nur für
+  Status", alles Bedienbare war `ink`. Das Ergebnis war eine Oberfläche, auf der ein Knopf
+  aussah wie eine Überschrift und die Statusfarben zwar auffielen, aber außerhalb des
+  Stempels nichts trugen. Der Akzent ist ein tiefes Tintenblau — die einzige kräftige
+  Farbe, die Gelb, Grün und Rot nicht ins Gehege kommt, auch nicht bei Rot-Grün-Schwäche.
+- **Rot markiert ablaufende Fristen — als Textfarbe, nie als Fläche** — Flächen bleiben dem
+  Status vorbehalten, sonst sähe eine Aktion, die morgen endet, aus wie eine abgelehnte
+  Einreichung. „Einsendeschluss morgen" sah vorher aus wie „in acht Tagen", und das ist die
+  kritischste Angabe der ganzen Liste.
+- **Der Statusstreifen macht die Statusfarbe erst nützlich** — beim Überfliegen einer langen
+  Liste liest niemand jeden Stempel. Eine durchgehende Farbkante am linken Rand sieht man,
+  ohne hinzusehen. Gezeichnet statt gelegt: In einer Liste steht die Zeilenhöhe erst beim
+  Zeichnen fest, ein Element mit „voller Höhe" hätte darin keine bekommen.
+- **Pro Bildschirm genau eine primäre Handlung** — zwei gefüllte Knöpfe untereinander heben
+  sich gegenseitig auf, dann führt keiner mehr.
+- **Der Belegplatz ist ein Ablagefeld, kein Knopfpaar** — vorher standen dort zwei 72 dp
+  hohe Kästen nebeneinander, in denen „Fotografieren" mitten im Wort umbrach; eine
+  Nebenhandlung sah aus wie die Hauptsache der Seite. Gestrichelt heißt überall „hier
+  gehört etwas hin", die Galerie steht leise daneben.
+
+- **Kontingente werden aus den Teilnahmebedingungen gelesen** — viele Aktionen sind
+  gedeckelt („1.000 Teilnahmen pro Woche") und werden zu einem festen Zeitpunkt
+  zurückgesetzt. Wer das nicht weiß, kauft das Produkt und merkt beim Einreichen, dass er
+  zu spät dran war. Gelesen werden Zahl, Zeitraum und Zurücksetzung; einen *Live-Zähler*
+  gibt es nicht, weil die Seiten ihn nicht hergeben.
+- **„Sobald das Kontingent erschöpft ist …" heißt nicht, dass es erschöpft ist** — dieser
+  Satz steht in fast jeden Teilnahmebedingungen. Als „erschöpft" zählt nur eine Aussage im
+  Präsens ohne Bedingungswort in den 70 Zeichen davor; sonst wären alle Aktionen dauerhaft
+  als tot markiert. Geprüft wird der unmittelbare Zusammenhang, nicht der Satz: Ein aus
+  HTML gewonnener Seitentext hat keine verlässlichen Satzgrenzen.
+- **Eine Zahl wird erst zur Obergrenze, wenn ein Wort sie dazu macht** — der erste Anlauf
+  las den Teilnehmerzähler einer Seite („schon 30.652 Teilnahmen!") als Kontingent. Jetzt
+  muss in der Nähe „begrenzt", „maximal", „insgesamt", „Kontingent" oder ein Zeitraum
+  stehen. Am echten Feed geprüft, nicht nur an erfundenen Beispielen.
+- **Erinnerungen mit dem AlarmManager, ungenau gestellt** — für eine Meldung zu einem
+  Zeitpunkt braucht es keine Bibliothek, und ein ungenauer Alarm erspart die
+  Sonderberechtigung für exakte Wecker. Das System darf ihn um bis zu eine Stunde
+  verschieben; bei einer Frist, die noch Tage läuft, ist das ohne Belang. Gestellte
+  Erinnerungen liegen in der Datenbank und werden beim App-Start neu gestellt — Wecker
+  überleben keinen Neustart des Telefons.
+- **Der Barcode-Scanner ist entfallen** — mit ihm CameraX und die Barcode-Bibliothek. Er
+  löste einen Sonderfall („steht im Laden vor einem Produkt"), den der tägliche Weg nicht
+  braucht, und kostete zwei Bibliotheken.
+
 ## Sonstiges
 
 - **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege

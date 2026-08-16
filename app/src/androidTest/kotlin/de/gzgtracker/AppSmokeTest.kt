@@ -1,5 +1,6 @@
 package de.gzgtracker
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -35,19 +36,29 @@ class AppSmokeTest {
     // Bewusst je eine Behauptung pro Test: Faellt eine, sagt schon der Testname,
     // welches Element fehlt — statt dass drei Moeglichkeiten offenbleiben.
 
+    /**
+     * Die App startet auf "Aktionen" — dort beginnt der Weg: erst suchen, was es
+     * gibt, dann kaufen, dann eintragen.
+     */
     @Test
     fun startetUndZeigtDieTitelzeile() {
-        // "Belege" steht in der Titelzeile und in der Navigation — daher onFirst().
-        app.onAllNodesWithText("Belege").onFirst().assertIsDisplayed()
+        app.onAllNodesWithText("Aktionen").onFirst().assertIsDisplayed()
+    }
+
+    /** Wechselt auf den Belegstapel — die Tests darunter spielen dort. */
+    private fun zeigeBelege() {
+        app.onNodeWithText("Belege").performClick()
     }
 
     @Test
     fun zeigtDenLeerenZustand() {
+        zeigeBelege()
         app.onNodeWithText("Noch keine Einreichungen").assertIsDisplayed()
     }
 
     @Test
     fun zeigtDenEinladungstext() {
+        zeigeBelege()
         app.onNodeWithText("Such dir eine Aktion, kauf das Produkt und trag den Beleg hier ein.")
             .assertIsDisplayed()
     }
@@ -63,6 +74,7 @@ class AppSmokeTest {
      */
     @Test
     fun hatEinenBedienbarenHauptknopf() {
+        zeigeBelege()
         val erschienen = runCatching {
             app.waitUntil(timeoutMillis = 10_000) {
                 app.onAllNodesWithContentDescription("Beleg eintragen")
@@ -83,6 +95,7 @@ class AppSmokeTest {
 
     @Test
     fun zeigtDieSummenkarte() {
+        zeigeBelege()
         app.onNodeWithText("Offen").assertIsDisplayed()
         // Summen bei leerer Liste: formatiert, nicht roh.
         app.onAllNodesWithText("0,00 €").onFirst().assertIsDisplayed()
@@ -90,17 +103,20 @@ class AppSmokeTest {
 
     @Test
     fun navigiertDurchAlleReiter() {
-        app.onNodeWithText("Aktionen").performClick()
-        app.onNodeWithText("Noch keine Aktionen").assertIsDisplayed()
-
+        // Reihenfolge so gewaehlt, dass die Beschriftung des Ziels immer nur in
+        // der Navigationsleiste steht — auf dem eigenen Reiter steht sie auch in
+        // der Titelzeile, und dann waere nicht klar, was angetippt wird.
         app.onNodeWithText("Konten").performClick()
         app.onNodeWithText("Noch keine Konten").assertIsDisplayed()
 
-        app.onNodeWithText("Einstellungen").performClick()
+        app.onNodeWithText("Optionen").performClick()
         app.onNodeWithText("Kontoregel").assertIsDisplayed()
 
         app.onNodeWithText("Belege").performClick()
         app.onNodeWithText("Noch keine Einreichungen").assertIsDisplayed()
+
+        app.onNodeWithText("Aktionen").performClick()
+        app.onNodeWithText("Noch keine Aktionen").assertIsDisplayed()
     }
 
     @Test
@@ -120,12 +136,14 @@ class AppSmokeTest {
 
     @Test
     fun oeffnetDieEinstellungenUndSchaltetDieKontoregelUm() {
-        app.onNodeWithText("Einstellungen").performClick()
+        app.onNodeWithText("Optionen").performClick()
 
         app.onNodeWithText("Blockieren").performClick()
         app.onNodeWithText("Warnen").assertIsDisplayed()
 
-        // Die Feed-URL kommt aus BuildConfig und muss gefuellt sein.
-        app.onNodeWithText("Feed-URL").assertIsDisplayed()
+        // Der Feed laesst sich anstossen — die Adresse dazu steht bewusst
+        // nicht mehr hier, sie ist eine Einstellung der App.
+        app.onNodeWithText("Jetzt aktualisieren").assertIsDisplayed()
+        app.onAllNodesWithText("Feed-URL").assertCountEquals(0)
     }
 }

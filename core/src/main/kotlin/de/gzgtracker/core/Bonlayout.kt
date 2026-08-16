@@ -72,6 +72,32 @@ object Bonlayout {
     }
 
     /**
+     * Wirft Dopplungen aus überlappenden Ausschnitten weg.
+     *
+     * Ein ganzer Kassenbon ist zu fein für einen einzigen Durchgang der
+     * Texterkennung — dann muss man mit dem Telefon dicht heran, und bei
+     * Aktionen, die den vollständigen Bon verlangen, geht das nicht. Der Ausweg
+     * ist, das Bild in überlappende Streifen zu zerlegen und jeden einzeln zu
+     * lesen; jeder Streifen bekommt so mehr Bildpunkte je Zeile.
+     *
+     * Was im Überlappungsbereich liegt, kommt dabei zweimal an. Doppelt gelesene
+     * Beträge wären fatal: Aus zwei mal `3,45` würde sonst ein zweiter Posten,
+     * und die Artikelliste stimmte nicht mehr.
+     */
+    fun vereinige(stuecke: List<Textstueck>): List<Textstueck> {
+        val behalten = mutableListOf<Textstueck>()
+        for (stueck in stuecke.sortedBy { it.mitte }) {
+            val schonDa = behalten.any { vorhanden ->
+                vorhanden.text.trim() == stueck.text.trim() &&
+                    abs(vorhanden.mitte - stueck.mitte) <= minOf(vorhanden.hoehe, stueck.hoehe) &&
+                    abs(vorhanden.links - stueck.links) <= minOf(vorhanden.hoehe, stueck.hoehe)
+            }
+            if (!schonDa) behalten.add(stueck)
+        }
+        return behalten
+    }
+
+    /**
      * True, wenn zwei Stücke auf dem Papier in derselben Zeile standen.
      *
      * Maßstab ist die kleinere der beiden Höhen: Ein großer Betrag rechts und

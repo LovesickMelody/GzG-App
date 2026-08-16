@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 
 from .fetch import Fetcher
 from .models import Action
-from .parsing import anforderungen_aus, saeubere
+from .parsing import anforderungen_aus, kontingent_aus, saeubere
 
 log = logging.getLogger(__name__)
 
@@ -198,7 +198,9 @@ def _lies_bedingungen_von_aktionsseite(aktion: Action, fetcher: Fetcher) -> None
     for stoerer in suppe(["script", "style", "noscript"]):
         stoerer.decompose()
 
-    gefunden = anforderungen_aus(suppe.get_text(" ", strip=True))
+    seitentext = suppe.get_text(" ", strip=True)
+
+    gefunden = anforderungen_aus(seitentext)
     if gefunden:
         log.info(
             "Aktion %r: Bedingungen von der Aktionsseite — %s",
@@ -206,3 +208,33 @@ def _lies_bedingungen_von_aktionsseite(aktion: Action, fetcher: Fetcher) -> None
             ", ".join(gefunden),
         )
         aktion.requirements = gefunden
+
+    _lies_kontingent(aktion, seitentext)
+
+
+def _lies_kontingent(aktion: Action, seitentext: str) -> None:
+    """
+    Uebernimmt die Kontingentangaben, wenn welche dastehen.
+
+    Nur ergaenzen, nie loeschen: Steht auf der Seite heute nichts davon, heisst
+    das nicht, dass es kein Kontingent gibt — nur, dass es diesmal nicht zu
+    finden war.
+    """
+    angaben = kontingent_aus(seitentext)
+
+    if angaben["anzahl"] is not None:
+        aktion.limit_anzahl = angaben["anzahl"]
+        aktion.limit_zeitraum = angaben["zeitraum"]
+    if angaben["zuruecksetzung"]:
+        aktion.limit_reset = angaben["zuruecksetzung"]
+    aktion.limit_erschoepft = bool(angaben["erschoepft"])
+
+    if angaben["anzahl"] or angaben["zuruecksetzung"] or angaben["erschoepft"]:
+        log.info(
+            "Aktion %r: Kontingent — Anzahl=%s Zeitraum=%s Reset=%s erschöpft=%s",
+            aktion.title[:40],
+            angaben["anzahl"],
+            angaben["zeitraum"],
+            angaben["zuruecksetzung"],
+            angaben["erschoepft"],
+        )
