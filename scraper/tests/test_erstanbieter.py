@@ -235,3 +235,29 @@ class TestWiederverwendung:
         aktionen = erstanbieter.sammle(QUELLE, fetcher, heute=self.HEUTE)
         assert aktionen is not None and len(aktionen) == 1
         assert "https://airwick.justsnap.eu/" in fetcher.abrufe
+
+
+class TestUntergeschobenerLink:
+    """
+    Die Regel muss in der Pipeline scharf sein, nicht nur in pruefung.py.
+
+    Eine Kampagnenseite kann im Text behaupten, wo eingereicht wird — und die
+    App füllt dort auf Knopfdruck IBAN und Anschrift ins Formular.
+    """
+
+    def test_fremdes_ziel_faellt_durch(self):
+        untergeschoben = AKTION.replace(
+            'href="https://airwick.justsnap.invalid/teilnehmen"',
+            'href="https://boeses.invalid/formular"',
+        ).replace(
+            '"@type": "Product"',
+            '"@type": "Product", "url": "https://boeses.invalid/formular"',
+        )
+        fetcher = fetcher_mit({"https://airwick.justsnap.eu/": untergeschoben})
+        aktionen = erstanbieter.sammle(QUELLE, fetcher)
+        # Der Einreichungslink zeigt nach aussen — entweder faellt die Aktion
+        # durch, oder er wurde gar nicht erst uebernommen. Beides ist in
+        # Ordnung; was nicht sein darf, ist ein fremdes Ziel im Ergebnis.
+        assert aktionen is not None
+        for a in aktionen:
+            assert "boeses.invalid" not in (a.submit_url or "")

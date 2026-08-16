@@ -69,6 +69,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.gzgtracker.core.fremderGastgeber
+import de.gzgtracker.core.hostVon
 import de.gzgtracker.ui.erfassen.kameraZiel
 import java.io.File
 
@@ -101,6 +103,26 @@ fun WebFormularScreen(
     // Ladezustand der Seite selbst — getrennt vom Laden der Einreichung.
     var seiteLaedt by remember { mutableStateOf(true) }
     var seitenfehler by remember { mutableStateOf<String?>(null) }
+
+    // Wo der eingebettete Browser gerade wirklich steht. Nicht dasselbe wie
+    // [zustand.adresse]: Das ist die Startadresse, und Weiterleitungen fuehren
+    // von dort weg. Wer gleich IBAN und Anschrift einfuegt, muss sehen koennen,
+    // wer sie bekommt.
+    var aktuelleAdresse by remember { mutableStateOf<String?>(null) }
+    // Nachfrage, bevor die Daten auf einer fremden Seite landen.
+    var fremderHost by remember { mutableStateOf<String?>(null) }
+
+    // Das eigentliche Einfuegen. Steht hier, weil es zwei Wege dorthin gibt —
+    // direkt ueber den Knopf und ueber die Nachfrage bei fremder Domain. Zwei
+    // Kopien waeren zwei Stellen, die auseinanderlaufen koennen.
+    val fuelleFelder: (WebView) -> Unit = { ziel ->
+        ziel.evaluateJavascript(viewModel.skript()) { ergebnis ->
+            // Rueckgabe ist "3/6" — als JSON-Text mit Anfuehrungszeichen
+            // drum herum.
+            val zahl = ergebnis?.trim('"') ?: "0"
+            viewModel.zeigeMeldung("$zahl Feldern gefüllt. Bitte prüfen, dann absenden.")
+        }
+    }
 
     // Das Datei-Feld der Anbieterseite. Ohne eigene Behandlung passiert beim
     // Antippen von "Datei auswählen" gar nichts — und genau dieses Foto ist der
@@ -176,6 +198,39 @@ fun WebFormularScreen(
         viewModel.meldungGelesen()
     }
 
+    // Der eingebettete Browser folgt jeder Weiterleitung. Landet man dabei auf
+    // einer Domain, die zur Aktion nicht passt, ist "Daten einfügen" der
+    // gefaehrlichste Knopf der App — er schreibt IBAN, Bankverbindung,
+    // Geburtsdatum und Anschrift in fremde Formularfelder. Also erst fragen.
+    fremderHost?.let { gastgeber ->
+        AlertDialog(
+            onDismissRequest = { fremderHost = null },
+            title = { Text("Andere Seite als erwartet") },
+            text = {
+                Text(
+                    "Du bist jetzt bei $gastgeber — das gehört nicht zur Aktion. " +
+                        "Beim Einfügen gehen IBAN, Bankverbindung, Geburtsdatum " +
+                        "und Anschrift an diese Seite. Nur fortfahren, wenn du " +
+                        "sie kennst.",
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        val ziel = webView
+                        fremderHost = null
+                        ziel?.let(fuelleFelder)
+                    },
+                ) {
+                    Text("Trotzdem einfügen")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { fremderHost = null }) { Text("Abbrechen") }
+            },
+        )
+    }
+
     if (belegwahlOffen) {
         AlertDialog(
             onDismissRequest = { beantworteDateiwahl(null) },
@@ -241,11 +296,27 @@ fun WebFormularScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = zustand.aktionstitel.ifBlank { "Einreichen" },
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    Column {
+                        Text(
+                            text = zustand.aktionstitel.ifBlank { "Einreichen" },
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        // Wer die Seite betreibt, steht darunter. Ohne das sieht
+                        // eine Weiterleitung auf eine fremde Domain genauso aus
+                        // wie die Aktionsseite selbst — und gleich darunter
+                        // sitzt der Knopf, der IBAN und Anschrift einfuegt.
+                        val gastgeber = hostVon(aktuelleAdresse ?: zustand.adresse)
+                        if (gastgeber != null) {
+                            Text(
+                                text = gastgeber,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = onZurueck) {
@@ -276,17 +347,16 @@ fun WebFormularScreen(
                     Button(
                         onClick = {
                             val ziel = webView
+                            val fremd = fremderGastgeber(aktuelleAdresse, zustand.adresse)
                             if (ziel == null) {
                                 viewModel.zeigeMeldung("Die Seite ist noch nicht geladen.")
+                            } else if (fremd != null) {
+                                // Nicht wortlos einfuegen: Hier gingen IBAN,
+                                // Bankverbindung, Geburtsdatum und Anschrift an
+                                // jemanden, den die Aktion nicht genannt hat.
+                                fremderHost = fremd
                             } else {
-                                ziel.evaluateJavascript(viewModel.skript()) { ergebnis ->
-                                    // Rueckgabe ist "3/6" — als JSON-Text mit
-                                    // Anfuehrungszeichen drum herum.
-                                    val zahl = ergebnis?.trim('"') ?: "0"
-                                    viewModel.zeigeMeldung(
-                                        "$zahl Feldern gefüllt. Bitte prüfen, dann absenden.",
-                                    )
-                                }
+                                fuelleFelder(ziel)
                             }
                         },
                         enabled = zustand.hatDaten,
@@ -411,6 +481,7 @@ fun WebFormularScreen(
                             ) {
                                 seiteLaedt = true
                                 seitenfehler = null
+                                aktuelleAdresse = url
                             }
 
                             override fun onPageFinished(view: WebView?, url: String?) {

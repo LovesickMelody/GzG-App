@@ -216,8 +216,14 @@ def sammle(
         befunde = pruefe_liste(
             [aktion],
             # nur_gestartete: Hier — und nur hier — kennen wir Kampagnen aus
-            # Zertifikaten, die noch niemand angekuendigt hat.
-            Kontext(seitentext=sichtbarer_text(html), nur_gestartete=True),
+            #   Zertifikaten, die noch niemand angekuendigt hat.
+            # eigene_herkunft: Der Einreichungslink kommt aus dem Seitentext,
+            #   und den schreibt der Betreiber der Seite, nicht wir.
+            Kontext(
+                seitentext=sichtbarer_text(html),
+                nur_gestartete=True,
+                eigene_herkunft=True,
+            ),
             quellenname=name,
         )
         gesammelt.extend(befunde)
