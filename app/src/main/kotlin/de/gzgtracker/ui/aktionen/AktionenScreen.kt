@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -232,18 +233,42 @@ fun AktionenScreen(
                 // Eigene Zeile statt neben den Chips: Dort blieb vom Text nur
                 // "Stand ge..." uebrig, egal wie kurz er gefasst war.
                 if (!zustand.nurMerkliste) {
-                    zustand.letzterSync?.let { sync ->
-                        Text(
-                            text = "Stand ${sync.relativeKurz()}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
-                            textAlign = TextAlign.End,
-                        )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        // Warum die Liste kurz ist, muss dastehen — sonst sieht
+                        // ein Suchbegriff, der das Einreichen ueberlebt hat, wie
+                        // ein kaputter Feed aus.
+                        if (zustand.eingeschraenkt) {
+                            Text(
+                                text = "${zustand.aktionen.size} von ${zustand.gesamt}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                            )
+                            TextButton(
+                                onClick = viewModel::setzeFilterZurueck,
+                                modifier = Modifier.heightIn(min = 48.dp),
+                            ) {
+                                Text("Filter zurücksetzen")
+                            }
+                        } else {
+                            Spacer(Modifier.weight(1f))
+                            zustand.letzterSync?.let { sync ->
+                                Text(
+                                    text = "Stand ${sync.relativeKurz()}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    textAlign = TextAlign.End,
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -275,10 +300,19 @@ fun AktionenScreen(
                 }
 
                 if (zustand.istLeer) {
-                    if (zustand.nurMerkliste) {
-                        LeereMerkliste(onAlleZeigen = { viewModel.setzeNurMerkliste(false) })
-                    } else {
-                        LeereAktionen(
+                    when {
+                        zustand.nurMerkliste ->
+                            LeereMerkliste(onAlleZeigen = { viewModel.setzeNurMerkliste(false) })
+
+                        // Es gibt Aktionen, nur passt keine zum Filter. "Feed
+                        // aktualisieren" waere hier der falsche Rat.
+                        zustand.gesamt > 0 -> NichtsGefunden(
+                            suche = zustand.suche,
+                            gesamt = zustand.gesamt,
+                            onZuruecksetzen = viewModel::setzeFilterZurueck,
+                        )
+
+                        else -> LeereAktionen(
                             onAnlegen = onAktionAnlegen,
                             onAktualisieren = viewModel::aktualisiere,
                         )
@@ -508,6 +542,56 @@ private fun fristText(aktion: PromoAction, tage: Long?, bisStart: Long? = null):
         tage == 1L -> "$bezeichnung morgen"
         tage <= 14 -> "$bezeichnung in $tage Tagen (${frist.deutsch()})"
         else -> "$bezeichnung ${frist.deutsch()}"
+    }
+}
+
+/**
+ * Der Filter passt auf nichts — aber Aktionen sind da.
+ *
+ * Wichtig ist die Zahl: „26 Aktionen sind geladen" nimmt den Verdacht weg, der
+ * Feed sei leer, und der Knopf daneben ist der Weg zurück.
+ */
+@Composable
+private fun NichtsGefunden(suche: String, gesamt: Int, onZuruecksetzen: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            Icons.Outlined.SearchOff,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = if (suche.isBlank()) {
+                "Kein Treffer für den Filter"
+            } else {
+                "Kein Treffer für „$suche“"
+            },
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(top = 16.dp),
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "$gesamt Aktionen sind geladen, nur passt keine dazu.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        TextButton(
+            onClick = onZuruecksetzen,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .heightIn(min = 48.dp),
+        ) {
+            Text("Filter zurücksetzen")
+        }
     }
 }
 
