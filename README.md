@@ -240,11 +240,10 @@ Prüfschicht                                             was nicht belegt ist, f
 
 ### Entdeckung: Kampagnen finden sich von selbst
 
-Aktionsplattformen legen je Kampagne eine eigene Subdomain an — belegt für
-JustSnap durch die Air-Wick-Aktion, deren Kontaktadresse
-`kontakt@airwick.justsnap.eu` lautet. Jede neue Subdomain braucht ein
-TLS-Zertifikat, und jedes ausgestellte Zertifikat landet nach RFC 6962 in einem
-öffentlichen Protokoll. Eine Abfrage am Tag genügt:
+Manche Aktionsplattformen legen je Kampagne eine eigene Subdomain an und lassen
+für jede ein eigenes TLS-Zertifikat ausstellen. Jedes ausgestellte Zertifikat
+landet nach RFC 6962 in einem öffentlichen Protokoll — eine Abfrage am Tag
+genügt dann, um jede neue Kampagne zu finden:
 
 ```
 https://api.certspotter.com/v1/issuances?domain=justsnap.eu&include_subdomains=true
@@ -254,6 +253,14 @@ Das ist rein passiv: öffentliche Register lesen, keine Anfrage an die
 Zielsysteme, kein Erraten von Namen. Plattformen, die ihre Kampagnen über
 *Pfade* statt Subdomains führen, fängt stattdessen die `sitemap.xml` ab —
 deshalb gibt es beide Entdecker.
+
+**Für JustSnap trägt dieser Weg nicht.** Der Probelauf ergab über elf Monate
+genau zwei Zertifikate: `*.justsnap.eu` und `justsnap.eu`. Ein solcher
+Platzhalter deckt jede Subdomain ab, also braucht `airwick.justsnap.eu` kein
+eigenes Zertifikat und taucht nirgends einzeln auf. Die Subdomain *gibt* es —
+protokolliert wird sie trotzdem nicht. Für Plattformen, die je Kampagne ein
+eigenes Zertifikat ausstellen lassen, bleibt der Weg richtig; JustSnap braucht
+einen anderen, deshalb steht die Quelle weiter auf `enabled: false`.
 
 Beide Zugänge zu diesen Protokollen — `crt.sh` und Cert Spotter — sperren
 Crawler per `robots.txt` aus, laden aber ausdrücklich zum Programmzugriff ein:

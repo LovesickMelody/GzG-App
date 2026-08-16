@@ -146,9 +146,14 @@ Abgehakt heisst: gebaut, getestet, committet.
       `--only`-Lauf haette den Feed leergeraeumt. Beides behoben
 - [x] Zweiter Probelauf: certspotter sperrt Crawler ebenfalls per robots.txt.
       Namentliche Ausnahme fuer die beiden dokumentierten Schnittstellen
-- [ ] Dritter Probelauf `--only justsnap`: Legt JustSnap wirklich je Kampagne eine
-      Subdomain an? Ergebnis lesen, nicht nur zaehlen
-- [ ] JustSnap-Quelle auf `enabled: true` stellen, wenn der Probelauf taugt
+- [x] Probelauf beantwortet: JustSnap benutzt ein Platzhalterzertifikat
+      (`*.justsnap.eu`), Kampagnen-Subdomains tauchen deshalb nie einzeln in den
+      Protokollen auf. Die Entdeckung ueber CT-Logs traegt fuer diese Plattform
+      nicht — Quelle bleibt auf `enabled: false`
+- [ ] Anderer Weg zu JustSnap: Hat justsnap.eu eine Aktionsuebersicht, die sich
+      lesen laesst? Sonst faellt die Plattform aus der Erstanbieter-Idee heraus
+- [ ] Pruefen, welche Plattformen je Kampagne ein eigenes Zertifikat ausstellen —
+      fuer die traegt die CT-Entdeckung unveraendert
 - [ ] Weitere Plattformen abklopfen (jolt, coreweb, Couponing House, DREI-D)
 - [ ] Erstanbieter mit eigener Aktionsuebersicht ergaenzen (P&G ForMe)
 - [ ] Websuche-Entdecker als Netz fuer unbekannte Plattformen

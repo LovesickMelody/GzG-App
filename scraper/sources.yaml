@@ -127,8 +127,15 @@ sources:
   # sonst Modell). Ein Portalumbau kann sie nicht brechen, weil sie kein Portal
   # anfasst — siehe README, "Erstanbieter statt Portale".
   #
-  # Noch abgeschaltet: Erst muss ein Probelauf zeigen, dass die Plattform
-  # wirklich je Kampagne eine Subdomain anlegt und was dabei herauskommt.
+  # Abgeschaltet, und zwar auf absehbare Zeit: Der Probelauf hat gezeigt, dass
+  # JustSnap ein Platzhalterzertifikat (*.justsnap.eu) benutzt. Ein Platzhalter
+  # deckt jede Subdomain ab, also braucht airwick.justsnap.eu kein eigenes
+  # Zertifikat — und taucht in den Protokollen nie einzeln auf. Ueber elf Monate
+  # gab es fuer die Domain genau zwei Eintraege, den Platzhalter und die
+  # nackte Domain.
+  #
+  # Der Eintrag bleibt als Vorlage stehen. Fuer eine Plattform, die je Kampagne
+  # ein eigenes Zertifikat ausstellen laesst, ist er unveraendert richtig.
   #   python -m gzg_scraper.run --only justsnap --output /tmp/probe.json
   - name: justsnap
     enabled: false

@@ -202,12 +202,26 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   eine Kampagne zu nehmen ist etwas anderes: Die Aktionsseite des Herstellers hat den
   einzigen Daseinszweck, gefunden zu werden. Nebeneffekt: Kein Portalumbau kann diese
   Quellenart brechen, weil sie kein Portal anfasst.
-- **Entdeckung über Certificate-Transparency-Logs** — Aktionsplattformen legen je Kampagne
-  eine Subdomain an (belegt: `airwick.justsnap.eu`), jede Subdomain braucht ein Zertifikat,
-  jedes Zertifikat steht nach RFC 6962 in einem öffentlichen Protokoll. Eine Abfrage bei
-  Zertifikatsprotokoll am Tag liefert damit jede neue Kampagne, rein passiv und ohne
-  Anfrage an die Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht
-  auffindbar sind.
+- **Entdeckung über Certificate-Transparency-Logs** — legt eine Plattform je Kampagne eine
+  Subdomain an *und lässt für jede ein eigenes Zertifikat ausstellen*, dann steht jede neue
+  Kampagne nach RFC 6962 binnen Minuten in einem öffentlichen Protokoll. Eine Abfrage am
+  Tag liefert sie, rein passiv und ohne Anfrage an die Zielsysteme. Sitemaps daneben, weil
+  pfadbasierte Plattformen so nicht auffindbar sind.
+- **Für JustSnap trägt das nicht — die Plattform benutzt ein Platzhalterzertifikat** — und
+  damit fällt die Begründung, mit der diese Entdeckungsart überhaupt angefangen wurde. Der
+  Probelauf ergab für `justsnap.eu` über elf Monate hinweg genau zwei Zertifikate:
+  `*.justsnap.eu` und `justsnap.eu`. Ein Platzhalter deckt *jede* Subdomain ab, also
+  braucht `airwick.justsnap.eu` kein eigenes Zertifikat und taucht nirgends einzeln auf.
+  Der Denkfehler steckte im ursprünglichen Satz „jede Subdomain braucht ein Zertifikat":
+  Das stimmt nicht — jede Subdomain braucht *Abdeckung*, und die kann aus einem Platzhalter
+  kommen. Die Air-Wick-Adresse belegte, dass es die Subdomain gibt, nie dass sie protokolliert
+  wird. Zwei verschiedene Aussagen, und nur die erste war belegt.
+  Der Zeitraum im Log schließt die Alternativerklärung aus: Es lag nicht an einem zu kleinen
+  Abfragefenster, die Historie war vollständig und wirklich so kurz.
+  Das Verfahren bleibt trotzdem im Code — es trägt für jede Plattform, die je Kampagne ein
+  eigenes Zertifikat ausstellen lässt, und das tun viele (ein Let's-Encrypt-Platzhalter
+  verlangt DNS-01, den Aufwand scheuen die meisten). Für JustSnap braucht es einen anderen
+  Weg.
 - **Certspotter statt crt.sh — weil crt.sh es per `robots.txt` verbietet** — der erste
   Probelauf gegen die echte Plattform fand null Kandidaten, und zwar nicht wegen eines
   Fehlers: Unser Fetcher liest `robots.txt` und hält sich daran, und crt.sh untersagt den
