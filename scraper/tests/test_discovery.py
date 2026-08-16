@@ -166,6 +166,42 @@ class TestCertspotter:
         assert ct_logs.finde("justsnap.eu", FetcherAttrappe({})) == []
 
 
+class TestLeeresErgebnisErklaertSich:
+    """
+    "2 Einträge → 0 Kampagnen" ist keine Antwort.
+
+    Dahinter stecken drei sehr verschiedene Fälle: Die Plattform hat gerade
+    keine Kampagne, sie benutzt ein Platzhalterzertifikat (dann taucht keine
+    Kampagne je einzeln auf), oder unser Filter ist zu streng. Unterscheiden
+    lässt sich das nur an den verworfenen Namen — also gehören sie ins Log.
+    """
+
+    def test_nennt_die_verworfenen_namen(self, caplog):
+        nur_platzhalter = (
+            '[{"id":"1","dns_names":["*.justsnap.eu","justsnap.eu"],'
+            '"not_before":"2026-08-01T00:00:00Z"}]'
+        )
+        with caplog.at_level("INFO"):
+            assert ct_logs.lies_certspotter(nur_platzhalter, "justsnap.eu") == []
+
+        assert "*.justsnap.eu" in caplog.text
+        assert "justsnap.eu" in caplog.text
+
+    def test_schweigt_wenn_etwas_gefunden_wurde(self, caplog):
+        with caplog.at_level("INFO"):
+            ct_logs.lies_certspotter(CERTSPOTTER, "justsnap.eu")
+        assert "nichts übrig" not in caplog.text
+
+    def test_nennt_den_abgedeckten_zeitraum(self, caplog):
+        """
+        Ohne den Zeitraum ist "wenige Einträge" nicht von "nur ein kleines
+        Zeitfenster geliefert bekommen" zu unterscheiden.
+        """
+        with caplog.at_level("INFO"):
+            ct_logs.lies_certspotter(CERTSPOTTER, "justsnap.eu")
+        assert "2026-01-05T00:00:00Z bis 2026-08-01T10:02:09Z" in caplog.text
+
+
 class TestSitemap:
     def test_liest_adressen(self):
         xml = (FIXTURES / "sitemap_aktionen.xml").read_text(encoding="utf-8")

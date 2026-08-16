@@ -99,6 +99,10 @@ def _lade_liste(inhalt: str | None, basis: str, anbieter: str) -> list[dict]:
     return eintraege if isinstance(eintraege, list) else []
 
 
+# Wieviele verworfene Namen im Log genannt werden, wenn nichts uebrigbleibt.
+MAX_GENANNTE = 20
+
+
 def _zu_kandidaten(paare: list[tuple[str, str | None]], basis: str) -> list[Kandidat]:
     """
     Fasst (Name, Ausstellungszeitpunkt) zu Kandidaten zusammen.
@@ -106,16 +110,36 @@ def _zu_kandidaten(paare: list[tuple[str, str | None]], basis: str) -> list[Kand
     Ein Name kann in vielen Zertifikaten stehen (Erneuerung alle 90 Tage). Es
     zaehlt der **frueheste** Zeitpunkt: Wann die Kampagne entstand, nicht wann
     ihr Zertifikat zuletzt erneuert wurde.
+
+    Bleibt nichts uebrig, stehen die verworfenen Namen im Log. "2 Einträge → 0
+    Kampagnen" sagt sonst nicht, ob die Plattform keine Kampagnen hat, ob sie
+    ein Platzhalterzertifikat benutzt (dann taucht keine Kampagne je einzeln
+    auf) oder ob unser Filter zu streng ist. Das sind drei sehr verschiedene
+    Antworten, und man sieht sie nur an den Namen.
     """
     frueheste: dict[str, str | None] = {}
+    verworfen: set[str] = set()
 
     for name, seit in paare:
         name = name.strip().casefold().rstrip(".")
         if not _brauchbar(name, basis):
+            if name:
+                verworfen.add(name)
             continue
         vorher = frueheste.get(name)
         if name not in frueheste or (seit and vorher and seit < vorher):
             frueheste[name] = seit
+
+    if not frueheste and verworfen:
+        genannt = sorted(verworfen)
+        log.info(
+            "%s: nichts übrig, verworfen wurden %s%s",
+            basis,
+            ", ".join(genannt[:MAX_GENANNTE]),
+            f" (und {len(genannt) - MAX_GENANNTE} weitere)"
+            if len(genannt) > MAX_GENANNTE
+            else "",
+        )
 
     return [
         Kandidat(
@@ -177,6 +201,19 @@ def lies_certspotter(inhalt: str | None, basis: str) -> list[Kandidat]:
             paare.append((str(name), seit))
 
     kandidaten = _zu_kandidaten(paare, basis)
+    # Der abgedeckte Zeitraum gehoert ins Log: Ohne ihn laesst sich "wenige
+    # Eintraege" nicht von "nur ein kleines Zeitfenster geliefert bekommen"
+    # unterscheiden — und das ist der Unterschied zwischen "Plattform macht das
+    # nicht" und "wir sehen es bloss nicht".
+    zeitpunkte = sorted(seit for _, seit in paare if seit)
+    if zeitpunkte:
+        log.info(
+            "certspotter %s: Zertifikate von %s bis %s",
+            basis,
+            zeitpunkte[0],
+            zeitpunkte[-1],
+        )
+
     log.info(
         "certspotter %s: %s Einträge → %s mögliche Kampagnen",
         basis,
