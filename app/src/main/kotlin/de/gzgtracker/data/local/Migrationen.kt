@@ -147,8 +147,21 @@ object Migrationen {
         }
     }
 
+    /**
+     * v10: Wiederkehrende Erinnerungen.
+     *
+     * Eine Erinnerung an eine Frist kommt einmal. Eine an die woechentliche
+     * Freischaltung eines Kontingents muss jede Woche kommen.
+     */
+    val VON_9_AUF_10 = object : Migration(9, 10) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE reminders ADD COLUMN abstandMillis INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE reminders ADD COLUMN anlass TEXT NOT NULL DEFAULT 'frist'")
+        }
+    }
+
     val ALLE = arrayOf(
         VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6, VON_6_AUF_7,
-        VON_7_AUF_8, VON_8_AUF_9,
+        VON_7_AUF_8, VON_8_AUF_9, VON_9_AUF_10,
     )
 }

@@ -37,6 +37,13 @@ object Erinnerungen {
 
     const val EXTRA_AKTION = "aktionId"
     const val EXTRA_TITEL = "titel"
+    const val EXTRA_ANLASS = "anlass"
+
+    /** Erinnert an eine ablaufende Einsendefrist. */
+    const val ANLASS_FRIST = "frist"
+
+    /** Erinnert kurz bevor ein Kontingent neu freigeschaltet wird. */
+    const val ANLASS_FREISCHALTUNG = "freischaltung"
 
     /**
      * Legt den Benachrichtigungskanal an.
@@ -59,21 +66,42 @@ object Erinnerungen {
     fun darfMelden(context: Context): Boolean =
         NotificationManagerCompat.from(context).areNotificationsEnabled()
 
-    /** Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt. */
-    fun stelle(context: Context, aktionId: String, titel: String, faelligAm: Instant) {
+    /**
+     * Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt.
+     *
+     * [abstandMillis] groesser null macht daraus einen wiederkehrenden Wecker —
+     * fuer Kontingente, die jede Woche neu freigeschaltet werden. Auch der ist
+     * ungenau gestellt; bei fuenf Minuten Vorlauf ist das knapp, aber der
+     * Ausweg waere die Sonderberechtigung fuer exakte Wecker, und die ist es
+     * nicht wert.
+     */
+    fun stelle(
+        context: Context,
+        aktionId: String,
+        titel: String,
+        faelligAm: Instant,
+        abstandMillis: Long = 0,
+        anlass: String = ANLASS_FRIST,
+    ) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        manager.set(
-            AlarmManager.RTC_WAKEUP,
-            faelligAm.toEpochMilli(),
-            absicht(context, aktionId, titel),
-        )
-        Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt")
+        val absicht = absicht(context, aktionId, titel, anlass)
+        if (abstandMillis > 0) {
+            manager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                faelligAm.toEpochMilli(),
+                abstandMillis,
+                absicht,
+            )
+        } else {
+            manager.set(AlarmManager.RTC_WAKEUP, faelligAm.toEpochMilli(), absicht)
+        }
+        Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt (Abstand $abstandMillis)")
     }
 
     /** Nimmt den Wecker zurück. */
     fun nimmZurueck(context: Context, aktionId: String) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        manager.cancel(absicht(context, aktionId, titel = ""))
+        manager.cancel(absicht(context, aktionId, titel = "", anlass = ANLASS_FRIST))
     }
 
     /**
@@ -83,7 +111,12 @@ object Erinnerungen {
      * ueberschreibt statt einen zweiten anzulegen — sonst meldete sich dieselbe
      * Aktion mehrfach.
      */
-    private fun absicht(context: Context, aktionId: String, titel: String): PendingIntent {
+    private fun absicht(
+        context: Context,
+        aktionId: String,
+        titel: String,
+        anlass: String,
+    ): PendingIntent {
         val intent = Intent(context, ErinnerungsEmpfaenger::class.java).apply {
             // Ohne eigene Adresse haelt das System zwei Absichten fuer gleich,
             // wenn sich nur die Extras unterscheiden — dann traegt der letzte
@@ -91,6 +124,7 @@ object Erinnerungen {
             data = android.net.Uri.parse("gzg://erinnerung/$aktionId")
             putExtra(EXTRA_AKTION, aktionId)
             putExtra(EXTRA_TITEL, titel)
+            putExtra(EXTRA_ANLASS, anlass)
         }
         return PendingIntent.getBroadcast(
             context,
@@ -107,6 +141,7 @@ class ErinnerungsEmpfaenger : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val aktionId = intent.getStringExtra(Erinnerungen.EXTRA_AKTION) ?: return
         val titel = intent.getStringExtra(Erinnerungen.EXTRA_TITEL).orEmpty()
+        val anlass = intent.getStringExtra(Erinnerungen.EXTRA_ANLASS)
 
         // Tippen fuehrt in die App. Mehr als das braucht es nicht: Wo man
         // hinmuss, weiss man dann selbst.
@@ -121,7 +156,13 @@ class ErinnerungsEmpfaenger : BroadcastReceiver() {
 
         val meldung: Notification = NotificationCompat.Builder(context, Erinnerungen.KANAL)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Einsendeschluss rückt näher")
+            .setContentTitle(
+                if (anlass == Erinnerungen.ANLASS_FREISCHALTUNG) {
+                    "Gleich gibt es neue Plätze"
+                } else {
+                    "Einsendeschluss rückt näher"
+                },
+            )
             .setContentText(titel.ifBlank { "Eine gemerkte Aktion läuft bald ab." })
             .setStyle(NotificationCompat.BigTextStyle().bigText(titel))
             .setContentIntent(oeffnen)

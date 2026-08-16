@@ -189,7 +189,13 @@ interface ErinnerungDao {
     @Query("DELETE FROM reminders WHERE actionId = :actionId")
     suspend fun entferne(actionId: String)
 
-    /** Raeumt auf, was laengst gefeuert hat. */
-    @Query("DELETE FROM reminders WHERE faelligAm < :vor")
-    suspend fun entferneAeltereAls(vor: Instant)
+    /**
+     * Raeumt auf, was laengst gefeuert hat — aber nur Einmaliges.
+     *
+     * Eine wiederkehrende Erinnerung hat ihren Termin zwangslaeufig in der
+     * Vergangenheit, sobald sie einmal gefeuert hat. Sie zu loeschen hiesse,
+     * dass sie genau einmal nuetzlich war.
+     */
+    @Query("DELETE FROM reminders WHERE faelligAm < :vor AND abstandMillis = 0")
+    suspend fun entferneAbgelaufeneEinmalige(vor: Instant)
 }

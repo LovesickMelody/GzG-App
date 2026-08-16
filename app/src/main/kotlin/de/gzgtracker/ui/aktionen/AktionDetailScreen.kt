@@ -38,13 +38,22 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,10 +68,15 @@ import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoActionType
+import de.gzgtracker.data.repository.Erinnerungsart
 import de.gzgtracker.ui.components.Teilnahmeliste
 import de.gzgtracker.ui.format.deutsch
 import de.gzgtracker.ui.theme.GzgTheme
 import de.gzgtracker.ui.theme.MoneyTextStyle
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 /**
  * Alles zu einer Aktion auf einer Seite — und unten der Weg weiter.
@@ -85,6 +99,8 @@ fun AktionDetailScreen(
     val aktion = zustand.aktion
     val snackbar = remember { SnackbarHostState() }
     val context = LocalContext.current
+    var erinnerungswahlOffen by remember { mutableStateOf(false) }
+    var datumOffen by remember { mutableStateOf(false) }
 
     // Ab Android 13 muss man Meldungen erlauben. Gefragt wird erst hier — beim
     // ersten Mal, dass jemand tatsaechlich erinnert werden will.
@@ -92,7 +108,7 @@ fun AktionDetailScreen(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { erlaubt ->
             if (erlaubt) {
-                viewModel.erinnerungUmschalten()
+                erinnerungswahlOffen = true
             } else {
                 viewModel.zeigeMeldung("Ohne Meldungen kann die App nicht erinnern.")
             }
@@ -110,7 +126,7 @@ fun AktionDetailScreen(
         if (brauchtFrage && !zustand.erinnert) {
             meldeErlaubnis.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else {
-            viewModel.erinnerungUmschalten()
+            erinnerungswahlOffen = true
         }
     }
 
@@ -118,6 +134,36 @@ fun AktionDetailScreen(
         val meldung = zustand.meldung ?: return@LaunchedEffect
         snackbar.showSnackbar(meldung)
         viewModel.meldungGelesen()
+    }
+
+    if (erinnerungswahlOffen) {
+        Erinnerungswahl(
+            erinnert = zustand.erinnert,
+            freischaltung = aktion?.limitReset.takeIf { zustand.hatFreischaltung },
+            onWahl = { art ->
+                erinnerungswahlOffen = false
+                viewModel.erinnere(art)
+            },
+            onEigenerZeitpunkt = {
+                erinnerungswahlOffen = false
+                datumOffen = true
+            },
+            onEntfernen = {
+                erinnerungswahlOffen = false
+                viewModel.erinnerungEntfernen()
+            },
+            onSchliessen = { erinnerungswahlOffen = false },
+        )
+    }
+
+    if (datumOffen) {
+        DatumUndZeitwahl(
+            onFertig = { zeitpunkt ->
+                datumOffen = false
+                viewModel.erinnere(Erinnerungsart.EIGEN, zeitpunkt)
+            },
+            onAbbrechen = { datumOffen = false },
+        )
     }
 
     Scaffold(
@@ -361,6 +407,134 @@ private fun Angabe(bezeichnung: String, wert: String) {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(0.6f),
+        )
+    }
+}
+
+/**
+ * Die Auswahl, woran erinnert werden soll.
+ *
+ * Zwei Anlässe sind grundverschieden: Eine Frist läuft irgendwann ab — da reicht
+ * ein Hinweis Tage vorher. Ein Kontingent wird zu einer festen Minute neu
+ * freigeschaltet, und fünf Minuten später kann alles weg sein. Dazu der eigene
+ * Zeitpunkt, für alles, was die App falsch oder gar nicht ausgelesen hat.
+ */
+@Composable
+private fun Erinnerungswahl(
+    erinnert: Boolean,
+    freischaltung: String?,
+    onWahl: (Erinnerungsart) -> Unit,
+    onEigenerZeitpunkt: () -> Unit,
+    onEntfernen: () -> Unit,
+    onSchliessen: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onSchliessen,
+        title = { Text("Woran erinnern?") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (freischaltung != null) {
+                    // Zuerst, weil es bei gedeckelten Aktionen das Wichtigere ist.
+                    Wahlzeile("5 Minuten vor der Freischaltung ($freischaltung)") {
+                        onWahl(Erinnerungsart.FREISCHALTUNG)
+                    }
+                }
+                Wahlzeile("Drei Tage vor der Frist") { onWahl(Erinnerungsart.FRIST) }
+                Wahlzeile("Eigener Zeitpunkt …", onKlick = onEigenerZeitpunkt)
+                if (erinnert) {
+                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    Wahlzeile("Erinnerung entfernen", onKlick = onEntfernen)
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onSchliessen) { Text("Abbrechen") } },
+    )
+}
+
+/**
+ * Eine Zeile der Auswahl.
+ *
+ * Linksbündig, weil man eine Liste von Möglichkeiten an der linken Kante
+ * entlangliest — zentrierter Text zwingt das Auge bei jeder Zeile neu zum
+ * Suchen. Und mindestens 48 dp hoch, damit jede Zeile sicher zu treffen ist.
+ */
+@Composable
+private fun Wahlzeile(beschriftung: String, onKlick: () -> Unit) {
+    TextButton(
+        onClick = onKlick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 48.dp),
+    ) {
+        Text(
+            text = beschriftung,
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Start,
+        )
+    }
+}
+
+/**
+ * Datum, dann Uhrzeit — in zwei Schritten.
+ *
+ * Beides gleichzeitig geht auf einem Telefon nicht unter, ohne dass eines von
+ * beiden zu klein wird.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DatumUndZeitwahl(
+    onFertig: (LocalDateTime) -> Unit,
+    onAbbrechen: () -> Unit,
+) {
+    var datum by remember { mutableStateOf<LocalDate?>(null) }
+    val datumszustand = rememberDatePickerState(
+        initialSelectedDateMillis = System.currentTimeMillis(),
+    )
+    val zeitzustand = rememberTimePickerState(initialHour = 9, initialMinute = 55, is24Hour = true)
+
+    if (datum == null) {
+        DatePickerDialog(
+            onDismissRequest = onAbbrechen,
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datumszustand.selectedDateMillis?.let { millis ->
+                            datum = Instant.ofEpochMilli(millis)
+                                .atZone(ZoneId.of("UTC"))
+                                .toLocalDate()
+                        }
+                    },
+                    enabled = datumszustand.selectedDateMillis != null,
+                ) {
+                    Text("Weiter")
+                }
+            },
+            dismissButton = { TextButton(onClick = onAbbrechen) { Text("Abbrechen") } },
+        ) {
+            DatePicker(state = datumszustand)
+        }
+    } else {
+        AlertDialog(
+            onDismissRequest = onAbbrechen,
+            title = { Text("Uhrzeit") },
+            text = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    TimePicker(state = zeitzustand)
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onFertig(
+                            datum!!.atTime(zeitzustand.hour, zeitzustand.minute),
+                        )
+                    },
+                ) {
+                    Text("Erinnern")
+                }
+            },
+            dismissButton = { TextButton(onClick = onAbbrechen) { Text("Abbrechen") } },
         )
     }
 }

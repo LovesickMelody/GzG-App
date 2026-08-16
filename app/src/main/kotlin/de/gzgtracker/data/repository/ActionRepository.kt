@@ -3,6 +3,7 @@ package de.gzgtracker.data.repository
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.gzgtracker.core.Erinnerung
+import de.gzgtracker.core.Kontingenterinnerung
 import de.gzgtracker.core.PromoAction
 import de.gzgtracker.data.local.ErinnerungDao
 import de.gzgtracker.data.local.ErinnerungEntity
@@ -55,29 +56,63 @@ class ActionRepository @Inject constructor(
         erinnerungen.beobachteAlle().map { liste -> liste.map { it.actionId }.toSet() }
 
     /**
-     * Stellt eine Erinnerung oder nimmt sie zurueck.
+     * Stellt eine Erinnerung. Eine vorhandene wird ersetzt.
      *
-     * @return der gestellte Zeitpunkt, oder `null` wenn zurueckgenommen wurde oder
-     *   sich kein sinnvoller Zeitpunkt mehr ergibt.
+     * @return der gestellte Zeitpunkt, oder `null`, wenn sich keiner ergibt —
+     *   etwa weil die Aktion keine Frist nennt oder die gewuenschte Art nicht
+     *   in Frage kommt.
      */
-    suspend fun erinnerungUmschalten(actionId: String): LocalDateTime? {
-        val vorhanden = erinnerungen.ladeAlle().any { it.actionId == actionId }
-        if (vorhanden) {
-            erinnerungen.entferne(actionId)
-            Erinnerungen.nimmZurueck(context, actionId)
-            return null
+    suspend fun erinnerungStellen(
+        actionId: String,
+        art: Erinnerungsart,
+        eigenerZeitpunkt: LocalDateTime? = null,
+    ): LocalDateTime? {
+        val aktion = dao.lade(actionId)?.toDomain() ?: return null
+
+        val (zeitpunkt, abstandTage) = when (art) {
+            Erinnerungsart.FRIST -> {
+                val frist = aktion.submissionDeadline ?: aktion.validTo ?: return null
+                (Erinnerung.zeitpunkt(frist, LocalDateTime.now()) ?: return null) to 0L
+            }
+
+            Erinnerungsart.FREISCHALTUNG -> {
+                val zuruecksetzung = Kontingenterinnerung.lies(aktion.limitReset) ?: return null
+                Kontingenterinnerung.naechsterWecker(zuruecksetzung, LocalDateTime.now()) to
+                    zuruecksetzung.abstandTage
+            }
+
+            Erinnerungsart.EIGEN -> {
+                val gewuenscht = eigenerZeitpunkt ?: return null
+                if (!gewuenscht.isAfter(LocalDateTime.now())) return null
+                gewuenscht to 0L
+            }
         }
 
-        val aktion = dao.lade(actionId)?.toDomain() ?: return null
-        val frist = aktion.submissionDeadline ?: aktion.validTo ?: return null
-        val zeitpunkt = Erinnerung.zeitpunkt(frist, LocalDateTime.now()) ?: return null
-
+        val anlass = if (art == Erinnerungsart.FREISCHALTUNG) {
+            Erinnerungen.ANLASS_FREISCHALTUNG
+        } else {
+            Erinnerungen.ANLASS_FRIST
+        }
+        val abstandMillis = abstandTage * 24 * 60 * 60 * 1000L
         val faellig = zeitpunkt.atZone(ZoneId.systemDefault()).toInstant()
+
         erinnerungen.upsert(
-            ErinnerungEntity(actionId = actionId, faelligAm = faellig, titel = aktion.title),
+            ErinnerungEntity(
+                actionId = actionId,
+                faelligAm = faellig,
+                titel = aktion.title,
+                abstandMillis = abstandMillis,
+                anlass = anlass,
+            ),
         )
-        Erinnerungen.stelle(context, actionId, aktion.title, faellig)
+        Erinnerungen.stelle(context, actionId, aktion.title, faellig, abstandMillis, anlass)
         return zeitpunkt
+    }
+
+    /** Nimmt eine Erinnerung zurueck. */
+    suspend fun erinnerungEntfernen(actionId: String) {
+        erinnerungen.entferne(actionId)
+        Erinnerungen.nimmZurueck(context, actionId)
     }
 
     /**
@@ -90,9 +125,24 @@ class ActionRepository @Inject constructor(
      */
     suspend fun stelleErinnerungenNeu() {
         val jetzt = Instant.now()
-        erinnerungen.entferneAeltereAls(jetzt)
+        // Nur einmalige Erinnerungen verfallen. Eine wiederkehrende bleibt, auch
+        // wenn ihr naechster Termin in der Vergangenheit steht — sie wird gleich
+        // auf den kommenden gesetzt.
+        erinnerungen.entferneAbgelaufeneEinmalige(jetzt)
         erinnerungen.ladeAlle().forEach { eintrag ->
-            Erinnerungen.stelle(context, eintrag.actionId, eintrag.titel, eintrag.faelligAm)
+            val faellig = if (eintrag.abstandMillis > 0) {
+                naechsterTermin(eintrag.faelligAm, eintrag.abstandMillis, jetzt)
+            } else {
+                eintrag.faelligAm
+            }
+            Erinnerungen.stelle(
+                context,
+                eintrag.actionId,
+                eintrag.titel,
+                faellig,
+                eintrag.abstandMillis,
+                eintrag.anlass,
+            )
         }
     }
 
@@ -186,4 +236,30 @@ private fun Throwable.lesbareMeldung(): String = when (this) {
         else -> "Server antwortet mit Fehler ${code()}."
     }
     else -> message ?: "Aktualisieren fehlgeschlagen."
+}
+
+
+/** Woran eine Erinnerung haengt. */
+enum class Erinnerungsart {
+    /** Vor Ablauf der Einsendefrist. */
+    FRIST,
+
+    /** Kurz bevor ein Kontingent neu freigeschaltet wird — wiederkehrend. */
+    FREISCHALTUNG,
+
+    /** Ein selbst gewaehlter Zeitpunkt. */
+    EIGEN,
+}
+
+/**
+ * Schiebt einen vergangenen Wiederholungstermin auf den naechsten kuenftigen.
+ *
+ * Noetig nach einem Neustart des Telefons: Der gespeicherte Termin kann dann
+ * Wochen zurueckliegen, und ein Wecker in der Vergangenheit feuert sofort.
+ */
+private fun naechsterTermin(start: Instant, abstandMillis: Long, jetzt: Instant): Instant {
+    if (abstandMillis <= 0 || start.isAfter(jetzt)) return start
+    val vergangen = jetzt.toEpochMilli() - start.toEpochMilli()
+    val schritte = vergangen / abstandMillis + 1
+    return start.plusMillis(schritte * abstandMillis)
 }

@@ -128,6 +128,8 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Standanzeige auf eigener Zeile
 - [x] Erinnerungen an Fristen (Datenbank v8)
 - [x] Kontingent aus den Teilnahmebedingungen (Datenbank v9)
+- [x] Erinnerung fünf Minuten vor der Freischaltung, wiederkehrend (Datenbank v10)
+- [x] Eigener Erinnerungszeitpunkt, falls die Freischaltung falsch ausgelesen wurde
 
 ## Weg vom Portal-Scraping
 

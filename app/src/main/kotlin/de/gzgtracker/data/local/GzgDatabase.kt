@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
         WatchlistEntity::class,
         ErinnerungEntity::class,
     ],
-    version = 9,
+    version = 10,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
