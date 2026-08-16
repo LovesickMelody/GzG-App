@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T05:27:33Z",
+  "generated_at": "2026-08-16T15:59:21Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,7 +11,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBpV3lvdkhxaGNyRFN0dGlrWDU2RE1jNVhVelhPUUIzZKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIGRKY0kwbHVNYkFvT2ZIbi1pS09nTjB3V0t0SDhEMkVCo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBBLUpaTjVXRTd0YXlUeW5PRDFoR2VwWTFXajhOQmJvV6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHVWclc4OC1NOFlRc2pQT0l2SzZCajhrRkFHUFk3eGRuo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -299,7 +299,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA1MjI4NDc&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA1MjI4NDc&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA1Njg2MTQ&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA1Njg2MTQ&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -323,7 +323,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895458989",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895673080",
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -522,7 +522,7 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/06/products-gratis-testen-767x756.png",
-      "limit_anzahl": 7592,
+      "limit_anzahl": 7462,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -541,7 +541,8 @@
       "submit_url": "https://www.deli-gratis-testen.de/",
       "requirements": [
         "produktfoto",
-        "bonfoto"
+        "bonfoto",
+        "iban"
       ],
       "retailers": [],
       "eans": [],
