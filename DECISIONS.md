@@ -205,8 +205,22 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Entdeckung über Certificate-Transparency-Logs** — Aktionsplattformen legen je Kampagne
   eine Subdomain an (belegt: `airwick.justsnap.eu`), jede Subdomain braucht ein Zertifikat,
   jedes Zertifikat steht nach RFC 6962 in einem öffentlichen Protokoll. Eine Abfrage bei
-  crt.sh am Tag liefert damit jede neue Kampagne, rein passiv und ohne Anfrage an die
-  Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht auffindbar sind.
+  Zertifikatsprotokoll am Tag liefert damit jede neue Kampagne, rein passiv und ohne
+  Anfrage an die Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht
+  auffindbar sind.
+- **Certspotter statt crt.sh — weil crt.sh es per `robots.txt` verbietet** — der erste
+  Probelauf gegen die echte Plattform fand null Kandidaten, und zwar nicht wegen eines
+  Fehlers: Unser Fetcher liest `robots.txt` und hält sich daran, und crt.sh untersagt den
+  Abruf. Das ist keine Formalie, die man wegdrücken sollte — die ganze Quellenart steht
+  und fällt damit, sich als gut erzogener Leser öffentlicher Register zu verhalten. Also
+  der Weg über die dokumentierte API von SSLMate, die genau für diesen Zweck da ist und
+  keinen Schlüssel braucht. Dieselben Protokolle, anderes Ausgabeformat. `crt.sh` bleibt
+  als `ct_anbieter` wählbar, falls jemand mit ausdrücklicher Erlaubnis läuft.
+- **Die Certspotter-Ausgabe wird seitenweise geholt, und ein Abbruch steht im Log** — die
+  API deckelt bei 100 Einträgen je Abruf. Ohne Weiterblättern fehlten bei einer großen
+  Plattform genau die Kampagnen, die den Ausschlag geben; mit stillem Abbruch nach fünf
+  Seiten läse sich ein halbes Ergebnis wie ein vollständiges. Deshalb beides: begrenzen
+  **und** sagen, dass begrenzt wurde.
 - **Was das Zertifikat findet, ist noch keine laufende Aktion** — ein Zertifikat existiert
   regelmäßig Wochen vor dem Kampagnenstart. So eine Aktion zu veröffentlichen verrät die
   Marketingplanung des Herstellers, den *niemand* um eine Ankündigung gebeten hat. Deshalb
@@ -255,6 +269,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   gewachsenen Portalquellen haben keinen Seitentext, also läuft dort die Betragsprüfung
   nicht. Eine Regel ohne Grundlage darf nicht raten, sonst verlören die Portalquellen
   schlagartig alles.
+- **Ein Lauf für eine einzelne Quelle lässt die anderen in Ruhe** — `fuehre_zusammen`
+  übernahm bisherige Einträge nur für *ausgefallene* Quellen. Quellen, die gar nicht
+  liefen, standen weder dort noch bei den frisch geholten — ihre Aktionen fielen also
+  stillschweigend heraus. Ein `--only`-Probelauf hätte auf `main` den Feed auf diese eine
+  Quelle eingedampft und das committet; genau diesen Aufruf empfiehlt die README für jede
+  neue Quelle. Jetzt gilt: nicht gelaufen heißt bisheriger Stand bleibt. Der Unterschied
+  zu „gelaufen, nichts gefunden" bleibt erhalten — die Quelle steht dann mit leerer Liste
+  im Ergebnis, und ihre alten Einträge verschwinden zu Recht.
 - **Jede Ablehnung steht mit Begründung im Log** — eine still verschwundene Aktion ist von
   einer nie gefundenen nicht zu unterscheiden. Wer im Actions-Lauf nachsieht, soll lesen
   können, *warum* eine Aktion fehlt.

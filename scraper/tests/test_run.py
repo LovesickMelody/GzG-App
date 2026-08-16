@@ -6,6 +6,7 @@ import json
 
 from gzg_scraper.models import Action, stable_id
 from gzg_scraper.run import (
+    eingeschaltete_namen,
     fuehre_zusammen,
     lade_bestand,
     lade_quellen,
@@ -80,6 +81,35 @@ class TestZusammenfuehren:
             ausgefallen=set(),
         )
         assert [e["title"] for e in ergebnis] == ["Aktuell"]
+
+    def test_behaelt_daten_uebersprungener_quellen(self):
+        """
+        Der Fall, den --only aufgedeckt hat: Ein Probelauf für eine einzelne
+        Quelle darf die anderen nicht aus dem Feed werfen. Sie sind weder
+        ausgefallen noch neu geholt — nur eben nicht gelaufen.
+        """
+        alt = aktion("Läuft weiter", quelle="portal-b").to_json()
+        ergebnis = fuehre_zusammen(
+            bestand={"actions": [alt]},
+            neu_je_quelle={"portal-a": [aktion("Frisch geholt")]},
+            ausgefallen=set(),
+            uebersprungen={"portal-b"},
+        )
+        assert {e["title"] for e in ergebnis} == {"Läuft weiter", "Frisch geholt"}
+
+    def test_leeres_ergebnis_loescht_trotzdem(self):
+        """
+        Die Gegenprobe: "gelaufen, nichts gefunden" ist etwas anderes als
+        "nicht gelaufen". Sonst blieben abgelaufene Aktionen ewig stehen.
+        """
+        alt = aktion("Vorbei", quelle="portal-a").to_json()
+        ergebnis = fuehre_zusammen(
+            bestand={"actions": [alt]},
+            neu_je_quelle={"portal-a": []},
+            ausgefallen=set(),
+            uebersprungen=set(),
+        )
+        assert ergebnis == []
 
     def test_sortiert_deterministisch(self):
         eins = fuehre_zusammen(
@@ -195,3 +225,10 @@ class TestQuellenLaden:
 
     def test_only_auf_unbekannte_quelle_gibt_nichts(self, tmp_path):
         assert lade_quellen(self.datei(tmp_path), nur="gibtsnicht") == []
+
+    def test_eingeschaltete_namen_ignoriert_only(self, tmp_path):
+        """
+        Diese Menge sagt, wessen Aktionen ein --only-Lauf stehenlassen muss.
+        Sie darf deshalb nicht davon abhängen, was gerade läuft.
+        """
+        assert eingeschaltete_namen(self.datei(tmp_path)) == {"laeuft"}

@@ -134,11 +134,16 @@ sources:
     enabled: false
     parser: erstanbieter
     base_url: https://justsnap.eu/
-    # Nackte Domain. Gefragt wird crt.sh nach "%.justsnap.eu" — belegt ist das
-    # Muster durch die Air-Wick-Aktion, deren Kontakt kontakt@airwick.justsnap.eu
-    # lautet.
+    # Nackte Domain. Gefragt werden die Zertifikatsprotokolle nach allem unter
+    # justsnap.eu — belegt ist das Muster durch die Air-Wick-Aktion, deren
+    # Kontakt kontakt@airwick.justsnap.eu lautet.
     ct_logs:
       - justsnap.eu
+    # Wer die Protokolle ausliefert. Standard ist "certspotter", eine
+    # dokumentierte API ohne Schluessel. "crt.sh" waere die bekanntere Adresse,
+    # verbietet den Abruf aber per robots.txt — der erste Probelauf fand
+    # deshalb null Kandidaten. Siehe DECISIONS.md.
+    ct_anbieter: certspotter
     # Faengt ab, was ueber Pfade statt Subdomains laeuft.
     # sitemaps:
     #   - url: https://justsnap.eu/sitemap.xml

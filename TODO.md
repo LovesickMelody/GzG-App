@@ -134,15 +134,18 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Pruefschicht `pruefung.py`: Betragsbeleg, Startdatum, Frist, Pflichtfelder
 - [x] Nutzungsvorbehalt nach § 44b UrhG erkennen (`tdmrep.json`, Meta, Prosa)
 - [x] Generische Extraktion: JSON-LD zuerst, Modell als Auffanglösung
-- [x] Entdeckung ueber Certificate-Transparency-Logs (crt.sh)
+- [x] Entdeckung ueber Certificate-Transparency-Logs (certspotter; crt.sh verbietet
+      den Abruf per robots.txt und bleibt nur als Option drin)
 - [x] Entdeckung ueber Sitemaps, inkl. Sitemap-Index
 - [x] Quellenart `erstanbieter` in `run.py` verdrahtet
 - [x] Tests gegen Fixtures, CI bleibt ohne API-Schluessel gruen
 - [x] `ANTHROPIC_API_KEY` als GitHub-Secret hinterlegen
 - [x] Bekannte Kampagnen wiederverwenden statt taeglich neu auszuwerten
 - [ ] Ausgabenlimit in der Anthropic Console setzen
-- [ ] Probelauf `--only justsnap`: Legt JustSnap wirklich je Kampagne eine
-      Subdomain an? Ergebnis lesen, nicht nur zaehlen
+- [x] Erster Probelauf `--only justsnap` — Ergebnis: crt.sh blockt, und ein
+      `--only`-Lauf haette den Feed leergeraeumt. Beides behoben
+- [ ] Zweiter Probelauf `--only justsnap` ueber certspotter: Legt JustSnap wirklich
+      je Kampagne eine Subdomain an? Ergebnis lesen, nicht nur zaehlen
 - [ ] JustSnap-Quelle auf `enabled: true` stellen, wenn der Probelauf taugt
 - [ ] Weitere Plattformen abklopfen (jolt, coreweb, Couponing House, DREI-D)
 - [ ] Erstanbieter mit eigener Aktionsuebersicht ergaenzen (P&G ForMe)

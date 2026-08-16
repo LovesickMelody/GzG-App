@@ -8,6 +8,7 @@ from gzg_scraper.discovery import ct_logs, sitemap
 
 FIXTURES = Path(__file__).parent / "fixtures"
 CRT = (FIXTURES / "crt_justsnap.json").read_text(encoding="utf-8")
+CERTSPOTTER = (FIXTURES / "certspotter_justsnap.json").read_text(encoding="utf-8")
 
 
 class FetcherAttrappe:
@@ -69,9 +70,97 @@ class TestCtLogs:
     def test_abruf_ueber_den_fetcher(self):
         adresse = "https://crt.sh/?q=%25.justsnap.eu&output=json"
         fetcher = FetcherAttrappe({adresse: CRT})
-        kandidaten = ct_logs.finde("justsnap.eu", fetcher)
+        kandidaten = ct_logs.finde("justsnap.eu", fetcher, "crt.sh")
         assert len(kandidaten) == 2
         assert fetcher.abrufe == [adresse]
+
+    def test_ausfall_gibt_leere_liste(self):
+        assert ct_logs.finde("justsnap.eu", FetcherAttrappe({}), "crt.sh") == []
+
+
+class TestCertspotter:
+    """
+    Der Standardweg zu denselben Protokollen.
+
+    crt.sh verbietet den Abruf per robots.txt — der erste Probelauf lief
+    deshalb ins Leere, ohne eine einzige Kampagne zu finden.
+    """
+
+    def test_findet_dieselben_kampagnen_wie_crt_sh(self):
+        """Gleiche Zertifikatslage, gleiches Ergebnis — nur anderes Format."""
+        ueber_certspotter = {
+            k.url for k in ct_logs.lies_certspotter(CERTSPOTTER, "justsnap.eu")
+        }
+        ueber_crt = {k.url for k in ct_logs.lies_antwort(CRT, "justsnap.eu")}
+        assert ueber_certspotter == ueber_crt == {
+            "https://airwick.justsnap.eu/",
+            "https://hoffmanns.justsnap.eu/",
+        }
+
+    def test_fruehester_zeitpunkt_gewinnt(self):
+        kandidaten = {
+            k.url: k for k in ct_logs.lies_certspotter(CERTSPOTTER, "justsnap.eu")
+        }
+        airwick = kandidaten["https://airwick.justsnap.eu/"]
+        assert airwick.zuerst_gesehen == "2026-04-02T08:14:32Z"
+
+    def test_kaputte_antwort(self):
+        assert ct_logs.lies_certspotter("{kein array", "justsnap.eu") == []
+        assert ct_logs.lies_certspotter(None, "justsnap.eu") == []
+        assert ct_logs.lies_certspotter("[]", "justsnap.eu") == []
+
+    def test_eintrag_ohne_namensliste_stoert_nicht(self):
+        assert ct_logs.lies_certspotter('[{"id":"1"}]', "justsnap.eu") == []
+
+    def test_ist_der_standardweg(self):
+        """Ohne ausdrückliche Angabe geht die Abfrage an certspotter."""
+        erste = ct_logs.CERTSPOTTER.format("justsnap.eu")
+        fetcher = FetcherAttrappe({erste: CERTSPOTTER})
+        kandidaten = ct_logs.finde("justsnap.eu", fetcher)
+        assert len(kandidaten) == 2
+        assert fetcher.abrufe[0] == erste
+
+    def test_folgt_der_seitenaufteilung(self):
+        """
+        Die API liefert höchstens 100 Einträge je Abruf. Ohne Weiterblättern
+        fehlten bei einer großen Plattform genau die Kampagnen, die den
+        Ausschlag geben.
+        """
+        erste = ct_logs.CERTSPOTTER.format("justsnap.eu")
+        zweite = f"{erste}&after=9210000006"
+        seite2 = (
+            '[{"id":"9210000007","dns_names":["persil.justsnap.eu"],'
+            '"not_before":"2026-08-10T00:00:00Z"}]'
+        )
+        dritte = f"{erste}&after=9210000007"
+        fetcher = FetcherAttrappe({erste: CERTSPOTTER, zweite: seite2, dritte: "[]"})
+
+        adressen = {k.url for k in ct_logs.finde("justsnap.eu", fetcher)}
+        assert "https://persil.justsnap.eu/" in adressen
+        assert fetcher.abrufe == [erste, zweite, dritte]
+
+    def test_bricht_nach_der_obergrenze_ab(self, caplog):
+        """Abschneiden ja — still abschneiden nein."""
+        erste = ct_logs.CERTSPOTTER.format("justsnap.eu")
+
+        class ImmerVoll:
+            abrufe: list[str] = []
+
+            def hole(self, url, still=False):
+                self.abrufe.append(url)
+                nummer = 9000000 + len(self.abrufe)
+                return (
+                    f'[{{"id":"{nummer}","dns_names":["a{nummer}.justsnap.eu"],'
+                    '"not_before":"2026-08-10T00:00:00Z"}]'
+                )
+
+        fetcher = ImmerVoll()
+        with caplog.at_level("WARNING"):
+            ct_logs.finde("justsnap.eu", fetcher)
+
+        assert len(fetcher.abrufe) == ct_logs.MAX_SEITEN
+        assert "abgebrochen" in caplog.text
+        assert erste in fetcher.abrufe[0]
 
     def test_ausfall_gibt_leere_liste(self):
         assert ct_logs.finde("justsnap.eu", FetcherAttrappe({})) == []

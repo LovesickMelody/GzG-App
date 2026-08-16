@@ -59,6 +59,18 @@ def lade_quellen(pfad: Path, nur: str | None = None) -> list[dict]:
     return [q for q in quellen if q.get("enabled", True)]
 
 
+def eingeschaltete_namen(pfad: Path) -> set[str]:
+    """
+    Namen aller eingeschalteten Quellen — unabhaengig von ``--only``.
+
+    Wird gebraucht, um zu erkennen, welche Quellen ein Lauf uebersprungen hat.
+    Bewusst ohne die abgeschalteten: Wer eine Quelle auf ``enabled: false``
+    setzt, will ihre Aktionen aus dem Feed haben, und beim naechsten Lauf
+    verschwinden sie auch.
+    """
+    return {q["name"] for q in lade_quellen(pfad) if q.get("name")}
+
+
 def lade_bestand(pfad: Path) -> dict:
     if not pfad.exists():
         return {"generated_at": None, "actions": []}
@@ -267,6 +279,7 @@ def fuehre_zusammen(
     bestand: dict,
     neu_je_quelle: dict[str, list[Action]],
     ausgefallen: set[str],
+    uebersprungen: set[str] | frozenset[str] = frozenset(),
 ) -> list[dict]:
     """
     Baut die neue Aktionsliste.
@@ -274,11 +287,22 @@ def fuehre_zusammen(
     Fuer ausgefallene Quellen werden die bisherigen Eintraege uebernommen, fuer
     alle anderen die frisch geholten. Aktionen aus Quellen, die es in
     ``sources.yaml`` nicht mehr gibt, fallen weg.
+
+    ``uebersprungen`` sind eingeschaltete Quellen, die dieser Lauf gar nicht
+    angefasst hat — bei ``--only`` also alle anderen. Ihre Eintraege bleiben
+    ebenfalls stehen. Ohne das loeschte ein Probelauf mit ``--only`` den halben
+    Feed: Die uebrigen Quellen stehen weder in ``neu_je_quelle`` noch in
+    ``ausgefallen``, ihre Aktionen fielen also stillschweigend hinten runter —
+    und auf ``main`` haette der naechste Commit das festgeschrieben.
+
+    Der Unterschied zu einer Quelle, die sauber gelaufen ist und nichts
+    gefunden hat, bleibt dabei erhalten: Die steht mit leerer Liste in
+    ``neu_je_quelle``, und ihre alten Eintraege verschwinden zu Recht.
     """
     ergebnis: dict[str, dict] = {}
 
     for eintrag in bestand.get("actions", []):
-        if eintrag.get("source") in ausgefallen:
+        if eintrag.get("source") in ausgefallen or eintrag.get("source") in uebersprungen:
             ergebnis[eintrag["id"]] = eintrag
 
     for aktionen in neu_je_quelle.values():
@@ -411,7 +435,19 @@ def main(argv: list[str] | None = None) -> int:
         else:
             neu_je_quelle[name] = ergebnis
 
-    aktionen = fuehre_zusammen(bestand, neu_je_quelle, ausgefallen)
+    # Quellen, die dieser Lauf nicht angefasst hat (bei --only alle anderen).
+    # Ihre Eintraege muessen stehenbleiben, sonst raeumt ein Probelauf den Feed
+    # leer.
+    uebersprungen = eingeschaltete_namen(argumente.sources) - {
+        q["name"] for q in quellen
+    }
+    if uebersprungen:
+        log.info(
+            "Nicht gelaufen, bisheriger Stand bleibt: %s",
+            ", ".join(sorted(uebersprungen)),
+        )
+
+    aktionen = fuehre_zusammen(bestand, neu_je_quelle, ausgefallen, uebersprungen)
 
     schreibe_wenn_geaendert(argumente.output, aktionen)
 

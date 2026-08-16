@@ -247,13 +247,19 @@ TLS-Zertifikat, und jedes ausgestellte Zertifikat landet nach RFC 6962 in einem
 öffentlichen Protokoll. Eine Abfrage am Tag genügt:
 
 ```
-https://crt.sh/?q=%25.justsnap.eu&output=json
+https://api.certspotter.com/v1/issuances?domain=justsnap.eu&include_subdomains=true
 ```
 
 Das ist rein passiv: öffentliche Register lesen, keine Anfrage an die
 Zielsysteme, kein Erraten von Namen. Plattformen, die ihre Kampagnen über
 *Pfade* statt Subdomains führen, fängt stattdessen die `sitemap.xml` ab —
 deshalb gibt es beide Entdecker.
+
+Naheliegender wäre `crt.sh` gewesen, die bekanntere Adresse für dieselben
+Protokolle. Deren `robots.txt` verbietet den Abruf aber, und der Scraper hält
+sich daran — der erste Probelauf fand damit exakt null Kampagnen. Der Zugang ist
+über `ct_anbieter` in `sources.yaml` umstellbar; `crt.sh` bleibt für den Fall
+drin, dass jemand mit ausdrücklicher Erlaubnis läuft.
 
 ### Extraktion: ein Weg für alle Seiten
 

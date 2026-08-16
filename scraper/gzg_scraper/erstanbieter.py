@@ -112,8 +112,9 @@ def entdecke(quelle: dict, fetcher: Fetcher) -> list[Kandidat]:
     """Fuehrt alle konfigurierten Entdecker aus und fasst sie zusammen."""
     gefunden: list[Kandidat] = []
 
+    anbieter = quelle.get("ct_anbieter") or ct_logs.STANDARD_ANBIETER
     for basis in quelle.get("ct_logs") or []:
-        gefunden.extend(ct_logs.finde(basis, fetcher))
+        gefunden.extend(ct_logs.finde(basis, fetcher, anbieter))
 
     for eintrag in quelle.get("sitemaps") or []:
         if isinstance(eintrag, str):

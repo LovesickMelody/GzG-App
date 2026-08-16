@@ -8,10 +8,17 @@ from pathlib import Path
 from gzg_scraper import erstanbieter
 
 FIXTURES = Path(__file__).parent / "fixtures"
-CRT = (FIXTURES / "crt_justsnap.json").read_text(encoding="utf-8")
+CT = (FIXTURES / "certspotter_justsnap.json").read_text(encoding="utf-8")
 AKTION = (FIXTURES / "aktion_jsonld.html").read_text(encoding="utf-8")
 
-CRT_ADRESSE = "https://crt.sh/?q=%25.justsnap.eu&output=json"
+# Die Pipeline fragt certspotter, nicht crt.sh — dessen robots.txt verbietet
+# den Abruf. Steht hier ausgeschrieben, damit die Attrappe genau das
+# beantwortet, was der Lauf wirklich anfragt.
+CT_ADRESSE = (
+    "https://api.certspotter.com/v1/issuances"
+    "?domain=justsnap.eu&include_subdomains=true"
+    "&expand=dns_names&expand=not_before"
+)
 
 QUELLE = {"name": "justsnap", "parser": "erstanbieter", "ct_logs": ["justsnap.eu"]}
 
@@ -31,7 +38,7 @@ class FetcherAttrappe:
 
 
 def fetcher_mit(seiten: dict[str, str]) -> FetcherAttrappe:
-    return FetcherAttrappe({CRT_ADRESSE: CRT, **seiten})
+    return FetcherAttrappe({CT_ADRESSE: CT, **seiten})
 
 
 class TestEntdeckung:
