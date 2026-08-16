@@ -154,8 +154,8 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Datenbank und Bonfotos aus der Cloud-Sicherung nehmen
 - [x] Erinnerungen nach Neustart und App-Update wieder stellen
 - [x] Einreichungsziel gegen die Aktionsseite prüfen (Pipeline und App)
-- [ ] `manager.set()` auf `setWindow()` umstellen — die Erinnerung darf derzeit um bis
-      zu eine Stunde verrutschen, was am Fristtag zu viel ist
+- [x] Erinnerung doze-fest stellen (`setWindowAndAllowWhileIdle`) — vorher konnte sie
+      über Nacht bis zum Wartungsfenster liegenbleiben
 - [ ] Antwortgröße in `fetch.py` deckeln
 - [ ] Kontrastwerte gegen WCAG nachrechnen (steht auch oben unter Design)
 - [ ] Verschlüsselung der Room-Datenbank abwägen (SQLCipher gegen eine Abhängigkeit

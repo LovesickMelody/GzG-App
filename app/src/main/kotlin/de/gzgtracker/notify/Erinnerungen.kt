@@ -20,20 +20,21 @@ import java.time.Instant
  * Erinnerungen an ablaufende Aktionen.
  *
  * Bewusst mit dem [AlarmManager] und ohne zusaetzliche Bibliothek: Es geht um eine
- * Meldung zu einem Zeitpunkt, mehr nicht. Der Alarm ist **ungenau** gestellt — das
- * System darf ihn um bis zu einer Stunde verschieben und dafuer mit anderen Weckern
- * buendeln. Fuer eine Erinnerung an eine Frist, die noch Tage laeuft, ist das genau
- * richtig, und es erspart die Sonderberechtigung fuer exakte Alarme.
+ * Meldung zu einem Zeitpunkt, mehr nicht. Der Alarm ist **ungenau** gestellt, aber
+ * doze-fest — die Begruendung steht bei [stelle].
  *
  * Was das System nicht kann: Alarme ueberleben keinen Neustart des Telefons. Deshalb
- * liegt jede gestellte Erinnerung auch in der Datenbank, und die App stellt sie beim
- * Start neu.
+ * liegt jede gestellte Erinnerung auch in der Datenbank, und der `NeustartEmpfaenger`
+ * stellt sie nach dem Hochfahren wieder.
  */
 object Erinnerungen {
 
     const val KANAL = "fristen"
 
     private const val TAG = "Erinnerungen"
+
+    /** Wie weit das System die Erinnerung zum Buendeln verschieben darf. */
+    private const val FENSTER_MS = 30L * 60 * 1000
 
     const val EXTRA_AKTION = "aktionId"
     const val EXTRA_TITEL = "titel"
@@ -59,12 +60,25 @@ object Erinnerungen {
     fun darfMelden(context: Context): Boolean =
         NotificationManagerCompat.from(context).areNotificationsEnabled()
 
-    /** Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt. */
+    /**
+     * Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt.
+     *
+     * `setWindowAndAllowWhileIdle` statt `set`: Ein gewoehnlicher Wecker wird im
+     * Doze-Modus bis zum naechsten Wartungsfenster zurueckgehalten, und das kann
+     * ueber Nacht Stunden bedeuten. Eine Erinnerung, die am Tag des
+     * Einsendeschlusses erst am Nachmittag ankommt, kommt zu spaet.
+     *
+     * `AndWhileIdle` weckt auch aus Doze heraus und braucht trotzdem **keine**
+     * Sonderberechtigung — anders als ein exakter Wecker. Das Fenster von einer
+     * halben Stunde laesst dem System weiter Spielraum zum Buendeln; genau
+     * punktgenau muss eine Fristerinnerung nicht sein.
+     */
     fun stelle(context: Context, aktionId: String, titel: String, faelligAm: Instant) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        manager.set(
+        manager.setWindowAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             faelligAm.toEpochMilli(),
+            FENSTER_MS,
             absicht(context, aktionId, titel),
         )
         Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt")

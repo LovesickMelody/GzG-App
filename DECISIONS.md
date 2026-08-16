@@ -493,10 +493,15 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   stehen. Am echten Feed geprüft, nicht nur an erfundenen Beispielen.
 - **Erinnerungen mit dem AlarmManager, ungenau gestellt** — für eine Meldung zu einem
   Zeitpunkt braucht es keine Bibliothek, und ein ungenauer Alarm erspart die
-  Sonderberechtigung für exakte Wecker. Das System darf ihn um bis zu eine Stunde
-  verschieben; bei einer Frist, die noch Tage läuft, ist das ohne Belang. Gestellte
-  Erinnerungen liegen in der Datenbank und werden beim App-Start neu gestellt — Wecker
-  überleben keinen Neustart des Telefons.
+  Sonderberechtigung für exakte Wecker. Gestellte Erinnerungen liegen in der Datenbank,
+  weil Wecker keinen Neustart überleben.
+- **Ungenau ja, aber doze-fest** — `set()` klang nach „höchstens eine Stunde später“, so
+  stand es hier auch. Im Doze-Modus hält Android einen solchen Wecker aber bis zum
+  nächsten Wartungsfenster zurück, und über Nacht sind das Stunden. Am Tag des
+  Einsendeschlusses ist eine Erinnerung, die erst nachmittags ankommt, wertlos. Jetzt
+  `setWindowAndAllowWhileIdle` mit einer halben Stunde Fenster: weckt aus Doze heraus,
+  lässt dem System weiter Spielraum zum Bündeln und braucht trotzdem keine
+  Sonderberechtigung.
 - **Wecker werden von einem Empfänger neu gestellt, nicht erst beim App-Start** — die
   Zeile darüber stand schon länger so da, gerufen hat `stelleErinnerungenNeu()` aber
   niemand. Eine Erinnerung fiel damit beim nächsten Neustart still aus, und gemerkt hat
