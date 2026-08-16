@@ -52,12 +52,17 @@ object Erinnerungen {
      * Meldung wortlos gar nicht an.
      */
     fun legeKanalAn(context: Context) {
+        // Name und Beschreibung darf `createNotificationChannel` auch bei einem
+        // bestehenden Kanal noch aendern — die Kennung nicht. Deshalb bleibt sie
+        // "fristen", obwohl hier laengst mehr als Fristen ankommt.
         val kanal = NotificationChannel(
             KANAL,
-            "Fristen",
+            "Erinnerungen",
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
-            description = "Erinnert, bevor der Einsendeschluss einer Aktion abläuft."
+            description =
+                "Erinnert vor dem Einsendeschluss und kurz bevor ein Kontingent neu " +
+                    "freigeschaltet wird."
         }
         context.getSystemService(NotificationManager::class.java)?.createNotificationChannel(kanal)
     }
@@ -154,17 +159,22 @@ class ErinnerungsEmpfaenger : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
+        val freischaltung = anlass == Erinnerungen.ANLASS_FREISCHALTUNG
+        val text = titel.ifBlank {
+            if (freischaltung) {
+                "Gleich werden neue Plätze frei."
+            } else {
+                "Eine gemerkte Aktion läuft bald ab."
+            }
+        }
+
         val meldung: Notification = NotificationCompat.Builder(context, Erinnerungen.KANAL)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(
-                if (anlass == Erinnerungen.ANLASS_FREISCHALTUNG) {
-                    "Gleich gibt es neue Plätze"
-                } else {
-                    "Einsendeschluss rückt näher"
-                },
+                if (freischaltung) "Gleich gibt es neue Plätze" else "Einsendeschluss rückt näher",
             )
-            .setContentText(titel.ifBlank { "Eine gemerkte Aktion läuft bald ab." })
-            .setStyle(NotificationCompat.BigTextStyle().bigText(titel))
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(oeffnen)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
