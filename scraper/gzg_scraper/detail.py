@@ -276,4 +276,4 @@ def _melde_kontingentsaetze(aktion: Action, seitentext: str) -> None:
         if any(wort in satz.casefold() for wort in _KONTINGENTWOERTER)
     ]
     for satz in treffer[:2]:
-        log.info("Aktion %r: Kontingentsatz ohne Treffer — %s", aktion.title[:40], satz[:200])
+        log.info("Aktion %r: Kontingentsatz ohne Treffer — %s", aktion.title[:40], satz[:320])

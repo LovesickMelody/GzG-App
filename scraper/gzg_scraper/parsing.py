@@ -374,12 +374,22 @@ _LIMIT = re.compile(
     re.IGNORECASE,
 )
 
+# Die andere Schreibweise, die auf echten Seiten haeufiger ist als die erste:
+# "Einlöselimit pro Woche 1.000" — Beschriftung zuerst, Zahl dahinter. Ohne sie
+# fand die Auswertung bei Sensodyne die 25.000 des Gesamtkontingents statt der
+# 1.000 pro Woche, auf die es ankommt.
+_LIMIT_BESCHRIFTET = re.compile(
+    rf"(?:einlöselimit|einloeselimit|teilnahmelimit|kontingent|limit)"
+    rf"[^.!?]{{0,40}}?{_ZAHL}",
+    re.IGNORECASE,
+)
+
 # Ohne eines dieser Woerter in der Naehe ist eine Zahl keine Obergrenze, sondern
 # irgendeine Zahl auf einer Werbeseite.
 _LIMITWOERTER = (
     "begrenzt", "beschränkt", "beschraenkt", "limitiert", "maximal", "maximale",
     "kontingent", "insgesamt", "zur verfügung", "zur verfuegung", "stehen bereit",
-    "vorrat", "erste", "ersten", "je woche", "pro woche", "je tag", "pro tag",
+    "vorrat", "je woche", "pro woche", "je tag", "pro tag",
     "pro monat", "je monat", "täglich", "taeglich", "wöchentlich", "woechentlich",
 )
 
@@ -396,7 +406,8 @@ _WOCHENTAGE = (
 
 _RESETWOERTER = (
     "zurückgesetzt", "zurueckgesetzt", "zurückgestellt", "neues kontingent",
-    "neu freigeschaltet", "wieder verfügbar", "wieder verfuegbar", "neue teilnahmen",
+    "freigeschaltet", "wieder verfügbar", "wieder verfuegbar", "neue teilnahmen",
+    "wochenkontingent", "wochenkontigent", "tageskontingent",
     "startet neu", "beginnt neu", "erneut teilnehmen", "aufgefüllt", "aufgefuellt",
 )
 
@@ -407,7 +418,9 @@ _ERSCHOEPFT = re.compile(
     r"(?:(?:ist|sind|wurde|wurden)\s+(?:\w+\s+){0,3}"
     r"(?:erschöpft|erschoepft|ausgeschöpft|ausgeschoepft|vergriffen)"
     r"|leider\s+vergriffen|bereits\s+vergriffen"
-    r"|teilnahmelimit\s+erreicht|maximale\s+teilnehmerzahl\s+erreicht"
+    r"|(?:teilnahmelimit|kontingent|einlöselimit|einloeselimit)"
+    r"\s+(?:\w+\s+){0,3}erreicht"
+    r"|maximale\s+teilnehmerzahl\s+erreicht"
     r"|alle\s+codes\s+vergeben)",
     re.IGNORECASE,
 )
@@ -443,7 +456,7 @@ def kontingent_aus(text: str | None) -> dict:
     ergebnis["erschoepft"] = _erschoepft_aus(inhalt)
     ergebnis["zuruecksetzung"] = _zuruecksetzung_aus(inhalt)
 
-    for treffer in _LIMIT.finditer(inhalt):
+    for treffer in _kandidaten(inhalt):
         anzahl = int(re.sub(r"[. ]", "", treffer.group(1)))
         # Unter zehn ist keine Kontingentangabe, sondern meist "2 Teilnahmen je
         # Haushalt" — eine andere Aussage, die hier nur verwirren wuerde.
@@ -463,6 +476,16 @@ def kontingent_aus(text: str | None) -> dict:
         break
 
     return ergebnis
+
+
+def _kandidaten(inhalt: str):
+    """
+    Alle Stellen, an denen eine Zahl eine Obergrenze sein koennte.
+
+    Die beschriftete Schreibweise zuerst: "Einlöselimit pro Woche 1.000" ist
+    eindeutiger als eine Zahl, neben der zufaellig "pro Woche" steht.
+    """
+    return list(_LIMIT_BESCHRIFTET.finditer(inhalt)) + list(_LIMIT.finditer(inhalt))
 
 
 def _erschoepft_aus(inhalt: str) -> bool:
