@@ -3,6 +3,7 @@ package de.gzgtracker.core
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
@@ -137,6 +138,44 @@ class EinreichdatenTest {
         kaufdatum = "14.08.2026",
         haendler = "Rewe",
     )
+
+    @Test
+    fun `nimmt die EAN mit, wenn eine da ist`() {
+        val werte = Einreichdaten.aus(
+            konto = konto,
+            produktname = "Bonduelle Salat",
+            preis = "2,49",
+            kaufdatum = "14.08.2026",
+            haendler = "Rewe",
+            ean = "4008400202037",
+        )
+        assertEquals("4008400202037", werte[Formularfeld.EAN])
+    }
+
+    @Test
+    fun `ohne EAN bleibt das Feld weg`() {
+        assertNull(daten()[Formularfeld.EAN])
+    }
+
+    @Test
+    fun `die EAN steht vor dem Produktnamen`() {
+        // Das Fuellskript nimmt je Feld den ersten Treffer, und PRODUKT passt
+        // mit "artikel" auch auf ein Feld "Artikelnummer". Stuende PRODUKT
+        // vorn, landete der Produktname in der Artikelnummer.
+        val werte = Einreichdaten.aus(
+            konto = null,
+            produktname = "Bonduelle Salat",
+            preis = "2,49",
+            kaufdatum = "14.08.2026",
+            haendler = null,
+            ean = "4008400202037",
+        )
+        val reihenfolge = werte.keys.toList()
+        assertTrue(
+            reihenfolge.indexOf(Formularfeld.EAN) < reihenfolge.indexOf(Formularfeld.PRODUKT),
+            "EAN muss vor PRODUKT stehen, war aber $reihenfolge",
+        )
+    }
 
     @Test
     fun `nimmt Anrede und Geburtsdatum mit`() {

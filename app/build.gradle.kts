@@ -156,9 +156,12 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // CameraX und der Barcode-Scanner sind mit dem Scan-Bildschirm entfallen:
-    // Fotos macht die Kamera-App des Geraets, gelesen wird nur noch Text vom Bon.
+    // CameraX ist mit dem Scan-Bildschirm entfallen: Fotos macht die Kamera-App
+    // des Geraets. Der Barcode-Leser ist zurueck, aber ohne Live-Sucher — er
+    // liest den Strichcode aus dem fertigen Produktfoto, das ohnehin gemacht
+    // wird. Das kostet eine Bibliothek und keinen zusaetzlichen Handgriff.
     implementation(libs.mlkit.text.recognition)
+    implementation(libs.mlkit.barcode.scanning)
     implementation(libs.androidx.exifinterface)
 
     implementation(libs.retrofit)

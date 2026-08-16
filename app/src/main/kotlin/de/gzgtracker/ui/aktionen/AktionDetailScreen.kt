@@ -66,6 +66,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
+import de.gzgtracker.core.Bildadresse
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.PromoActionType
 import de.gzgtracker.data.repository.Erinnerungsart
@@ -255,10 +256,18 @@ fun AktionDetailScreen(
         ) {
             // Gross statt Briefmarke: Im Laden erkennt man die Packung am Bild.
             aktion.imageUrl?.let { adresse ->
+                // Der Feed liefert 150 Pixel Kantenlaenge; hier stehen ueber
+                // tausend zur Verfuegung. Deshalb wird die groessere Fassung
+                // angefragt -- und wenn der Anbieter die nicht hergibt, faellt
+                // die Anzeige auf die kleine zurueck. Unscharf ist besser als leer.
+                var quelle by remember(adresse) {
+                    mutableStateOf(Bildadresse.groesser(adresse))
+                }
                 AsyncImage(
-                    model = adresse,
+                    model = quelle,
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
+                    onError = { if (quelle != adresse) quelle = adresse },
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(max = 240.dp)

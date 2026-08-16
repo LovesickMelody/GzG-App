@@ -50,6 +50,15 @@ enum class Formularfeld(
         "Produkt",
         listOf("produkt", "artikel", "product"),
     ),
+    // Manche Anbieter verlangen die Nummer unter dem Strichcode, um die Sorte
+    // zu belegen. Achtung bei der Reihenfolge in [Einreichdaten.aus]: Das
+    // Skript nimmt je Feld den ersten Treffer, und PRODUKT passt mit "artikel"
+    // auch auf "Artikelnummer". Deshalb wird EAN dort vor PRODUKT einsortiert.
+    EAN(
+        "ean",
+        "EAN",
+        listOf("ean", "gtin", "barcode", "strichcode", "artikelnummer"),
+    ),
     STRASSE("strasse", "Straße", listOf("straße", "strasse", "street", "adresse")),
     HAUSNUMMER("hausnummer", "Hausnummer", listOf("hausnummer", "hausnr", "nummer")),
     PLZ("plz", "PLZ", listOf("plz", "postleitzahl", "zip", "postcode")),
@@ -236,6 +245,7 @@ object Einreichdaten {
         preis: String,
         kaufdatum: String,
         haendler: String?,
+        ean: String? = null,
     ): Map<Formularfeld, String> {
         val werte = mutableMapOf<Formularfeld, String>()
 
@@ -257,6 +267,10 @@ object Einreichdaten {
                 werte[Formularfeld.GEBURTSDATUM] = wert.format(GEBURTSDATUMSFORMAT)
             }
         }
+
+        // Vor PRODUKT: Das Skript nimmt je Feld den ersten Treffer, und PRODUKT
+        // passt mit "artikel" auch auf ein Feld "Artikelnummer".
+        ean?.let { werte[Formularfeld.EAN] = it.filter(Char::isDigit) }
 
         werte[Formularfeld.PRODUKT] = produktname
         werte[Formularfeld.BETRAG] = preis
