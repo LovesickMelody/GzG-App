@@ -18,6 +18,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.filled.Bookmark
@@ -46,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,7 +83,14 @@ fun AktionenScreen(
     val snackbar = remember { SnackbarHostState() }
     // Die Suchleiste nahm dauerhaft ein Sechstel des Bildschirms ein, obwohl
     // man selten sucht. Jetzt eine Lupe — und Platz fuer Aktionen.
-    var sucheOffen by remember { mutableStateOf(false) }
+    var sucheOffen by rememberSaveable { mutableStateOf(false) }
+
+    // Entscheidend ist nicht der Knopf, sondern der Suchbegriff: Wer gesucht,
+    // eine Aktion geoeffnet und zurueckgegangen ist, kam mit zugeklappter Leiste
+    // zurueck — der Begriff filterte aber weiter. Am Geraet sah das aus, als
+    // wuerden die uebrigen Aktionen nicht mehr geladen. Solange etwas im Feld
+    // steht, bleibt es sichtbar.
+    val sucheSichtbar = sucheOffen || zustand.suche.isNotBlank()
     var sortiermenue by remember { mutableStateOf(false) }
 
     LaunchedEffect(zustand.meldung) {
@@ -106,11 +115,29 @@ fun AktionenScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            sucheOffen = !sucheOffen
-                            if (!sucheOffen) viewModel.setzeSuche("")
+                            if (sucheSichtbar) {
+                                viewModel.setzeSuche("")
+                                sucheOffen = false
+                            } else {
+                                sucheOffen = true
+                            }
                         },
                     ) {
-                        Icon(Icons.Outlined.Search, contentDescription = "Suchen")
+                        Icon(
+                            if (sucheSichtbar) Icons.Outlined.SearchOff else Icons.Outlined.Search,
+                            contentDescription = if (sucheSichtbar) {
+                                "Suche schließen"
+                            } else {
+                                "Suchen"
+                            },
+                            // Ein aktiver Suchbegriff traegt den Akzent: Dann ist
+                            // die Liste gefiltert, und das muss man sehen.
+                            tint = if (zustand.suche.isNotBlank()) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                        )
                     }
 
                     Box {
@@ -159,7 +186,7 @@ fun AktionenScreen(
                 .padding(innen),
         ) {
             Column(Modifier.fillMaxSize()) {
-                if (sucheOffen) {
+                if (sucheSichtbar) {
                     SucheFeld(
                         wert = zustand.suche,
                         onWert = viewModel::setzeSuche,
@@ -418,7 +445,7 @@ private fun AktionZeile(
                 Text(
                     text = listOfNotNull(
                         if (aktion.limitErschoepft) "Zuletzt erschöpft" else null,
-                        aktion.kontingentText,
+                        aktion.kontingentKurz,
                     ).joinToString(" · "),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (aktion.limitErschoepft) {
@@ -463,14 +490,17 @@ private fun fristText(aktion: PromoAction, tage: Long?, bisStart: Long? = null):
     val beginn = aktion.validFrom
     if (bisStart != null && beginn != null) {
         return when {
-            bisStart == 1L -> "Startet morgen (${beginn.deutsch()})"
-            bisStart <= 14 -> "Startet in $bisStart Tagen (${beginn.deutsch()})"
-            else -> "Startet am ${beginn.deutsch()}"
+            bisStart == 1L -> "Ab morgen"
+            bisStart <= 14 -> "Ab ${beginn.deutsch()} (in $bisStart Tagen)"
+            else -> "Ab ${beginn.deutsch()}"
         }
     }
 
     val frist = aktion.submissionDeadline ?: aktion.validTo ?: return "Ohne Frist"
-    val bezeichnung = if (aktion.submissionDeadline != null) "Einsendeschluss" else "Läuft bis"
+    // Kurz halten: Neben Bild, Glocke und Lesezeichen bleiben keine 200 dp fuer
+    // Text, und "Einsendeschluss 31.10.2026" brach mitten im Wort um. Das lange
+    // Wort steht auf der Aktionsseite, wo Platz dafuer ist.
+    val bezeichnung = if (aktion.submissionDeadline != null) "Frist" else "Läuft bis"
     return when {
         tage == null -> "$bezeichnung ${frist.deutsch()}"
         tage < 0 -> "Abgelaufen seit ${frist.deutsch()}"

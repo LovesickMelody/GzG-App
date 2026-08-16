@@ -33,6 +33,7 @@ from ..parsing import (
     datum_bereich,
     eans_aus,
     haendler_aus,
+    kontingent_aus,
     kuerze_titel,
     saeubere,
 )
@@ -200,6 +201,12 @@ def parse(xml: str, quelle: dict) -> list[Action]:
         if bis is None:
             von, bis = datum_bereich(titel)
 
+        # Wie stark die Aktion gedeckelt ist, steht oft schon in der
+        # Beschreibung des Portals — bei mydealz regelmaessig genauer als beim
+        # Anbieter selbst ("Kontingent wird montags um 9 Uhr zurueckgesetzt").
+        # Ein Abruf mehr kostet das nicht: Der Text liegt ohnehin im Feed.
+        kontingent = kontingent_aus(volltext)
+
         adresse = _link(eintrag)
         bekannte = quelle.get("retailers", BEKANNTE_HAENDLER)
         marke, aus_anbieter = _sortiere_anbieter(_anbieter_aus_element(eintrag), bekannte)
@@ -220,6 +227,10 @@ def parse(xml: str, quelle: dict) -> list[Action]:
                 retailers=haendler_aus(volltext, bekannte) + aus_anbieter,
                 eans=eans_aus(volltext),
                 image_url=_bild(eintrag),
+                limit_anzahl=kontingent["anzahl"],
+                limit_zeitraum=kontingent["zeitraum"],
+                limit_reset=kontingent["zuruecksetzung"],
+                limit_erschoepft=kontingent["erschoepft"],
             )
         )
 

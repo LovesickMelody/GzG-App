@@ -94,6 +94,12 @@ def reichere_an(aktionen: list[Action], quelle: dict, fetcher: Fetcher) -> None:
                             bereich.get_text(" ", strip=True)
                         )
 
+                # Das Kontingent steht oft auf der Portalseite genauer als beim
+                # Anbieter: Dort schreibt jemand hin, wann montags neu
+                # freigeschaltet wird. Die Anbieterseite darf es spaeter
+                # ueberschreiben, sie ist die verbindlichere Quelle.
+                _lies_kontingent(aktion, suppe.get_text(" ", strip=True))
+
         if von_aktionsseite:
             _lies_bedingungen_von_aktionsseite(aktion, fetcher)
 
@@ -227,7 +233,11 @@ def _lies_kontingent(aktion: Action, seitentext: str) -> None:
         aktion.limit_zeitraum = angaben["zeitraum"]
     if angaben["zuruecksetzung"]:
         aktion.limit_reset = angaben["zuruecksetzung"]
-    aktion.limit_erschoepft = bool(angaben["erschoepft"])
+    if angaben["erschoepft"]:
+        aktion.limit_erschoepft = True
+
+    if not aktion.limit_reset:
+        _melde_kontingentsaetze(aktion, seitentext)
 
     if angaben["anzahl"] or angaben["zuruecksetzung"] or angaben["erschoepft"]:
         log.info(
@@ -238,3 +248,32 @@ def _lies_kontingent(aktion: Action, seitentext: str) -> None:
             angaben["zuruecksetzung"],
             angaben["erschoepft"],
         )
+
+
+# Woerter, an denen ein Satz haengt, in dem etwas ueber das Kontingent steht.
+_KONTINGENTWOERTER = (
+    "kontingent", "zurückgesetzt", "zurueckgesetzt", "freigeschaltet",
+    "wieder verfügbar", "teilnahmen pro", "täglich neu", "woechentlich neu",
+    "wöchentlich neu", "montags", "jeden montag",
+)
+
+
+def _melde_kontingentsaetze(aktion: Action, seitentext: str) -> None:
+    """
+    Schreibt Saetze ins Log, in denen es um das Kontingent geht.
+
+    Nur wenn die Auswertung nichts gefunden hat. Der Zweck ist nicht die App,
+    sondern die naechste Verbesserung: An der echten Formulierung sieht man,
+    warum ein Muster nicht greift — Raten am Schreibtisch hat hier schon einmal
+    danebengelegen.
+    """
+    import re as _re
+
+    text = _re.sub(r"\s+", " ", seitentext)
+    treffer = [
+        satz.strip()
+        for satz in _re.split(r"(?<=[.!?]) ", text)
+        if any(wort in satz.casefold() for wort in _KONTINGENTWOERTER)
+    ]
+    for satz in treffer[:2]:
+        log.info("Aktion %r: Kontingentsatz ohne Treffer — %s", aktion.title[:40], satz[:200])
