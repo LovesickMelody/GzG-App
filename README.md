@@ -308,6 +308,38 @@ cd scraper
 python -m gzg_scraper.run --only justsnap --output /tmp/probe.json --delay 3
 ```
 
+### Was das kostet
+
+**Die Zahl der Nutzer spielt keine Rolle.** Das Modell läuft einmal am Tag in
+GitHub Actions; die App lädt nur die fertige `actions.json`. Ob zehn oder
+zehntausend Leute die App haben, ändert an den Modellkosten nichts.
+
+Was kostet, sind Kandidatenseiten **ohne** JSON-LD — rund 3.500 Token hinein,
+300 hinaus. Zwei Deckel begrenzen das:
+
+- `max_kandidaten` — wie viele Seiten je Quelle und Lauf überhaupt abgerufen
+  werden.
+- `auffrischen_tage` — eine bereits bekannte Kampagne wird nur alle *n* Tage
+  erneut gelesen; dazwischen kommt der Eintrag unverändert aus `actions.json`,
+  ohne Abruf und ohne Modellaufruf. Welcher Tag es je Kampagne ist, entscheidet
+  ihre Adresse, damit die Last sich über die Woche verteilt statt in einer
+  Spitze anzufallen.
+
+Damit zahlt ein Lauf im Regelfall nur die **neuen** Kampagnen — realistisch
+eine Handvoll am Tag statt vierzig:
+
+| | ohne Wiederverwendung | mit (Vorgabe) |
+|---|---|---|
+| `claude-opus-5` | ~30 €/Monat | **~3 €/Monat** |
+| `claude-haiku-4-5` | ~6 €/Monat | **~0,75 €/Monat** |
+
+Eine Kampagne wird immer neu gelesen, wenn ihre Frist abgelaufen ist oder sie
+gar keine nennt — sonst schleppte der Feed eine tote Aktion mit.
+
+Unabhängig davon gehört ein **Ausgabenlimit in der Anthropic Console**
+(*Settings → Limits*) gesetzt. Es ist die einzige Bremse, die auch dann greift,
+wenn im Code etwas schiefgeht.
+
 ### Das Modell einrichten
 
 Ohne Schlüssel überspringt der Lauf die Modell-Extraktion, meldet das einmal und

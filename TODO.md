@@ -112,7 +112,9 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Entdeckung ueber Sitemaps, inkl. Sitemap-Index
 - [x] Quellenart `erstanbieter` in `run.py` verdrahtet
 - [x] Tests gegen Fixtures, CI bleibt ohne API-Schluessel gruen
-- [ ] `ANTHROPIC_API_KEY` als GitHub-Secret hinterlegen
+- [x] `ANTHROPIC_API_KEY` als GitHub-Secret hinterlegen
+- [x] Bekannte Kampagnen wiederverwenden statt taeglich neu auszuwerten
+- [ ] Ausgabenlimit in der Anthropic Console setzen
 - [ ] Probelauf `--only justsnap`: Legt JustSnap wirklich je Kampagne eine
       Subdomain an? Ergebnis lesen, nicht nur zaehlen
 - [ ] JustSnap-Quelle auf `enabled: true` stellen, wenn der Probelauf taugt

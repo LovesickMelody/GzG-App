@@ -258,6 +258,23 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   regeln das ohne Codeänderung.
 - **Ohne API-Schlüssel läuft alles weiter** — der Lauf meldet das einmal und wertet nur
   JSON-LD aus. Sonst wäre die CI von einem Secret abhängig, das in keinem Fork existiert.
+- **Bekannte Kampagnen werden nicht jeden Tag neu gelesen** — der Kostenhebel. Ohne die
+  Wiederverwendung zahlt jeder Lauf das Volle: Eine gestern gefundene Kampagne bekäme
+  heute wieder einen Abruf und einen Modellaufruf, obwohl sie unverändert in
+  `actions.json` steht. Die Nutzerzahl spielt dabei nie eine Rolle — die App lädt nur die
+  fertige Datei, das Modell läuft einmal am Tag in Actions.
+- **Welcher Wochentag eine Kampagne aufgefrischt wird, entscheidet ihre Adresse** — ein
+  Zeitstempel je Aktion wäre der naheliegende Weg gewesen, hätte aber ein neues Feld in
+  `actions.json` gebraucht, und dieses Format liest die App. Ein Hash der Adresse modulo
+  `auffrischen_tage` ist stabil (dieselbe Kampagne trifft immer denselben Tag),
+  gleichverteilt (die Last fällt nicht an einem Tag an) und braucht kein Schema.
+- **Ohne Frist wird immer neu gelesen** — die einzige Stelle, an der „keine Frist bekannt"
+  streng ausgelegt wird. Sonst lässt sich nicht sagen, ob die Kampagne noch läuft, und
+  eine abgelaufene weiterzuschleppen wäre schlimmer als ein Abruf zu viel.
+- **`--only` startet auch eine abgeschaltete Quelle** — die README schreibt für jede neue
+  Quelle einen Probelauf vor, bevor sie scharf geschaltet wird. Vorher filterte `--only`
+  erst *nach* dem Aktiv-Filter, und der empfohlene Befehl endete bei „Keine aktive Quelle".
+  Wer eine Quelle ausdrücklich benennt, meint sie auch.
 
 ## Design
 

@@ -19,7 +19,6 @@ import os
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
-from urllib.parse import urlparse
 
 import yaml
 
@@ -29,7 +28,7 @@ from .extract import Modellextraktor
 from .extract.modell import STANDARD_EFFORT as EFFORT_VORGABE
 from .extract.modell import STANDARD_MODELL as MODELL_VORGABE
 from .fetch import Fetcher
-from .models import Action
+from .models import Action, adressenschluessel
 from .pruefung import Kontext, pruefe_liste
 from .registry import hole as hole_parser
 from .tdm import Vorbehaltspruefer
@@ -196,26 +195,6 @@ def filtere_arten(aktionen: list[Action], quelle: dict) -> list[Action]:
     return behalten
 
 
-def _adressenschluessel(adresse: str | None) -> str | None:
-    """
-    Vereinheitlicht eine Einreichungsadresse fuer den Vergleich.
-
-    Zwei Portale verlinken dasselbe Formular gern leicht verschieden —
-    "https://scondoo.de/?cashbackDetail=81788" gegen
-    "https://scondoo.de?cashbackDetail=81788". Verglichen wird deshalb ohne
-    Schema, ohne "www." und ohne ueberfluessige Schraegstriche.
-    """
-    if not adresse:
-        return None
-    teile = urlparse(adresse.strip())
-    host = teile.netloc.casefold().removeprefix("www.")
-    if not host:
-        return None
-    pfad = teile.path.rstrip("/")
-    frage = f"?{teile.query}" if teile.query else ""
-    return f"{host}{pfad}{frage}"
-
-
 def _vollstaendigkeit(eintrag: dict) -> int:
     """Wie viele Felder gefuellt sind — je mehr, desto besser als Grundlage."""
     return sum(1 for wert in eintrag.values() if wert not in (None, "", []))
@@ -241,7 +220,7 @@ def fasse_dubletten_zusammen(aktionen: list[dict]) -> list[dict]:
     ohne_adresse: list[dict] = []
 
     for eintrag in aktionen:
-        schluessel = _adressenschluessel(eintrag.get("submit_url"))
+        schluessel = adressenschluessel(eintrag.get("submit_url"))
         if schluessel is None:
             ohne_adresse.append(eintrag)
         else:
@@ -406,6 +385,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     pruefer = Vorbehaltspruefer()
 
+    # Vor der Schleife, nicht danach: Die Erstanbieter-Quellen brauchen den
+    # bisherigen Stand, um bekannte Kampagnen nicht erneut abzurufen und
+    # auszuwerten.
+    bestand = lade_bestand(argumente.output)
+
     neu_je_quelle: dict[str, list[Action]] = {}
     ausgefallen: set[str] = set()
 
@@ -413,7 +397,13 @@ def main(argv: list[str] | None = None) -> int:
         name = quelle["name"]
         log.info("--- Quelle %s ---", name)
         if quelle.get("parser") == "erstanbieter":
-            ergebnis = erstanbieter.sammle(quelle, fetcher, extraktor, pruefer)
+            ergebnis = erstanbieter.sammle(
+                quelle,
+                fetcher,
+                extraktor,
+                pruefer,
+                bekannt=erstanbieter.bekannte_adressen(bestand, name),
+            )
         else:
             ergebnis = sammle_quelle(quelle, fetcher)
         if ergebnis is None:
@@ -421,7 +411,6 @@ def main(argv: list[str] | None = None) -> int:
         else:
             neu_je_quelle[name] = ergebnis
 
-    bestand = lade_bestand(argumente.output)
     aktionen = fuehre_zusammen(bestand, neu_je_quelle, ausgefallen)
 
     schreibe_wenn_geaendert(argumente.output, aktionen)
