@@ -216,6 +216,21 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   der Weg über die dokumentierte API von SSLMate, die genau für diesen Zweck da ist und
   keinen Schlüssel braucht. Dieselben Protokolle, anderes Ausgabeformat. `crt.sh` bleibt
   als `ct_anbieter` wählbar, falls jemand mit ausdrücklicher Erlaubnis läuft.
+- **Für dokumentierte Schnittstellen gilt die `robots.txt` nicht — für Kampagnenseiten
+  sehr wohl** — der zweite Probelauf zeigte, dass auch Cert Spotter Crawler per
+  `robots.txt` aussperrt. Damit stand die Frage grundsätzlich: `robots.txt` ist ein
+  Standard für *Crawler*, für Programme, die sich durch die Seiten eines Angebots
+  hangeln. Diese beiden Hosts sind das Gegenteil — sie beantworten *eine* Frage über
+  *eine* Domain und laden ausdrücklich dazu ein (SSLMate dokumentiert die API samt
+  Ratenlimits und Schlüsseln, Sectigo veröffentlicht für crt.sh eigens eine
+  Datenbankschnittstelle, damit niemand die Weboberfläche abgrast). Ihr pauschales
+  `Disallow: /` zielt auf Suchmaschinen. Deshalb eine namentliche Ausnahmeliste in
+  `fetch.py` — mit exaktem Hostvergleich, denn eine Unterdomäne wie
+  `crt.sh.boeses.invalid` dürfte die Prüfung nicht aushebeln. Sie steht im Code und
+  nicht in `sources.yaml`: Wer eine Quelle ergänzt, soll sie nicht nebenbei erweitern
+  können. **Auf den Kampagnenseiten ändert sich nichts** — dort, wo § 44b UrhG und der
+  Nutzungsvorbehalt greifen, wird unverändert geprüft. Genau dort liegt die
+  Rechtsgrundlage.
 - **Die Certspotter-Ausgabe wird seitenweise geholt, und ein Abbruch steht im Log** — die
   API deckelt bei 100 Einträgen je Abruf. Ohne Weiterblättern fehlten bei einer großen
   Plattform genau die Kampagnen, die den Ausschlag geben; mit stillem Abbruch nach fünf

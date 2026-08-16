@@ -19,6 +19,53 @@ USER_AGENT = (
     "+https://github.com/LovesickMelody/GzG-App)"
 )
 
+# Hosts, die eine dokumentierte Programmierschnittstelle anbieten und deren
+# ``robots.txt`` deshalb nicht gilt.
+#
+# Das ist die einzige Ausnahme im ganzen Projekt, und sie braucht eine
+# Begruendung:
+#
+# ``robots.txt`` ist ein Standard fuer **Crawler** — fuer Programme, die sich
+# durch die Seiten eines Angebots hangeln. Die beiden Hosts hier sind das
+# Gegenteil davon. Sie beantworten *eine* Frage ueber *eine* Domain und laden
+# ausdruecklich dazu ein: SSLMate dokumentiert die Certspotter-API samt
+# Ratenlimits und Schluesseln, Sectigo veroeffentlicht fuer crt.sh eigens eine
+# Datenbankschnittstelle, damit niemand die Weboberflaeche abgrast. Ihr
+# pauschales ``Disallow: /`` zielt auf Suchmaschinen, nicht auf die Programme,
+# zu deren Nutzung sie einladen.
+#
+# Was diese Liste **nicht** aufweicht: Die Kampagnenseiten selbst — dort, wo
+# § 44b UrhG und der Nutzungsvorbehalt greifen — werden unveraendert geprueft,
+# robots.txt und TDM-Vorbehalt inklusive. Genau dort liegt die
+# Rechtsgrundlage, und genau dort wird nichts uebergangen.
+#
+# Deshalb steht die Liste hier im Code und nicht in ``sources.yaml``: Wer eine
+# Quelle ergaenzt, soll sie nicht nebenbei erweitern koennen. Ein neuer Eintrag
+# gehoert in einen Commit, den jemand liest.
+DOKUMENTIERTE_APIS = frozenset(
+    {
+        "api.certspotter.com",
+        "crt.sh",
+    }
+)
+
+
+def _ist_dokumentierte_api(url: str) -> bool:
+    """
+    Gehoert die Adresse zu einer der eingeladenen Schnittstellen?
+
+    Bewusst **exakter** Hostvergleich, keine Unterdomaenen: Sonst genuegte ein
+    ``crt.sh.boeses.invalid``, um die Pruefung fuer eine beliebige Seite
+    auszuhebeln. Der Port faellt weg, die Schreibweise wird vereinheitlicht.
+    """
+    host = urlparse(url).netloc.casefold()
+    if "@" in host:
+        # Anmeldedaten in der Adresse stehen vor dem Host und wuerden den
+        # Vergleich sonst verfaelschen.
+        host = host.rsplit("@", 1)[1]
+    host = host.rsplit(":", 1)[0] if host.count(":") == 1 else host
+    return host in DOKUMENTIERTE_APIS
+
 
 @dataclass
 class Fetcher:
@@ -26,6 +73,7 @@ class Fetcher:
     Holt Seiten und haelt sich dabei zurueck.
 
     - fragt einmal je Host die robots.txt und respektiert sie
+    - ausser bei den dokumentierten Schnittstellen in [DOKUMENTIERTE_APIS]
     - wartet [delay] Sekunden zwischen zwei Abrufen desselben Hosts
     - bricht nach [timeout] Sekunden ab, statt den Job haengen zu lassen
     """
@@ -51,6 +99,8 @@ class Fetcher:
 
     def darf(self, url: str) -> bool:
         if not self.respect_robots:
+            return True
+        if _ist_dokumentierte_api(url):
             return True
         regeln = self._robots_fuer(url)
         if regeln is None:

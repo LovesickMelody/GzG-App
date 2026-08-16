@@ -255,11 +255,17 @@ Zielsysteme, kein Erraten von Namen. Plattformen, die ihre Kampagnen über
 *Pfade* statt Subdomains führen, fängt stattdessen die `sitemap.xml` ab —
 deshalb gibt es beide Entdecker.
 
-Naheliegender wäre `crt.sh` gewesen, die bekanntere Adresse für dieselben
-Protokolle. Deren `robots.txt` verbietet den Abruf aber, und der Scraper hält
-sich daran — der erste Probelauf fand damit exakt null Kampagnen. Der Zugang ist
-über `ct_anbieter` in `sources.yaml` umstellbar; `crt.sh` bleibt für den Fall
-drin, dass jemand mit ausdrücklicher Erlaubnis läuft.
+Beide Zugänge zu diesen Protokollen — `crt.sh` und Cert Spotter — sperren
+Crawler per `robots.txt` aus, laden aber ausdrücklich zum Programmzugriff ein:
+SSLMate dokumentiert die API samt Ratenlimits und Schlüsseln, Sectigo
+veröffentlicht für `crt.sh` eigens eine Datenbankschnittstelle, damit niemand
+die Weboberfläche abgrast. Ihr pauschales `Disallow: /` zielt auf
+Suchmaschinen. Für genau diese beiden Hosts steht deshalb eine namentliche
+Ausnahme in `fetch.py` (`DOKUMENTIERTE_APIS`).
+
+**Auf den Kampagnenseiten ändert das nichts.** Dort — wo § 44b UrhG und der
+Nutzungsvorbehalt greifen und wo die Daten herkommen, die in der App landen —
+wird unverändert geprüft: `robots.txt`, `tdmrep.json`, Meta-Tags und Prosa.
 
 ### Extraktion: ein Weg für alle Seiten
 

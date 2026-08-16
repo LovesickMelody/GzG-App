@@ -144,8 +144,10 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [ ] Ausgabenlimit in der Anthropic Console setzen
 - [x] Erster Probelauf `--only justsnap` — Ergebnis: crt.sh blockt, und ein
       `--only`-Lauf haette den Feed leergeraeumt. Beides behoben
-- [ ] Zweiter Probelauf `--only justsnap` ueber certspotter: Legt JustSnap wirklich
-      je Kampagne eine Subdomain an? Ergebnis lesen, nicht nur zaehlen
+- [x] Zweiter Probelauf: certspotter sperrt Crawler ebenfalls per robots.txt.
+      Namentliche Ausnahme fuer die beiden dokumentierten Schnittstellen
+- [ ] Dritter Probelauf `--only justsnap`: Legt JustSnap wirklich je Kampagne eine
+      Subdomain an? Ergebnis lesen, nicht nur zaehlen
 - [ ] JustSnap-Quelle auf `enabled: true` stellen, wenn der Probelauf taugt
 - [ ] Weitere Plattformen abklopfen (jolt, coreweb, Couponing House, DREI-D)
 - [ ] Erstanbieter mit eigener Aktionsuebersicht ergaenzen (P&G ForMe)
