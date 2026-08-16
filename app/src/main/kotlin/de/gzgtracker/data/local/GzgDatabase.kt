@@ -10,8 +10,9 @@ import androidx.room.TypeConverters
         PromoActionEntity::class,
         SubmissionEntity::class,
         WatchlistEntity::class,
+        ErinnerungEntity::class,
     ],
-    version = 6,
+    version = 9,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -24,6 +25,8 @@ abstract class GzgDatabase : RoomDatabase() {
     abstract fun submissionDao(): SubmissionDao
 
     abstract fun watchlistDao(): WatchlistDao
+
+    abstract fun erinnerungDao(): ErinnerungDao
 
     companion object {
         const val NAME = "gzg-tracker.db"

@@ -29,3 +29,19 @@ fun Instant.relativeAngabe(jetzt: Instant = Instant.now()): String {
 
 /** EAN in Viererbloecken, damit sie lesbar bleibt. */
 fun String.eanLesbar(): String = chunked(4).joinToString(" ")
+
+/**
+ * Dieselbe Angabe, nur kurz — fuer Zeilen, in denen wenig Platz ist.
+ *
+ * "Aktualisiert vor 4 Minuten" brach in der Aktionsliste mitten im Wort um.
+ */
+fun Instant.relativeKurz(jetzt: Instant = Instant.now()): String {
+    val minuten = java.time.Duration.between(this, jetzt).toMinutes()
+    return when {
+        minuten < 1 -> "gerade eben"
+        minuten < 60 -> "vor $minuten Min."
+        minuten < 60 * 24 -> "vor ${minuten / 60} Std."
+        minuten < 60 * 24 * 2 -> "gestern"
+        else -> "vor ${minuten / (60 * 24)} Tagen"
+    }
+}

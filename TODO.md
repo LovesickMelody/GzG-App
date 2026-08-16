@@ -102,6 +102,32 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [x] Auswahlfelder im Formularskript
 - [x] Leiste unter dem Formular auf eine Zeile
 - [x] Leere Anbieterseite wird erkannt und gemeldet
+- [x] Kassenbon: streifenweises Lesen, höhere Auflösung
+- [x] Produktbilder vollständig statt zugeschnitten
+- [x] Suche als Lupe statt Dauerleiste
+- [x] Sortierung nach Frist, Betrag, Name
+- [x] "Stand vor X Min." einzeilig
+- [x] BIC im Konto (Datenbank v7)
+- [x] Feed-Adresse aus den Einstellungen entfernt
+- [x] "Manuell eintragen" und eigene Aktion beim Erfassen anlegen
+
+## Design
+
+- [x] Farbrollen festgelegt, Akzent eingeführt, Regel in CLAUDE.md geändert
+- [x] Belegplatz als Ablagefeld statt zweier zu großer Knöpfe
+- [x] Statusstreifen in der Belegliste
+- [x] Ablaufende Fristen hervorgehoben
+- [x] Aktiver Reiter, Lesezeichen und Auswahl im Akzent
+- [x] Abschnittsüberschriften mit Akzentstrich
+- [ ] Karten als dritte Papierstufe in Erfassen und Detail
+- [ ] Checkliste als Icon-Reihe statt Textzeile
+- [ ] Kontrastwerte nachrechnen
+- [x] Filtersymbol auch in der Aktionsliste
+- [x] Barcode-Scanner entfernt
+- [x] Reiter getauscht, "Optionen" statt "Einstellungen"
+- [x] Standanzeige auf eigener Zeile
+- [x] Erinnerungen an Fristen (Datenbank v8)
+- [x] Kontingent aus den Teilnahmebedingungen (Datenbank v9)
 
 ## Weg vom Portal-Scraping
 

@@ -1,6 +1,11 @@
 package de.gzgtracker.data.repository
 
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import de.gzgtracker.core.Erinnerung
 import de.gzgtracker.core.PromoAction
+import de.gzgtracker.data.local.ErinnerungDao
+import de.gzgtracker.data.local.ErinnerungEntity
 import de.gzgtracker.data.local.PromoActionDao
 import de.gzgtracker.data.local.PromoActionEntity
 import de.gzgtracker.data.local.toDomain
@@ -13,7 +18,10 @@ import de.gzgtracker.data.settings.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import de.gzgtracker.notify.Erinnerungen
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,8 +35,10 @@ sealed interface FeedErgebnis {
 class ActionRepository @Inject constructor(
     private val dao: PromoActionDao,
     private val watchlist: WatchlistDao,
+    private val erinnerungen: ErinnerungDao,
     private val api: ActionsApi,
     private val settings: SettingsRepository,
+    @ApplicationContext private val context: Context,
 ) {
 
     val alle: Flow<List<PromoAction>> = dao.beobachteAlle().map { liste ->
@@ -37,6 +47,54 @@ class ActionRepository @Inject constructor(
 
     fun beobachte(id: String): Flow<PromoAction?> =
         dao.beobachte(id).map { it?.toDomain() }
+
+    // --- Erinnerungen -------------------------------------------------------
+
+    /** Die Aktionen, zu denen eine Erinnerung gestellt ist. */
+    val erinnert: Flow<Set<String>> =
+        erinnerungen.beobachteAlle().map { liste -> liste.map { it.actionId }.toSet() }
+
+    /**
+     * Stellt eine Erinnerung oder nimmt sie zurueck.
+     *
+     * @return der gestellte Zeitpunkt, oder `null` wenn zurueckgenommen wurde oder
+     *   sich kein sinnvoller Zeitpunkt mehr ergibt.
+     */
+    suspend fun erinnerungUmschalten(actionId: String): LocalDateTime? {
+        val vorhanden = erinnerungen.ladeAlle().any { it.actionId == actionId }
+        if (vorhanden) {
+            erinnerungen.entferne(actionId)
+            Erinnerungen.nimmZurueck(context, actionId)
+            return null
+        }
+
+        val aktion = dao.lade(actionId)?.toDomain() ?: return null
+        val frist = aktion.submissionDeadline ?: aktion.validTo ?: return null
+        val zeitpunkt = Erinnerung.zeitpunkt(frist, LocalDateTime.now()) ?: return null
+
+        val faellig = zeitpunkt.atZone(ZoneId.systemDefault()).toInstant()
+        erinnerungen.upsert(
+            ErinnerungEntity(actionId = actionId, faelligAm = faellig, titel = aktion.title),
+        )
+        Erinnerungen.stelle(context, actionId, aktion.title, faellig)
+        return zeitpunkt
+    }
+
+    /**
+     * Stellt alle gespeicherten Erinnerungen neu.
+     *
+     * Noetig nach jedem Neustart des Telefons: Wecker des Systems ueberleben ihn
+     * nicht. Weil die App nicht mitbekommt, wann neu gestartet wurde, passiert das
+     * einfach bei jedem Start — doppelt Stellen schadet nicht, der Wecker wird
+     * dabei ersetzt.
+     */
+    suspend fun stelleErinnerungenNeu() {
+        val jetzt = Instant.now()
+        erinnerungen.entferneAeltereAls(jetzt)
+        erinnerungen.ladeAlle().forEach { eintrag ->
+            Erinnerungen.stelle(context, eintrag.actionId, eintrag.titel, eintrag.faelligAm)
+        }
+    }
 
     /** Die Merkliste: Aktions-Id -> ist es schon im Wagen? */
     val gemerkt: Flow<Map<String, Boolean>> = watchlist.beobachteAlle().map { liste ->

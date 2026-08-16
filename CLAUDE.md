@@ -21,10 +21,18 @@ Diese Datei gilt für jede Session in diesem Repo.
 
 ## Design
 
-- Farbe ist ausschließlich für Status reserviert (gelb = eingereicht, grün = erstattet,
-  rot = abgelehnt). Buttons und Navigation bleiben `ink`.
+- Farbe hat genau drei Rollen, und keine Farbe hat zwei davon:
+  1. **Status** — gelb = eingereicht, grün = erstattet, rot = abgelehnt. Nur als Fläche,
+     immer mit Icon und Text daneben. Rot darf zusätzlich als *Textfarbe* eine
+     ablaufende Frist markieren, nie als Fläche.
+  2. **Interaktion** — der Akzent (tiefes Tintenblau): primäre Knöpfe, aktiver Reiter,
+     Ausgewähltes, Fokus.
+  3. **Struktur** — Tinte auf Papier: Text, Flächen, Linien.
+- Pro Bildschirm genau eine primäre Handlung. Drei Stufen: primär gefüllt im Akzent,
+  sekundär `OutlinedButton`, tertiär `TextButton`.
 - Material You Dynamic Color bleibt deaktiviert.
 - Keine neuen Farben oder Schriftgrößen außerhalb der Tokens in `ui/theme/`.
+- Touch-Ziele mindestens 48 dp. Beschriftungen brechen nicht mitten im Wort um.
 - UI-Texte auf Deutsch, Sentence Case, aktive Verben.
 
 ## Git

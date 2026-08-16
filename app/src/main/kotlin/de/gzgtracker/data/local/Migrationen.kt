@@ -102,5 +102,53 @@ object Migrationen {
         }
     }
 
-    val ALLE = arrayOf(VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6)
+    /** v7: BIC. Manche Formulare verlangen sie neben der IBAN. */
+    val VON_6_AUF_7 = object : Migration(6, 7) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE accounts ADD COLUMN bic TEXT")
+        }
+    }
+
+    /**
+     * v8: Erinnerungen.
+     *
+     * Eigene Tabelle, damit eine gestellte Erinnerung den Feed-Abgleich ueberlebt —
+     * dabei werden Aktionen ersetzt.
+     */
+    val VON_7_AUF_8 = object : Migration(7, 8) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS reminders (
+                    actionId TEXT NOT NULL PRIMARY KEY,
+                    faelligAm INTEGER NOT NULL,
+                    titel TEXT NOT NULL
+                )
+                """.trimIndent(),
+            )
+        }
+    }
+
+    /**
+     * v9: Kontingent einer Aktion.
+     *
+     * Viele Anbieter geben nur eine feste Zahl Teilnahmen frei und setzen sie zu
+     * einem festen Zeitpunkt zurueck. Wer das nicht weiss, kauft das Produkt und
+     * merkt beim Einreichen, dass er zu spaet dran war.
+     */
+    val VON_8_AUF_9 = object : Migration(8, 9) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE promo_actions ADD COLUMN limitAnzahl INTEGER")
+            db.execSQL("ALTER TABLE promo_actions ADD COLUMN limitZeitraum TEXT")
+            db.execSQL("ALTER TABLE promo_actions ADD COLUMN limitReset TEXT")
+            db.execSQL(
+                "ALTER TABLE promo_actions ADD COLUMN limitErschoepft INTEGER NOT NULL DEFAULT 0",
+            )
+        }
+    }
+
+    val ALLE = arrayOf(
+        VON_1_AUF_2, VON_2_AUF_3, VON_3_AUF_4, VON_4_AUF_5, VON_5_AUF_6, VON_6_AUF_7,
+        VON_7_AUF_8, VON_8_AUF_9,
+    )
 }

@@ -25,6 +25,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AddAPhoto
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Warning
@@ -50,6 +51,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import android.Manifest
@@ -63,6 +69,7 @@ import androidx.core.content.ContextCompat
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -70,6 +77,7 @@ import coil.compose.AsyncImage
 import de.gzgtracker.core.Belegart
 import de.gzgtracker.core.Money
 import de.gzgtracker.core.SubmissionStatus
+import de.gzgtracker.ui.components.Abschnittstitel
 import de.gzgtracker.ui.components.DatumFeld
 import de.gzgtracker.ui.components.label
 import de.gzgtracker.ui.konten.FarbPunkt
@@ -82,7 +90,6 @@ import java.io.File
 fun ErfassenScreen(
     onFertig: () -> Unit,
     onAbbrechen: () -> Unit,
-    onScannen: () -> Unit,
     onEinreichen: (Long) -> Unit,
     viewModel: ErfassenViewModel = hiltViewModel(),
 ) {
@@ -176,16 +183,6 @@ fun ErfassenScreen(
                         )
                     }
                 },
-                actions = {
-                    if (zustand.istNeu) {
-                        IconButton(onClick = onScannen) {
-                            Icon(
-                                Icons.Outlined.QrCodeScanner,
-                                contentDescription = "Barcode scannen",
-                            )
-                        }
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
@@ -202,13 +199,7 @@ fun ErfassenScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Abschnitt("Aktion")
-            if (zustand.aktionen.isEmpty()) {
-                Text(
-                    text = "Noch keine Aktionen da. Lade den Feed oder leg eine Aktion an.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            } else if (zustand.gewaehlteAktion != null && !aktionswahlOffen) {
+            if (zustand.gewaehlteAktion != null && !aktionswahlOffen) {
                 // Steht die Aktion fest, nimmt sie eine Zeile ein statt des
                 // halben Bildschirms — geaendert wird selten.
                 Row(
@@ -244,9 +235,34 @@ fun ErfassenScreen(
                         aktion.brand?.contains(aktionssuche, ignoreCase = true) == true
                 }
 
+                // Nicht jede Aktion steht im Feed. Wer eine im Laden entdeckt
+                // oder aus der Werbung hat, muss sie hier eintragen koennen —
+                // sonst laesst sich der Kauf gar nicht erfassen.
+                if (aktionssuche.isNotBlank()) {
+                    TextButton(
+                        onClick = {
+                            viewModel.legeEigeneAktionAn(aktionssuche.trim())
+                            aktionswahlOffen = false
+                            aktionssuche = ""
+                        },
+                    ) {
+                        Icon(
+                            Icons.Outlined.AddCircleOutline,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Text("  „${aktionssuche.trim()}“ als eigene Aktion anlegen")
+                    }
+                }
+
                 if (treffer.isEmpty()) {
                     Text(
-                        text = "Keine Aktion passt zu „$aktionssuche“.",
+                        text = if (aktionssuche.isBlank()) {
+                            "Noch keine Aktionen da. Lade den Feed, oder tipp oben einen " +
+                                "Namen ein und leg die Aktion selbst an."
+                        } else {
+                            "Keine Aktion passt zu „$aktionssuche“."
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -470,14 +486,7 @@ fun ErfassenScreen(
 }
 
 @Composable
-private fun Abschnitt(titel: String) {
-    Text(
-        text = titel,
-        style = MaterialTheme.typography.titleLarge,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.padding(top = 8.dp),
-    )
-}
+private fun Abschnitt(titel: String) = Abschnittstitel(titel)
 
 /**
  * Die Warnung zur Kontoregel. Sie nutzt Rot bewusst nicht als Flaeche — Rot ist im
@@ -551,7 +560,7 @@ private fun BelegFeld(
         text = if (verlangt) "${art.label} — von dieser Aktion verlangt" else art.label,
         style = MaterialTheme.typography.labelLarge,
         color = if (verlangt) {
-            MaterialTheme.colorScheme.onSurface
+            MaterialTheme.colorScheme.primary
         } else {
             MaterialTheme.colorScheme.onSurfaceVariant
         },
@@ -588,30 +597,73 @@ private fun BelegFeld(
             TextButton(onClick = onAusGalerie) { Text("Aus Galerie") }
         }
     } else {
+        // Ein Ablageplatz statt zweier klobiger Knoepfe: Vorher standen hier zwei
+        // 72 dp hohe Kaesten nebeneinander, in denen "Fotografieren" mitten im
+        // Wort umbrach — und eine Nebenhandlung sah aus wie die Hauptsache der
+        // Seite. Jetzt fuehrt eine grosse Flaeche zum Regelfall (fotografieren),
+        // die Galerie steht leise daneben.
+        val rahmenfarbe = if (verlangt) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.outline
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(88.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .gestrichelt(rahmenfarbe, 8.dp)
+                .clickable(onClick = onFotografieren),
+            contentAlignment = Alignment.Center,
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Outlined.PhotoCamera,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = "Fotografieren",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    maxLines = 1,
+                )
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.End,
         ) {
-            // Fotografieren steht links und traegt das Kamerasymbol: Das ist der
-            // Regelfall — man kommt vom Einkauf und hat den Bon in der Hand.
-            OutlinedButton(
-                onClick = onFotografieren,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(72.dp),
-            ) {
-                Icon(Icons.Outlined.PhotoCamera, contentDescription = null)
-                Text("  Fotografieren")
-            }
-            OutlinedButton(
-                onClick = onAusGalerie,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(72.dp),
-            ) {
-                Icon(Icons.Outlined.AddAPhoto, contentDescription = null)
-                Text("  Galerie")
+            TextButton(onClick = onAusGalerie) {
+                Icon(
+                    Icons.Outlined.AddAPhoto,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                )
+                Text("  Aus Galerie")
             }
         }
     }
+}
+
+/**
+ * Gestrichelter Rahmen — die uebliche Form fuer "hier gehoert etwas hin".
+ *
+ * Ein durchgezogener Rahmen sieht aus wie ein Feld mit Inhalt; gestrichelt heisst
+ * ueberall: noch leer, hier ablegen.
+ */
+private fun Modifier.gestrichelt(farbe: Color, radius: Dp): Modifier = drawBehind {
+    drawRoundRect(
+        color = farbe,
+        cornerRadius = CornerRadius(radius.toPx()),
+        style = Stroke(
+            width = 1.5.dp.toPx(),
+            pathEffect = PathEffect.dashPathEffect(
+                floatArrayOf(9.dp.toPx(), 6.dp.toPx()),
+            ),
+        ),
+    )
 }

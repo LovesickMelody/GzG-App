@@ -34,7 +34,6 @@ import de.gzgtracker.ui.detail.DetailScreen
 import de.gzgtracker.ui.einstellungen.EinstellungenScreen
 import de.gzgtracker.ui.erfassen.ErfassenScreen
 import de.gzgtracker.ui.konten.KontenScreen
-import de.gzgtracker.ui.scan.ScanScreen
 import de.gzgtracker.ui.uebersicht.UebersichtScreen
 
 /** Alle Ziele der App an einer Stelle, damit Routen nicht als Strings verstreuen. */
@@ -44,7 +43,6 @@ object Routes {
     const val KONTEN = "konten"
     const val EINSTELLUNGEN = "einstellungen"
 
-    const val SCAN = "scan"
     const val DETAIL = "detail/{id}"
     const val ERFASSEN = "erfassen?actionId={actionId}&ean={ean}&submissionId={submissionId}"
     const val AKTION_BEARBEITEN = "aktion-bearbeiten?actionId={actionId}"
@@ -71,11 +69,14 @@ private data class TabZiel(
     val icon: ImageVector,
 )
 
+// Aktionen zuerst: Der Weg beginnt bei "was gibt es?", nicht bei "was habe ich
+// schon eingereicht?". "Optionen" statt "Einstellungen", weil das lange Wort in
+// der Leiste mitten im Wort umbrach.
 private val TABS = listOf(
-    TabZiel(Routes.UEBERSICHT, "Belege", Icons.Outlined.ReceiptLong),
     TabZiel(Routes.AKTIONEN, "Aktionen", Icons.Outlined.LocalOffer),
+    TabZiel(Routes.UEBERSICHT, "Belege", Icons.Outlined.ReceiptLong),
     TabZiel(Routes.KONTEN, "Konten", Icons.Outlined.CreditCard),
-    TabZiel(Routes.EINSTELLUNGEN, "Einstellungen", Icons.Outlined.Settings),
+    TabZiel(Routes.EINSTELLUNGEN, "Optionen", Icons.Outlined.Settings),
 )
 
 @Composable
@@ -108,12 +109,14 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
                                 }
                             },
                             icon = { Icon(tab.icon, contentDescription = null) },
-                            label = { Text(tab.label) },
-                            // Navigation bleibt `ink` — kein farbiger Indikator.
+                            label = { Text(tab.label, maxLines = 1) },
+                            // Wo man ist, traegt den Akzent. Vorher unterschieden
+                            // sich aktiver und schlafender Reiter nur durch einen
+                            // Grauton — auf dem Geraet kaum zu sehen.
                             colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.onSurface,
-                                selectedTextColor = MaterialTheme.colorScheme.onSurface,
-                                indicatorColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
                                 unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                             ),
@@ -125,13 +128,12 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
     ) { innenAbstand ->
         NavHost(
             navController = navController,
-            startDestination = Routes.UEBERSICHT,
+            startDestination = Routes.AKTIONEN,
             modifier = Modifier.padding(innenAbstand),
         ) {
             composable(Routes.UEBERSICHT) {
                 UebersichtScreen(
                     onEintragOeffnen = { id -> navController.navigate(Routes.detail(id)) },
-                    onScannen = { navController.navigate(Routes.SCAN) },
                     onErfassen = { navController.navigate(Routes.erfassen()) },
                 )
             }
@@ -171,17 +173,6 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
 
             composable(Routes.EINSTELLUNGEN) { EinstellungenScreen() }
 
-            composable(Routes.SCAN) {
-                ScanScreen(
-                    onAbbrechen = { navController.popBackStack() },
-                    onTreffer = { actionId, ean ->
-                        navController.navigate(Routes.erfassen(actionId = actionId, ean = ean)) {
-                            popUpTo(Routes.SCAN) { inclusive = true }
-                        }
-                    },
-                )
-            }
-
             composable(
                 route = Routes.DETAIL,
                 arguments = listOf(navArgument("id") { type = NavType.LongType }),
@@ -208,7 +199,6 @@ fun GzgApp(navController: NavHostController = rememberNavController()) {
                 ErfassenScreen(
                     onFertig = { navController.popBackStack() },
                     onAbbrechen = { navController.popBackStack() },
-                    onScannen = { navController.navigate(Routes.SCAN) },
                     onEinreichen = { submissionId ->
                         // Das Formular ersetzt die Erfassung im Verlauf: Zurueck
                         // fuehrt dann zur Liste, nicht in ein Formular, das man

@@ -25,6 +25,7 @@ data class AccountEntity(
     val email: String? = null,
     val anrede: String? = null,
     val geburtsdatum: LocalDate? = null,
+    val bic: String? = null,
     val createdAt: Instant,
 )
 
@@ -54,6 +55,10 @@ data class PromoActionEntity(
     val retailers: List<String>,
     val eans: List<String>,
     val imageUrl: String?,
+    val limitAnzahl: Int? = null,
+    val limitZeitraum: String? = null,
+    val limitReset: String? = null,
+    val limitErschoepft: Boolean = false,
     val source: String,
     val isManual: Boolean = false,
     val lastSeenAt: Instant? = null,
@@ -116,4 +121,19 @@ data class WatchlistEntity(
     @PrimaryKey val actionId: String,
     val imWagen: Boolean = false,
     val addedAt: Instant,
+)
+
+/**
+ * Eine gestellte Erinnerung.
+ *
+ * Eigene Tabelle statt einer Spalte an der Aktion: Aktionen werden beim
+ * Feed-Abgleich ersetzt, eine gestellte Erinnerung soll das ueberleben. Der
+ * Zeitpunkt steht mit dabei, damit die App nach einem Neustart weiss, was sie
+ * neu stellen muss — Alarme des Systems ueberleben einen Neustart nicht.
+ */
+@Entity(tableName = "reminders")
+data class ErinnerungEntity(
+    @PrimaryKey val actionId: String,
+    val faelligAm: Instant,
+    val titel: String,
 )

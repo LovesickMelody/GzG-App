@@ -9,6 +9,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.gzgtracker.core.Bonauswertung
+import de.gzgtracker.core.Bonlayout
 import de.gzgtracker.core.Kassenbon
 import de.gzgtracker.core.Textstueck
 import kotlinx.coroutines.Dispatchers
@@ -112,7 +113,63 @@ class BonLeser @Inject constructor(
     /** Was die Texterkennung hergab: Zeilen mit Lage, dazu der rohe Text. */
     private data class Erkanntes(val stuecke: List<Textstueck>, val roh: String)
 
-    private suspend fun erkenneText(bitmap: Bitmap): Erkanntes =
+    /**
+     * Liest das Bild — bei langen Bons in ueberlappenden Streifen.
+     *
+     * Warum in Streifen: Die Erkennung arbeitet mit einer festen inneren
+     * Groesse. Ein ganzer Kassenbon auf einem Bild heisst deshalb wenige
+     * Bildpunkte je Zeile, und dann liest sie nur noch aus naechster Naehe
+     * etwas. Genau das war am Geraet das Problem — nur laesst sich ein Bon,
+     * der vollstaendig zu sehen sein muss, nicht aus naechster Naehe
+     * fotografieren.
+     *
+     * Jeder Streifen wird einzeln gelesen und bekommt so ein Vielfaches an
+     * Bildpunkten je Zeile. Die Rahmen werden um den Anfang des Streifens
+     * verschoben, damit sie wieder aufs ganze Bild passen; die Ueberlappung
+     * verhindert, dass eine Zeile genau an der Schnittkante verlorengeht.
+     */
+    private suspend fun erkenneText(bitmap: Bitmap): Erkanntes {
+        val streifen = teileAuf(bitmap)
+        val stuecke = mutableListOf<Textstueck>()
+        val texte = mutableListOf<String>()
+
+        for ((oben, ausschnitt) in streifen) {
+            val ergebnis = erkenneEinzeln(ausschnitt)
+            if (ausschnitt != bitmap) ausschnitt.recycle()
+            texte += ergebnis.roh
+            stuecke += ergebnis.stuecke.map { stueck ->
+                stueck.copy(oben = stueck.oben + oben, unten = stueck.unten + oben)
+            }
+        }
+
+        return Erkanntes(Bonlayout.vereinige(stuecke), texte.joinToString("\n"))
+    }
+
+    /**
+     * Zerlegt ein hohes Bild in ueberlappende Streifen.
+     *
+     * Kurze Bilder bleiben, wie sie sind — ein Kassenzettel mit fuenf Zeilen
+     * braucht das nicht, und jeder zusaetzliche Durchgang kostet Zeit.
+     */
+    private fun teileAuf(bitmap: Bitmap): List<Pair<Int, Bitmap>> {
+        if (bitmap.height <= STREIFENHOEHE) return listOf(0 to bitmap)
+
+        val schritt = STREIFENHOEHE - UEBERLAPPUNG
+        val streifen = mutableListOf<Pair<Int, Bitmap>>()
+        var oben = 0
+        while (oben < bitmap.height) {
+            val hoehe = minOf(STREIFENHOEHE, bitmap.height - oben)
+            // Ein Reststueck von wenigen Punkten bringt nichts und schneidet
+            // hoechstens eine Zeile in der Mitte durch.
+            if (hoehe < UEBERLAPPUNG && streifen.isNotEmpty()) break
+            streifen += oben to Bitmap.createBitmap(bitmap, 0, oben, bitmap.width, hoehe)
+            oben += schritt
+        }
+        Log.i(TAG, "Bon in ${streifen.size} Streifen gelesen (${bitmap.height} Punkte hoch)")
+        return streifen
+    }
+
+    private suspend fun erkenneEinzeln(bitmap: Bitmap): Erkanntes =
         suspendCancellableCoroutine { fortsetzung ->
             // Drehung 0: Das Bild wurde beim Uebernehmen schon aufgerichtet.
             erkenner.process(InputImage.fromBitmap(bitmap, 0))
@@ -135,5 +192,15 @@ class BonLeser @Inject constructor(
 
     private companion object {
         const val TAG = "BonLeser"
+
+        /**
+         * Hoehe eines Streifens in Bildpunkten. Etwa so hoch wie ein Bildschirm
+         * — genug fuer ein bis zwei Dutzend Bonzeilen, wenig genug, dass jede
+         * Zeile noch reichlich Bildpunkte hat.
+         */
+        const val STREIFENHOEHE = 1400
+
+        /** Ueberlappung, damit keine Zeile genau an der Schnittkante verschwindet. */
+        const val UEBERLAPPUNG = 200
     }
 }
