@@ -33,9 +33,6 @@ object Erinnerungen {
 
     private const val TAG = "Erinnerungen"
 
-    /** Wie weit das System die Erinnerung zum Buendeln verschieben darf. */
-    private const val FENSTER_MS = 30L * 60 * 1000
-
     const val EXTRA_AKTION = "aktionId"
     const val EXTRA_TITEL = "titel"
 
@@ -63,22 +60,21 @@ object Erinnerungen {
     /**
      * Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt.
      *
-     * `setWindowAndAllowWhileIdle` statt `set`: Ein gewoehnlicher Wecker wird im
+     * `setAndAllowWhileIdle` statt `set`: Ein gewoehnlicher Wecker wird im
      * Doze-Modus bis zum naechsten Wartungsfenster zurueckgehalten, und das kann
      * ueber Nacht Stunden bedeuten. Eine Erinnerung, die am Tag des
      * Einsendeschlusses erst am Nachmittag ankommt, kommt zu spaet.
      *
      * `AndWhileIdle` weckt auch aus Doze heraus und braucht trotzdem **keine**
-     * Sonderberechtigung — anders als ein exakter Wecker. Das Fenster von einer
-     * halben Stunde laesst dem System weiter Spielraum zum Buendeln; genau
-     * punktgenau muss eine Fristerinnerung nicht sein.
+     * Sonderberechtigung — anders als ein exakter Wecker. Genau ist der Wecker
+     * damit weiterhin nicht, und das ist richtig so: Das System darf ihn
+     * verschieben und buendeln, es laesst ihn nur nicht mehr liegen.
      */
     fun stelle(context: Context, aktionId: String, titel: String, faelligAm: Instant) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        manager.setWindowAndAllowWhileIdle(
+        manager.setAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             faelligAm.toEpochMilli(),
-            FENSTER_MS,
             absicht(context, aktionId, titel),
         )
         Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt")

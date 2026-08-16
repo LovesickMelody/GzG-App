@@ -499,9 +499,9 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   stand es hier auch. Im Doze-Modus hält Android einen solchen Wecker aber bis zum
   nächsten Wartungsfenster zurück, und über Nacht sind das Stunden. Am Tag des
   Einsendeschlusses ist eine Erinnerung, die erst nachmittags ankommt, wertlos. Jetzt
-  `setWindowAndAllowWhileIdle` mit einer halben Stunde Fenster: weckt aus Doze heraus,
-  lässt dem System weiter Spielraum zum Bündeln und braucht trotzdem keine
-  Sonderberechtigung.
+  `setAndAllowWhileIdle`: weckt aus Doze heraus, bleibt dabei ungenau — das System darf
+  weiter verschieben und bündeln, es lässt den Wecker nur nicht mehr liegen — und
+  braucht trotzdem keine Sonderberechtigung.
 - **Wecker werden von einem Empfänger neu gestellt, nicht erst beim App-Start** — die
   Zeile darüber stand schon länger so da, gerufen hat `stelleErinnerungenNeu()` aber
   niemand. Eine Erinnerung fiel damit beim nächsten Neustart still aus, und gemerkt hat
