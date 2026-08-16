@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Ab Android 12. Zwei getrennte Regelwerke, und der Unterschied ist der ganze
+  Punkt:
+
+  cloud-backup    geht auf Google-Server. Hier steht ausschliesslich, was
+                  niemanden etwas angeht: die Einstellungen.
+  device-transfer laeuft direkt von Geraet zu Geraet, ohne Umweg. Hier darf
+                  alles mit, damit ein Geraetewechsel nicht bedeutet, jede
+                  Einreichung neu einzutippen.
+
+  Die Datenbank enthaelt IBAN, BIC, Geburtsdatum, Anschrift, Telefon und
+  E-Mail — eine vollstaendige Identitaet samt Bankverbindung. Die README
+  verspricht, dass die Daten auf dem Geraet bleiben, und genau das gilt jetzt
+  auch fuer die Sicherung. Bonfotos zeigen Einkaeufe und gehoeren aus demselben
+  Grund nicht in die Cloud.
+-->
 <data-extraction-rules>
     <cloud-backup>
         <include
-            domain="database"
-            path="." />
-        <include
-            domain="file"
-            path="receipts/" />
-        <include
             domain="sharedpref"
             path="." />
+        <exclude
+            domain="database"
+            path="." />
+        <exclude
+            domain="file"
+            path="receipts/" />
     </cloud-backup>
     <device-transfer>
         <include

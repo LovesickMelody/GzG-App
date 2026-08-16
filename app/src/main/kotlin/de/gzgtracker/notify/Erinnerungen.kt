@@ -20,14 +20,12 @@ import java.time.Instant
  * Erinnerungen an ablaufende Aktionen.
  *
  * Bewusst mit dem [AlarmManager] und ohne zusaetzliche Bibliothek: Es geht um eine
- * Meldung zu einem Zeitpunkt, mehr nicht. Der Alarm ist **ungenau** gestellt — das
- * System darf ihn um bis zu einer Stunde verschieben und dafuer mit anderen Weckern
- * buendeln. Fuer eine Erinnerung an eine Frist, die noch Tage laeuft, ist das genau
- * richtig, und es erspart die Sonderberechtigung fuer exakte Alarme.
+ * Meldung zu einem Zeitpunkt, mehr nicht. Der Alarm ist **ungenau** gestellt, aber
+ * doze-fest — die Begruendung steht bei [stelle].
  *
  * Was das System nicht kann: Alarme ueberleben keinen Neustart des Telefons. Deshalb
- * liegt jede gestellte Erinnerung auch in der Datenbank, und die App stellt sie beim
- * Start neu.
+ * liegt jede gestellte Erinnerung auch in der Datenbank, und der `NeustartEmpfaenger`
+ * stellt sie nach dem Hochfahren wieder.
  */
 object Erinnerungen {
 
@@ -59,10 +57,22 @@ object Erinnerungen {
     fun darfMelden(context: Context): Boolean =
         NotificationManagerCompat.from(context).areNotificationsEnabled()
 
-    /** Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt. */
+    /**
+     * Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt.
+     *
+     * `setAndAllowWhileIdle` statt `set`: Ein gewoehnlicher Wecker wird im
+     * Doze-Modus bis zum naechsten Wartungsfenster zurueckgehalten, und das kann
+     * ueber Nacht Stunden bedeuten. Eine Erinnerung, die am Tag des
+     * Einsendeschlusses erst am Nachmittag ankommt, kommt zu spaet.
+     *
+     * `AndWhileIdle` weckt auch aus Doze heraus und braucht trotzdem **keine**
+     * Sonderberechtigung — anders als ein exakter Wecker. Genau ist der Wecker
+     * damit weiterhin nicht, und das ist richtig so: Das System darf ihn
+     * verschieben und buendeln, es laesst ihn nur nicht mehr liegen.
+     */
     fun stelle(context: Context, aktionId: String, titel: String, faelligAm: Instant) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        manager.set(
+        manager.setAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             faelligAm.toEpochMilli(),
             absicht(context, aktionId, titel),

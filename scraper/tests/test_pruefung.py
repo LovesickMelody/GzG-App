@@ -162,3 +162,80 @@ class TestListe:
             Kontext(seitentext="nichts davon", heute=HEUTE, nur_gestartete=True),
         )
         assert len(befund.verstoesse) == 3
+
+
+class TestEinreichungAmOrt:
+    """
+    Eine fremde Seite darf nicht bestimmen, wohin die App zum Einreichen führt.
+
+    Dort füllt die App auf Knopfdruck IBAN, Bankverbindung und Anschrift in die
+    Formularfelder — ein untergeschobenes Ziel bekäme genau das.
+    """
+
+    def entdeckt(self) -> Kontext:
+        return Kontext(heute=HEUTE, eigene_herkunft=True)
+
+    def test_fremder_host_abgelehnt(self):
+        befund = pruefe(
+            aktion(
+                url="https://airwick.justsnap.invalid/",
+                submit_url="https://boeses.invalid/formular",
+            ),
+            self.entdeckt(),
+        )
+        assert not befund.darf_veroeffentlichen
+        assert "gehört nicht zu" in befund.verstoesse[0]
+
+    def test_gleicher_host_geht_durch(self):
+        befund = pruefe(
+            aktion(
+                url="https://airwick.justsnap.invalid/",
+                submit_url="https://airwick.justsnap.invalid/teilnehmen",
+            ),
+            self.entdeckt(),
+        )
+        assert befund.darf_veroeffentlichen
+
+    def test_unterdomaene_gehoert_dazu(self):
+        """Die Kampagne sitzt auf der Subdomain, das Formular auf der Hauptdomain."""
+        befund = pruefe(
+            aktion(
+                url="https://airwick.justsnap.invalid/",
+                submit_url="https://justsnap.invalid/einreichen",
+            ),
+            self.entdeckt(),
+        )
+        assert befund.darf_veroeffentlichen
+
+    def test_www_ist_derselbe_host(self):
+        befund = pruefe(
+            aktion(
+                url="https://justsnap.invalid/aktion",
+                submit_url="https://www.justsnap.invalid/einreichen",
+            ),
+            self.entdeckt(),
+        )
+        assert befund.darf_veroeffentlichen
+
+    def test_nackte_endung_gilt_nicht_als_verwandt(self):
+        """Sonst wäre jeder .invalid-Host mit jedem anderen verwandt."""
+        befund = pruefe(
+            aktion(url="https://justsnap.invalid/", submit_url="https://invalid/x"),
+            self.entdeckt(),
+        )
+        assert not befund.darf_veroeffentlichen
+
+    def test_portale_duerfen_woanders_einreichen(self):
+        """
+        Bei mydealz ist der Unterschied der Zweck: Der Artikel steht im Portal,
+        das Formular beim Hersteller. Ohne diese Ausnahme fiele jede Portal-
+        Aktion durch.
+        """
+        befund = pruefe(
+            aktion(
+                url="https://www.mydealz.invalid/deals/nivea-123",
+                submit_url="https://nivea.justsnap.invalid/teilnehmen",
+            ),
+            Kontext(heute=HEUTE),
+        )
+        assert befund.darf_veroeffentlichen

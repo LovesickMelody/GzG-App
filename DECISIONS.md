@@ -205,8 +205,22 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Entdeckung über Certificate-Transparency-Logs** — Aktionsplattformen legen je Kampagne
   eine Subdomain an (belegt: `airwick.justsnap.eu`), jede Subdomain braucht ein Zertifikat,
   jedes Zertifikat steht nach RFC 6962 in einem öffentlichen Protokoll. Eine Abfrage bei
-  crt.sh am Tag liefert damit jede neue Kampagne, rein passiv und ohne Anfrage an die
-  Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht auffindbar sind.
+  Zertifikatsprotokoll am Tag liefert damit jede neue Kampagne, rein passiv und ohne
+  Anfrage an die Zielsysteme. Sitemaps daneben, weil pfadbasierte Plattformen so nicht
+  auffindbar sind.
+- **Certspotter statt crt.sh — weil crt.sh es per `robots.txt` verbietet** — der erste
+  Probelauf gegen die echte Plattform fand null Kandidaten, und zwar nicht wegen eines
+  Fehlers: Unser Fetcher liest `robots.txt` und hält sich daran, und crt.sh untersagt den
+  Abruf. Das ist keine Formalie, die man wegdrücken sollte — die ganze Quellenart steht
+  und fällt damit, sich als gut erzogener Leser öffentlicher Register zu verhalten. Also
+  der Weg über die dokumentierte API von SSLMate, die genau für diesen Zweck da ist und
+  keinen Schlüssel braucht. Dieselben Protokolle, anderes Ausgabeformat. `crt.sh` bleibt
+  als `ct_anbieter` wählbar, falls jemand mit ausdrücklicher Erlaubnis läuft.
+- **Die Certspotter-Ausgabe wird seitenweise geholt, und ein Abbruch steht im Log** — die
+  API deckelt bei 100 Einträgen je Abruf. Ohne Weiterblättern fehlten bei einer großen
+  Plattform genau die Kampagnen, die den Ausschlag geben; mit stillem Abbruch nach fünf
+  Seiten läse sich ein halbes Ergebnis wie ein vollständiges. Deshalb beides: begrenzen
+  **und** sagen, dass begrenzt wurde.
 - **Was das Zertifikat findet, ist noch keine laufende Aktion** — ein Zertifikat existiert
   regelmäßig Wochen vor dem Kampagnenstart. So eine Aktion zu veröffentlichen verrät die
   Marketingplanung des Herstellers, den *niemand* um eine Ankündigung gebeten hat. Deshalb
@@ -239,6 +253,13 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Der Betrag muss wörtlich im Seitentext stehen** — die wichtigste Regel der Prüfschicht.
   Sie kostet gelegentlich einen korrekten Betrag, der nur als Bild vorliegt, und verhindert
   dafür, dass jemand ein Produkt kauft, weil bei uns eine Zahl stand, die es nirgends gab.
+- **Der Einreichungslink muss zur Aktionsseite gehören** — `submit_url` stammt aus dem
+  Seitentext, und den schreibt der Betreiber der Seite, nicht wir. Auf genau diesen Link
+  führt die App zum Einreichen, und dort füllt sie auf Knopfdruck IBAN, Bankverbindung
+  und Anschrift in die Formularfelder. Ein untergeschobenes Ziel bekäme das geschenkt.
+  Deshalb die Regel `einreichung_am_ort` bei entdeckten Quellen: gleicher Host oder
+  Unterdomäne. Für Portale gilt sie nicht — dort *ist* der Wechsel vom Artikel zum
+  Herstellerformular der Zweck.
 - **Nutzungsvorbehalte werden auch in Prosa gesucht** — § 44b UrhG erlaubt automatisiertes
   Auswerten nur, solange kein maschinenlesbarer Vorbehalt erklärt ist, und das LG Hamburg
   hat entschieden, dass dafür auch natürliche Sprache genügt. `robots.txt` allein zu prüfen
@@ -248,6 +269,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   gewachsenen Portalquellen haben keinen Seitentext, also läuft dort die Betragsprüfung
   nicht. Eine Regel ohne Grundlage darf nicht raten, sonst verlören die Portalquellen
   schlagartig alles.
+- **Ein Lauf für eine einzelne Quelle lässt die anderen in Ruhe** — `fuehre_zusammen`
+  übernahm bisherige Einträge nur für *ausgefallene* Quellen. Quellen, die gar nicht
+  liefen, standen weder dort noch bei den frisch geholten — ihre Aktionen fielen also
+  stillschweigend heraus. Ein `--only`-Probelauf hätte auf `main` den Feed auf diese eine
+  Quelle eingedampft und das committet; genau diesen Aufruf empfiehlt die README für jede
+  neue Quelle. Jetzt gilt: nicht gelaufen heißt bisheriger Stand bleibt. Der Unterschied
+  zu „gelaufen, nichts gefunden" bleibt erhalten — die Quelle steht dann mit leerer Liste
+  im Ergebnis, und ihre alten Einträge verschwinden zu Recht.
 - **Jede Ablehnung steht mit Begründung im Log** — eine still verschwundene Aktion ist von
   einer nie gefundenen nicht zu unterscheiden. Wer im Actions-Lauf nachsieht, soll lesen
   können, *warum* eine Aktion fehlt.
@@ -258,6 +287,23 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   regeln das ohne Codeänderung.
 - **Ohne API-Schlüssel läuft alles weiter** — der Lauf meldet das einmal und wertet nur
   JSON-LD aus. Sonst wäre die CI von einem Secret abhängig, das in keinem Fork existiert.
+- **Bekannte Kampagnen werden nicht jeden Tag neu gelesen** — der Kostenhebel. Ohne die
+  Wiederverwendung zahlt jeder Lauf das Volle: Eine gestern gefundene Kampagne bekäme
+  heute wieder einen Abruf und einen Modellaufruf, obwohl sie unverändert in
+  `actions.json` steht. Die Nutzerzahl spielt dabei nie eine Rolle — die App lädt nur die
+  fertige Datei, das Modell läuft einmal am Tag in Actions.
+- **Welcher Wochentag eine Kampagne aufgefrischt wird, entscheidet ihre Adresse** — ein
+  Zeitstempel je Aktion wäre der naheliegende Weg gewesen, hätte aber ein neues Feld in
+  `actions.json` gebraucht, und dieses Format liest die App. Ein Hash der Adresse modulo
+  `auffrischen_tage` ist stabil (dieselbe Kampagne trifft immer denselben Tag),
+  gleichverteilt (die Last fällt nicht an einem Tag an) und braucht kein Schema.
+- **Ohne Frist wird immer neu gelesen** — die einzige Stelle, an der „keine Frist bekannt"
+  streng ausgelegt wird. Sonst lässt sich nicht sagen, ob die Kampagne noch läuft, und
+  eine abgelaufene weiterzuschleppen wäre schlimmer als ein Abruf zu viel.
+- **`--only` startet auch eine abgeschaltete Quelle** — die README schreibt für jede neue
+  Quelle einen Probelauf vor, bevor sie scharf geschaltet wird. Vorher filterte `--only`
+  erst *nach* dem Aktiv-Filter, und der empfohlene Befehl endete bei „Keine aktive Quelle".
+  Wer eine Quelle ausdrücklich benennt, meint sie auch.
 
 ## Design
 
@@ -469,18 +515,45 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   stehen. Am echten Feed geprüft, nicht nur an erfundenen Beispielen.
 - **Erinnerungen mit dem AlarmManager, ungenau gestellt** — für eine Meldung zu einem
   Zeitpunkt braucht es keine Bibliothek, und ein ungenauer Alarm erspart die
-  Sonderberechtigung für exakte Wecker. Das System darf ihn um bis zu eine Stunde
-  verschieben; bei einer Frist, die noch Tage läuft, ist das ohne Belang. Gestellte
-  Erinnerungen liegen in der Datenbank und werden beim App-Start neu gestellt — Wecker
-  überleben keinen Neustart des Telefons.
+  Sonderberechtigung für exakte Wecker. Gestellte Erinnerungen liegen in der Datenbank,
+  weil Wecker keinen Neustart überleben.
+- **Ungenau ja, aber doze-fest** — `set()` klang nach „höchstens eine Stunde später“, so
+  stand es hier auch. Im Doze-Modus hält Android einen solchen Wecker aber bis zum
+  nächsten Wartungsfenster zurück, und über Nacht sind das Stunden. Am Tag des
+  Einsendeschlusses ist eine Erinnerung, die erst nachmittags ankommt, wertlos. Jetzt
+  `setAndAllowWhileIdle`: weckt aus Doze heraus, bleibt dabei ungenau — das System darf
+  weiter verschieben und bündeln, es lässt den Wecker nur nicht mehr liegen — und
+  braucht trotzdem keine Sonderberechtigung.
+- **Wecker werden von einem Empfänger neu gestellt, nicht erst beim App-Start** — die
+  Zeile darüber stand schon länger so da, gerufen hat `stelleErinnerungenNeu()` aber
+  niemand. Eine Erinnerung fiel damit beim nächsten Neustart still aus, und gemerkt hat
+  man es erst nach der Frist. Jetzt hängt ein Empfänger an `BOOT_COMPLETED` und
+  `MY_PACKAGE_REPLACED` — ein App-Update räumt die Wecker genauso ab. Der Aufruf beim
+  App-Start bleibt zusätzlich stehen, für die Fälle, in denen der Empfänger übergangen
+  wird; erneutes Stellen ersetzt den Wecker nur.
+- **Der eingebettete Browser zeigt seinen Gastgeber, und bei fremder Domain fragt die App
+  nach** — „Daten einfügen" schreibt IBAN, Bankverbindung, Geburtsdatum und Anschrift in
+  die Felder der *gerade geladenen* Seite, und der Browser folgt jeder Weiterleitung.
+  Ohne Angabe sieht eine fremde Domain aus wie die Aktionsseite selbst. Unterdomänen
+  gelten als dieselbe Herkunft (`airwick.justsnap.eu` und `justsnap.eu` sind eine
+  Kampagne), eine nackte Endung nicht — sonst wäre jeder `.de`-Host mit jedem anderen
+  verwandt. Ohne geladene Seite wird **nicht** gewarnt: Eine Warnung ohne Grundlage lehrt
+  nur, sie wegzuklicken.
 - **Der Barcode-Scanner ist entfallen** — mit ihm CameraX und die Barcode-Bibliothek. Er
   löste einen Sonderfall („steht im Laden vor einem Produkt"), den der tägliche Weg nicht
   braucht, und kostete zwei Bibliotheken.
 
 ## Sonstiges
 
-- **Backup erlaubt, Bonfotos eingeschlossen** — bei Geräteswechsel sollen Belege
-  mitkommen; der Export-Cache ist ausgenommen.
+- **Backup nur noch für die Einstellungen, Datenbank und Belege bleiben auf dem Gerät** —
+  die frühere Regel nahm alles mit, auch in die Cloud-Sicherung. In der Datenbank stehen
+  aber IBAN, BIC, Geburtsdatum, Anschrift, Telefon und E-Mail; in `receipts/` liegen die
+  Bonfotos. Das ist genau das, was der erste Satz der README ausschließt. Ab Android 12
+  trennt `data-extraction-rules` beides: `cloud-backup` bekommt nur die
+  Einstellungsdatei, `device-transfer` weiterhin alles — ein Geräteswechsel kostet dort
+  also keine Einreichung. Auf Android 8 bis 11 gibt es diese Trennung nicht, dort steht
+  nur die Einstellungsdatei drin; der Preis ist ein Geräteswechsel ohne Einreichungen,
+  und das ist die günstigere Seite der Abwägung.
 - **Deutsche Bezeichner in der App-eigenen Fachlogik, englische in Framework-Nähe** —
   `pruefeKonto`, `belegteKonten`, `vorschlag` lesen sich in der Domäne natürlicher;
   Room-Entities und Compose-Signaturen bleiben beim üblichen Englisch.

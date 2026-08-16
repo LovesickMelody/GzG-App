@@ -19,7 +19,6 @@ import os
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
-from urllib.parse import urlparse
 
 import yaml
 
@@ -29,7 +28,7 @@ from .extract import Modellextraktor
 from .extract.modell import STANDARD_EFFORT as EFFORT_VORGABE
 from .extract.modell import STANDARD_MODELL as MODELL_VORGABE
 from .fetch import Fetcher
-from .models import Action
+from .models import Action, adressenschluessel
 from .pruefung import Kontext, pruefe_liste
 from .registry import hole as hole_parser
 from .tdm import Vorbehaltspruefer
@@ -41,10 +40,35 @@ STANDARD_QUELLEN = WURZEL / "scraper" / "sources.yaml"
 STANDARD_AUSGABE = WURZEL / "data" / "actions.json"
 
 
-def lade_quellen(pfad: Path) -> list[dict]:
+def lade_quellen(pfad: Path, nur: str | None = None) -> list[dict]:
+    """
+    Liest die aktiven Quellen aus ``sources.yaml``.
+
+    ``nur`` uebergeht dabei ``enabled``. Wer eine Quelle ausdruecklich benennt,
+    meint sie auch — sonst liesse sich eine neue Quelle nie probelaufen lassen,
+    bevor sie scharf geschaltet ist, und genau das ist der Weg, den die README
+    fuer jede neue Quelle vorschreibt.
+    """
     with pfad.open(encoding="utf-8") as datei:
         inhalt = yaml.safe_load(datei) or {}
-    return [q for q in inhalt.get("sources", []) if q.get("enabled", True)]
+    quellen = inhalt.get("sources", [])
+
+    if nur:
+        return [q for q in quellen if q.get("name") == nur]
+
+    return [q for q in quellen if q.get("enabled", True)]
+
+
+def eingeschaltete_namen(pfad: Path) -> set[str]:
+    """
+    Namen aller eingeschalteten Quellen — unabhaengig von ``--only``.
+
+    Wird gebraucht, um zu erkennen, welche Quellen ein Lauf uebersprungen hat.
+    Bewusst ohne die abgeschalteten: Wer eine Quelle auf ``enabled: false``
+    setzt, will ihre Aktionen aus dem Feed haben, und beim naechsten Lauf
+    verschwinden sie auch.
+    """
+    return {q["name"] for q in lade_quellen(pfad) if q.get("name")}
 
 
 def lade_bestand(pfad: Path) -> dict:
@@ -183,26 +207,6 @@ def filtere_arten(aktionen: list[Action], quelle: dict) -> list[Action]:
     return behalten
 
 
-def _adressenschluessel(adresse: str | None) -> str | None:
-    """
-    Vereinheitlicht eine Einreichungsadresse fuer den Vergleich.
-
-    Zwei Portale verlinken dasselbe Formular gern leicht verschieden —
-    "https://scondoo.de/?cashbackDetail=81788" gegen
-    "https://scondoo.de?cashbackDetail=81788". Verglichen wird deshalb ohne
-    Schema, ohne "www." und ohne ueberfluessige Schraegstriche.
-    """
-    if not adresse:
-        return None
-    teile = urlparse(adresse.strip())
-    host = teile.netloc.casefold().removeprefix("www.")
-    if not host:
-        return None
-    pfad = teile.path.rstrip("/")
-    frage = f"?{teile.query}" if teile.query else ""
-    return f"{host}{pfad}{frage}"
-
-
 def _vollstaendigkeit(eintrag: dict) -> int:
     """Wie viele Felder gefuellt sind — je mehr, desto besser als Grundlage."""
     return sum(1 for wert in eintrag.values() if wert not in (None, "", []))
@@ -228,7 +232,7 @@ def fasse_dubletten_zusammen(aktionen: list[dict]) -> list[dict]:
     ohne_adresse: list[dict] = []
 
     for eintrag in aktionen:
-        schluessel = _adressenschluessel(eintrag.get("submit_url"))
+        schluessel = adressenschluessel(eintrag.get("submit_url"))
         if schluessel is None:
             ohne_adresse.append(eintrag)
         else:
@@ -275,6 +279,7 @@ def fuehre_zusammen(
     bestand: dict,
     neu_je_quelle: dict[str, list[Action]],
     ausgefallen: set[str],
+    uebersprungen: set[str] | frozenset[str] = frozenset(),
 ) -> list[dict]:
     """
     Baut die neue Aktionsliste.
@@ -282,11 +287,22 @@ def fuehre_zusammen(
     Fuer ausgefallene Quellen werden die bisherigen Eintraege uebernommen, fuer
     alle anderen die frisch geholten. Aktionen aus Quellen, die es in
     ``sources.yaml`` nicht mehr gibt, fallen weg.
+
+    ``uebersprungen`` sind eingeschaltete Quellen, die dieser Lauf gar nicht
+    angefasst hat — bei ``--only`` also alle anderen. Ihre Eintraege bleiben
+    ebenfalls stehen. Ohne das loeschte ein Probelauf mit ``--only`` den halben
+    Feed: Die uebrigen Quellen stehen weder in ``neu_je_quelle`` noch in
+    ``ausgefallen``, ihre Aktionen fielen also stillschweigend hinten runter —
+    und auf ``main`` haette der naechste Commit das festgeschrieben.
+
+    Der Unterschied zu einer Quelle, die sauber gelaufen ist und nichts
+    gefunden hat, bleibt dabei erhalten: Die steht mit leerer Liste in
+    ``neu_je_quelle``, und ihre alten Eintraege verschwinden zu Recht.
     """
     ergebnis: dict[str, dict] = {}
 
     for eintrag in bestand.get("actions", []):
-        if eintrag.get("source") in ausgefallen:
+        if eintrag.get("source") in ausgefallen or eintrag.get("source") in uebersprungen:
             ergebnis[eintrag["id"]] = eintrag
 
     for aktionen in neu_je_quelle.values():
@@ -365,13 +381,22 @@ def main(argv: list[str] | None = None) -> int:
         stream=sys.stdout,
     )
 
-    quellen = lade_quellen(argumente.sources)
-    if argumente.only:
-        quellen = [q for q in quellen if q["name"] == argumente.only]
+    quellen = lade_quellen(argumente.sources, argumente.only)
 
     if not quellen:
-        log.error("Keine aktive Quelle in %s", argumente.sources)
+        if argumente.only:
+            log.error("Quelle %r steht nicht in %s", argumente.only, argumente.sources)
+        else:
+            log.error("Keine aktive Quelle in %s", argumente.sources)
         return 1
+
+    for quelle in quellen:
+        if not quelle.get("enabled", True):
+            log.info(
+                "Quelle %s ist abgeschaltet und läuft nur, weil sie mit --only "
+                "ausdrücklich genannt wurde",
+                quelle["name"],
+            )
 
     fetcher = Fetcher(delay=argumente.delay, respect_robots=not argumente.ignore_robots)
 
@@ -384,6 +409,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     pruefer = Vorbehaltspruefer()
 
+    # Vor der Schleife, nicht danach: Die Erstanbieter-Quellen brauchen den
+    # bisherigen Stand, um bekannte Kampagnen nicht erneut abzurufen und
+    # auszuwerten.
+    bestand = lade_bestand(argumente.output)
+
     neu_je_quelle: dict[str, list[Action]] = {}
     ausgefallen: set[str] = set()
 
@@ -391,7 +421,13 @@ def main(argv: list[str] | None = None) -> int:
         name = quelle["name"]
         log.info("--- Quelle %s ---", name)
         if quelle.get("parser") == "erstanbieter":
-            ergebnis = erstanbieter.sammle(quelle, fetcher, extraktor, pruefer)
+            ergebnis = erstanbieter.sammle(
+                quelle,
+                fetcher,
+                extraktor,
+                pruefer,
+                bekannt=erstanbieter.bekannte_adressen(bestand, name),
+            )
         else:
             ergebnis = sammle_quelle(quelle, fetcher)
         if ergebnis is None:
@@ -399,8 +435,19 @@ def main(argv: list[str] | None = None) -> int:
         else:
             neu_je_quelle[name] = ergebnis
 
-    bestand = lade_bestand(argumente.output)
-    aktionen = fuehre_zusammen(bestand, neu_je_quelle, ausgefallen)
+    # Quellen, die dieser Lauf nicht angefasst hat (bei --only alle anderen).
+    # Ihre Eintraege muessen stehenbleiben, sonst raeumt ein Probelauf den Feed
+    # leer.
+    uebersprungen = eingeschaltete_namen(argumente.sources) - {
+        q["name"] for q in quellen
+    }
+    if uebersprungen:
+        log.info(
+            "Nicht gelaufen, bisheriger Stand bleibt: %s",
+            ", ".join(sorted(uebersprungen)),
+        )
+
+    aktionen = fuehre_zusammen(bestand, neu_je_quelle, ausgefallen, uebersprungen)
 
     schreibe_wenn_geaendert(argumente.output, aktionen)
 

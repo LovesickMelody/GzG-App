@@ -30,6 +30,9 @@ Regel                        Was ohne sie passiert
                              veroeffentlicht und darf vorgemerkt werden.
 ``kein_vorbehalt``           Wir werten eine Quelle aus, die das ausdruecklich
                              untersagt hat (§ 44b UrhG, siehe ``tdm.py``).
+``einreichung_am_ort``       Eine fremde Seite bestimmt, wohin die App zum
+                             Einreichen fuehrt — und dort fuellt sie auf
+                             Knopfdruck IBAN und Anschrift ins Formular.
 ===========================  ==================================================
 
 Bewusst **nicht** hier: der Ablauf-Filter. Den macht ``run.filtere_abgelaufene``
@@ -73,6 +76,12 @@ class Kontext:
     # Grund eines erkannten Nutzungsvorbehalts, sonst None (siehe tdm.py).
     vorbehalt: str | None = None
     heute: date | None = None
+    # Ob ``submit_url`` zur Herkunft der Seite passen muss. Standard ist "nein":
+    # Bei den Portalquellen ist der Unterschied ja der Zweck — ``url`` zeigt auf
+    # den Artikel im Portal, ``submit_url`` auf das Formular des Herstellers.
+    # Nur bei entdeckten Quellen stammen beide aus derselben Seite, und nur dort
+    # kann ein fremder Seitentext das Ziel bestimmen.
+    eigene_herkunft: bool = False
     # Ob noch nicht gestartete Aktionen abgelehnt werden. Standard ist "nein":
     # Ein Portal, das eine Aktion vorab ankuendigt, veroeffentlicht sie damit
     # selbst — da gibt es nichts zu verraten, und wer vormerken will, soll das
@@ -124,6 +133,55 @@ def _schreibweisen(cents: int) -> list[str]:
         formen += [f"{euro}{trenner}{zeichen}" for trenner in ("", " ") for zeichen in ("€", "EUR", "Euro")]
 
     return formen
+
+
+def _gleiche_herkunft(einer: str, anderer: str) -> bool:
+    """
+    Gehoeren zwei Hosts zusammen?
+
+    Gleich, oder der eine eine Unterdomaene des anderen:
+    ``airwick.justsnap.eu`` und ``justsnap.eu`` gehoeren zusammen,
+    ``airwick.justsnap.eu`` und ``boeses.example`` nicht.
+
+    Bewusst ohne Public-Suffix-Liste — die waere eine weitere Abhaengigkeit fuer
+    einen Vergleich, den diese Regel nicht braucht. Der Preis: Zwei Hosts unter
+    derselben oeffentlichen Endung gaelten als verwandt, wenn einer davon *nur*
+    die Endung waere. Deshalb muss jeder Host mindestens einen Punkt haben.
+    """
+    einer, anderer = einer.casefold(), anderer.casefold()
+    if "." not in einer or "." not in anderer:
+        return False
+    return (
+        einer == anderer
+        or einer.endswith("." + anderer)
+        or anderer.endswith("." + einer)
+    )
+
+
+def _einreichung_am_ort(aktion: Action, kontext: Kontext) -> str | None:
+    """
+    Der Einreichungslink muss zur Seite gehoeren, aus der die Aktion stammt.
+
+    Bei entdeckten Quellen liest ein Modell den Seitentext — und den schreibt
+    nicht wir, sondern wer auch immer die Seite betreibt. Ohne diese Regel
+    koennte eine Seite bestimmen, wohin die App zum Einreichen fuehrt.
+
+    Das waere kein theoretischer Schaden: Auf der Einreichungsseite fuellt die
+    App auf Knopfdruck IBAN, Bankverbindung, Geburtsdatum und Anschrift in die
+    Formularfelder. Ein untergeschobenes Ziel bekaeme genau das.
+    """
+    if not kontext.eigene_herkunft or not aktion.submit_url or not aktion.url:
+        return None
+
+    ziel = urlparse(aktion.submit_url).netloc.removeprefix("www.")
+    quelle = urlparse(aktion.url).netloc.removeprefix("www.")
+    if not ziel or not quelle:
+        return None
+
+    if _gleiche_herkunft(ziel, quelle):
+        return None
+
+    return f"Einreichungslink {ziel!r} gehört nicht zu {quelle!r}"
 
 
 def _betrag_belegt(aktion: Action, kontext: Kontext) -> str | None:
@@ -225,6 +283,7 @@ def _kein_vorbehalt(aktion: Action, kontext: Kontext) -> str | None:
 REGELN = [
     ("pflichtfelder", _pflichtfelder),
     ("kein_vorbehalt", _kein_vorbehalt),
+    ("einreichung_am_ort", _einreichung_am_ort),
     ("gestartet", _gestartet),
     ("frist_plausibel", _frist_plausibel),
     ("betrag_belegt", _betrag_belegt),
