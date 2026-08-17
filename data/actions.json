@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-16T15:59:21Z",
+  "generated_at": "2026-08-17T04:43:26Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,7 +11,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBBLUpaTjVXRTd0YXlUeW5PRDFoR2VwWTFXajhOQmJvV6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHVWclc4OC1NOFlRc2pQT0l2SzZCajhrRkFHUFk3eGRuo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBFemZtclIwOGJCUUs5TmFtenBEanJGNkdULXduU3BLRqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEVkLUx4S0xvWjdaOEVHaTlTdVBhNXhHWVJHSnRDSW43o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -51,29 +51,6 @@
       "source": "mydealz"
     },
     {
-      "id": "f4c5d90a58a6",
-      "title": "100% Cashback auf Borotalco Deo",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-08-16",
-      "submission_deadline": "2026-08-16",
-      "url": "https://www.mydealz.de/deals/gzg-100-cashback-auf-borotalco-deo-2817904",
-      "submit_url": null,
-      "requirements": [],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/jpe9Q/2817904_1/re/150x150/qt/55/2817904_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "2f6831f16314",
       "title": "1x Milka Eisprodukt",
       "brand": "Milka",
@@ -83,7 +60,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/gzg-1x-milka-eisprodukt-2818362",
-      "submit_url": "https://milka-oreo-icecream-cashback.de/Promo?influencer=foodnewsgermany",
+      "submit_url": null,
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -249,7 +226,7 @@
       "valid_to": "2026-10-31",
       "submission_deadline": "2026-10-31",
       "url": "https://www.mydealz.de/deals/gzg-gratis-testen-sensodyne-proschmelz-clincal-zahnschmelz-protect-2819890",
-      "submit_url": "https://www.erlebe-haleon.de/deals/proschmelz-clinical-protect/",
+      "submit_url": null,
       "requirements": [
         "bonfoto",
         "handy_verifizierung",
@@ -259,7 +236,7 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/x1jPB/2819890_1/re/150x150/qt/55/2819890_1.jpg",
-      "limit_anzahl": 25000,
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -299,7 +276,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA1Njg2MTQ&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA1Njg2MTQ&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA2MTE3Nzk&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA2MTE3Nzk&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -323,7 +300,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895673080",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1895877420",
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -359,56 +336,6 @@
       "source": "mydealz"
     },
     {
-      "id": "21c4231ab604",
-      "title": "Rockstar Original Sugar & Blueberry Acai Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 149,
-      "valid_from": "2026-06-01",
-      "valid_to": "2026-12-31",
-      "submission_deadline": "2026-12-31",
-      "url": "https://www.mydealz.de/deals/gzg-rockstar-original-sugar-blueberry-acai-gratis-testen-2805536",
-      "submit_url": "https://www.rockstarenergy.de/geschmacksgarantie",
-      "requirements": [
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Zy5fn/2805536_1/re/150x150/qt/55/2805536_1.jpg",
-      "limit_anzahl": 60000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "1ccdaaba1184",
-      "title": "TENA Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-07-20",
-      "valid_to": "2026-08-16",
-      "submission_deadline": "2026-08-16",
-      "url": "https://www.mydealz.de/deals/gzg-bei-lidl-tena-gratis-testen-2813750",
-      "submit_url": "https://try.tena.com/de/aktionen/gratis-testen/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Lidl",
-        "Norma"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/VG2cr/2813750_1/re/150x150/qt/55/2813750_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "d861248e25f2",
       "title": "endori Gratis Testen Aktion",
       "brand": null,
@@ -426,6 +353,33 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/6DlfQ/2822978_1/re/150x150/qt/55/2822978_1.jpg",
       "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "6bb3738eaefd",
+      "title": "nutella biscuits Gratis Testen",
+      "brand": "Nutella",
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": "2026-09-13",
+      "submission_deadline": "2026-09-13",
+      "url": "https://www.mydealz.de/deals/gzg-nutella-biscuits-gratis-testen-2825851",
+      "submit_url": "https://www.nutella.com/de/de/xp/biscuits-gratistesten/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "handy_verifizierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/juRsX/2825851_1/re/150x150/qt/55/2825851_1.jpg",
+      "limit_anzahl": 50000,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -522,7 +476,7 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://rabattigel.de/wp-content/uploads/2026/06/products-gratis-testen-767x756.png",
-      "limit_anzahl": 7462,
+      "limit_anzahl": 7407,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -599,6 +553,56 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://minusl-gratistesten.de/design-assets/10008/footer_1782731309.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "rabattigel"
+    },
+    {
+      "id": "162fcf047430",
+      "title": "Rockstar Original Sugar & Blueberry Acai",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 149,
+      "valid_from": "2026-06-01",
+      "valid_to": "2026-12-31",
+      "submission_deadline": "2026-12-31",
+      "url": "https://rabattigel.de/rockstar-original-sugar-blueberry-acai-gratis-testen-geld-zurueck/",
+      "submit_url": "https://www.rockstarenergy.de/geschmacksgarantie",
+      "requirements": [
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://www.rockstarenergy.de/geschmacksgarantie/assets/gfx/visual.png?v=1.01.4",
+      "limit_anzahl": 60000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "rabattigel"
+    },
+    {
+      "id": "242a7cfb981a",
+      "title": "Sensodyne Proschmelz Clincal Zahnschmelz Protect",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": "2026-10-31",
+      "submission_deadline": "2026-10-31",
+      "url": "https://rabattigel.de/sensodyne-proschmelz-clincal-zahnschmelz-protect-gratis-testen-geld-zurueck/",
+      "submit_url": "https://www.erlebe-haleon.de/deals/proschmelz-clinical-protect",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "registrierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://rabattigel.de/wp-content/uploads/2026/08/werbung-mobile-768x469.png",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
