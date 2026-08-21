@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T04:37:03Z",
+  "generated_at": "2026-08-21T04:37:35Z",
   "actions": [
     {
       "id": "7f1d1c84fa28",
@@ -11,7 +11,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBCYjc1aU9nNFZ6aUQ0UkRZb3V5YmpEZzRENHhySGEwR6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHZoZjY1N1JVTVNtWlJCUVhpQkVOTFlqQ1RoMVZQRjRLo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBoWndHUkFkQ1pmM2FpelIxZ2FIWHVnZjBfSmd4Nk84NKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEFmODNtTzBIZFRmdFYwV2ljUHVhcGNaT0xkTUZKTG1ho2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -37,7 +37,6 @@
       "submit_url": "https://www.marktguru.de/mb/oyess-honey-vanilla-cashback-6818",
       "requirements": [
         "bonfoto",
-        "strichcode",
         "app"
       ],
       "retailers": [
@@ -195,6 +194,27 @@
       "source": "mydealz"
     },
     {
+      "id": "fd8e3389190c",
+      "title": "GzG - Lipton Sensations PINK",
+      "brand": "Lipton",
+      "type": "gratis_testen",
+      "max_refund_cents": 199,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://www.mydealz.de/deals/lipton-sensations-pink-2827925",
+      "submit_url": null,
+      "requirements": [],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/aAUdy/2827925_1/re/150x150/qt/55/2827925_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "b356ef205980",
       "title": "Jacobs 3in1/2in1 gratis testen ab dem 17.08-26 - 30.09.26",
       "brand": "JACOBS Kaffee",
@@ -228,7 +248,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA4MjExNzI&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA4MjExNzI&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA4ODgxNTI&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA4ODgxNTI&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -252,7 +272,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1896522476&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1896765003&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -411,30 +431,6 @@
       "source": "rabattigel"
     },
     {
-      "id": "5f0dd252f20b",
-      "title": "Deli Reform Omega-3",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-08-31",
-      "submission_deadline": "2026-08-31",
-      "url": "https://rabattigel.de/deli-reform-omega-3-gratis-testen-geld-zurueck/",
-      "submit_url": "https://www.deli-gratis-testen.de/",
-      "requirements": [
-        "produktfoto",
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": 100,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
       "id": "20109d372907",
       "title": "Fazer Aito Haferdrink",
       "brand": null,
@@ -453,6 +449,29 @@
       "retailers": [
         "Rewe"
       ],
+      "eans": [],
+      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "rabattigel"
+    },
+    {
+      "id": "a86981b3b65b",
+      "title": "LIPTON SENSATIONS",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": "2026-10-25",
+      "submission_deadline": "2026-10-25",
+      "url": "https://rabattigel.de/lipton-sensations-gratis-testen-geld-zurueck/",
+      "submit_url": "https://lipton-sensations-gratis.de",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
       "eans": [],
       "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
       "limit_anzahl": null,
