@@ -1,6 +1,55 @@
 {
-  "generated_at": "2026-08-22T04:32:01Z",
+  "generated_at": "2026-08-23T04:36:17Z",
   "actions": [
+    {
+      "id": "9d2656572f72",
+      "title": "Bonduelle Frische Salate Gratis Testen mit Scondoo",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/bonduelle-frische-salate-gratis-testen-mit-scondoo",
+      "submit_url": "https://scondoo.de/?cashbackDetail=81788",
+      "requirements": [
+        "app"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/133/bonduelle-frische-salate-gratis-testen-mit-scondoo_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "7a6893486835",
+      "title": "Lipton Sensations Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/lipton-sensations-gratis-testen",
+      "submit_url": "https://lipton-sensations-gratis.de/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/136/lipton-sensations-gratis-testen_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
     {
       "id": "7f1d1c84fa28",
       "title": "100 % zurück auf Pantene Pro-V Repair & Care Collection und andere Artikel über for me",
@@ -11,7 +60,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBnckc3X1F1V2FvaTJTWmRzSDczRlZiTUtNZGl4MU96MaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIHdRN2JZRUJqQkdlY2JqYXFUYUJxaXQyNDRCT0NoMDNHo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SB6Q1J0R0NwdnJjaWlhcUJYRmhGRHp4UVkxLWJVeW04WaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDV1MXZQZzhNdXRjRzl1MkdUZmUyZVdWbjg3bjB3Y3Nzo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -37,6 +86,7 @@
       "submit_url": "https://www.marktguru.de/mb/oyess-honey-vanilla-cashback-6818",
       "requirements": [
         "bonfoto",
+        "strichcode",
         "app"
       ],
       "retailers": [
@@ -248,7 +298,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTA5NTQ5MTg&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTA5NTQ5MTg&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTEwMTMyNTc&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTEwMTMyNTc&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -272,7 +322,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1896970658&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897206940&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
@@ -356,200 +406,6 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
-    },
-    {
-      "id": "09a9184a93aa",
-      "title": "Andros Be Nuts! Erdnusscreme",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-08-31",
-      "submission_deadline": "2026-08-31",
-      "url": "https://rabattigel.de/andros-be-nuts-erdnusscreme-mus-gratis-testen-geld-zurueck/",
-      "submit_url": "https://andros-be-nuts.de/pages/gratistesten",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "f81657d956e3",
-      "title": "BiFi Tasty Bites",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-07-13",
-      "valid_to": "2026-08-23",
-      "submission_deadline": "2026-08-23",
-      "url": "https://rabattigel.de/bifi-tasty-bites-gratis-testen-geld-zurueck/",
-      "submit_url": "https://bifi-promotion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": 333,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "5485abe75f12",
-      "title": "Bonduelle Frische Salate",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-08-10",
-      "valid_to": "2026-08-30",
-      "submission_deadline": "2026-08-30",
-      "url": "https://rabattigel.de/bonduelle-frische-salate-gratis-testen-geld-zurueck/",
-      "submit_url": "https://scondoo.de?cashbackDetail=81788",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "zusammen_fotografieren"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "20109d372907",
-      "title": "Fazer Aito Haferdrink",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-08-30",
-      "submission_deadline": "2026-08-30",
-      "url": "https://rabattigel.de/100-cashback-fazer-aito-haferdrink-ggf-personalisiert-gratis-testen-geld-zurueck/",
-      "submit_url": "https://scondoo.de",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "zusammen_fotografieren"
-      ],
-      "retailers": [
-        "Rewe"
-      ],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "a86981b3b65b",
-      "title": "LIPTON SENSATIONS",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-10-25",
-      "submission_deadline": "2026-10-25",
-      "url": "https://rabattigel.de/lipton-sensations-gratis-testen-geld-zurueck/",
-      "submit_url": "https://lipton-sensations-gratis.de",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.couponplatz.de/fulfillments/1784116924515liptonheadermobile538x522px.png",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "b47fc132bd92",
-      "title": "MinusL Milchsnack",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-08-31",
-      "submission_deadline": "2026-08-31",
-      "url": "https://rabattigel.de/minusl-milchsnack-gratis-testen-geld-zurueck/",
-      "submit_url": "https://minusl-gratistesten.de/",
-      "requirements": [
-        "bonfoto",
-        "app",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "162fcf047430",
-      "title": "Rockstar Original Sugar & Blueberry Acai",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 149,
-      "valid_from": "2026-06-01",
-      "valid_to": "2026-12-31",
-      "submission_deadline": "2026-12-31",
-      "url": "https://rabattigel.de/rockstar-original-sugar-blueberry-acai-gratis-testen-geld-zurueck/",
-      "submit_url": "https://www.rockstarenergy.de/geschmacksgarantie",
-      "requirements": [
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": 60000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "4245241cfc44",
-      "title": "Valess Produkt Deiner Wahl gratis probieren",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-09-30",
-      "submission_deadline": "2026-09-30",
-      "url": "https://rabattigel.de/valess-produkt-deiner-wahl-gratis-probieren-gratis-testen-geld-zurueck/",
-      "submit_url": "https://www.valess-aktion.de/",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20640%20360'%3E%3C/svg%3E",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
     }
   ]
 }
