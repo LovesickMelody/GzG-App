@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T04:36:17Z",
+  "generated_at": "2026-08-24T04:43:19Z",
   "actions": [
     {
       "id": "9d2656572f72",
@@ -60,7 +60,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SB6Q1J0R0NwdnJjaWlhcUJYRmhGRHp4UVkxLWJVeW04WaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDV1MXZQZzhNdXRjRzl1MkdUZmUyZVdWbjg3bjB3Y3Nzo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBBX0RMdGJqRDRfYWg3dnhNSi15ZDRNVjc2a0toWHVuaaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDdaTXR1ZHc2ZTZsdGRPWXNiRllTeVctaUp4UnVybjF1o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -86,7 +86,6 @@
       "submit_url": "https://www.marktguru.de/mb/oyess-honey-vanilla-cashback-6818",
       "requirements": [
         "bonfoto",
-        "strichcode",
         "app"
       ],
       "retailers": [
@@ -204,7 +203,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/ab-19uhr-gzg-gratis-protein-pizzaboden-geld-wird-nach-umfrage-erstattet-2821392",
-      "submit_url": "https://themorepizza.com/",
+      "submit_url": "https://themorepizza.com/password",
       "requirements": [],
       "retailers": [
         "dm"
@@ -298,7 +297,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTEwMTMyNTc&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTEwMTMyNTc&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTEwNzkxNTk&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTEwNzkxNTk&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -322,7 +321,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897206940&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897405235&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
