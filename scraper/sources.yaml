@@ -137,33 +137,38 @@ sources:
   # Noch abgeschaltet: Erst muss ein Probelauf zeigen, dass die Plattform
   # wirklich je Kampagne eine Subdomain anlegt und was dabei herauskommt.
   #   python -m gzg_scraper.run --only justsnap --output /tmp/probe.json
-  - name: justsnap
-    enabled: false
+  # --- Abwickler, die uns die Portale schon genannt haben ------------------
+  #
+  # Der Weg, der uebrig blieb. Geplant war, Kampagnen ueber
+  # Certificate-Transparency-Logs zu finden: JustSnap legt je Kampagne eine
+  # Subdomain an, jedes Zertifikat landet in einem oeffentlichen Register.
+  # Beide Anbieter verbieten den Abruf per robots.txt (crt.sh und certspotter,
+  # beides am 25.08.2026 geprueft), und eine Kampagnenuebersicht veroeffentlicht
+  # ein Abwickler nicht — justsnap.de ist eine B2B-Firmenseite, justsnap.eu
+  # loest gar nicht auf. Siehe DECISIONS.md.
+  #
+  # Also andersherum: Jede Aktion aus einem Portal nennt bereits die Adresse
+  # beim Abwickler. Die wird mitgeschrieben (data/abwickler.json) und hier
+  # wieder eingelesen. Es wird nichts gesucht, nur nachgesehen — bei dem, der
+  # die Aktion veranstaltet und ein Interesse hat, gefunden zu werden.
+  #
+  # Was das leistet: Ausfallsicherung. Faellt mydealz aus, bleiben die
+  # Kampagnenadressen. Was es nicht leistet: eine voellig neue Kampagne bei
+  # einem Abwickler finden, den noch nie ein Portal genannt hat.
+  - name: abwickler
+    enabled: true
     parser: erstanbieter
-    base_url: https://justsnap.eu/
-    # Nackte Domain. Gefragt werden die Zertifikatsprotokolle nach allem unter
-    # justsnap.eu — belegt ist das Muster durch die Air-Wick-Aktion, deren
-    # Kontakt kontakt@airwick.justsnap.eu lautet.
-    ct_logs:
-      - justsnap.eu
-    # Wer die Protokolle ausliefert. Standard ist "certspotter", eine
-    # dokumentierte API ohne Schluessel. "crt.sh" waere die bekanntere Adresse,
-    # verbietet den Abruf aber per robots.txt — der erste Probelauf fand
-    # deshalb null Kandidaten. Siehe DECISIONS.md.
-    ct_anbieter: certspotter
-    # Faengt ab, was ueber Pfade statt Subdomains laeuft.
-    # sitemaps:
-    #   - url: https://justsnap.eu/sitemap.xml
-    #     muster: "/aktion/"
-    # Hoechstens so viele Kandidatenseiten je Lauf abrufen. Der Rest kommt
-    # beim naechsten Mal dran; sortiert wird nach Zertifikatsalter, neueste
-    # zuerst.
+    # true genuegt: Welche Datei es ist, entscheidet der Lauf ueber
+    # --abwickler (Vorgabe data/abwickler.json). Ein Pfad an dieser Stelle
+    # waere relativ zum Arbeitsverzeichnis des Laufs und damit doppelt
+    # gefuehrt.
+    gelernte_abwickler: true
+    # Anfangs steht die Datei leer da und die Quelle liefert nichts. Das ist
+    # kein Fehler, sondern der erste Lauf: Gelernt wird nach dem Sammeln.
     max_kandidaten: 40
     # Nach wievielen Tagen eine bereits bekannte Kampagne erneut gelesen wird.
     # Dazwischen wird der Eintrag aus actions.json uebernommen — ohne Abruf und
-    # ohne Modellaufruf. Das ist der Kostenhebel: Ohne ihn zahlt jeder Lauf das
-    # Volle, mit ihm nur die neuen Kampagnen. Welcher Wochentag es je Kampagne
-    # ist, entscheidet ihre Adresse, damit die Last sich verteilt.
+    # ohne Modellaufruf. Das ist der Kostenhebel.
     auffrischen_tage: 7
 
   # Beispiel fuer eine abgeschaltete Quelle — als Vorlage fuer neue Portale.

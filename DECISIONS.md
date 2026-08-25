@@ -216,6 +216,29 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   der Weg über die dokumentierte API von SSLMate, die genau für diesen Zweck da ist und
   keinen Schlüssel braucht. Dieselben Protokolle, anderes Ausgabeformat. `crt.sh` bleibt
   als `ct_anbieter` wählbar, falls jemand mit ausdrücklicher Erlaubnis läuft.
+- **Nachtrag 25.08.2026: Certspotter verbietet es genauso — die Entdeckung über
+  Zertifikatsprotokolle ist damit tot** — der zweite Probelauf lief in dieselbe Wand:
+  `robots.txt verbietet https://api.certspotter.com/v1/issuances?domain=justsnap.eu`.
+  Damit ist der Weg bei beiden geprüften Anbietern zu. Ein Ausweichen gab es nicht:
+  `justsnap.eu` löst gar nicht im DNS auf, und `justsnap.de` ist die B2B-Firmenseite des
+  Dienstleisters — eine Kampagnenübersicht veröffentlicht ein Abwickler nicht, das wäre
+  seine Kundenkartei. Die Quelle `justsnap` ist deshalb entfernt statt als abgeschaltete
+  Ruine weitergeschleppt zu werden.
+- **Stattdessen: Abwickler lernen, statt sie zu suchen** — jede Aktion aus einem Portal
+  nennt bereits die Adresse beim Abwickler (`andros-be-nuts.de`,
+  `www.jacobskaffee-promotions.de`, …). Die wird mitgeschrieben und beim nächsten Lauf
+  direkt abgefragt. Rechtlich der unbedenklichste der drei Wege: Es wird nichts gesucht,
+  nur Links gefolgt, die ohnehin vorliegen — und zwar zum Urheber der Aktion, der ein
+  Interesse hat, gefunden zu werden. TDM-Prüfung und `robots.txt` laufen trotzdem.
+  Ehrlich zur Grenze: Das ist **Ausfallsicherung, keine Entdeckung**. Fällt ein Portal
+  aus, bleiben die Adressen; eine Kampagne bei einem Abwickler, den nie ein Portal
+  genannt hat, findet dieser Weg nicht.
+- **Anmeldeseiten werden nicht gelernt** — beim ersten Lauf gegen die echten Daten landete
+  prompt `konto.for-me-online.de/u/login?state=hKFo2SBPdl9…` im Verzeichnis. Dahinter
+  steht keine Aktion, sondern ein Formular, und die Adresse trägt einen
+  Sitzungsschlüssel, der in einem öffentlichen Repo nichts zu suchen hat. Verglichen
+  werden **Pfadsegmente**, nicht Teilzeichenketten: Sonst fängt „konto" nicht
+  `/mein-konto`, und „auth" schlüge bei `/authentische-aktion` fälschlich an.
 - **Die Certspotter-Ausgabe wird seitenweise geholt, und ein Abbruch steht im Log** — die
   API deckelt bei 100 Einträgen je Abruf. Ohne Weiterblättern fehlten bei einer großen
   Plattform genau die Kampagnen, die den Ausschlag geben; mit stillem Abbruch nach fünf
@@ -280,11 +303,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Jede Ablehnung steht mit Begründung im Log** — eine still verschwundene Aktion ist von
   einer nie gefundenen nicht zu unterscheiden. Wer im Actions-Lauf nachsieht, soll lesen
   können, *warum* eine Aktion fehlt.
-- **Vorgabe ist `claude-opus-5` bei Denktiefe `low`, beides umstellbar** — die Denktiefe,
-  weil Abschreiben aus vorliegendem Text keine Denkaufgabe ist. Das Modell bleibt bei der
-  Vorgabe für neue Anbindungen; ob ein kleineres reicht, ist eine Kostenentscheidung des
-  Betreibers und gehört nicht in den Code. `GZG_MODELL`, `GZG_EFFORT` und `--ohne-modell`
-  regeln das ohne Codeänderung.
+- **Vorgabe ist `claude-haiku-4-5` bei Denktiefe `low`, beides umstellbar** — dieselbe
+  Begründung für beides: Aus vorliegendem Text ein Dutzend Felder abzuschreiben ist keine
+  Denkaufgabe, der Extraktor rechnet nicht, er zitiert. Vorher stand hier `claude-opus-5`,
+  und das widersprach dem Kommentar zwei Zeilen darunter im selben Modul. Bei bis zu
+  vierzig Kandidatenseiten je Quelle und Lauf, täglich, ist das laut der Kostentabelle in
+  der README der Unterschied zwischen ~0,75 € und ~3 € im Monat — bei gleichem Ergebnis.
+  Wo eine Seite den Extraktor regelmäßig überfordert, schaltet `GZG_MODELL` hoch;
+  `GZG_EFFORT` und `--ohne-modell` regeln den Rest ohne Codeänderung.
 - **Ohne API-Schlüssel läuft alles weiter** — der Lauf meldet das einmal und wertet nur
   JSON-LD aus. Sonst wäre die CI von einem Secret abhängig, das in keinem Fork existiert.
 - **Bekannte Kampagnen werden nicht jeden Tag neu gelesen** — der Kostenhebel. Ohne die

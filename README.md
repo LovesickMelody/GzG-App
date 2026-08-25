@@ -339,10 +339,10 @@ Was kostet, sind Kandidatenseiten **ohne** JSON-LD — rund 3.500 Token hinein,
 Damit zahlt ein Lauf im Regelfall nur die **neuen** Kampagnen — realistisch
 eine Handvoll am Tag statt vierzig:
 
-| | ohne Wiederverwendung | mit (Vorgabe) |
+| | ohne Wiederverwendung | mit Wiederverwendung |
 |---|---|---|
-| `claude-opus-5` | ~30 €/Monat | **~3 €/Monat** |
-| `claude-haiku-4-5` | ~6 €/Monat | **~0,75 €/Monat** |
+| `claude-haiku-4-5` (Vorgabe) | ~6 €/Monat | **~0,75 €/Monat** |
+| `claude-opus-5` | ~30 €/Monat | ~3 €/Monat |
 
 Eine Kampagne wird immer neu gelesen, wenn ihre Frist abgelaufen ist oder sie
 gar keine nennt — sonst schleppte der Feed eine tote Aktion mit.
@@ -365,9 +365,10 @@ python -m gzg_scraper.run --modell claude-haiku-4-5 --effort low
 python -m gzg_scraper.run --ohne-modell     # nur JSON-LD, kostet nichts
 ```
 
-Vorgabe ist `claude-opus-5` bei Denktiefe `low`. Das ist die teure, sichere
-Variante; ein kleineres Modell reicht für reines Abschreiben aus vorliegendem
-Text oft aus und kostet einen Bruchteil. Die Entscheidung gehört dir — die
+Vorgabe ist `claude-haiku-4-5` bei Denktiefe `low`. Der Extraktor rechnet
+nicht, er schreibt aus vorliegendem Text ein Dutzend Felder ab — dafür kostet
+das größte Modell ein Vielfaches, ohne mehr zu treffen. Wo eine Seite den
+Extraktor regelmäßig überfordert, lässt sich mit `GZG_MODELL` hochschalten; die
 Prüfschicht dahinter ist dieselbe.
 
 ---
