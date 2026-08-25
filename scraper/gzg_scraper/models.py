@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import re
 import unicodedata
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, fields
+from urllib.parse import urlparse
 
 
 @dataclass
@@ -69,6 +70,39 @@ class Action:
             "limit_erschoepft": daten["limit_erschoepft"],
             "source": daten["source"],
         }
+
+    @classmethod
+    def from_json(cls, eintrag: dict) -> Action:
+        """
+        Der Rueckweg aus ``actions.json``.
+
+        Gebraucht fuer die Wiederverwendung: Eine Kampagne, die gestern schon
+        gelesen wurde, soll heute nicht noch einmal abgerufen und ausgewertet
+        werden. ``id`` wird bewusst nicht uebernommen — sie berechnet sich aus
+        Titel, Marke und Frist und faellt damit von selbst wieder gleich aus.
+        """
+        felder = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in eintrag.items() if k in felder})
+
+
+def adressenschluessel(adresse: str | None) -> str | None:
+    """
+    Vereinheitlicht eine Adresse fuer den Vergleich.
+
+    Zwei Portale verlinken dasselbe Formular gern leicht verschieden —
+    "https://scondoo.de/?cashbackDetail=81788" gegen
+    "https://scondoo.de?cashbackDetail=81788". Verglichen wird deshalb ohne
+    Schema, ohne "www." und ohne ueberfluessige Schraegstriche.
+    """
+    if not adresse:
+        return None
+    teile = urlparse(adresse.strip())
+    host = teile.netloc.casefold().removeprefix("www.")
+    if not host:
+        return None
+    pfad = teile.path.rstrip("/")
+    frage = f"?{teile.query}" if teile.query else ""
+    return f"{host}{pfad}{frage}"
 
 
 def normalisiere(wert: str | None) -> str:

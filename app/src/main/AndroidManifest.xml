@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Nur um die Erinnerungen nach einem Neustart wieder zu stellen: Android
+         verwirft alle Wecker beim Ausschalten. Ohne das faellt eine gestellte
+         Erinnerung still aus, und man merkt es erst nach der Frist. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
         android:name="android.hardware.camera.any"
@@ -41,6 +45,17 @@
         <receiver
             android:name=".notify.ErinnerungsEmpfaenger"
             android:exported="false" />
+
+        <!-- Stellt die Wecker nach Neustart und nach einem App-Update wieder.
+             Beide Meldungen schickt nur das System, deshalb nicht exportiert. -->
+        <receiver
+            android:name=".notify.NeustartEmpfaenger"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

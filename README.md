@@ -4,9 +4,14 @@ Android-App, um Geld-zurück-Garantie-Aktionen („gratis testen“) zu finden u
 Erstattungsstatus der eigenen Einreichungen zu verfolgen.
 
 Alles bleibt auf dem Gerät: kein Backend, keine Konten, keine Analyse, keine Tracker.
-Nur zwei Berechtigungen — Kamera für den Barcode-Scan und Internet für den Aktions-Feed.
-Bonfotos kommen über den Photo Picker herein, deshalb braucht die App keinen
-Speicherzugriff.
+Vier Berechtigungen — Internet für den Aktions-Feed, Kamera für das Bonfoto, Meldungen
+für die Fristerinnerung und „nach Neustart starten“, damit gestellte Erinnerungen einen
+Neustart überleben. Bonfotos aus der Galerie kommen über den Photo Picker herein,
+deshalb braucht die App keinen Speicherzugriff.
+
+Auch die Sicherung hält sich daran: Einreichungen, Konten und Bonfotos gehen **nicht**
+in die Google-Cloud-Sicherung. Ab Android 12 nimmt sie der direkte Weg von Gerät zu
+Gerät trotzdem mit.
 
 **Die App reicht nichts automatisch bei Anbietern ein.** Sie öffnet die Aktionsseite,
 die Einreichung machst du dort selbst, danach setzt du den Status in der App.
@@ -242,13 +247,19 @@ TLS-Zertifikat, und jedes ausgestellte Zertifikat landet nach RFC 6962 in einem
 öffentlichen Protokoll. Eine Abfrage am Tag genügt:
 
 ```
-https://crt.sh/?q=%25.justsnap.eu&output=json
+https://api.certspotter.com/v1/issuances?domain=justsnap.eu&include_subdomains=true
 ```
 
 Das ist rein passiv: öffentliche Register lesen, keine Anfrage an die
 Zielsysteme, kein Erraten von Namen. Plattformen, die ihre Kampagnen über
 *Pfade* statt Subdomains führen, fängt stattdessen die `sitemap.xml` ab —
 deshalb gibt es beide Entdecker.
+
+Naheliegender wäre `crt.sh` gewesen, die bekanntere Adresse für dieselben
+Protokolle. Deren `robots.txt` verbietet den Abruf aber, und der Scraper hält
+sich daran — der erste Probelauf fand damit exakt null Kampagnen. Der Zugang ist
+über `ct_anbieter` in `sources.yaml` umstellbar; `crt.sh` bleibt für den Fall
+drin, dass jemand mit ausdrücklicher Erlaubnis läuft.
 
 ### Extraktion: ein Weg für alle Seiten
 
@@ -307,6 +318,38 @@ Erst probelaufen lassen und **das Ergebnis lesen, nicht nur zählen**:
 cd scraper
 python -m gzg_scraper.run --only justsnap --output /tmp/probe.json --delay 3
 ```
+
+### Was das kostet
+
+**Die Zahl der Nutzer spielt keine Rolle.** Das Modell läuft einmal am Tag in
+GitHub Actions; die App lädt nur die fertige `actions.json`. Ob zehn oder
+zehntausend Leute die App haben, ändert an den Modellkosten nichts.
+
+Was kostet, sind Kandidatenseiten **ohne** JSON-LD — rund 3.500 Token hinein,
+300 hinaus. Zwei Deckel begrenzen das:
+
+- `max_kandidaten` — wie viele Seiten je Quelle und Lauf überhaupt abgerufen
+  werden.
+- `auffrischen_tage` — eine bereits bekannte Kampagne wird nur alle *n* Tage
+  erneut gelesen; dazwischen kommt der Eintrag unverändert aus `actions.json`,
+  ohne Abruf und ohne Modellaufruf. Welcher Tag es je Kampagne ist, entscheidet
+  ihre Adresse, damit die Last sich über die Woche verteilt statt in einer
+  Spitze anzufallen.
+
+Damit zahlt ein Lauf im Regelfall nur die **neuen** Kampagnen — realistisch
+eine Handvoll am Tag statt vierzig:
+
+| | ohne Wiederverwendung | mit (Vorgabe) |
+|---|---|---|
+| `claude-opus-5` | ~30 €/Monat | **~3 €/Monat** |
+| `claude-haiku-4-5` | ~6 €/Monat | **~0,75 €/Monat** |
+
+Eine Kampagne wird immer neu gelesen, wenn ihre Frist abgelaufen ist oder sie
+gar keine nennt — sonst schleppte der Feed eine tote Aktion mit.
+
+Unabhängig davon gehört ein **Ausgabenlimit in der Anthropic Console**
+(*Settings → Limits*) gesetzt. Es ist die einzige Bremse, die auch dann greift,
+wenn im Code etwas schiefgeht.
 
 ### Das Modell einrichten
 

@@ -20,14 +20,12 @@ import java.time.Instant
  * Erinnerungen an ablaufende Aktionen.
  *
  * Bewusst mit dem [AlarmManager] und ohne zusaetzliche Bibliothek: Es geht um eine
- * Meldung zu einem Zeitpunkt, mehr nicht. Der Alarm ist **ungenau** gestellt — das
- * System darf ihn um bis zu einer Stunde verschieben und dafuer mit anderen Weckern
- * buendeln. Fuer eine Erinnerung an eine Frist, die noch Tage laeuft, ist das genau
- * richtig, und es erspart die Sonderberechtigung fuer exakte Alarme.
+ * Meldung zu einem Zeitpunkt, mehr nicht. Der Alarm ist **ungenau** gestellt, aber
+ * doze-fest — die Begruendung steht bei [stelle].
  *
  * Was das System nicht kann: Alarme ueberleben keinen Neustart des Telefons. Deshalb
- * liegt jede gestellte Erinnerung auch in der Datenbank, und die App stellt sie beim
- * Start neu.
+ * liegt jede gestellte Erinnerung auch in der Datenbank, und der `NeustartEmpfaenger`
+ * stellt sie nach dem Hochfahren wieder.
  */
 object Erinnerungen {
 
@@ -38,6 +36,9 @@ object Erinnerungen {
     const val EXTRA_AKTION = "aktionId"
     const val EXTRA_TITEL = "titel"
     const val EXTRA_ANLASS = "anlass"
+
+    /** Abstand einer wiederkehrenden Erinnerung in Millisekunden; 0 = einmalig. */
+    const val EXTRA_ABSTAND = "abstandMillis"
 
     /** Erinnert an eine ablaufende Einsendefrist. */
     const val ANLASS_FRIST = "frist"
@@ -74,11 +75,23 @@ object Erinnerungen {
     /**
      * Stellt den Wecker für eine Aktion. Ein vorhandener wird ersetzt.
      *
-     * [abstandMillis] groesser null macht daraus einen wiederkehrenden Wecker —
-     * fuer Kontingente, die jede Woche neu freigeschaltet werden. Auch der ist
-     * ungenau gestellt; bei fuenf Minuten Vorlauf ist das knapp, aber der
-     * Ausweg waere die Sonderberechtigung fuer exakte Wecker, und die ist es
-     * nicht wert.
+     * `setAndAllowWhileIdle` statt `set`: Ein gewoehnlicher Wecker wird im
+     * Doze-Modus bis zum naechsten Wartungsfenster zurueckgehalten, und das kann
+     * ueber Nacht Stunden bedeuten. Eine Erinnerung, die am Tag des
+     * Einsendeschlusses erst am Nachmittag ankommt, kommt zu spaet.
+     *
+     * `AndWhileIdle` weckt auch aus Doze heraus und braucht trotzdem **keine**
+     * Sonderberechtigung — anders als ein exakter Wecker. Genau ist der Wecker
+     * damit weiterhin nicht, und das ist richtig so: Das System darf ihn
+     * verschieben und buendeln, es laesst ihn nur nicht mehr liegen.
+     *
+     * [abstandMillis] groesser null heisst: wiederkehrend, fuer Kontingente, die
+     * jede Woche neu freigeschaltet werden. Bewusst **nicht** mit
+     * `setInexactRepeating` — dessen Wecker sind nicht doze-fest, und
+     * ausgerechnet bei fuenf Minuten Vorlauf auf eine Freischaltung waere ein
+     * bis zum Wartungsfenster liegengebliebener Wecker wertlos. Stattdessen
+     * wird immer nur der naechste Termin gestellt, und der
+     * [ErinnerungsEmpfaenger] stellt nach dem Ausloesen den uebernaechsten.
      */
     fun stelle(
         context: Context,
@@ -89,17 +102,11 @@ object Erinnerungen {
         anlass: String = ANLASS_FRIST,
     ) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        val absicht = absicht(context, aktionId, titel, anlass)
-        if (abstandMillis > 0) {
-            manager.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                faelligAm.toEpochMilli(),
-                abstandMillis,
-                absicht,
-            )
-        } else {
-            manager.set(AlarmManager.RTC_WAKEUP, faelligAm.toEpochMilli(), absicht)
-        }
+        manager.setAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            faelligAm.toEpochMilli(),
+            absicht(context, aktionId, titel, anlass, abstandMillis),
+        )
         Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt (Abstand $abstandMillis)")
     }
 
@@ -121,6 +128,7 @@ object Erinnerungen {
         aktionId: String,
         titel: String,
         anlass: String,
+        abstandMillis: Long = 0,
     ): PendingIntent {
         val intent = Intent(context, ErinnerungsEmpfaenger::class.java).apply {
             // Ohne eigene Adresse haelt das System zwei Absichten fuer gleich,
@@ -130,6 +138,7 @@ object Erinnerungen {
             putExtra(EXTRA_AKTION, aktionId)
             putExtra(EXTRA_TITEL, titel)
             putExtra(EXTRA_ANLASS, anlass)
+            putExtra(EXTRA_ABSTAND, abstandMillis)
         }
         return PendingIntent.getBroadcast(
             context,
@@ -147,6 +156,25 @@ class ErinnerungsEmpfaenger : BroadcastReceiver() {
         val aktionId = intent.getStringExtra(Erinnerungen.EXTRA_AKTION) ?: return
         val titel = intent.getStringExtra(Erinnerungen.EXTRA_TITEL).orEmpty()
         val anlass = intent.getStringExtra(Erinnerungen.EXTRA_ANLASS)
+        val abstand = intent.getLongExtra(Erinnerungen.EXTRA_ABSTAND, 0)
+
+        // Wiederkehrende Erinnerung: gleich den naechsten Termin stellen. Das
+        // System kennt keinen doze-festen Wiederholwecker, also stellt sich
+        // dieser hier selbst neu — sonst kaeme die Meldung zur Freischaltung
+        // genau einmal.
+        //
+        // Zuerst, noch vor dem Anzeigen: Faellt das Melden gleich durch eine
+        // entzogene Erlaubnis, soll wenigstens die Kette nicht abreissen.
+        if (abstand > 0) {
+            Erinnerungen.stelle(
+                context,
+                aktionId,
+                titel,
+                Instant.now().plusMillis(abstand),
+                abstandMillis = abstand,
+                anlass = anlass ?: Erinnerungen.ANLASS_FREISCHALTUNG,
+            )
+        }
 
         // Tippen fuehrt in die App. Mehr als das braucht es nicht: Wo man
         // hinmuss, weiss man dann selbst.

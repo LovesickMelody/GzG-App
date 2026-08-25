@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 8 bis 11. Anders als ab Android 12 laesst sich hier **nicht** zwischen
+  Cloud-Sicherung und Geraetewechsel unterscheiden — es gibt nur ein Regelwerk,
+  und was drinsteht, landet auch auf Google-Servern.
+
+  Deshalb steht hier nur die Einstellungsdatei. Datenbank und Bonfotos bleiben
+  draussen: Sie enthalten IBAN, Bankverbindung, Geburtsdatum und Einkaeufe, und
+  die sollen das Geraet nicht verlassen.
+
+  Der Preis ist ehrlich zu nennen: Auf diesen Android-Versionen ueberlebt ein
+  Geraetewechsel die Einreichungen nicht. Ab Android 12 schon — dort greift
+  data_extraction_rules.xml mit dem direkten Geraet-zu-Geraet-Weg.
+-->
 <full-backup-content>
-    <include
-        domain="database"
-        path="." />
-    <include
-        domain="file"
-        path="receipts/" />
     <include
         domain="sharedpref"
         path="." />
+    <exclude
+        domain="database"
+        path="." />
+    <exclude
+        domain="file"
+        path="receipts/" />
     <exclude
         domain="file"
         path="export/" />
