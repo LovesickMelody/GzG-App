@@ -27,6 +27,13 @@ on:
         description: "Nur diese eine Quelle laufen lassen"
         required: false
         default: ""
+      roh:
+        description: >-
+          CSS-Selektor, dessen Treffer im Rohtext ausgegeben werden. Nur
+          zusammen mit `inspect`. Dafür da, einen umgebauten Seitenaufbau
+          abzulesen, statt den neuen Selektor zu raten.
+        required: false
+        default: ""
 
 concurrency:
   group: scrape
@@ -73,7 +80,14 @@ jobs:
         run: pip install -r scraper/requirements.txt
 
       - name: Struktur ausgeben
-        run: python scraper/inspect_source.py --source "${{ inputs.inspect }}"
+        run: |
+          if [ -n "${{ inputs.roh }}" ]; then
+            python scraper/inspect_source.py \
+              --source "${{ inputs.inspect }}" \
+              --roh "${{ inputs.roh }}" --roh-anzahl 3
+          else
+            python scraper/inspect_source.py --source "${{ inputs.inspect }}"
+          fi
 
   scrape:
     name: Feed aktualisieren
