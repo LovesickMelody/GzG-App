@@ -48,6 +48,13 @@ on:
         type: boolean
         required: false
         default: false
+      roh_anzahl:
+        description: >-
+          Wie viele Treffer von `roh` ausgegeben werden. Standard 3; für eine
+          Sitemap mit tausend Einträgen braucht es mehr, um ein Pfadmuster
+          überhaupt zu erkennen.
+        required: false
+        default: "3"
 
 concurrency:
   group: scrape
@@ -99,6 +106,7 @@ jobs:
           ADRESSE: ${{ inputs.url }}
           ROH: ${{ inputs.roh }}
           EXTERN: ${{ inputs.extern }}
+          ROH_ANZAHL: ${{ inputs.roh_anzahl }}
         run: |
           # Argumente als Array, nicht als Zeichenkette: Ein Selektor enthaelt
           # Leerzeichen ("div.a strong"), und ueber die Umgebung statt direkt
@@ -109,7 +117,7 @@ jobs:
           else
             args+=(--source "$QUELLE")
           fi
-          [ -n "$ROH" ] && args+=(--roh "$ROH" --roh-anzahl 3)
+          [ -n "$ROH" ] && args+=(--roh "$ROH" --roh-anzahl "${ROH_ANZAHL:-3}")
           [ "$EXTERN" = "true" ] && args+=(--extern)
 
           python scraper/inspect_source.py "${args[@]}"
