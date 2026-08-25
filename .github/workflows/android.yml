@@ -199,22 +199,79 @@ jobs:
       - name: Gradle einrichten (mit Cache)
         uses: gradle/actions/setup-gradle@v4
 
-      # Optional: nur wenn die Secrets hinterlegt sind. Ohne Keystore signiert
-      # der Release-Build mit dem Debug-Key (siehe README) und ist trotzdem
-      # installierbar — nur nicht fuer den Play Store geeignet.
+      # Ohne Keystore wird hier abgebrochen, nicht ersatzweise mit dem Debug-Key
+      # signiert. Eine debug-signierte APK unter einem Versionsnamen sieht echt
+      # aus, taugt aber nicht fuer Play — und wer sie installiert hat, bekommt
+      # spaeter kein Update auf die richtig signierte Fassung, weil Android eine
+      # andere Signatur als andere App behandelt.
       - name: Keystore aus Secret schreiben
-        if: env.KEYSTORE_BASE64 != ''
         run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::KEYSTORE_BASE64 fehlt. Ein Release ohne eigenen Keystore" \
+                 "waere mit dem Debug-Key signiert und fuer Play unbrauchbar." \
+                 "Anleitung: README, Abschnitt \"Für den Play Store signieren\"."
+            exit 1
+          fi
           echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
           echo "KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
 
-      - name: Release-APK bauen
-        run: ./gradlew assembleRelease
+      # Aus v1.2.3 wird versionCode 10203. Play verlangt fuer jeden Upload einen
+      # hoeheren Wert; aus dem Tag abgeleitet kann man das nicht vergessen.
+      - name: Version aus dem Tag ableiten
+        run: |
+          name="${GITHUB_REF_NAME#v}"
+          haupt=$(echo "$name" | cut -d. -f1)
+          neben=$(echo "$name" | cut -d. -f2)
+          klein=$(echo "$name" | cut -d. -f3 | cut -d- -f1)
+          code=$(( ${haupt:-0} * 10000 + ${neben:-0} * 100 + ${klein:-0} ))
 
-      - name: APK umbenennen
+          # Die Rechnung hat zwei Grenzen, und beide fallen erst beim Upload
+          # auf, wenn niemand sie hier nennt.
+          if [ "${klein:-0}" -ge 100 ] || [ "${neben:-0}" -ge 100 ]; then
+            echo "::error::$name sprengt das Schema: Neben- und Patchversion" \
+                 "muessen unter 100 bleiben, sonst kollidiert der versionCode" \
+                 "mit einer anderen Version."
+            exit 1
+          fi
+          if [ "$name" != "${name%%-*}" ]; then
+            echo "::warning::$name ist eine Vorabversion und bekommt denselben" \
+                 "versionCode ($code) wie ${name%%-*}. Play nimmt denselben" \
+                 "versionCode kein zweites Mal an — entweder diese Vorabversion" \
+                 "nicht hochladen, oder spaeter eine hoehere Patchversion taggen."
+          fi
+
+          echo "VERSION_NAME=$name" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
+          echo "::notice::$GITHUB_REF_NAME → versionName $name, versionCode $code"
+
+      # Play nimmt fuer neue Apps kein APK mehr an, sondern ein App Bundle.
+      # Die APK bleibt trotzdem dabei — fuer alle, die ohne Play installieren.
+      - name: Release bauen (Bundle und APK)
+        run: |
+          ./gradlew bundleRelease assembleRelease \
+            -PsigningRequired \
+            -PversionCode="$VERSION_CODE" \
+            -PversionName="$VERSION_NAME"
+
+      # Gegenprobe statt Vertrauen: Steht hier der Debug-Key, ging oben etwas
+      # schief, und es faellt vor der Veroeffentlichung auf statt danach.
+      - name: Signatur prüfen
+        run: |
+          werkzeuge=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          apk=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          "$werkzeuge/apksigner" verify --print-certs "$apk" | tee signatur.txt
+
+          if grep -qi "CN=Android Debug" signatur.txt; then
+            echo "::error::Die APK ist mit dem Debug-Key signiert — nicht veroeffentlichen."
+            exit 1
+          fi
+          echo "::notice::$(grep -m1 'certificate SHA-256' signatur.txt || echo 'Signatur geprüft')"
+
+      - name: Dateien sammeln
         run: |
           mkdir -p dist
           cp app/build/outputs/apk/release/*.apk "dist/gzg-tracker-${GITHUB_REF_NAME}.apk"
+          cp app/build/outputs/bundle/release/*.aab "dist/gzg-tracker-${GITHUB_REF_NAME}.aab"
 
       - name: GitHub Release anlegen
         env:
@@ -224,4 +281,4 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --title "GZG-Tracker $GITHUB_REF_NAME" \
             --generate-notes \
-            dist/*.apk
+            dist/*.apk dist/*.aab

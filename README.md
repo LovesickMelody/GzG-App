@@ -27,8 +27,9 @@ die Einreichung machst du dort selbst, danach setzt du den Status in der App.
 - [Einen kaputten Scraper reparieren](#einen-kaputten-scraper-reparieren)
 - [Eine neue Quelle hinzufügen](#eine-neue-quelle-hinzufügen)
 - [Entwickeln und Testen](#entwickeln-und-testen)
-- [Release signieren](#release-signieren)
+- [Für den Play Store signieren](#für-den-play-store-signieren)
 - [Rechtliches zum Scraping](#rechtliches-zum-scraping)
+- [Datenschutzerklärung](PRIVACY.md) · [Play-Datensicherheit](docs/play-datensicherheit.md)
 
 ---
 
@@ -624,11 +625,16 @@ Nützliche Schalter: `--only <quelle>`, `--delay <sekunden>`, `--sources <datei>
 
 ---
 
-## Release signieren
+## Für den Play Store signieren
 
-Ohne hinterlegten Keystore signiert der Release-Build mit dem Debug-Key. Die APK ist
-installierbar, aber nicht für den Play Store geeignet und der Key wechselt bei jeder
-Umgebung. Für einen dauerhaften Key:
+Ohne hinterlegten Keystore **bricht der Release-Build ab**. Das ist Absicht: Eine
+mit dem Debug-Key signierte APK sieht echt aus, taugt aber nicht für Play — und
+wer sie installiert hat, bekommt später **kein Update** auf die richtig signierte
+Fassung, weil Android eine andere Signatur als andere App behandelt. Dieser
+Fehler lässt sich nachträglich nur durch Deinstallation beim Nutzer heilen.
+
+Für den Debug-Weg (`debug-latest`) ändert sich nichts; der läuft weiter ohne
+Keystore.
 
 ### 1. Keystore erzeugen (lokal, einmalig)
 
@@ -639,9 +645,10 @@ keytool -genkeypair -v \
   -alias gzg
 ```
 
-> **Diese Datei niemals ins Repo committen** und sicher aufbewahren. Ist sie weg, lässt
-> sich eine installierte App nicht mehr durch ein Update ersetzen. `.gitignore` sperrt
-> `*.jks`, `*.keystore` und `keystore.properties` bereits.
+> **Diese Datei niemals ins Repo committen** und an einem sicheren Ort
+> aufbewahren — am besten zusätzlich außerhalb des Rechners. Ist sie weg, kannst
+> du deine eigene App nie wieder aktualisieren. `.gitignore` sperrt `*.jks`,
+> `*.keystore` und `keystore.properties` bereits.
 
 ### 2. Als GitHub Secrets hinterlegen
 
@@ -660,7 +667,19 @@ keytool -genkeypair -v \
 git tag v0.1.0 && git push origin v0.1.0
 ```
 
-Der Workflow baut die Release-APK und hängt sie an ein GitHub Release.
+Der Workflow baut daraufhin **beides**:
+
+- `gzg-tracker-v0.1.0.aab` — das App Bundle für Play. Neue Apps nimmt Play seit
+  August 2021 nur noch in diesem Format an.
+- `gzg-tracker-v0.1.0.apk` — zum Installieren ohne Play.
+
+Der `versionCode` wird aus dem Tag abgeleitet: `v1.2.3` ergibt `10203`. Play
+verlangt für jeden Upload einen höheren Wert, und abgeleitet kann man das nicht
+vergessen.
+
+Vor der Veröffentlichung prüft der Workflow die Signatur mit `apksigner` und
+bricht ab, wenn dort der Debug-Key steht. Der SHA-256-Fingerabdruck landet als
+Notiz im Job-Log — vergleiche ihn beim ersten Mal mit deinem eigenen.
 
 ### Lokal signieren
 
@@ -673,6 +692,24 @@ storePassword=…
 keyAlias=gzg
 keyPassword=…
 ```
+
+Lokal bleibt der bequeme Weg: Ohne `-PsigningRequired` fällt ein
+`assembleRelease` weiterhin auf den Debug-Key zurück, damit man zum Ausprobieren
+nicht erst einen Keystore braucht.
+
+### Was für Play sonst noch fehlt
+
+Signierung allein reicht nicht. Der Stand ist in
+[`docs/play-datensicherheit.md`](docs/play-datensicherheit.md) festgehalten,
+kurz:
+
+- **Datenschutzerklärung** unter einer öffentlichen Adresse — der Entwurf liegt
+  als [`PRIVACY.md`](PRIVACY.md) bei und braucht noch Name und Kontakt des
+  Verantwortlichen.
+- **Data-Safety-Formular** — die Antworten stehen in der Datei oben.
+- **Die offene Rechtsfrage**, ob die aus den Portalen gewonnenen Aktionsdaten
+  kommerziell weitergegeben werden dürfen. Das ist keine Formularfrage; siehe
+  den nächsten Abschnitt.
 
 ---
 
