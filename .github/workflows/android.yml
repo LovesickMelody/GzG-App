@@ -224,6 +224,22 @@ jobs:
           neben=$(echo "$name" | cut -d. -f2)
           klein=$(echo "$name" | cut -d. -f3 | cut -d- -f1)
           code=$(( ${haupt:-0} * 10000 + ${neben:-0} * 100 + ${klein:-0} ))
+
+          # Die Rechnung hat zwei Grenzen, und beide fallen erst beim Upload
+          # auf, wenn niemand sie hier nennt.
+          if [ "${klein:-0}" -ge 100 ] || [ "${neben:-0}" -ge 100 ]; then
+            echo "::error::$name sprengt das Schema: Neben- und Patchversion" \
+                 "muessen unter 100 bleiben, sonst kollidiert der versionCode" \
+                 "mit einer anderen Version."
+            exit 1
+          fi
+          if [ "$name" != "${name%%-*}" ]; then
+            echo "::warning::$name ist eine Vorabversion und bekommt denselben" \
+                 "versionCode ($code) wie ${name%%-*}. Play nimmt denselben" \
+                 "versionCode kein zweites Mal an — entweder diese Vorabversion" \
+                 "nicht hochladen, oder spaeter eine hoehere Patchversion taggen."
+          fi
+
           echo "VERSION_NAME=$name" >> "$GITHUB_ENV"
           echo "VERSION_CODE=$code" >> "$GITHUB_ENV"
           echo "::notice::$GITHUB_REF_NAME → versionName $name, versionCode $code"
