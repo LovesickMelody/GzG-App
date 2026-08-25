@@ -30,10 +30,24 @@ on:
       roh:
         description: >-
           CSS-Selektor, dessen Treffer im Rohtext ausgegeben werden. Nur
-          zusammen mit `inspect`. Dafür da, einen umgebauten Seitenaufbau
-          abzulesen, statt den neuen Selektor zu raten.
+          zusammen mit `inspect` oder `url`. Dafür da, einen umgebauten
+          Seitenaufbau abzulesen, statt den neuen Selektor zu raten.
         required: false
         default: ""
+      url:
+        description: >-
+          Einzelne Adresse ansehen, ohne dass sie in sources.yaml steht — für
+          die Frage, ob sich eine neue Quelle überhaupt lohnt. Ersetzt
+          `inspect`; robots.txt wird auch hier beachtet.
+        required: false
+        default: ""
+      extern:
+        description: >-
+          Zusätzlich die ausgehenden Links der Seite auflisten. Zeigt, zu
+          welchen Abwicklern eine Übersichtsseite führt.
+        type: boolean
+        required: false
+        default: false
 
 concurrency:
   group: scrape
@@ -65,7 +79,7 @@ jobs:
 
   inspect:
     name: Seitenaufbau ansehen
-    if: github.event_name == 'workflow_dispatch' && inputs.inspect != ''
+    if: github.event_name == 'workflow_dispatch' && (inputs.inspect != '' || inputs.url != '')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,18 +94,31 @@ jobs:
         run: pip install -r scraper/requirements.txt
 
       - name: Struktur ausgeben
+        env:
+          QUELLE: ${{ inputs.inspect }}
+          ADRESSE: ${{ inputs.url }}
+          ROH: ${{ inputs.roh }}
+          EXTERN: ${{ inputs.extern }}
         run: |
-          if [ -n "${{ inputs.roh }}" ]; then
-            python scraper/inspect_source.py \
-              --source "${{ inputs.inspect }}" \
-              --roh "${{ inputs.roh }}" --roh-anzahl 3
+          # Argumente als Array, nicht als Zeichenkette: Ein Selektor enthaelt
+          # Leerzeichen ("div.a strong"), und ueber die Umgebung statt direkt
+          # eingesetzt, damit eine Eingabe keine Shell-Zeile aufreissen kann.
+          args=()
+          if [ -n "$ADRESSE" ]; then
+            args+=(--url "$ADRESSE")
           else
-            python scraper/inspect_source.py --source "${{ inputs.inspect }}"
+            args+=(--source "$QUELLE")
           fi
+          [ -n "$ROH" ] && args+=(--roh "$ROH" --roh-anzahl 3)
+          [ "$EXTERN" = "true" ] && args+=(--extern)
+
+          python scraper/inspect_source.py "${args[@]}"
 
   scrape:
     name: Feed aktualisieren
-    if: github.event_name != 'workflow_dispatch' || inputs.inspect == ''
+    if: >-
+      github.event_name != 'workflow_dispatch' ||
+      (inputs.inspect == '' && inputs.url == '')
     needs: test
     runs-on: ubuntu-latest
     steps:
