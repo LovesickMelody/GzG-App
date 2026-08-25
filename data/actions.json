@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T04:39:04Z",
+  "generated_at": "2026-08-25T04:53:21Z",
   "actions": [
     {
       "id": "7a6893486835",
@@ -8,8 +8,8 @@
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
+      "valid_to": "2026-10-25",
+      "submission_deadline": "2026-10-25",
       "url": "https://geldzurueck.deals/lipton-sensations-gratis-testen",
       "submit_url": "https://lipton-sensations-gratis.de/",
       "requirements": [
@@ -37,7 +37,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SAxLV9KQlFmbER4SVpteHU3U1NRcTNxM2ZtNnBhdGtyRaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIFFGaVVESWZtNEFMclc1TGNXc1JwYnVOX3VYcVk0WFpTo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBEOVJyMnkxaXpFSFJETzNTT01FN1dlTU5KUi1tQXFBY6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIC1DbGlqOGRqcHBaUFNGNjBsR21oTjV4M2tBZ1FGTk54o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -345,7 +345,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTExNDQ3NTc&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTExNDQ3NTc&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTExNDUxNTA&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTExNDUxNTA&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -369,7 +369,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897604274&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897605453&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
