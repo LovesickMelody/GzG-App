@@ -165,4 +165,23 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/actions.json
           git commit -m "Aktionen aktualisiert (${anzahl} Einträge)"
-          git push
+
+          # Zwischen Checkout und Push kann auf main etwas gelandet sein — ein
+          # Merge, oder der Lauf davor. Dann wird der Push abgewiesen, und der
+          # ganze Sammellauf war umsonst: Die Aktionen sind geholt, stehen aber
+          # nirgends. Genau das ist nach dem Merge von #9 passiert.
+          #
+          # `--rebase` statt `merge`: Der eigene Commit betrifft nur
+          # data/actions.json und soll oben aufsetzen, ohne einen
+          # Merge-Commit je Lauf zu hinterlassen.
+          for versuch in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "Push abgewiesen (Versuch ${versuch}) — hole nach und rebase."
+            git pull --rebase origin "${{ github.event.repository.default_branch }}"
+            sleep $((versuch * 3))
+          done
+
+          echo "::error::Push nach drei Versuchen abgewiesen — Aktionen wurden nicht gespeichert."
+          exit 1

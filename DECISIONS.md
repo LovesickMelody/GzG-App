@@ -280,11 +280,14 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
 - **Jede Ablehnung steht mit Begründung im Log** — eine still verschwundene Aktion ist von
   einer nie gefundenen nicht zu unterscheiden. Wer im Actions-Lauf nachsieht, soll lesen
   können, *warum* eine Aktion fehlt.
-- **Vorgabe ist `claude-opus-5` bei Denktiefe `low`, beides umstellbar** — die Denktiefe,
-  weil Abschreiben aus vorliegendem Text keine Denkaufgabe ist. Das Modell bleibt bei der
-  Vorgabe für neue Anbindungen; ob ein kleineres reicht, ist eine Kostenentscheidung des
-  Betreibers und gehört nicht in den Code. `GZG_MODELL`, `GZG_EFFORT` und `--ohne-modell`
-  regeln das ohne Codeänderung.
+- **Vorgabe ist `claude-haiku-4-5` bei Denktiefe `low`, beides umstellbar** — dieselbe
+  Begründung für beides: Aus vorliegendem Text ein Dutzend Felder abzuschreiben ist keine
+  Denkaufgabe, der Extraktor rechnet nicht, er zitiert. Vorher stand hier `claude-opus-5`,
+  und das widersprach dem Kommentar zwei Zeilen darunter im selben Modul. Bei bis zu
+  vierzig Kandidatenseiten je Quelle und Lauf, täglich, ist das laut der Kostentabelle in
+  der README der Unterschied zwischen ~0,75 € und ~3 € im Monat — bei gleichem Ergebnis.
+  Wo eine Seite den Extraktor regelmäßig überfordert, schaltet `GZG_MODELL` hoch;
+  `GZG_EFFORT` und `--ohne-modell` regeln den Rest ohne Codeänderung.
 - **Ohne API-Schlüssel läuft alles weiter** — der Lauf meldet das einmal und wertet nur
   JSON-LD aus. Sonst wäre die CI von einem Secret abhängig, das in keinem Fork existiert.
 - **Bekannte Kampagnen werden nicht jeden Tag neu gelesen** — der Kostenhebel. Ohne die

@@ -34,11 +34,16 @@ from ..parsing import (
 
 log = logging.getLogger(__name__)
 
-# Vorgabe laut Projektregeln fuer neue Claude-Anbindungen. Ueber sources.yaml
-# oder GZG_MODELL umstellbar — ein kleineres Modell kostet deutlich weniger und
-# reicht fuer diese Aufgabe oft aus. Die Entscheidung gehoert dem Betreiber,
-# nicht diesem Modul.
-STANDARD_MODELL = "claude-opus-5"
+# Haiku, nicht Opus. Die Begruendung stand schon zwei Zeilen tiefer und
+# widersprach der Wahl: Aus einem vorliegenden Text ein Dutzend Felder
+# abzuschreiben ist keine Denkaufgabe. Dieser Extraktor rechnet nicht, er
+# zitiert — und dafuer kostet das groesste Modell ein Vielfaches, ohne mehr zu
+# treffen. Bei bis zu 40 Kandidatenseiten je Lauf und Quelle, jeden Tag, ist
+# das der Unterschied zwischen Cent und Euro.
+#
+# Ueber `sources.yaml` oder GZG_MODELL umstellbar: Wo eine Seite den Extraktor
+# regelmaessig ueberfordert, darf der Betreiber hochschalten.
+STANDARD_MODELL = "claude-haiku-4-5-20251001"
 
 # "low" genuegt: Aus einem vorliegenden Text ein Dutzend Felder abzuschreiben
 # ist keine Denkaufgabe. Hoehere Stufen kosten Vielfaches ohne besseres Ergebnis.
