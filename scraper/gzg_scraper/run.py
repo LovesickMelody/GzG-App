@@ -466,7 +466,53 @@ def main(argv: list[str] | None = None) -> int:
         log.error("Keine einzige Quelle lieferte Daten")
         return 1
 
+    if melde_versiegte_quellen(bestand, neu_je_quelle):
+        return 1
+
     return 0
+
+
+def melde_versiegte_quellen(
+    bestand: dict, neu_je_quelle: dict[str, list[Action]]
+) -> bool:
+    """
+    Schlaegt Alarm, wenn eine Quelle *plötzlich* nichts mehr liefert.
+
+    Der Unterschied zu einer ausgefallenen Quelle ist wichtig: Dort ist der
+    Abruf gescheitert, das sieht man. Hier lief alles glatt — die Seite kam an,
+    der Parser lief durch, und trotzdem blieb nichts uebrig. Genau so ist
+    rabattigel wochenlang unbemerkt versiegt: Die Seite hatte ihren Datumsblock
+    umgebaut, der Selektor traf nichts mehr, jede Aktion galt als abgelaufen,
+    und der Job meldete brav "erfolgreich".
+
+    Eine Quelle, die gestern noch Aktionen hatte und heute keine mehr, ist
+    deshalb ein roter Job. Lieber ein Fehlalarm, wenn ein kleines Portal
+    wirklich einmal leer ist, als noch einmal wochenlang stille Leere.
+
+    Der Feed ist zu diesem Zeitpunkt schon geschrieben — der Alarm haelt die
+    App nicht auf, er macht nur sichtbar, dass jemand hinsehen muss.
+    """
+    vorher: dict[str, int] = {}
+    for eintrag in bestand.get("actions", []):
+        quelle = eintrag.get("source")
+        if quelle:
+            vorher[quelle] = vorher.get(quelle, 0) + 1
+
+    versiegt = sorted(
+        name
+        for name, aktionen in neu_je_quelle.items()
+        if not aktionen and vorher.get(name, 0) > 0
+    )
+    for name in versiegt:
+        log.error(
+            "Quelle %s lieferte %s Aktionen und jetzt keine mehr — "
+            "Selektoren gegen die echte Seite prüfen: "
+            "python scraper/inspect_source.py --source %s",
+            name,
+            vorher[name],
+            name,
+        )
+    return bool(versiegt)
 
 
 if __name__ == "__main__":

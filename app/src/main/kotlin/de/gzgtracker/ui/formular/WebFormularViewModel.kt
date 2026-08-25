@@ -72,6 +72,9 @@ class WebFormularViewModel @Inject constructor(
                     preis = Money.formatPlain(eintrag.pricePaidCents),
                     kaufdatum = eintrag.purchaseDate.format(datumsformat),
                     haendler = eintrag.retailer,
+                    // Manche Anbieter verlangen die Nummer unter dem Strichcode.
+                    // Sie kommt aus dem Produktfoto, wenn sie darauf zu sehen war.
+                    ean = eintrag.ean,
                 ),
                 belege = eintrag.belege,
                 meldung = if (aktion?.besteAdresse == null) {

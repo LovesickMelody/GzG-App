@@ -148,20 +148,31 @@ jobs:
       - name: Debug-APK bauen
         run: ./gradlew assembleDebug
 
+      # Der Dateiname traegt den Commit. Vorher hiess jede APK gleich und lag
+      # unter derselben Adresse — und GitHubs Auslieferungsnetz hat weiter die
+      # alten Bytes geschickt, obwohl das Asset laengst ersetzt war. Am Geraet
+      # sah es aus, als waeren die Aenderungen nicht drin; sie waren es, nur
+      # nicht in der ausgelieferten Datei. Mit dem Commit im Namen gibt es fuer
+      # jeden Stand eine eigene Adresse, die nichts Altes verdecken kann.
       - name: Prerelease aktualisieren
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          kurz="${GITHUB_SHA:0:7}"
+          datei="gzg-tracker-debug-${kurz}.apk"
           mkdir -p dist
-          cp app/build/outputs/apk/debug/*.apk "dist/gzg-tracker-debug.apk"
+          cp app/build/outputs/apk/debug/*.apk "dist/$datei"
           gh release delete debug-latest --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
           gh release create debug-latest \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
-            --title "Debug-APK (letzter Stand)" \
-            --notes "Automatisch gebaut aus \`$GITHUB_REF_NAME\` ($GITHUB_SHA). Zum Ausprobieren, nicht zum Aufheben." \
+            --title "Debug-APK ($kurz)" \
+            --notes "Automatisch gebaut aus \`$GITHUB_REF_NAME\` ($GITHUB_SHA), $(date -u '+%d.%m.%Y %H:%M') UTC. Zum Ausprobieren, nicht zum Aufheben." \
             --prerelease \
-            dist/gzg-tracker-debug.apk
+            "dist/$datei"
+
+          groesse=$(stat -c%s "dist/$datei")
+          echo "::notice::APK $datei — $((groesse / 1048576)) MB"
 
   release:
     name: Release-APK veroeffentlichen

@@ -136,4 +136,14 @@ data class ErinnerungEntity(
     @PrimaryKey val actionId: String,
     val faelligAm: Instant,
     val titel: String,
+    /**
+     * Abstand einer Wiederholung in Millisekunden, 0 fuer einmalig.
+     *
+     * Eine Erinnerung an eine Frist kommt einmal. Eine an die woechentliche
+     * Freischaltung eines Kontingents muss jede Woche kommen — sonst waere sie
+     * genau einmal nuetzlich.
+     */
+    val abstandMillis: Long = 0,
+    /** Was in der Meldung steht. Bei einer Freischaltung etwas anderes als bei einer Frist. */
+    val anlass: String = "frist",
 )

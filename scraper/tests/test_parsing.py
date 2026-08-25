@@ -253,3 +253,85 @@ class TestKontingent:
             "zuruecksetzung": None,
             "erschoepft": False,
         }
+
+
+class TestKontingentAusEchtenSeiten:
+    """
+    Formulierungen, die im Sammellauf wirklich vorkamen.
+
+    Die erste Fassung des Musters entstand am Schreibtisch und griff bei keiner
+    davon. Erst das Log der echten Seiten zeigte, wie die Anbieter schreiben.
+    """
+
+    # Der Satz, um den es von Anfang an ging — woertlich aus dem Sammellauf.
+    SENSODYNE = (
+        "Teilnahmezeitraum 03.08.2026 - 31.10.2026 Nachweis Bon und Produkt auf einem "
+        "Foto Aktionspackung Aktionssticker Limits Teilnahmelimit 1 Einlösung pro Person "
+        "Kaufmenge 1 Einlöselimit pro Woche 1.000 montags ab 08:00 Uhr Länder"
+    )
+
+    def test_beschriftung_vor_der_zahl(self):
+        # Die 25.000 des Gesamtkontingents stehen woanders auf derselben Seite —
+        # entscheidend ist diese Zeile.
+        angaben = kontingent_aus(self.SENSODYNE)
+        assert angaben["anzahl"] == 1000
+        assert angaben["zeitraum"] == "woche"
+
+    def test_zuruecksetzung_ohne_das_wort_zurueckgesetzt(self):
+        # "1.000 montags ab 08:00 Uhr" — kein Wort von Zuruecksetzen, und doch
+        # genau das. Es reicht, dass der Satz von einem Limit handelt.
+        assert kontingent_aus(self.SENSODYNE)["zuruecksetzung"] == "Montags um 08:00 Uhr"
+
+    def test_wochentag_ohne_limit_ist_keine_zuruecksetzung(self):
+        # Aus dem Fernsehprogramm einer O2-Aktion. Wochentag und Uhrzeit allein
+        # sagen nichts ueber ein Kontingent.
+        angaben = kontingent_aus(
+            "Villa der Versuchung, Sat.1, ab 3.8 jeden Montag Exklusiv, RTL, "
+            "Montag bis Freitag um 18:30 Uhr"
+        )
+        assert angaben["zuruecksetzung"] is None
+
+    def test_weiches_trennzeichen_im_wort(self):
+        # BiFi: Im HTML steht "Teilnahme\u00adkontingent" mit weichem Trennstrich.
+        angaben = kontingent_aus(
+            "Leider ist das Teilnahme\u00adkontingent für die Kaufpreis-Erstattungen "
+            "vollständig ausgeschöpft."
+        )
+        assert angaben["erschoepft"] is True
+
+    def test_bedingung_mit_verb_am_satzanfang(self):
+        # Deli Reform: "Ist das ... ausgeschöpft, kannst du ..." — eine Bedingung
+        # ohne das Wort "wenn". Sie sagt gerade nicht, dass es jetzt so ist.
+        angaben = kontingent_aus(
+            "Ist das tägliche Kontingent der Gratis-Testen-Aktion ausgeschöpft "
+            "kannst du hier das Gewinnspiel-Formular absenden."
+        )
+        assert angaben["erschoepft"] is False
+
+    def test_freigeschaltet_ohne_das_wort_neu(self):
+        # Valess. Beachte den Tippfehler auf der Seite: "Wochenkontigent".
+        angaben = kontingent_aus(
+            "Das nächste Wochenkontigent wird kommenden Montag um 8:00 Uhr freigeschaltet."
+        )
+        assert angaben["zuruecksetzung"] == "Montags um 08:00 Uhr"
+
+    def test_heutiges_kontingent_ist_ausgeschoepft(self):
+        # Jacobs.
+        angaben = kontingent_aus(
+            "Heutiges Kontingent ist ausgeschöpft – bitte komm morgen wieder"
+        )
+        assert angaben["erschoepft"] is True
+
+    def test_teilnahmelimit_mit_woertern_dazwischen(self):
+        # BiFi: "erreicht" statt "erschöpft", und "für heute" dazwischen.
+        assert kontingent_aus("Leider ist das Teilnahmelimit für heute erreicht.")["erschoepft"]
+
+    def test_restzaehler_ist_keine_obergrenze(self):
+        # "Noch 7.585 verfügbar" sagt, wie viel uebrig ist — nicht, wie viel es
+        # insgesamt gab. Genau diese Zahl stand faelschlich im Feed.
+        assert kontingent_aus("Noch 7.585 Teilnahmen verfügbar")["anzahl"] is None
+
+    def test_pro_haushalt_bleibt_draussen(self):
+        # funny-frisch.
+        angaben = kontingent_aus("Bis zu vier Teilnahmen pro Haushalt und deutscher IBAN.")
+        assert angaben["anzahl"] is None

@@ -517,6 +517,30 @@ was dir nicht passt, sag Bescheid, dann drehe ich es um.
   Zeitpunkt braucht es keine Bibliothek, und ein ungenauer Alarm erspart die
   Sonderberechtigung für exakte Wecker. Gestellte Erinnerungen liegen in der Datenbank,
   weil Wecker keinen Neustart überleben.
+- **Fünf Minuten Vorlauf vor der Freischaltung, und der Wecker wiederholt sich** — bei
+  „1.000 pro Woche, montags ab 08:00 Uhr" entscheidet nicht die Frist, sondern die Minute:
+  Um 08:05 kann alles weg sein. Die Erinnerung kommt deshalb um 07:55 und wiederholt sich
+  im Rhythmus der Zurücksetzung (wöchentlich oder täglich), statt einmal zu feuern. Der
+  Vorlauf wird abgezogen, *nachdem* die nächste Freischaltung feststeht — sonst suchte ein
+  Wecker um 07:55 nach einer Freischaltung, die erst um 08:00 anfängt, und spränge eine
+  Woche zu weit.
+- **Der wiederkehrende Wecker stellt sich selbst neu, statt `setInexactRepeating` zu
+  benutzen** — beim Zusammenführen mit `main` traf die Wiederholung auf `setAndAllowWhileIdle`
+  (Zeile weiter unten). Beides zusammen geht nicht: Einen doze-festen *Wiederhol*wecker
+  kennt Android nicht, und `setInexactRepeating` ist genau der Typ, den Doze bis zum
+  Wartungsfenster liegen lässt. Bei fünf Minuten Vorlauf auf eine Freischaltung wäre das
+  wertlos. Deshalb steht immer nur der nächste Termin, und der Empfänger stellt beim
+  Auslösen den übernächsten — zuerst, noch vor dem Anzeigen, damit die Kette auch dann
+  nicht abreißt, wenn das Melden an einer entzogenen Erlaubnis scheitert.
+- **Ohne Uhrzeit im Text kein Wecker** — `Kontingenterinnerung.lies` gibt bei „Montags"
+  ohne Zeitangabe `null` zurück, statt eine Stunde zu raten. Ein Wecker, der fünf Minuten
+  vor der falschen Minute klingelt, ist schlechter als keiner. Für genau diese Fälle gibt
+  es den selbst gesetzten Zeitpunkt.
+- **Wiederkehrende Erinnerungen verfallen nicht** — beim App-Start räumt
+  `entferneAbgelaufeneEinmalige` nur Erinnerungen mit `abstandMillis = 0` weg. Ein
+  wiederkehrender Termin darf in der Vergangenheit stehen; er wird von `naechsterTermin`
+  auf den kommenden geschoben, damit ein Wecker nach einem Geräteneustart nicht sofort
+  losgeht.
 - **Ungenau ja, aber doze-fest** — `set()` klang nach „höchstens eine Stunde später“, so
   stand es hier auch. Im Doze-Modus hält Android einen solchen Wecker aber bis zum
   nächsten Wartungsfenster zurück, und über Nacht sind das Stunden. Am Tag des

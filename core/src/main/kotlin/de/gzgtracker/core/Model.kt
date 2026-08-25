@@ -169,10 +169,29 @@ data class PromoAction(
                     "monat" -> " pro Monat"
                     else -> " insgesamt"
                 }
-                teile += "$anzahl Teilnahmen$zeitraum"
+                teile += "${mitTausenderpunkten(anzahl)} Teilnahmen$zeitraum"
             }
             limitReset?.let { teile += "neu $it" }
             return teile.joinToString(", ").takeIf { it.isNotBlank() }
+        }
+
+    /**
+     * Dasselbe in kurz, fuer die Liste.
+     *
+     * "25000 Teilnahmen insgesamt" brach dort ueber zwei Zeilen. Neben Bild und
+     * Lesezeichen bleibt keine halbe Bildschirmbreite fuer Text — und "25.000
+     * insgesamt" sagt an dieser Stelle dasselbe.
+     */
+    val kontingentKurz: String?
+        get() {
+            val anzahl = limitAnzahl ?: return limitReset?.let { "neu $it" }
+            val zeitraum = when (limitZeitraum) {
+                "tag" -> "pro Tag"
+                "woche" -> "pro Woche"
+                "monat" -> "pro Monat"
+                else -> "insgesamt"
+            }
+            return "${mitTausenderpunkten(anzahl)} $zeitraum"
         }
 
     /** True, wenn es ueberhaupt etwas ueber das Kontingent zu sagen gibt. */
@@ -257,3 +276,15 @@ enum class Belegart(val label: String, val anforderung: String) {
 
 /** Ein Belegfoto und was darauf zu sehen ist. */
 data class Beleg(val art: Belegart, val pfad: String)
+
+/**
+ * Tausenderpunkte, wie man sie hierzulande schreibt.
+ *
+ * "25000" liest sich als Zahlenklumpen; "25.000" erkennt man auf einen Blick.
+ */
+private fun mitTausenderpunkten(zahl: Int): String =
+    zahl.toString()
+        .reversed()
+        .chunked(3)
+        .joinToString(".")
+        .reversed()

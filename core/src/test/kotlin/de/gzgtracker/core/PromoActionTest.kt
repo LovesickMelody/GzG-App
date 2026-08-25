@@ -68,7 +68,7 @@ class KontingentTextTest {
 
     @Test
     fun `nennt Anzahl und Zeitraum`() {
-        assertEquals("1000 Teilnahmen pro Woche", aktion(1000, "woche").kontingentText)
+        assertEquals("1.000 Teilnahmen pro Woche", aktion(1000, "woche").kontingentText)
     }
 
     @Test
@@ -79,7 +79,7 @@ class KontingentTextTest {
     @Test
     fun `haengt die Zuruecksetzung an`() {
         val text = aktion(1000, "woche", "Montags um 09:00 Uhr").kontingentText
-        assertEquals("1000 Teilnahmen pro Woche, neu Montags um 09:00 Uhr", text)
+        assertEquals("1.000 Teilnahmen pro Woche, neu Montags um 09:00 Uhr", text)
     }
 
     @Test
@@ -132,5 +132,43 @@ class PromoActionStartTest {
     @Test
     fun `ohne Startdatum gibt es nichts zu melden`() {
         assertNull(aktion(null).tageBisStart(heute))
+    }
+}
+
+/** Die kurze Fassung fuer die Liste, in der wenig Platz ist. */
+class KontingentKurzTest {
+
+    private fun aktion(anzahl: Int? = null, zeitraum: String? = null, reset: String? = null) =
+        PromoAction(
+            id = "a",
+            title = "Test",
+            limitAnzahl = anzahl,
+            limitZeitraum = zeitraum,
+            limitReset = reset,
+        )
+
+    @Test
+    fun `setzt Tausenderpunkte`() {
+        assertEquals("25.000 insgesamt", aktion(25000).kontingentKurz)
+        assertEquals("1.000.000 insgesamt", aktion(1000000).kontingentKurz)
+        assertEquals("333 pro Tag", aktion(333, "tag").kontingentKurz)
+    }
+
+    @Test
+    fun `laesst das Wort Teilnahmen weg`() {
+        // In der Liste zaehlt jede Zeile — die lange Fassung steht auf der
+        // Aktionsseite.
+        assertEquals("1.000 pro Woche", aktion(1000, "woche").kontingentKurz)
+        assertEquals("1.000 Teilnahmen pro Woche", aktion(1000, "woche").kontingentText)
+    }
+
+    @Test
+    fun `ohne Anzahl bleibt die Zuruecksetzung`() {
+        assertEquals("neu Montags um 09:00 Uhr", aktion(reset = "Montags um 09:00 Uhr").kontingentKurz)
+    }
+
+    @Test
+    fun `ohne alles gibt es nichts`() {
+        assertNull(aktion().kontingentKurz)
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material.icons.outlined.LocalOffer
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material.icons.filled.Bookmark
@@ -46,6 +48,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,7 +84,14 @@ fun AktionenScreen(
     val snackbar = remember { SnackbarHostState() }
     // Die Suchleiste nahm dauerhaft ein Sechstel des Bildschirms ein, obwohl
     // man selten sucht. Jetzt eine Lupe — und Platz fuer Aktionen.
-    var sucheOffen by remember { mutableStateOf(false) }
+    var sucheOffen by rememberSaveable { mutableStateOf(false) }
+
+    // Entscheidend ist nicht der Knopf, sondern der Suchbegriff: Wer gesucht,
+    // eine Aktion geoeffnet und zurueckgegangen ist, kam mit zugeklappter Leiste
+    // zurueck — der Begriff filterte aber weiter. Am Geraet sah das aus, als
+    // wuerden die uebrigen Aktionen nicht mehr geladen. Solange etwas im Feld
+    // steht, bleibt es sichtbar.
+    val sucheSichtbar = sucheOffen || zustand.suche.isNotBlank()
     var sortiermenue by remember { mutableStateOf(false) }
 
     LaunchedEffect(zustand.meldung) {
@@ -106,11 +116,29 @@ fun AktionenScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            sucheOffen = !sucheOffen
-                            if (!sucheOffen) viewModel.setzeSuche("")
+                            if (sucheSichtbar) {
+                                viewModel.setzeSuche("")
+                                sucheOffen = false
+                            } else {
+                                sucheOffen = true
+                            }
                         },
                     ) {
-                        Icon(Icons.Outlined.Search, contentDescription = "Suchen")
+                        Icon(
+                            if (sucheSichtbar) Icons.Outlined.SearchOff else Icons.Outlined.Search,
+                            contentDescription = if (sucheSichtbar) {
+                                "Suche schließen"
+                            } else {
+                                "Suchen"
+                            },
+                            // Ein aktiver Suchbegriff traegt den Akzent: Dann ist
+                            // die Liste gefiltert, und das muss man sehen.
+                            tint = if (zustand.suche.isNotBlank()) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                        )
                     }
 
                     Box {
@@ -159,7 +187,7 @@ fun AktionenScreen(
                 .padding(innen),
         ) {
             Column(Modifier.fillMaxSize()) {
-                if (sucheOffen) {
+                if (sucheSichtbar) {
                     SucheFeld(
                         wert = zustand.suche,
                         onWert = viewModel::setzeSuche,
@@ -205,18 +233,42 @@ fun AktionenScreen(
                 // Eigene Zeile statt neben den Chips: Dort blieb vom Text nur
                 // "Stand ge..." uebrig, egal wie kurz er gefasst war.
                 if (!zustand.nurMerkliste) {
-                    zustand.letzterSync?.let { sync ->
-                        Text(
-                            text = "Stand ${sync.relativeKurz()}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
-                            textAlign = TextAlign.End,
-                        )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        // Warum die Liste kurz ist, muss dastehen — sonst sieht
+                        // ein Suchbegriff, der das Einreichen ueberlebt hat, wie
+                        // ein kaputter Feed aus.
+                        if (zustand.eingeschraenkt) {
+                            Text(
+                                text = "${zustand.aktionen.size} von ${zustand.gesamt}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                            )
+                            TextButton(
+                                onClick = viewModel::setzeFilterZurueck,
+                                modifier = Modifier.heightIn(min = 48.dp),
+                            ) {
+                                Text("Filter zurücksetzen")
+                            }
+                        } else {
+                            Spacer(Modifier.weight(1f))
+                            zustand.letzterSync?.let { sync ->
+                                Text(
+                                    text = "Stand ${sync.relativeKurz()}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    textAlign = TextAlign.End,
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -248,10 +300,19 @@ fun AktionenScreen(
                 }
 
                 if (zustand.istLeer) {
-                    if (zustand.nurMerkliste) {
-                        LeereMerkliste(onAlleZeigen = { viewModel.setzeNurMerkliste(false) })
-                    } else {
-                        LeereAktionen(
+                    when {
+                        zustand.nurMerkliste ->
+                            LeereMerkliste(onAlleZeigen = { viewModel.setzeNurMerkliste(false) })
+
+                        // Es gibt Aktionen, nur passt keine zum Filter. "Feed
+                        // aktualisieren" waere hier der falsche Rat.
+                        zustand.gesamt > 0 -> NichtsGefunden(
+                            suche = zustand.suche,
+                            gesamt = zustand.gesamt,
+                            onZuruecksetzen = viewModel::setzeFilterZurueck,
+                        )
+
+                        else -> LeereAktionen(
                             onAnlegen = onAktionAnlegen,
                             onAktualisieren = viewModel::aktualisiere,
                         )
@@ -418,7 +479,7 @@ private fun AktionZeile(
                 Text(
                     text = listOfNotNull(
                         if (aktion.limitErschoepft) "Zuletzt erschöpft" else null,
-                        aktion.kontingentText,
+                        aktion.kontingentKurz,
                     ).joinToString(" · "),
                     style = MaterialTheme.typography.bodySmall,
                     color = if (aktion.limitErschoepft) {
@@ -463,14 +524,17 @@ private fun fristText(aktion: PromoAction, tage: Long?, bisStart: Long? = null):
     val beginn = aktion.validFrom
     if (bisStart != null && beginn != null) {
         return when {
-            bisStart == 1L -> "Startet morgen (${beginn.deutsch()})"
-            bisStart <= 14 -> "Startet in $bisStart Tagen (${beginn.deutsch()})"
-            else -> "Startet am ${beginn.deutsch()}"
+            bisStart == 1L -> "Ab morgen"
+            bisStart <= 14 -> "Ab ${beginn.deutsch()} (in $bisStart Tagen)"
+            else -> "Ab ${beginn.deutsch()}"
         }
     }
 
     val frist = aktion.submissionDeadline ?: aktion.validTo ?: return "Ohne Frist"
-    val bezeichnung = if (aktion.submissionDeadline != null) "Einsendeschluss" else "Läuft bis"
+    // Kurz halten: Neben Bild, Glocke und Lesezeichen bleiben keine 200 dp fuer
+    // Text, und "Einsendeschluss 31.10.2026" brach mitten im Wort um. Das lange
+    // Wort steht auf der Aktionsseite, wo Platz dafuer ist.
+    val bezeichnung = if (aktion.submissionDeadline != null) "Frist" else "Läuft bis"
     return when {
         tage == null -> "$bezeichnung ${frist.deutsch()}"
         tage < 0 -> "Abgelaufen seit ${frist.deutsch()}"
@@ -478,6 +542,56 @@ private fun fristText(aktion: PromoAction, tage: Long?, bisStart: Long? = null):
         tage == 1L -> "$bezeichnung morgen"
         tage <= 14 -> "$bezeichnung in $tage Tagen (${frist.deutsch()})"
         else -> "$bezeichnung ${frist.deutsch()}"
+    }
+}
+
+/**
+ * Der Filter passt auf nichts — aber Aktionen sind da.
+ *
+ * Wichtig ist die Zahl: „26 Aktionen sind geladen" nimmt den Verdacht weg, der
+ * Feed sei leer, und der Knopf daneben ist der Weg zurück.
+ */
+@Composable
+private fun NichtsGefunden(suche: String, gesamt: Int, onZuruecksetzen: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            Icons.Outlined.SearchOff,
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Text(
+            text = if (suche.isBlank()) {
+                "Kein Treffer für den Filter"
+            } else {
+                "Kein Treffer für „$suche“"
+            },
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(top = 16.dp),
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = "$gesamt Aktionen sind geladen, nur passt keine dazu.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp),
+        )
+        TextButton(
+            onClick = onZuruecksetzen,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .heightIn(min = 48.dp),
+        ) {
+            Text("Filter zurücksetzen")
+        }
     }
 }
 

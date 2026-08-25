@@ -14,6 +14,7 @@ import de.gzgtracker.core.PromoAction
 import de.gzgtracker.core.Submission
 import de.gzgtracker.core.SubmissionStatus
 import de.gzgtracker.data.receipt.BonLeser
+import de.gzgtracker.data.receipt.EanLeser
 import de.gzgtracker.data.receipt.ReceiptStorage
 import de.gzgtracker.data.repository.AccountRepository
 import de.gzgtracker.data.repository.ActionRepository
@@ -97,6 +98,7 @@ class ErfassenViewModel @Inject constructor(
     private val settings: SettingsRepository,
     private val receipts: ReceiptStorage,
     private val bonLeser: BonLeser,
+    private val eanLeser: EanLeser,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -286,6 +288,12 @@ class ErfassenViewModel @Inject constructor(
             if (art == Belegart.BON || art == Belegart.ZUSAMMEN) {
                 werteBonAus(neu)
             }
+
+            // Umgekehrt der Strichcode: Der steht auf der Packung, nicht auf
+            // dem Bon.
+            if (art == Belegart.PRODUKT || art == Belegart.ZUSAMMEN) {
+                liesEan(neu)
+            }
         }
     }
 
@@ -359,6 +367,26 @@ class ErfassenViewModel @Inject constructor(
                     else -> "Bon gelesen, aber kein Betrag gefunden. Bitte eintragen."
                 },
             )
+        }
+    }
+
+    /**
+     * Traegt die EAN aus dem Produktfoto ein, falls das Feld leer ist.
+     *
+     * Ohne Meldung, in beide Richtungen: Steht die Nummer da, sieht man sie im
+     * Feld; steht keine da, war auf dem Foto keiner zu finden, und das ist der
+     * Normalfall und kein Fehler — das Feld ist optional. Eine Meldung wuerde
+     * hier nur die vom Bon verdraengen, und die ist die wichtigere.
+     *
+     * Von Hand Eingetragenes bleibt: Wer die Nummer abgetippt hat, hat den
+     * besseren Blick auf die Packung gehabt als die Erkennung.
+     */
+    private suspend fun liesEan(pfad: String) {
+        if (_uiState.value.ean.isNotBlank()) return
+
+        val gelesen = eanLeser.lies(pfad) ?: return
+        _uiState.update { zustand ->
+            if (zustand.ean.isNotBlank()) zustand else zustand.copy(ean = gelesen)
         }
     }
 

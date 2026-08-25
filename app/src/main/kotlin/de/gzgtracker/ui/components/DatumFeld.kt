@@ -50,6 +50,9 @@ fun DatumFeld(
         readOnly = true,
         label = { Text(label) },
         placeholder = { Text(platzhalter) },
+        // Ein Datum umbrechen zu lassen ergibt nie Sinn — aus "16.08.2026" wurde
+        // sonst "16.08.202" und darunter eine einsame "6".
+        singleLine = true,
         trailingIcon = {
             Icon(Icons.Outlined.CalendarToday, contentDescription = null)
         },

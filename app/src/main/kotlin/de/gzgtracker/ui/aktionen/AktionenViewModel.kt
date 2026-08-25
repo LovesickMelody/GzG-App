@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.gzgtracker.core.PromoAction
 import de.gzgtracker.data.repository.ActionRepository
 import de.gzgtracker.data.repository.FeedErgebnis
+import de.gzgtracker.data.repository.SubmissionRepository
 import de.gzgtracker.data.settings.SettingsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,8 +42,20 @@ data class AktionenUiState(
     val aktualisiertGerade: Boolean = false,
     val letzterSync: Instant? = null,
     val meldung: String? = null,
+    /** Wie viele Aktionen insgesamt da sind, bevor gefiltert wird. */
+    val gesamt: Int = 0,
 ) {
     val istLeer: Boolean get() = !laedt && aktionen.isEmpty()
+
+    /**
+     * True, wenn Suche oder Filter etwas ausblenden.
+     *
+     * Genau daran ist schon zweimal der Eindruck entstanden, der Feed lade
+     * nicht: Ein Suchbegriff ueberlebt das Einreichen, und danach steht in der
+     * Liste nur noch ein Eintrag. Wo etwas fehlt, muss dastehen, warum.
+     */
+    val eingeschraenkt: Boolean
+        get() = !laedt && !nurMerkliste && (suche.isNotBlank() || aktionen.size < gesamt)
 
     val anzahlGemerkt: Int get() = gemerkt.size
 
@@ -56,6 +69,7 @@ data class AktionenUiState(
 class AktionenViewModel @Inject constructor(
     private val actions: ActionRepository,
     private val settings: SettingsRepository,
+    private val submissions: SubmissionRepository,
 ) : ViewModel() {
 
     private val eingaben = MutableStateFlow(Eingaben())
@@ -98,6 +112,7 @@ class AktionenViewModel @Inject constructor(
             aktualisiertGerade = eingabe.aktualisiert,
             letzterSync = einstellungen.lastSyncAt,
             meldung = eingabe.meldung,
+            gesamt = alle.size,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -110,9 +125,40 @@ class AktionenViewModel @Inject constructor(
         // nicht mitbekommt, wann neu gestartet wurde, stellt sie sie bei jedem
         // Start neu — doppelt stellen schadet nicht.
         viewModelScope.launch { actions.stelleErinnerungenNeu() }
+
+        vergissSucheNachEinreichung()
+    }
+
+    /**
+     * Loescht den Suchbegriff, sobald eine Einreichung dazugekommen ist.
+     *
+     * Das ViewModel haengt am Navigationseintrag der Liste und ueberlebt deshalb
+     * den ganzen Weg ueber Aktion, Formular und Erfassen. Wer vorher nach
+     * "senso" gesucht hatte, kam zurueck und sah eine Liste mit einem Eintrag —
+     * und hielt den Feed fuer kaputt. Nach dem Einreichen ist die Suche erledigt.
+     *
+     * Nur der Suchbegriff, nicht die Merkliste: Wer den Einkaufszettel abarbeitet,
+     * will nach dem Einreichen wieder den Zettel sehen und nicht alles.
+     */
+    private fun vergissSucheNachEinreichung() {
+        viewModelScope.launch {
+            var bekannt: Int? = null
+            submissions.alle.collect { liste ->
+                val vorher = bekannt
+                bekannt = liste.size
+                if (vorher != null && liste.size > vorher) {
+                    eingaben.update { it.copy(suche = "") }
+                }
+            }
+        }
     }
 
     fun setzeSuche(begriff: String) = eingaben.update { it.copy(suche = begriff) }
+
+    /** Nimmt Suche und Filter zurueck auf den Ausgangszustand. */
+    fun setzeFilterZurueck() = eingaben.update {
+        it.copy(suche = "", nurLaufende = true, nurMerkliste = false)
+    }
 
     fun setzeNurLaufende(nur: Boolean) = eingaben.update { it.copy(nurLaufende = nur) }
 

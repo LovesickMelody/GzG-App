@@ -45,6 +45,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,8 +74,13 @@ fun UebersichtScreen(
     val context = LocalContext.current
 
     var filterOffen by remember { mutableStateOf(false) }
-    var sucheOffen by remember { mutableStateOf(false) }
+    var sucheOffen by rememberSaveable { mutableStateOf(false) }
     var erstattungFuer by remember { mutableStateOf<SubmissionZeile?>(null) }
+
+    // Nicht der Knopf entscheidet, sondern der Begriff: Wer sucht, einen Beleg
+    // oeffnet und zurueckgeht, kaeme sonst mit zugeklappter Leiste zurueck —
+    // waehrend der Begriff weiterfiltert und die Liste unerklaerlich kurz ist.
+    val sucheSichtbar = sucheOffen || zustand.filter.suche.isNotBlank()
 
     LaunchedEffect(zustand.meldung) {
         val meldung = zustand.meldung ?: return@LaunchedEffect
@@ -96,13 +102,27 @@ fun UebersichtScreen(
                     titleContentColor = MaterialTheme.colorScheme.onBackground,
                 ),
                 actions = {
-                    IconButton(onClick = { sucheOffen = !sucheOffen }) {
+                    IconButton(
+                        onClick = {
+                            if (sucheSichtbar) {
+                                viewModel.setzeSuche("")
+                                sucheOffen = false
+                            } else {
+                                sucheOffen = true
+                            }
+                        },
+                    ) {
                         Icon(
-                            if (sucheOffen) Icons.Outlined.SearchOff else Icons.Outlined.Search,
-                            contentDescription = if (sucheOffen) {
+                            if (sucheSichtbar) Icons.Outlined.SearchOff else Icons.Outlined.Search,
+                            contentDescription = if (sucheSichtbar) {
                                 "Suche schließen"
                             } else {
                                 "Belege durchsuchen"
+                            },
+                            tint = if (zustand.filter.suche.isNotBlank()) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             },
                         )
                     }
@@ -166,7 +186,7 @@ fun UebersichtScreen(
                 .padding(innen),
         ) {
             Column(Modifier.fillMaxSize()) {
-                if (sucheOffen) {
+                if (sucheSichtbar) {
                     SucheFeld(
                         wert = zustand.filter.suche,
                         onWert = viewModel::setzeSuche,

@@ -35,6 +35,16 @@ object Erinnerungen {
 
     const val EXTRA_AKTION = "aktionId"
     const val EXTRA_TITEL = "titel"
+    const val EXTRA_ANLASS = "anlass"
+
+    /** Abstand einer wiederkehrenden Erinnerung in Millisekunden; 0 = einmalig. */
+    const val EXTRA_ABSTAND = "abstandMillis"
+
+    /** Erinnert an eine ablaufende Einsendefrist. */
+    const val ANLASS_FRIST = "frist"
+
+    /** Erinnert kurz bevor ein Kontingent neu freigeschaltet wird. */
+    const val ANLASS_FREISCHALTUNG = "freischaltung"
 
     /**
      * Legt den Benachrichtigungskanal an.
@@ -43,12 +53,17 @@ object Erinnerungen {
      * Meldung wortlos gar nicht an.
      */
     fun legeKanalAn(context: Context) {
+        // Name und Beschreibung darf `createNotificationChannel` auch bei einem
+        // bestehenden Kanal noch aendern — die Kennung nicht. Deshalb bleibt sie
+        // "fristen", obwohl hier laengst mehr als Fristen ankommt.
         val kanal = NotificationChannel(
             KANAL,
-            "Fristen",
+            "Erinnerungen",
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
-            description = "Erinnert, bevor der Einsendeschluss einer Aktion abläuft."
+            description =
+                "Erinnert vor dem Einsendeschluss und kurz bevor ein Kontingent neu " +
+                    "freigeschaltet wird."
         }
         context.getSystemService(NotificationManager::class.java)?.createNotificationChannel(kanal)
     }
@@ -69,21 +84,36 @@ object Erinnerungen {
      * Sonderberechtigung — anders als ein exakter Wecker. Genau ist der Wecker
      * damit weiterhin nicht, und das ist richtig so: Das System darf ihn
      * verschieben und buendeln, es laesst ihn nur nicht mehr liegen.
+     *
+     * [abstandMillis] groesser null heisst: wiederkehrend, fuer Kontingente, die
+     * jede Woche neu freigeschaltet werden. Bewusst **nicht** mit
+     * `setInexactRepeating` — dessen Wecker sind nicht doze-fest, und
+     * ausgerechnet bei fuenf Minuten Vorlauf auf eine Freischaltung waere ein
+     * bis zum Wartungsfenster liegengebliebener Wecker wertlos. Stattdessen
+     * wird immer nur der naechste Termin gestellt, und der
+     * [ErinnerungsEmpfaenger] stellt nach dem Ausloesen den uebernaechsten.
      */
-    fun stelle(context: Context, aktionId: String, titel: String, faelligAm: Instant) {
+    fun stelle(
+        context: Context,
+        aktionId: String,
+        titel: String,
+        faelligAm: Instant,
+        abstandMillis: Long = 0,
+        anlass: String = ANLASS_FRIST,
+    ) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
         manager.setAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             faelligAm.toEpochMilli(),
-            absicht(context, aktionId, titel),
+            absicht(context, aktionId, titel, anlass, abstandMillis),
         )
-        Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt")
+        Log.i(TAG, "Erinnerung für $aktionId auf $faelligAm gestellt (Abstand $abstandMillis)")
     }
 
     /** Nimmt den Wecker zurück. */
     fun nimmZurueck(context: Context, aktionId: String) {
         val manager = context.getSystemService(AlarmManager::class.java) ?: return
-        manager.cancel(absicht(context, aktionId, titel = ""))
+        manager.cancel(absicht(context, aktionId, titel = "", anlass = ANLASS_FRIST))
     }
 
     /**
@@ -93,7 +123,13 @@ object Erinnerungen {
      * ueberschreibt statt einen zweiten anzulegen — sonst meldete sich dieselbe
      * Aktion mehrfach.
      */
-    private fun absicht(context: Context, aktionId: String, titel: String): PendingIntent {
+    private fun absicht(
+        context: Context,
+        aktionId: String,
+        titel: String,
+        anlass: String,
+        abstandMillis: Long = 0,
+    ): PendingIntent {
         val intent = Intent(context, ErinnerungsEmpfaenger::class.java).apply {
             // Ohne eigene Adresse haelt das System zwei Absichten fuer gleich,
             // wenn sich nur die Extras unterscheiden — dann traegt der letzte
@@ -101,6 +137,8 @@ object Erinnerungen {
             data = android.net.Uri.parse("gzg://erinnerung/$aktionId")
             putExtra(EXTRA_AKTION, aktionId)
             putExtra(EXTRA_TITEL, titel)
+            putExtra(EXTRA_ANLASS, anlass)
+            putExtra(EXTRA_ABSTAND, abstandMillis)
         }
         return PendingIntent.getBroadcast(
             context,
@@ -117,6 +155,26 @@ class ErinnerungsEmpfaenger : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val aktionId = intent.getStringExtra(Erinnerungen.EXTRA_AKTION) ?: return
         val titel = intent.getStringExtra(Erinnerungen.EXTRA_TITEL).orEmpty()
+        val anlass = intent.getStringExtra(Erinnerungen.EXTRA_ANLASS)
+        val abstand = intent.getLongExtra(Erinnerungen.EXTRA_ABSTAND, 0)
+
+        // Wiederkehrende Erinnerung: gleich den naechsten Termin stellen. Das
+        // System kennt keinen doze-festen Wiederholwecker, also stellt sich
+        // dieser hier selbst neu — sonst kaeme die Meldung zur Freischaltung
+        // genau einmal.
+        //
+        // Zuerst, noch vor dem Anzeigen: Faellt das Melden gleich durch eine
+        // entzogene Erlaubnis, soll wenigstens die Kette nicht abreissen.
+        if (abstand > 0) {
+            Erinnerungen.stelle(
+                context,
+                aktionId,
+                titel,
+                Instant.now().plusMillis(abstand),
+                abstandMillis = abstand,
+                anlass = anlass ?: Erinnerungen.ANLASS_FREISCHALTUNG,
+            )
+        }
 
         // Tippen fuehrt in die App. Mehr als das braucht es nicht: Wo man
         // hinmuss, weiss man dann selbst.
@@ -129,11 +187,22 @@ class ErinnerungsEmpfaenger : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
+        val freischaltung = anlass == Erinnerungen.ANLASS_FREISCHALTUNG
+        val text = titel.ifBlank {
+            if (freischaltung) {
+                "Gleich werden neue Plätze frei."
+            } else {
+                "Eine gemerkte Aktion läuft bald ab."
+            }
+        }
+
         val meldung: Notification = NotificationCompat.Builder(context, Erinnerungen.KANAL)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Einsendeschluss rückt näher")
-            .setContentText(titel.ifBlank { "Eine gemerkte Aktion läuft bald ab." })
-            .setStyle(NotificationCompat.BigTextStyle().bigText(titel))
+            .setContentTitle(
+                if (freischaltung) "Gleich gibt es neue Plätze" else "Einsendeschluss rückt näher",
+            )
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setContentIntent(oeffnen)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

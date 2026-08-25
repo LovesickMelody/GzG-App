@@ -330,32 +330,34 @@ fun ErfassenScreen(
                 else -> null
             }
 
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(
-                    value = zustand.preis,
-                    onValueChange = viewModel::setzePreis,
-                    label = { Text("Gezahlter Preis") },
-                    suffix = { Text("€") },
-                    singleLine = true,
-                    isError = zustand.preis.isNotEmpty() && !zustand.preisOk,
-                    // Der Hinweis steht unter dem Feld, nicht als Meldung, die
-                    // wieder verschwindet: Ein falsch gelesener Betrag faellt
-                    // sonst erst auf, wenn die Erstattung ausbleibt.
-                    // Der Unterschied zaehlt: "an der Summe abgelesen" ist etwas
-                    // anderes als "groesster Betrag auf dem Bon".
-                    supportingText = preishinweis?.let { text -> { Text(text) } },
-                    textStyle = MoneyTextStyle,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.weight(1f),
-                )
-                DatumFeld(
-                    label = "Kaufdatum",
-                    wert = zustand.kaufdatum,
-                    onWert = viewModel::setzeKaufdatum,
-                    hinweis = if (zustand.datumAusBon) "Aus dem Bon — prüfen" else null,
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            // Nebeneinander war zu eng: Neben Beschriftung und Kalendersymbol
+            // blieben fuer "16.08.2026" keine 100 dp, und das Datum brach mitten
+            // in der Jahreszahl um. Beide ueber die volle Breite -- so wie jedes
+            // andere Feld in diesem Formular auch.
+            OutlinedTextField(
+                value = zustand.preis,
+                onValueChange = viewModel::setzePreis,
+                label = { Text("Gezahlter Preis") },
+                suffix = { Text("€") },
+                singleLine = true,
+                isError = zustand.preis.isNotEmpty() && !zustand.preisOk,
+                // Der Hinweis steht unter dem Feld, nicht als Meldung, die
+                // wieder verschwindet: Ein falsch gelesener Betrag faellt
+                // sonst erst auf, wenn die Erstattung ausbleibt.
+                // Der Unterschied zaehlt: "an der Summe abgelesen" ist etwas
+                // anderes als "groesster Betrag auf dem Bon".
+                supportingText = preishinweis?.let { text -> { Text(text) } },
+                textStyle = MoneyTextStyle,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+            )
+            DatumFeld(
+                label = "Kaufdatum",
+                wert = zustand.kaufdatum,
+                onWert = viewModel::setzeKaufdatum,
+                hinweis = if (zustand.datumAusBon) "Aus dem Bon — prüfen" else null,
+                modifier = Modifier.fillMaxWidth(),
+            )
 
             if (zustand.liestBon) {
                 Row(
@@ -451,12 +453,15 @@ fun ErfassenScreen(
                 }
             }
 
+            // Eine Zeile hoch, waechst beim Tippen mit. Vorher standen hier zwei
+            // leere Zeilen und beanspruchten Platz fuer etwas, das die meisten
+            // Einreichungen gar nicht brauchen.
             OutlinedTextField(
                 value = zustand.notiz,
                 onValueChange = viewModel::setzeNotiz,
                 label = { Text("Notiz") },
                 placeholder = { Text("optional") },
-                minLines = 2,
+                maxLines = 4,
                 modifier = Modifier.fillMaxWidth(),
             )
 

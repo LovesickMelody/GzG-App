@@ -1,0 +1,95 @@
+<!--
+  Ausschnitt aus https://rabattigel.de/cashback/, abgelesen am 25.08.2026 mit
+  `inspect_source.py --source rabattigel --roh "div.rgu-loop-date-box"`.
+
+  Der Zweck dieser Fixture: Die Seite hat ihren Datumsblock zwischen dem
+  14.08. und dem 25.08.2026 umgebaut — aus `div.rgu-date` wurde
+  `div.rgu-loop-date-row`. Der alte Selektor traf danach nichts mehr, die
+  Quelle lieferte wochenlang null Aktionen, und niemandem fiel es auf. Ein
+  Test gegen echtes Markup meldet so etwas beim naechsten Umbau sofort.
+
+  Gekuerzt auf das, worauf die Selektoren zugreifen.
+-->
+<html>
+  <body>
+    <main>
+      <article class="has-media rgu-card">
+        <div class="rgu-card-media">
+          <a class="rgu-card-image" href="https://rabattigel.de/beliebiges-centrum-produkt-gratis-testen-geld-zurueck/">
+            <img class="rgu-loop-image" src="https://rabattigel.de/wp-content/uploads/2026/08/werbung-mobile-1-768x715.png" />
+          </a>
+        </div>
+        <div class="rgu-card-main">
+          <h3 class="rgu-card-title">
+            <a href="https://rabattigel.de/beliebiges-centrum-produkt-gratis-testen-geld-zurueck/">
+              beliebiges Centrum Produkt [gratis testen, Geld zurück!]
+            </a>
+          </h3>
+          <div class="rgu-card-metabox">
+            <span class="rgu-excerpt-short">Centrum Produkt kaufen und den vollen Kaufpreis zurückerhalten.</span>
+            <div aria-label="Deal-Daten" class="rgu-loop-date-box">
+              <div aria-label="Eingetragen am 22.08.2026" class="rgu-loop-date-row is-posted" title="Eingetragen am 22.08.2026">
+                <span aria-hidden="true" class="rgu-loop-date-icon">📅</span>
+                <strong>22.08.2026</strong>
+              </div>
+              <div aria-label="Gültig bis 15.10.2026" class="rgu-loop-date-row is-expiry" title="Gültig bis 15.10.2026">
+                <span aria-hidden="true" class="rgu-loop-date-icon">❌</span>
+                <strong>15.10.2026</strong>
+              </div>
+            </div>
+          </div>
+          <div class="rgu-card-actionline">
+            <a class="btn_offer_block re_track_btn rgu-cta" href="https://www.erlebe-haleon.de/deals/centrum">Zum Angebot</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="has-media rgu-card">
+        <div class="rgu-card-media">
+          <a class="rgu-card-image" href="https://rabattigel.de/lipton-sensations/">
+            <img class="rgu-loop-image" src="https://rabattigel.de/wp-content/uploads/2026/08/lipton-768x651.webp" />
+          </a>
+        </div>
+        <div class="rgu-card-main">
+          <h3 class="rgu-card-title">
+            <a href="https://rabattigel.de/lipton-sensations/">LIPTON SENSATIONS [gratis testen, Geld zurück!]</a>
+          </h3>
+          <div class="rgu-card-metabox">
+            <span class="rgu-excerpt-short">Lipton Sensations gratis testen.</span>
+            <div aria-label="Deal-Daten" class="rgu-loop-date-box">
+              <div aria-label="Eingetragen am 20.08.2026" class="rgu-loop-date-row is-posted" title="Eingetragen am 20.08.2026">
+                <span aria-hidden="true" class="rgu-loop-date-icon">📅</span>
+                <strong>20.08.2026</strong>
+              </div>
+              <div aria-label="Gültig bis 25.10.2026" class="rgu-loop-date-row is-expiry" title="Gültig bis 25.10.2026">
+                <span aria-hidden="true" class="rgu-loop-date-icon">❌</span>
+                <strong>25.10.2026</strong>
+              </div>
+            </div>
+          </div>
+          <div class="rgu-card-actionline">
+            <a class="btn_offer_block re_track_btn rgu-cta" href="https://lipton-sensations-gratis.de/">Zum Angebot</a>
+          </div>
+        </div>
+      </article>
+
+      <!--
+        Dritte Karte ohne Datumsblock: Nicht jede Karte traegt eine Frist, und
+        eine fehlende darf nicht dazu fuehren, dass die Aktion wegfaellt.
+      -->
+      <article class="has-media rgu-card">
+        <div class="rgu-card-main">
+          <h3 class="rgu-card-title">
+            <a href="https://rabattigel.de/fazer-aito-haferdrink/">Fazer Aito Haferdrink [gratis testen, Geld zurück!]</a>
+          </h3>
+          <div class="rgu-card-metabox">
+            <span class="rgu-excerpt-short">Haferdrink gratis testen.</span>
+          </div>
+          <div class="rgu-card-actionline">
+            <a class="btn_offer_block re_track_btn rgu-cta" href="https://www.fazer.de/aktion">Zum Angebot</a>
+          </div>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
