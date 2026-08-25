@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from gzg_scraper.models import Action, stable_id
+from gzg_scraper import run
 from gzg_scraper.run import fuehre_zusammen, lade_bestand, schreibe_wenn_geaendert
 
 
@@ -157,3 +158,42 @@ class TestJsonForm:
         ).to_json()
         assert eintrag["retailers"] == ["Rossmann", "dm"]
         assert eintrag["eans"] == ["4005900123456", "96385074"]
+
+
+class TestVersiegteQuellen:
+    """
+    Eine Quelle, die stillschweigend auf null faellt, muss auffallen.
+
+    Genau das ist mit rabattigel passiert: Abruf gelungen, Parser gelaufen,
+    null Aktionen uebrig — und der Job meldete "erfolgreich". Wochenlang.
+    """
+
+    BESTAND = {
+        "actions": [
+            {"source": "rabattigel", "title": "A"},
+            {"source": "rabattigel", "title": "B"},
+            {"source": "mydealz", "title": "C"},
+        ]
+    }
+
+    def test_meldet_eine_versiegte_quelle(self):
+        assert run.melde_versiegte_quellen(
+            self.BESTAND, {"rabattigel": [], "mydealz": ["x"]}
+        )
+
+    def test_schweigt_wenn_alles_liefert(self):
+        assert not run.melde_versiegte_quellen(
+            self.BESTAND, {"rabattigel": ["x"], "mydealz": ["y"]}
+        )
+
+    def test_schweigt_bei_einer_neuen_leeren_Quelle(self):
+        # Eine Quelle, die noch nie etwas geliefert hat, ist kein Rueckschritt.
+        assert not run.melde_versiegte_quellen(self.BESTAND, {"frisch": []})
+
+    def test_schweigt_wenn_die_Quelle_ausgefallen_ist(self):
+        # Ausgefallene Quellen stehen gar nicht erst in neu_je_quelle — ihr
+        # alter Stand bleibt, und das ist der gewollte Weg.
+        assert not run.melde_versiegte_quellen(self.BESTAND, {"mydealz": ["y"]})
+
+    def test_ohne_bestand_kein_alarm(self):
+        assert not run.melde_versiegte_quellen({"actions": []}, {"rabattigel": []})

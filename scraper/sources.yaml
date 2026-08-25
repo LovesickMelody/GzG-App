@@ -112,12 +112,19 @@ sources:
       # ein Nachladen der Detailseite erübrigt sich.
       submit_link: "a.rgu-cta@href"
       image: "a.rgu-card-image img@src"
-      # "Gültig bis 30.08.2026" — der Einsendeschluss steht direkt am Bild.
-      deadline: "div.rgu-date strong"
-      valid_to: "div.rgu-date strong"
-      # Der Kurztext beginnt mit "Zeitraum: 10.08.2026 – 30.08.2026"; das erste
-      # Datum darin ist der Aktionsbeginn.
-      valid_from: "span.rgu-excerpt-short"
+      # Der Datumsblock trägt zwei Zeilen: `.is-posted` ("Eingetragen am") und
+      # `.is-expiry` ("Gültig bis"). Nur die zweite ist der Einsendeschluss.
+      #
+      # Abgelesen am 25.08.2026, nicht geraten. Vorher stand hier
+      # `div.rgu-date strong` — das Element gibt es seit dem Umbau der Seite
+      # nicht mehr, der Selektor traf nichts, und die Quelle lieferte still
+      # null Aktionen. Dagegen steht jetzt `tests/test_css_listing.py`
+      # mit einer Fixture aus dem echten Markup.
+      deadline: "div.rgu-loop-date-row.is-expiry strong"
+      valid_to: "div.rgu-loop-date-row.is-expiry strong"
+      # Kein `valid_from`: Die Übersicht nennt keinen Aktionsbeginn. Früher
+      # stand hier `span.rgu-excerpt-short` — das ist aber die Beschreibung
+      # ("So einfach geht's: Packung kaufen …") und kein Datum.
     bedingungen_von_aktionsseite: true
 
   # --- Erstanbieter: Kampagnen beim Urheber lesen statt beim Portal ---------

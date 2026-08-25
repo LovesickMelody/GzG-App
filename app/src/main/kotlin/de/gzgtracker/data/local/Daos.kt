@@ -103,6 +103,26 @@ interface PromoActionDao {
     @Query("SELECT DISTINCT source FROM promo_actions WHERE isManual = 0")
     suspend fun bekannteQuellen(): List<String>
 
+    /**
+     * Raeumt eine Quelle vollstaendig weg, die im Feed gar nicht mehr vorkommt.
+     *
+     * Eigene Abfrage statt [raeumeAufFuerQuelle] mit leerer Liste: `IN ()` ist
+     * in SQLite keine leere Menge, sondern ein Syntaxfehler.
+     *
+     * Dieselben Ausnahmen wie oben — was eine Einreichung hat oder auf dem
+     * Einkaufszettel steht, bleibt.
+     */
+    @Query(
+        """
+        DELETE FROM promo_actions
+        WHERE isManual = 0
+          AND source = :source
+          AND id NOT IN (SELECT DISTINCT actionId FROM submissions)
+          AND id NOT IN (SELECT actionId FROM watchlist)
+        """,
+    )
+    suspend fun entferneQuelle(source: String)
+
     @Transaction
     suspend fun ersetzeQuelle(
         source: String,

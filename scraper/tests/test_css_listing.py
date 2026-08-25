@@ -165,3 +165,60 @@ class TestTitelKuerzen:
         assert parse(self.HTML, ohne)[0].title == (
             "Bonduelle Frische Salate [gratis testen, Geld zurück!]"
         )
+
+
+class TestRabattigel:
+    """
+    Gegen das echte Markup von rabattigel.de.
+
+    Diese Klasse gibt es wegen eines stillen Ausfalls: Die Seite baute ihren
+    Datumsblock um, `div.rgu-date` traf danach nichts mehr, und weil eine
+    Aktion ohne Frist als "laeuft noch" durchgeht, fiel erst Wochen spaeter
+    auf, dass die Quelle gar nichts mehr lieferte. Ein Test gegen echtes
+    Markup meldet den naechsten Umbau sofort.
+    """
+
+    import yaml as _yaml
+
+    QUELLE = next(
+        q
+        for q in _yaml.safe_load(
+            (Path(__file__).parents[1] / "sources.yaml").read_text(encoding="utf-8")
+        )["sources"]
+        if q["name"] == "rabattigel"
+    )
+
+    @pytest.fixture
+    def aktionen(self):
+        html = (FIXTURES / "listing_rabattigel.html").read_text(encoding="utf-8")
+        return parse(html, self.QUELLE)
+
+    def test_findet_alle_karten(self, aktionen):
+        assert len(aktionen) == 3
+
+    def test_liest_den_einsendeschluss(self, aktionen):
+        # "Gültig bis 15.10.2026" — nicht "Eingetragen am 22.08.2026".
+        assert aktionen[0].submission_deadline == "2026-10-15"
+        assert aktionen[1].submission_deadline == "2026-10-25"
+
+    def test_verwechselt_das_eintragsdatum_nicht_mit_der_frist(self, aktionen):
+        # Genau diese Verwechslung wuerde jede Aktion sofort "abgelaufen"
+        # aussehen lassen, sobald das Eintragsdatum in der Vergangenheit liegt.
+        for aktion in aktionen:
+            assert aktion.submission_deadline != "2026-08-22"
+            assert aktion.submission_deadline != "2026-08-20"
+
+    def test_karte_ohne_datumsblock_bleibt_erhalten(self, aktionen):
+        ohne = aktionen[2]
+        assert ohne.title == "Fazer Aito Haferdrink"
+        assert ohne.submission_deadline is None
+
+    def test_traegt_keinen_beschreibungstext_als_datum_ein(self, aktionen):
+        # Der Kurztext ist Prosa ("So einfach geht's: Packung kaufen …") und
+        # war frueher als `valid_from` verdrahtet.
+        for aktion in aktionen:
+            assert aktion.valid_from is None
+
+    def test_liest_titel_und_einreichungslink(self, aktionen):
+        assert aktionen[0].title == "beliebiges Centrum Produkt"
+        assert aktionen[0].submit_url == "https://www.erlebe-haleon.de/deals/centrum"

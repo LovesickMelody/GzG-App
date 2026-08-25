@@ -215,9 +215,23 @@ class ActionRepository @Inject constructor(
             return FeedErgebnis.Erfolg(aktionen = 0, quellen = 0)
         }
 
-        eintraege.groupBy { it.source }.forEach { (quelle, aktionen) ->
+        val imFeed = eintraege.groupBy { it.source }
+        imFeed.forEach { (quelle, aktionen) ->
             dao.ersetzeQuelle(source = quelle, actions = aktionen, gesehenAm = jetzt)
         }
+
+        // Quellen, die der Feed gar nicht mehr nennt, wurden bisher nie
+        // angefasst — ihre Aktionen blieben fuer immer stehen. Genau daran lag
+        // es, dass die Liste wochenalte Angebote zeigte, obwohl der Feed sie
+        // laengst nicht mehr enthielt.
+        //
+        // Das ist gefahrlos, weil der Sammellauf den letzten Stand einer
+        // *ausgefallenen* Quelle selbst weitertraegt: Was hier fehlt, fehlt
+        // absichtlich. Einreichungen und der Einkaufszettel bleiben ohnehin
+        // verschont.
+        dao.bekannteQuellen()
+            .filterNot { it in imFeed }
+            .forEach { verschwunden -> dao.entferneQuelle(verschwunden) }
 
         settings.merkeSync(jetzt)
         return FeedErgebnis.Erfolg(
