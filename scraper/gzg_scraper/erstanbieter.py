@@ -3,7 +3,7 @@ Quellenart „Erstanbieter": Kampagnen bei ihrem Urheber lesen statt bei einem P
 
 Das ist die Pipeline aus Entdeckung, Extraktion und Pruefung::
 
-    ct_logs + sitemap  →  Kandidaten-Adressen   (kein Portal beteiligt)
+    ct_logs + sitemap + gelernt  →  Kandidaten-Adressen
             ↓
     fetch + tdm-Prüfung
             ↓
@@ -26,9 +26,10 @@ from __future__ import annotations
 import hashlib
 import logging
 from datetime import date
+from pathlib import Path
 
 from .extract import Modellextraktor, extrahiere, sichtbarer_text
-from .discovery import Kandidat, ct_logs, sitemap
+from .discovery import Kandidat, ct_logs, gelernt, sitemap
 from .fetch import Fetcher
 from .models import Action, adressenschluessel
 from .pruefung import Kontext, pruefe_liste
@@ -129,6 +130,14 @@ def entdecke(quelle: dict, fetcher: Fetcher) -> list[Kandidat]:
                 muster=eintrag.get("muster"),
                 quellenname=f"sitemap:{quelle['name']}",
             )
+        )
+
+    # Abwickler, die uns die Portale schon genannt haben. Kein Netzzugriff —
+    # die Adressen stehen in der Datei, gelernt aus fruehen Laeufen.
+    gelernt_datei = quelle.get("gelernte_abwickler")
+    if gelernt_datei:
+        gefunden.extend(
+            gelernt.finde(Path(gelernt_datei), quellenname=f"gelernt:{quelle['name']}")
         )
 
     # Dieselbe Adresse kann aus zwei Entdeckern kommen. Der erste Fund gewinnt,

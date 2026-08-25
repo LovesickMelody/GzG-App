@@ -24,6 +24,7 @@ import yaml
 
 from . import erstanbieter
 from .detail import reichere_an
+from .discovery import gelernt
 from .extract import Modellextraktor
 from .extract.modell import STANDARD_EFFORT as EFFORT_VORGABE
 from .extract.modell import STANDARD_MODELL as MODELL_VORGABE
@@ -38,6 +39,11 @@ log = logging.getLogger("gzg_scraper")
 WURZEL = Path(__file__).resolve().parents[2]
 STANDARD_QUELLEN = WURZEL / "scraper" / "sources.yaml"
 STANDARD_AUSGABE = WURZEL / "data" / "actions.json"
+
+# Verzeichnis der Abwickler, die uns die Portale schon genannt haben.
+# Liegt neben actions.json und wird mitcommittet: Jeder Lauf startet mit
+# einem frischen Klon, ohne die Datei waere das Gelernte nach einem Lauf weg.
+STANDARD_ABWICKLER = WURZEL / "data" / "abwickler.json"
 
 
 def lade_quellen(pfad: Path, nur: str | None = None) -> list[dict]:
@@ -346,6 +352,12 @@ def main(argv: list[str] | None = None) -> int:
     zerleger = argparse.ArgumentParser(description="Sammelt GZG-Aktionen als actions.json")
     zerleger.add_argument("--sources", type=Path, default=STANDARD_QUELLEN)
     zerleger.add_argument("--output", type=Path, default=STANDARD_AUSGABE)
+    zerleger.add_argument(
+        "--abwickler",
+        type=Path,
+        default=STANDARD_ABWICKLER,
+        help="Verzeichnis der gelernten Abwickler-Adressen",
+    )
     zerleger.add_argument("--delay", type=float, default=2.0, help="Sekunden zwischen Abrufen")
     zerleger.add_argument("--only", help="nur diese Quelle laufen lassen")
     zerleger.add_argument(
@@ -421,6 +433,11 @@ def main(argv: list[str] | None = None) -> int:
         name = quelle["name"]
         log.info("--- Quelle %s ---", name)
         if quelle.get("parser") == "erstanbieter":
+            # Der Lauf arbeitet im Verzeichnis scraper/, ein relativer Pfad aus
+            # sources.yaml zeigte also woanders hin als --abwickler. Deshalb
+            # entscheidet hier der Lauf, nicht die Quellendatei.
+            if quelle.get("gelernte_abwickler"):
+                quelle = {**quelle, "gelernte_abwickler": str(argumente.abwickler)}
             ergebnis = erstanbieter.sammle(
                 quelle,
                 fetcher,
@@ -450,6 +467,7 @@ def main(argv: list[str] | None = None) -> int:
     aktionen = fuehre_zusammen(bestand, neu_je_quelle, ausgefallen, uebersprungen)
 
     schreibe_wenn_geaendert(argumente.output, aktionen)
+    lerne_abwickler(argumente.abwickler, aktionen)
 
     log.info(
         "Fertig: %s Aktionen, %s Quellen erfolgreich, %s ausgefallen%s",
@@ -470,6 +488,26 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     return 0
+
+
+def lerne_abwickler(pfad: Path, aktionen: list[dict]) -> None:
+    """
+    Schreibt fort, welche Abwickler uns die Portale genannt haben.
+
+    Der Ertrag steckt nicht in diesem Lauf, sondern im naechsten: Aus dem
+    Verzeichnis wird eine Entdeckung, die ohne jedes Portal auskommt. Faellt
+    mydealz aus, sind die Kampagnenadressen trotzdem da.
+
+    Bewusst nach dem Schreiben von ``actions.json`` und ohne Einfluss darauf:
+    Ein Fehler beim Lernen darf den Feed nicht aufhalten.
+    """
+    try:
+        vorher = gelernt.lies_verzeichnis(pfad)
+        nachher = gelernt.lerne(vorher, aktionen, heute=date.today().isoformat())
+        if gelernt.schreibe_verzeichnis(pfad, nachher):
+            log.info("Abwicklerverzeichnis aktualisiert: %s Host(s)", len(nachher))
+    except OSError as fehler:
+        log.warning("Abwicklerverzeichnis nicht schreibbar: %s", fehler)
 
 
 def melde_versiegte_quellen(

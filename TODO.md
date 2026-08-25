@@ -146,9 +146,14 @@ Abgehakt heisst: gebaut, getestet, committet.
 - [ ] Ausgabenlimit in der Anthropic Console setzen
 - [x] Erster Probelauf `--only justsnap` — Ergebnis: crt.sh blockt, und ein
       `--only`-Lauf haette den Feed leergeraeumt. Beides behoben
-- [ ] Zweiter Probelauf `--only justsnap` ueber certspotter: Legt JustSnap wirklich
-      je Kampagne eine Subdomain an? Ergebnis lesen, nicht nur zaehlen
-- [ ] JustSnap-Quelle auf `enabled: true` stellen, wenn der Probelauf taugt
+- [x] Zweiter Probelauf `--only justsnap` — Ergebnis: **certspotter verbietet den
+      Abruf ebenfalls per robots.txt**, `justsnap.eu` loest nicht auf, und
+      `justsnap.de` ist eine B2B-Firmenseite ohne Kampagnenliste. Die Entdeckung
+      ueber Zertifikatsprotokolle ist damit bei beiden Anbietern zu
+- [x] JustSnap-Quelle entfernt und durch die Quelle `abwickler` ersetzt: Adressen
+      lernen, die uns die Portale ohnehin nennen (`data/abwickler.json`)
+- [ ] Nach ein paar Laeufen pruefen, wie viele Aktionen die Quelle `abwickler`
+      wirklich beisteuert — und ob sie einen Portalausfall auffaengt
 - [ ] Weitere Plattformen abklopfen (jolt, coreweb, Couponing House, DREI-D)
 - [ ] Erstanbieter mit eigener Aktionsuebersicht ergaenzen (P&G ForMe)
 - [ ] Websuche-Entdecker als Netz fuer unbekannte Plattformen
