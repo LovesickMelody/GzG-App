@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T04:53:21Z",
+  "generated_at": "2026-08-26T04:40:36Z",
   "actions": [
     {
       "id": "7a6893486835",
@@ -8,8 +8,8 @@
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
-      "valid_to": "2026-10-25",
-      "submission_deadline": "2026-10-25",
+      "valid_to": null,
+      "submission_deadline": null,
       "url": "https://geldzurueck.deals/lipton-sensations-gratis-testen",
       "submit_url": "https://lipton-sensations-gratis.de/",
       "requirements": [
@@ -37,7 +37,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBEOVJyMnkxaXpFSFJETzNTT01FN1dlTU5KUi1tQXFBY6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIC1DbGlqOGRqcHBaUFNGNjBsR21oTjV4M2tBZ1FGTk54o2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SA2SmEyMGxqT0haS0VqcTY3TTZDcS1aYXd6ZzlwRXZ2V6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDc3MTE5TzNSV2cyOFcwd0EwVjI3eXlfX2tLSnFLTGdjo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -70,6 +70,32 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/Og83V/2818388_1/re/150x150/qt/55/2818388_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "5545c519360f",
+      "title": "100% GzG auf Febreze Aprilfrisch Air, Plug, Bath, Textile (personalisiert), evtl. auch andere Produkte",
+      "brand": "for me:",
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-12-30",
+      "valid_to": "2027-01-15",
+      "submission_deadline": "2027-01-15",
+      "url": "https://www.mydealz.de/deals/for-me-100-gzg-auf-febreze-aprilfrisch-air-plug-bath-textile-personalisiert-evtl-auch-andere-produkte-2830269",
+      "submit_url": "https://www.for-me-online.de/geld-zurueck-aktionen#ancre_1",
+      "requirements": [
+        "bonfoto",
+        "handy_verifizierung",
+        "registrierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/HS6YB/2830269_1/re/150x150/qt/55/2830269_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -345,7 +371,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTExNDUxNTA&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTExNDUxNTA&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTEyMTQ3NTE&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTEyMTQ3NTE&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -369,7 +395,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897605453&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897795908&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
