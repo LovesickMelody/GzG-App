@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-26T04:40:36Z",
+  "generated_at": "2026-08-27T15:02:06Z",
   "actions": [
     {
       "id": "7a6893486835",
@@ -37,7 +37,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SA2SmEyMGxqT0haS0VqcTY3TTZDcS1aYXd6ZzlwRXZ2V6Fur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDc3MTE5TzNSV2cyOFcwd0EwVjI3eXlfX2tLSnFLTGdjo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBwRlhjcDRsY2ZlRVFYMkl4c1Q4aUxYdGtwTURqeWliOaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDdXUHBQTGQwczhPbjBYWW9IUF9TaHhFdWtpNHlBWlJao2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -63,6 +63,7 @@
       "submit_url": "https://www.marktguru.de/mb/oyess-honey-vanilla-cashback-6818",
       "requirements": [
         "bonfoto",
+        "strichcode",
         "app"
       ],
       "retailers": [
@@ -124,29 +125,6 @@
       "source": "mydealz"
     },
     {
-      "id": "18c983381d7d",
-      "title": "2 Flaschen SACHSEN QUELLE medium+ Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-10-30",
-      "submission_deadline": "2026-10-30",
-      "url": "https://www.mydealz.de/deals/gzg-regional-sachsen-quelle-medium-orange-oder-medium-lemon-gratis-testen-2-flaschen-2818169",
-      "submit_url": "https://www.sachsenquelle.de/medium-orange/",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/27nd5/2818169_1/re/150x150/qt/55/2818169_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "92d251bfbaec",
       "title": "651 Fitnessstudios (United let’s move) vom 23.-30.09.2026 gratis testen",
       "brand": null,
@@ -163,6 +141,29 @@
       "image_url": "https://static.mydealz.de/threads/raw/Cg6bm/2829882_1/re/150x150/qt/55/2829882_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "7bedea0e37a2",
+      "title": "Arla Skyr Drink Gratis Testen (täglich 555 Teilnahmen) bis 08.11.",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 199,
+      "valid_from": null,
+      "valid_to": "2026-11-08",
+      "submission_deadline": "2026-11-08",
+      "url": "https://www.mydealz.de/deals/gzg-ab-3108-arla-skyr-drink-gratis-testen-taglich-555-teilnahmen-bis-0811-2830762",
+      "submit_url": "https://arla-skyr-promotion.de/",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/yeQKs/2830762_1/re/150x150/qt/55/2830762_1.jpg",
+      "limit_anzahl": 555,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -291,6 +292,35 @@
       "source": "mydealz"
     },
     {
+      "id": "6b9c1233f469",
+      "title": "Gratis Testen Dove body+mind Serum Duschprodukte Geld zurück bei dm budni Rossmann Müller GZG",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 795,
+      "valid_from": "2026-09-20",
+      "valid_to": "2026-09-27",
+      "submission_deadline": "2026-09-27",
+      "url": "https://www.mydealz.de/deals/gzg-gratis-testen-dove-bodymind-serum-duschprodukte-geld-zuruck-bei-dm-budni-rossmann-muller-gzg-2831181",
+      "submit_url": "https://aktionen.oca-services.com/teilnahmeformular/dove/de-de/dove-serum-duschgel-zufriedenheitsgarantie#/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "Budni",
+        "Müller",
+        "Rossmann",
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/df8qN/2831181_1/re/150x150/qt/55/2831181_1.jpg",
+      "limit_anzahl": 16000,
+      "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "59db6a0c485f",
       "title": "Gratis testen - Sensodyne Proschmelz Clincal Zahnschmelz Protect mit Aktionssticker",
       "brand": null,
@@ -338,6 +368,30 @@
       "source": "mydealz"
     },
     {
+      "id": "847671617fd7",
+      "title": "Hilcona GZG",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": "2026-08-31",
+      "submission_deadline": "2026-08-31",
+      "url": "https://www.mydealz.de/deals/hilcona-gzg-2830642",
+      "submit_url": null,
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/v25r7/2830642_1/re/150x150/qt/55/2830642_1.jpg",
+      "limit_anzahl": 20000,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "b356ef205980",
       "title": "Jacobs 3in1/2in1 gratis testen ab dem 17.08-26 - 30.09.26",
       "brand": "JACOBS Kaffee",
@@ -362,6 +416,30 @@
       "source": "mydealz"
     },
     {
+      "id": "9d1d4c0ee66c",
+      "title": "Milka Pralinen Gratis Testen (2.500 pro Woche/40.000 insgesamt) bis 27.12.",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 749,
+      "valid_from": "2026-09-07",
+      "valid_to": "2026-12-27",
+      "submission_deadline": "2026-12-27",
+      "url": "https://www.mydealz.de/deals/gzg-ab-0709-milka-pralinen-gratis-testen-2500-pro-woche40000-insgesamt-bis-2712-2831122",
+      "submit_url": "https://gratisschenken.milka.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/AUCBZ/2831122_1/re/150x150/qt/55/2831122_1.jpg",
+      "limit_anzahl": 40000,
+      "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "87ff5f68e229",
       "title": "O2 Priority: O2 TV Classic gratis testen und optional Disney+ für 3 Monate sichern.",
       "brand": "o2",
@@ -371,7 +449,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTEyMTQ3NTE&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTEyMTQ3NTE&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTEzMjM5MjU&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTEzMjM5MjU&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -395,7 +473,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1897795908&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1898110567&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
