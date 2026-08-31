@@ -1,6 +1,53 @@
 {
-  "generated_at": "2026-08-30T09:47:59Z",
+  "generated_at": "2026-08-31T10:36:08Z",
   "actions": [
+    {
+      "id": "5ace036f8615",
+      "title": "Endori Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/endori-gratis-testen",
+      "submit_url": "https://endori-gratis-testen.de/",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/139/endori-gratis-testen_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "1128e43bf9e7",
+      "title": "Hilcona Pasta Gratis testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/hilcona-pasta-gratis-testen",
+      "submit_url": "https://hilcona-testen.de/",
+      "requirements": [
+        "bonfoto",
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/141/hilcona-pasta-gratis-testen_xs.png",
+      "limit_anzahl": 1300,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
     {
       "id": "7a6893486835",
       "title": "Lipton Sensations Gratis Testen",
@@ -37,40 +84,13 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBvbWtaTTRDWWNyLVlKMDlOQjAzNG1jNExVNF8yN1B6bKFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIG42NHRMNmt0WlA3WkZodkFEMWVhZDFRX1A3R0tUYXUto2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBxSGJrX0RTaU5jU2d0MllJRXNoZWFOQll5R2hvZ09rUqFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEVmSDI3UWhoUXlaMzFsN0JBbDBDb2otQUw2VE50blZNo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/1b1iF/2822183_1/re/150x150/qt/55/2822183_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "a1d1aee4440c",
-      "title": "100% Cashback GZG - Oyess Honey & Vanilla • MARKTGURU • DM",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 295,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/100-cashback-gzg-oyess-honey-vanilla-nur-bei-dm-2818388",
-      "submit_url": "https://www.marktguru.de/mb/oyess-honey-vanilla-cashback-6818",
-      "requirements": [
-        "bonfoto",
-        "strichcode",
-        "app"
-      ],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Og83V/2818388_1/re/150x150/qt/55/2818388_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -134,7 +154,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788083122_f248c56a60a9df18181a54d59fea3e84&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788172420_69768d31a9e3aee8b3ad85261ba549e4&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -159,39 +179,14 @@
       "url": "https://www.mydealz.de/deals/gzg-ab-3108-arla-skyr-drink-gratis-testen-taglich-555-teilnahmen-bis-0811-2830762",
       "submit_url": "https://arla-skyr-promotion.de/",
       "requirements": [
-        "bonfoto"
+        "bonfoto",
+        "iban"
       ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/yeQKs/2830762_1/re/150x150/qt/55/2830762_1.jpg",
       "limit_anzahl": 555,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "388fb64349a3",
-      "title": "Bonduelle Salat Gratis Testen via scondoo",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-08-10",
-      "valid_to": "2026-08-30",
-      "submission_deadline": "2026-08-30",
-      "url": "https://www.mydealz.de/deals/gzg-bonduelle-salat-gratis-testen-via-scondoo-2822886",
-      "submit_url": null,
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "zusammen_fotografieren",
-        "app"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/OWElM/2822886_1/re/150x150/qt/55/2822886_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -344,7 +339,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/x1jPB/2819890_1/re/150x150/qt/55/2819890_1.jpg",
       "limit_anzahl": 25000,
       "limit_zeitraum": null,
-      "limit_reset": "Montags um 08:00 Uhr",
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -451,7 +446,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/o2-priority-o2-tv-classic-gratis-testen-und-optional-disney-fur-3-monate-sichern-2818983",
-      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTE0Nzk3NTQ&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTE0Nzk3NTQ&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
+      "submit_url": "https://www.o2online.de/priority/vorteile/deal-o2tv-disney-07-09-26?affiliateid=v03MDAwMDAwMDAwMDAwMDAyMTE1NDk1OTg&mediacode=AFF_ca_10575_-TextGEN&partnerId=O2_AFF_DLZ_EXA_15004&ref=v03MDAwMDAwMDAwMDAwMDAyMTE1NDk1OTg&utm_campaign=O2_SALES_PO_null_null_O2_AFF_DLZ_EXA_15004&utm_content=O2_AFF_DLZ_EXA_15004&utm_keyword=AFF_ca_10575_10444-&utm_medium=comads&utm_source=affiliate&utm_term=AFF_ca_10575_-TextGEN",
       "requirements": [
         "handy_verifizierung",
         "registrierung"
@@ -475,7 +470,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/pyur-3-monate-internet-250-gratis-testen-bei-verfugbarkeit-als-neukunde-2819197",
-      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1898606174&wfid=10575",
+      "submit_url": "https://www.pyur.com/?campID=AFF-Comads&ca_id=1898786516&wfid=10575",
       "requirements": [],
       "retailers": [],
       "eans": [],
