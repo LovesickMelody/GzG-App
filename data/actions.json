@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01T09:13:46Z",
+  "generated_at": "2026-09-02T08:26:50Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -27,25 +27,28 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "5ace036f8615",
-      "title": "Endori Gratis Testen",
+      "id": "7186ccd415ff",
+      "title": "Claro Spültabs Gratis Testen",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
       "valid_to": null,
       "submission_deadline": null,
-      "url": "https://geldzurueck.deals/endori-gratis-testen",
-      "submit_url": "https://endori-gratis-testen.de/",
+      "url": "https://geldzurueck.deals/claro-spueltabs-gratis-testen",
+      "submit_url": "https://claro-gratis-testen.at/",
       "requirements": [
-        "bonfoto"
+        "produktfoto",
+        "bonfoto",
+        "registrierung",
+        "iban"
       ],
       "retailers": [],
       "eans": [],
-      "image_url": "https://geldzurueck.deals/images/139/endori-gratis-testen_xs.png",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
+      "image_url": "https://geldzurueck.deals/images/148/claro-spueltabs-gratis-testen_xs.png",
+      "limit_anzahl": 2000,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags um 09:00 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -107,7 +110,7 @@
       "valid_to": "2027-01-15",
       "submission_deadline": "2027-01-15",
       "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBaQlZuQUhHZThZZHgzaVdfTG9YeDRtb1h6dDh3QnBlUaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEZEZXVkcF9ySXc4OHdzdTlKWEwtTUFoV0xVaUFFazBBo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
+      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBpaE9iMmlvSXNqcV9mR2I1SmhSTmJ0WnZud1U4UmhVUaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEowTUl4dEZWVnBRZVhXemZNMHZ4QTJJems1Tm9FN2tmo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
       "requirements": [
         "registrierung"
       ],
@@ -244,7 +247,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788253896_eef67a349d1e0321918a7f8c6ea1e019&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788337479_fde8c55a64d9df483ccdd36cbd173d04&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -401,30 +404,6 @@
       "source": "mydealz"
     },
     {
-      "id": "002284343c3f",
-      "title": "Edgard & Cooper Katzen- oder Hundefutter Gratis Testen bis 10€",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 1000,
-      "valid_from": "2026-08-24",
-      "valid_to": "2026-09-27",
-      "submission_deadline": "2026-09-27",
-      "url": "https://www.mydealz.de/deals/gzg-ab-2408-edgard-cooper-katzen-oder-hundefutter-gratis-testen-bis-10eur-2821084",
-      "submit_url": "https://cashu-club.de/aktion/edgardcooper",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/fukzZ/2821084_1/re/150x150/qt/55/2821084_1.jpg",
-      "limit_anzahl": 1000,
-      "limit_zeitraum": "woche",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "16a1f42cb9ff",
       "title": "GZG VoltaHeat- (Wärmepflaster, Wärme Gel) oder VoltaCool-Produkt (Kühl Gel)",
       "brand": null,
@@ -448,29 +427,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/ITuar/2833246_1/re/150x150/qt/55/2833246_1.jpg",
       "limit_anzahl": 20000,
       "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "f04226ffb1ad",
-      "title": "Gratis Protein Pizzaboden - Geld wird nach Umfrage erstattet",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 590,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/ab-19uhr-gzg-gratis-protein-pizzaboden-geld-wird-nach-umfrage-erstattet-2821392",
-      "submit_url": "https://themorepizza.com/",
-      "requirements": [],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/9pOhE/2821392_1/re/150x150/qt/55/2821392_1.jpg",
-      "limit_anzahl": 69,
-      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -606,6 +562,31 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/PPGqQ/2832877_1/re/150x150/qt/55/2832877_1.jpg",
       "limit_anzahl": 30000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "e41a23c9ed02",
+      "title": "VPN Plus 2 Jahre für 2,99 €/Monat statt 9,99 € (-70 %) | 71,76 € gesamt | 30 Tage Geld-zurück",
+      "brand": "Proton",
+      "type": "gratis_testen",
+      "max_refund_cents": 299,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-10298c8d4bd1e47d569e10df765eb4-26&affiliate=4998&affiliateId=4998",
+      "requirements": [
+        "registrierung"
+      ],
+      "retailers": [
+        "Norma"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/l1ajY/2823428_1/re/150x150/qt/55/2823428_1.jpg",
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
