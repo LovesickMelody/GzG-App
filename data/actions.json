@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T08:26:50Z",
+  "generated_at": "2026-09-03T08:36:37Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -86,7 +86,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://geldzurueck.deals/rama-cashback-gewinnspiel-bis-zu-100-prozent-geld-zurueck-aktion",
-      "submit_url": "https://rama-promotion.de/",
+      "submit_url": "https://www.rama-promotion.de/",
       "requirements": [
         "bonfoto",
         "iban"
@@ -99,29 +99,6 @@
       "limit_reset": "Montags um 00:00 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
-    },
-    {
-      "id": "7f1d1c84fa28",
-      "title": "100 % zurück auf Pantene Pro-V Repair & Care Collection und andere Artikel über for me",
-      "brand": "for me:",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-08-07",
-      "valid_to": "2027-01-15",
-      "submission_deadline": "2027-01-15",
-      "url": "https://www.mydealz.de/deals/100-zuruck-auf-pantene-pro-v-repair-care-collection-und-andere-artikel-uber-for-me-2822183",
-      "submit_url": "https://konto.for-me-online.de/u/login?state=hKFo2SBpaE9iMmlvSXNqcV9mR2I1SmhSTmJ0WnZud1U4UmhVUaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIEowTUl4dEZWVnBRZVhXemZNMHZ4QTJJems1Tm9FN2tmo2NpZNkgSm1VaGtRV2xvY2l5QlRLa0JiR1Q3WWNOMkFwa0FTdjc",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/1b1iF/2822183_1/re/150x150/qt/55/2822183_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
     },
     {
       "id": "78a54a8056a8",
@@ -247,7 +224,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788337479_fde8c55a64d9df483ccdd36cbd173d04&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788424451_ed28c6effe1aea317be176b5c89b5afe&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -530,6 +507,29 @@
       "source": "mydealz"
     },
     {
+      "id": "2d96798f0bbc",
+      "title": "Reese's 1+1 GRATIS",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 219,
+      "valid_from": "2026-09-01",
+      "valid_to": "2026-11-07",
+      "submission_deadline": "2026-11-07",
+      "url": "https://www.mydealz.de/deals/teil-gzg-reeses-11-gratis-2834275",
+      "submit_url": "https://reeses-aktion.de",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/Dt01g/2834275_1/re/150x150/qt/55/2834275_1.jpg",
+      "limit_anzahl": 350,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "fe0c6defb449",
       "title": "Tena Slipeinlagen Gratis Testen",
       "brand": "TENA",
@@ -577,7 +577,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-10298c8d4bd1e47d569e10df765eb4-26&affiliate=4998&affiliateId=4998",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-10239cbc5095898677bf82934d376a-26&affiliate=4998&affiliateId=4998",
       "requirements": [
         "registrierung"
       ],
