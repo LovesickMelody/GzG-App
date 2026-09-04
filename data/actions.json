@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T08:36:37Z",
+  "generated_at": "2026-09-04T08:31:31Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -49,30 +49,6 @@
       "limit_anzahl": 2000,
       "limit_zeitraum": "woche",
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "1128e43bf9e7",
-      "title": "Hilcona Pasta Gratis testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/hilcona-pasta-gratis-testen",
-      "submit_url": "https://hilcona-testen.de/",
-      "requirements": [
-        "bonfoto",
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/141/hilcona-pasta-gratis-testen_xs.png",
-      "limit_anzahl": 1300,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -224,7 +200,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788424451_ed28c6effe1aea317be176b5c89b5afe&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788510569_1b3289c1e7dda645aa6339b53b7cec47&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -459,6 +435,32 @@
       "source": "mydealz"
     },
     {
+      "id": "f28b8c59cf19",
+      "title": "Herta frische Pizza Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-08-31",
+      "valid_to": "2026-11-29",
+      "submission_deadline": "2026-11-29",
+      "url": "https://www.mydealz.de/deals/gzg-nur-bei-globus-herta-frische-pizza-gratis-testen-2834412",
+      "submit_url": null,
+      "requirements": [
+        "produktfoto",
+        "bonfoto"
+      ],
+      "retailers": [
+        "Globus"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/JtScI/2834412_1/re/150x150/qt/55/2834412_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "b356ef205980",
       "title": "Jacobs 3in1/2in1 gratis testen ab dem 17.08-26 - 30.09.26",
       "brand": "JACOBS Kaffee",
@@ -577,7 +579,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-10239cbc5095898677bf82934d376a-26&affiliate=4998&affiliateId=4998",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-1021ae7f25697c2326c5cc65c9b73d-26&affiliate=4998&affiliateId=4998",
       "requirements": [
         "registrierung"
       ],
