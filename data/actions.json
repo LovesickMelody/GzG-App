@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T08:31:31Z",
+  "generated_at": "2026-09-05T08:05:57Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -200,7 +200,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788510569_1b3289c1e7dda645aa6339b53b7cec47&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788595440_f7bb6359bad8929461d190ba0b24b98d&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -481,7 +481,7 @@
       "limit_anzahl": 555,
       "limit_zeitraum": null,
       "limit_reset": null,
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -579,7 +579,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-1021ae7f25697c2326c5cc65c9b73d-26&affiliate=4998&affiliateId=4998",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-1022cfe99246ae5be22bdb91091513-26&affiliate=4998&affiliateId=4998",
       "requirements": [
         "registrierung"
       ],
