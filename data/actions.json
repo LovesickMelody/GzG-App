@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T08:24:48Z",
+  "generated_at": "2026-09-07T08:58:36Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -200,7 +200,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788682974_99185f182f54c0e2b8e626f96b33a45a&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788771393_0c87671e1e5af4d44724c7d81f1cbf29&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -414,7 +414,7 @@
       "valid_to": "2026-09-27",
       "submission_deadline": "2026-09-27",
       "url": "https://www.mydealz.de/deals/gzg-gratis-testen-dove-bodymind-serum-duschprodukte-geld-zuruck-bei-dm-budni-rossmann-muller-gzg-2831181",
-      "submit_url": "https://aktionen.oca-services.com/teilnahmeformular/dove/de-de/dove-serum-duschgel-zufriedenheitsgarantie#/",
+      "submit_url": "https://aktionen.oca-services.com/dove-serum-duschgel-zufriedenheitsgarantie#/",
       "requirements": [
         "bonfoto",
         "iban"
@@ -523,7 +523,7 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/AUCBZ/2831122_1/re/150x150/qt/55/2831122_1.jpg",
       "limit_anzahl": 40000,
-      "limit_zeitraum": "woche",
+      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -599,7 +599,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-1028130fec3f1337297c534f5a0df0-26&affiliate=4998&affiliateId=4998",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-102ba0f4cee49c23a39c663ebf575f-26&affiliate=4998&affiliateId=4998",
       "requirements": [
         "registrierung"
       ],
