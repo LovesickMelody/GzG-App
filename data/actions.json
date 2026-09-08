@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-07T08:58:36Z",
+  "generated_at": "2026-09-08T08:39:44Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -200,7 +200,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788771393_0c87671e1e5af4d44724c7d81f1cbf29&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788856659_6ab3a51e6fcfe46f9634aae1512a2716&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -455,6 +455,30 @@
       "source": "mydealz"
     },
     {
+      "id": "dbae2de242b0",
+      "title": "GzG: CESAR Hundefutter gratis testen; bis zu 2 Teilnahmen pro Person",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 679,
+      "valid_from": "2026-09-07",
+      "valid_to": "2026-10-11",
+      "submission_deadline": "2026-10-11",
+      "url": "https://www.mydealz.de/deals/gzg-cesar-hundefutter-gratis-testen-bis-zu-2-teilnahmen-pro-person-2836515",
+      "submit_url": "https://promomo-cesar.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/REnVg/2836515_1/re/150x150/qt/55/2836515_1.jpg",
+      "limit_anzahl": 5000,
+      "limit_zeitraum": null,
+      "limit_reset": "Montags um 00:00 Uhr",
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "f28b8c59cf19",
       "title": "Herta frische Pizza Gratis Testen",
       "brand": null,
@@ -599,7 +623,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-102ba0f4cee49c23a39c663ebf575f-26&affiliate=4998&affiliateId=4998",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-102100aa09b7449e1c5039bf7d7b29-26&affiliate=4998&affiliateId=4998",
       "requirements": [
         "registrierung"
       ],
