@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-08T08:39:44Z",
+  "generated_at": "2026-09-09T08:41:28Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -200,7 +200,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788856659_6ab3a51e6fcfe46f9634aae1512a2716&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1788943170_cfcd9b6b7d4e0378413e4c6c343aab26&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -623,7 +623,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-102100aa09b7449e1c5039bf7d7b29-26&affiliate=4998&affiliateId=4998",
+      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-10223573818903906654ca9d8d049a-26&affiliate=4998&affiliateId=4998",
       "requirements": [
         "registrierung"
       ],
@@ -633,29 +633,6 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/l1ajY/2823428_1/re/150x150/qt/55/2823428_1.jpg",
       "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "d861248e25f2",
-      "title": "endori Gratis Testen Aktion",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-11-01",
-      "submission_deadline": "2026-11-01",
-      "url": "https://www.mydealz.de/deals/gzg-ab-3108-endori-gratis-testen-aktion-2822978",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/6DlfQ/2822978_1/re/150x150/qt/55/2822978_1.jpg",
-      "limit_anzahl": 20000,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
