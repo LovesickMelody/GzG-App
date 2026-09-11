@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-10T08:42:13Z",
+  "generated_at": "2026-09-11T08:37:50Z",
   "actions": [
     {
       "id": "8e1c6097b303",
@@ -200,7 +200,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789029622_1be5cfc605ab860260483d28d4edfc4f&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789115756_76e524ead240040cf01e38cf8b68e27c&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -455,6 +455,31 @@
       "source": "mydealz"
     },
     {
+      "id": "761b268d33e1",
+      "title": "GzG TREK Protein Oat Bars 3er-Pack",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 399,
+      "valid_from": null,
+      "valid_to": "2026-12-31",
+      "submission_deadline": "2026-12-31",
+      "url": "https://www.mydealz.de/deals/gzg-trek-protein-oat-bars-3er-pack-2837829",
+      "submit_url": "https://www.trekbars.com/de/geldzurueck",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [
+        "Edeka"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/IAbqa/2837829_1/re/150x150/qt/55/2837829_1.jpg",
+      "limit_anzahl": 5000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "dbae2de242b0",
       "title": "GzG: CESAR Hundefutter gratis testen; bis zu 2 Teilnahmen pro Person",
       "brand": null,
@@ -584,31 +609,6 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/PPGqQ/2832877_1/re/150x150/qt/55/2832877_1.jpg",
       "limit_anzahl": 30000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "e41a23c9ed02",
-      "title": "VPN Plus 2 Jahre für 2,99 €/Monat statt 9,99 € (-70 %) | 71,76 € gesamt | 30 Tage Geld-zurück",
-      "brand": "Proton",
-      "type": "gratis_testen",
-      "max_refund_cents": 299,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/proton-vpn-vpn-plus-2-jahre-fur-299-eurmonat-statt-999-eur-70-7176-eur-gesamt-30-tage-geld-zuruck-2823428",
-      "submit_url": "https://protonvpn.com/de/l/special-partner-offer?url_id=0&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-4998&utm_medium=link&utm_term=vpn_special_partner_offer_new_landing&utm_content=26&phfp=true&visitorId=ho-1021791378a8e07e705563c9fba17d-26&affiliate=4998&affiliateId=4998",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [
-        "Norma"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/l1ajY/2823428_1/re/150x150/qt/55/2823428_1.jpg",
-      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
