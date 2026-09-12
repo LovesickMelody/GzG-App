@@ -1,31 +1,6 @@
 {
-  "generated_at": "2026-09-11T08:37:50Z",
+  "generated_at": "2026-09-12T08:25:27Z",
   "actions": [
-    {
-      "id": "8e1c6097b303",
-      "title": "Always Ultra Binden Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/always-ultra-binden-gratis-testen",
-      "submit_url": "https://www.for-me-online.de/always-cashback",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "strichcode"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/143/always-ultra-binden-gratis-testen_xs.png",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
     {
       "id": "7186ccd415ff",
       "title": "Claro Spültabs Gratis Testen",
@@ -49,30 +24,6 @@
       "limit_anzahl": 2000,
       "limit_zeitraum": "woche",
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "732eefd6a6c8",
-      "title": "Rama Cashback-Gewinnspiel: Bis zu 100 % Geld-Zurück-Aktion",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/rama-cashback-gewinnspiel-bis-zu-100-prozent-geld-zurueck-aktion",
-      "submit_url": "https://www.rama-promotion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/144/rama-cashback-gewinnspiel-bis-zu-100-prozent-geld-zurueck-aktion_xs.png",
-      "limit_anzahl": 2000,
-      "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 00:00 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -200,7 +151,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789115756_76e524ead240040cf01e38cf8b68e27c&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789201414_52ca8b39cd9d2514ef6f4b61c73cdcb2&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -375,7 +326,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/ITuar/2833246_1/re/150x150/qt/55/2833246_1.jpg",
       "limit_anzahl": 20000,
       "limit_zeitraum": null,
-      "limit_reset": null,
+      "limit_reset": "Montags um 10:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -474,8 +425,8 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/IAbqa/2837829_1/re/150x150/qt/55/2837829_1.jpg",
       "limit_anzahl": 5000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Dienstags um 06:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
