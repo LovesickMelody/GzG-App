@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-12T08:25:27Z",
+  "generated_at": "2026-09-14T09:37:24Z",
   "actions": [
     {
       "id": "7186ccd415ff",
@@ -24,6 +24,32 @@
       "limit_anzahl": 2000,
       "limit_zeitraum": "woche",
       "limit_reset": "Montags um 09:00 Uhr",
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "a134e9983f65",
+      "title": "[Globus] Herta Frische Pizza Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/globus-herta-frische-pizza-gratis-testen",
+      "submit_url": "https://herta-frische-pizza-testen.de/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto"
+      ],
+      "retailers": [
+        "Globus"
+      ],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/154/globus-herta-frische-pizza-gratis-testen_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -151,7 +177,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789201414_52ca8b39cd9d2514ef6f4b61c73cdcb2&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789378533_1902d94cf7558253af3f145e7e7de4f9&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -174,7 +200,7 @@
       "valid_to": "2026-11-08",
       "submission_deadline": "2026-11-08",
       "url": "https://www.mydealz.de/deals/gzg-ab-1409-air-wick-gratis-testen-1000-teilnahmen-pro-tag-2832876",
-      "submit_url": "https://gratis.testen.airwick.de/campaign-is-over",
+      "submit_url": "https://gratis.testen.airwick.de/",
       "requirements": [
         "bonfoto",
         "strichcode",
@@ -193,10 +219,10 @@
         "4251758433763",
         "4251758433879"
       ],
-      "image_url": "https://static.mydealz.de/threads/raw/vhTEd/2832876_1/re/150x150/qt/55/2832876_1.jpg",
+      "image_url": "https://static.mydealz.de/threads/raw/2fbji/2832876_1/re/150x150/qt/55/2832876_1.jpg",
       "limit_anzahl": 1000,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
+      "limit_reset": "Täglich um 09:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -326,7 +352,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/ITuar/2833246_1/re/150x150/qt/55/2833246_1.jpg",
       "limit_anzahl": 20000,
       "limit_zeitraum": null,
-      "limit_reset": "Montags um 10:00 Uhr",
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -560,30 +586,6 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/PPGqQ/2832877_1/re/150x150/qt/55/2832877_1.jpg",
       "limit_anzahl": 30000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "6bb3738eaefd",
-      "title": "nutella biscuits Gratis Testen",
-      "brand": "Nutella",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-09-13",
-      "submission_deadline": "2026-09-13",
-      "url": "https://www.mydealz.de/deals/gzg-nutella-biscuits-gratis-testen-2825851",
-      "submit_url": "https://www.nutella.com/de/de/xp/biscuits-gratistesten/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/juRsX/2825851_1/re/150x150/qt/55/2825851_1.jpg",
-      "limit_anzahl": 50000,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
