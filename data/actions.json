@@ -1,32 +1,6 @@
 {
-  "generated_at": "2026-09-14T09:37:24Z",
+  "generated_at": "2026-09-15T09:15:32Z",
   "actions": [
-    {
-      "id": "7186ccd415ff",
-      "title": "Claro Spültabs Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/claro-spueltabs-gratis-testen",
-      "submit_url": "https://claro-gratis-testen.at/",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "registrierung",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/148/claro-spueltabs-gratis-testen_xs.png",
-      "limit_anzahl": 2000,
-      "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
     {
       "id": "a134e9983f65",
       "title": "[Globus] Herta Frische Pizza Gratis Testen",
@@ -52,6 +26,30 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
+    },
+    {
+      "id": "7caa492c6f42",
+      "title": "100 % Cashback! Solero Bon Bon – fruchtiger Nasch-Deal! in zwei verschiedenen Sorten (GzG)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 449,
+      "valid_from": "2026-09-14",
+      "valid_to": "2026-10-11",
+      "submission_deadline": "2026-10-11",
+      "url": "https://www.mydealz.de/deals/100-cashback-solero-bon-bon-fruchtiger-nasch-deal-in-zwei-verschiedenen-sorten-2839144",
+      "submit_url": "https://aktionen.oca-services.com/teilnahmeformular/langnese/de-de/solero-cashback#/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/ymOcU/2839144_1/re/150x150/qt/55/2839144_1.jpg",
+      "limit_anzahl": 500,
+      "limit_zeitraum": "tag",
+      "limit_reset": "Täglich",
+      "limit_erschoepft": false,
+      "source": "mydealz"
     },
     {
       "id": "78a54a8056a8",
@@ -177,7 +175,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789378533_1902d94cf7558253af3f145e7e7de4f9&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789463619_4bc6d742892fc0fc53b4dbb84710ea6c&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -411,6 +409,30 @@
       "source": "mydealz"
     },
     {
+      "id": "1658d0f0dcd8",
+      "title": "Gratis Testen via WhatsApp: MyLove-MyLife Produkte (Vegan) - bis zu 3 Produkte @ BioMarkt-Verbund & Knuspr (bald Alnatura)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 279,
+      "valid_from": "2026-09-07",
+      "valid_to": "2026-12-14",
+      "submission_deadline": "2026-12-14",
+      "url": "https://www.mydealz.de/deals/gratis-testen-via-whatsapp-mylove-mylife-produkte-vegan-bis-zu-3-produkte-at-biomarkt-verbund-knuspr-bald-alnatura-2839270",
+      "submit_url": "https://www.mylove-mylife.at/aut/de",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/Nyghg/2839270_1/re/150x150/qt/55/2839270_1.jpg",
+      "limit_anzahl": 15000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "fd8e3389190c",
       "title": "GzG - Lipton Sensations PINK",
       "brand": "Lipton",
@@ -425,6 +447,38 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/aAUdy/2827925_1/re/150x150/qt/55/2827925_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "5fb70fe3bafe",
+      "title": "GzG Opflanzda vegane Obazda Alternative – Gratis Testen (Geld-zurück-Aktion)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-09-10",
+      "valid_to": "2026-10-16",
+      "submission_deadline": "2026-10-16",
+      "url": "https://www.mydealz.de/deals/gzg-opflanzda-vegane-obazda-alternative-gratis-testen-geld-zuruck-aktion-2839287",
+      "submit_url": "https://opflanzda-testen.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "Aldi",
+        "Edeka",
+        "Globus",
+        "Kaufland",
+        "Lidl",
+        "Müller",
+        "Rewe"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/ztzCm/2839287_1/re/150x150/qt/55/2839287_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -592,8 +646,8 @@
       "source": "mydealz"
     },
     {
-      "id": "be63d429a8cd",
-      "title": "o.b. GzG / Teil-GzG 3€ Tampons Gratis Testen Geld zurück Damen Hygiene & Periode dm budni Müller Rossmann ab 15.09.",
+      "id": "638acdf596eb",
+      "title": "o.b. GzG / Teil-GzG 3€ Tampons Gratis Testen Geld zurück Damen Hygiene & Periode NUR BEI dm",
       "brand": "o.b.",
       "type": "gratis_testen",
       "max_refund_cents": 300,
@@ -606,8 +660,6 @@
         "bonfoto"
       ],
       "retailers": [
-        "Budni",
-        "Müller",
         "Rossmann",
         "dm"
       ],
