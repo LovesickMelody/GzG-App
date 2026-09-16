@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T09:15:32Z",
+  "generated_at": "2026-09-16T09:07:38Z",
   "actions": [
     {
       "id": "a134e9983f65",
@@ -175,7 +175,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789463619_4bc6d742892fc0fc53b4dbb84710ea6c&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789549553_9f23268d32f14cf035a152cabe5b64ed&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -433,27 +433,6 @@
       "source": "mydealz"
     },
     {
-      "id": "fd8e3389190c",
-      "title": "GzG - Lipton Sensations PINK",
-      "brand": "Lipton",
-      "type": "gratis_testen",
-      "max_refund_cents": 199,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/lipton-sensations-pink-2827925",
-      "submit_url": null,
-      "requirements": [],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/aAUdy/2827925_1/re/150x150/qt/55/2827925_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "5fb70fe3bafe",
       "title": "GzG Opflanzda vegane Obazda Alternative – Gratis Testen (Geld-zurück-Aktion)",
       "brand": null,
@@ -579,6 +558,29 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/AUCBZ/2831122_1/re/150x150/qt/55/2831122_1.jpg",
       "limit_anzahl": 40000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "9deedc37d9ab",
+      "title": "Philips OneBlade Modelle Geld-zurück-Garantie mit Aktionszeitraum 01.01.2024-31.12.2026",
+      "brand": "Philips",
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2024-01-01",
+      "valid_to": "2027-03-01",
+      "submission_deadline": "2027-03-01",
+      "url": "https://www.mydealz.de/deals/geld-zuruck-garantie-mit-aktionszeitraum-01012024-31122026-2839939",
+      "submit_url": "https://www.philips.de/c-w/aktion/gzg-oneblade?clickref=&origin=2_de_de___100l81_____mydealz_____Coupon%2FVoucher___pz&utm_source=100l81&utm_medium=affiliate&utm_campaign=partnerize&utm_content=Coupon%2FVoucher&utm_term=mydealz",
+      "requirements": [
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/p5gO9/2839939_1/re/150x150/qt/55/2839939_1.jpg",
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
