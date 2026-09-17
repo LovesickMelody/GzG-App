@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T09:07:38Z",
+  "generated_at": "2026-09-17T09:16:08Z",
   "actions": [
     {
       "id": "a134e9983f65",
@@ -175,7 +175,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789549553_9f23268d32f14cf035a152cabe5b64ed&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789636458_c345d722806b2df063edbb0f33e3e0a5&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -204,7 +204,9 @@
         "strichcode",
         "iban"
       ],
-      "retailers": [],
+      "retailers": [
+        "Rossmann"
+      ],
       "eans": [
         "4002448019039",
         "4002448146254",
@@ -217,7 +219,7 @@
         "4251758433763",
         "4251758433879"
       ],
-      "image_url": "https://static.mydealz.de/threads/raw/2fbji/2832876_1/re/150x150/qt/55/2832876_1.jpg",
+      "image_url": "https://static.mydealz.de/threads/raw/UJkOQ/2832876_1/re/150x150/qt/55/2832876_1.jpg",
       "limit_anzahl": 1000,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich um 09:00 Uhr",
