@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17T09:16:08Z",
+  "generated_at": "2026-09-18T08:49:06Z",
   "actions": [
     {
       "id": "a134e9983f65",
@@ -145,27 +145,6 @@
       "source": "mydealz"
     },
     {
-      "id": "92d251bfbaec",
-      "title": "651 Fitnessstudios (United let’s move) vom 23.-30.09.2026 gratis testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-09-30",
-      "submission_deadline": "2026-09-30",
-      "url": "https://www.mydealz.de/deals/9500-fitnessstudios-united-lets-move-vom-23-30092026-gratis-testen-2829882",
-      "submit_url": "https://www.unitedletsmove.org/",
-      "requirements": [],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Cg6bm/2829882_1/re/150x150/qt/55/2829882_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "6ad383672830",
       "title": "90 Tage Gratis testen für Neukunden - 1 Million Hörbücher und E-Books - Kündigung jeder Zeit möglich",
       "brand": "BookBeat",
@@ -175,7 +154,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789636458_c345d722806b2df063edbb0f33e3e0a5&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789721248_2a60b04bd49c627e81096f987c8404f5&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -251,32 +230,6 @@
       "source": "mydealz"
     },
     {
-      "id": "3d95918bcfbf",
-      "title": "Centrum Gratis Testen (in der Apotheke)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-08-24",
-      "valid_to": "2026-10-15",
-      "submission_deadline": "2026-10-15",
-      "url": "https://www.mydealz.de/deals/gzg-centrum-gratis-testen-in-der-apotheke-2829597",
-      "submit_url": "https://www.erlebe-haleon.de/deals/centrum/",
-      "requirements": [
-        "bonfoto",
-        "handy_verifizierung",
-        "registrierung",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/G6wJY/2829597_1/re/150x150/qt/55/2829597_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "adaa44c28099",
       "title": "Claro Spültabs gratis testen – 100 % Cashback | 26.285 Einlösungen | ab 01.09.2026",
       "brand": null,
@@ -301,30 +254,6 @@
       "limit_anzahl": 26285,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "c541f781856d",
-      "title": "Corny Cashback-Aktion: 2x Corny Protein kaufen = 1x Geld zurück",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 399,
-      "valid_from": "2026-09-01",
-      "valid_to": "2026-10-31",
-      "submission_deadline": "2026-10-31",
-      "url": "https://www.mydealz.de/deals/corny-cashback-aktion-2x-corny-protein-kaufen-1x-geld-zuruck-2830059",
-      "submit_url": "https://www.corny-aktion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/pQELH/2830059_1/re/150x150/qt/55/2830059_1.jpg",
-      "limit_anzahl": 1000,
-      "limit_zeitraum": "tag",
-      "limit_reset": "Täglich um 08:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -377,6 +306,38 @@
       "image_url": "https://static.mydealz.de/threads/raw/oRBDw/2835317_1/re/150x150/qt/55/2835317_1.jpg",
       "limit_anzahl": 1000,
       "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "82dfbc35464e",
+      "title": "Gillette Antitranspirant Deo Gratis Testen",
+      "brand": "for me:",
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-09-18",
+      "valid_to": "2026-12-25",
+      "submission_deadline": "2026-12-25",
+      "url": "https://www.mydealz.de/deals/gzg-ab-1809-gillette-deo-gratis-testen-2840477",
+      "submit_url": "https://www.for-me-online.de/gillette-deo",
+      "requirements": [
+        "bonfoto",
+        "handy_verifizierung",
+        "registrierung",
+        "iban"
+      ],
+      "retailers": [
+        "Norma"
+      ],
+      "eans": [
+        "8006530030076",
+        "8006530030182",
+        "8006530030304"
+      ],
+      "image_url": "https://static.mydealz.de/threads/raw/smqGK/2840477_1/re/150x150/qt/55/2840477_1.jpg",
+      "limit_anzahl": 15000,
+      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -566,6 +527,29 @@
       "source": "mydealz"
     },
     {
+      "id": "06d3ef23f42d",
+      "title": "PRIMUM Hundefutter – 100 % Geld-zurück-Garantie bis max. 100 € | 2 Teilnahmen pro Haushalt | bis 31.12.2026 | Zufriedenheitsgarantie",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 10000,
+      "valid_from": null,
+      "valid_to": "2026-12-31",
+      "submission_deadline": "2026-12-31",
+      "url": "https://www.mydealz.de/deals/gzg-primum-hundefutter-100-geld-zuruck-garantie-bis-max-100-eur-2-teilnahmen-pro-haushalt-bis-31122026-zufriedenheitsgarantie-2840838",
+      "submit_url": "https://www.primum.pet/garantie",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/KpPbx/2840838_1/re/150x150/qt/55/2840838_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "9deedc37d9ab",
       "title": "Philips OneBlade Modelle Geld-zurück-Garantie mit Aktionszeitraum 01.01.2024-31.12.2026",
       "brand": "Philips",
@@ -644,6 +628,34 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/PPGqQ/2832877_1/re/150x150/qt/55/2832877_1.jpg",
       "limit_anzahl": 30000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "67856dd2260b",
+      "title": "Zewa Wisch & Weg Gratis testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-12-31",
+      "submission_deadline": "2026-12-31",
+      "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
+      "submit_url": "https://www.zewa.net/de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "Rossmann"
+      ],
+      "eans": [
+        "7322542604489"
+      ],
+      "image_url": "https://static.mydealz.de/threads/raw/kuN5z/2840660_1/re/150x150/qt/55/2840660_1.jpg",
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
