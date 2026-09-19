@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-18T08:49:06Z",
+  "generated_at": "2026-09-19T08:35:21Z",
   "actions": [
     {
       "id": "a134e9983f65",
@@ -119,25 +119,22 @@
       "source": "mydealz"
     },
     {
-      "id": "5545c519360f",
-      "title": "100% GzG auf Febreze Aprilfrisch Air, Plug, Bath, Textile (personalisiert), evtl. auch andere Produkte",
-      "brand": "for me:",
+      "id": "1dac423dd0b8",
+      "title": "3x FELIX Little Extras kaufen und 100% Geld zurück oder Prämie",
+      "brand": "PURINA",
       "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-12-30",
-      "valid_to": "2027-01-15",
-      "submission_deadline": "2027-01-15",
-      "url": "https://www.mydealz.de/deals/for-me-100-gzg-auf-febreze-aprilfrisch-air-plug-bath-textile-personalisiert-evtl-auch-andere-produkte-2830269",
-      "submit_url": "https://www.for-me-online.de/geld-zurueck-aktionen#ancre_1",
+      "max_refund_cents": 717,
+      "valid_from": "2026-09-21",
+      "valid_to": "2026-11-15",
+      "submission_deadline": "2026-11-15",
+      "url": "https://www.mydealz.de/deals/3x-felix-little-extras-kaufen-und-100-geld-zuruck-oder-pramie-sichern-2841355",
+      "submit_url": null,
       "requirements": [
-        "bonfoto",
-        "handy_verifizierung",
-        "registrierung",
-        "iban"
+        "bonfoto"
       ],
       "retailers": [],
       "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/HS6YB/2830269_1/re/150x150/qt/55/2830269_1.jpg",
+      "image_url": "https://static.mydealz.de/threads/raw/kE4le/2841355_1/re/150x150/qt/55/2841355_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -154,7 +151,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789721248_2a60b04bd49c627e81096f987c8404f5&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789806833_6016c8490f90ba1778945a77fb334f09&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -447,8 +444,8 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/IAbqa/2837829_1/re/150x150/qt/55/2837829_1.jpg",
       "limit_anzahl": 5000,
-      "limit_zeitraum": "woche",
-      "limit_reset": "Dienstags um 06:00 Uhr",
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -473,7 +470,7 @@
       "limit_anzahl": 5000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
