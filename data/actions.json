@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-19T08:35:21Z",
+  "generated_at": "2026-09-20T09:07:25Z",
   "actions": [
     {
       "id": "a134e9983f65",
@@ -119,8 +119,8 @@
       "source": "mydealz"
     },
     {
-      "id": "1dac423dd0b8",
-      "title": "3x FELIX Little Extras kaufen und 100% Geld zurück oder Prämie",
+      "id": "e328172aca93",
+      "title": "3x FELIX Little Extras kaufen und bis zu 100% Geld zurück oder Prämie",
       "brand": "PURINA",
       "type": "gratis_testen",
       "max_refund_cents": 717,
@@ -151,7 +151,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789806833_6016c8490f90ba1778945a77fb334f09&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789895157_a5eab26f6ba95a49576772f0bc733dbf&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -470,7 +470,7 @@
       "limit_anzahl": 5000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": false,
+      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
