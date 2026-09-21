@@ -1,26 +1,24 @@
 {
-  "generated_at": "2026-09-20T09:07:25Z",
+  "generated_at": "2026-09-21T09:39:41Z",
   "actions": [
     {
-      "id": "a134e9983f65",
-      "title": "[Globus] Herta Frische Pizza Gratis Testen",
+      "id": "120e6a329fb8",
+      "title": "FELIX Little Extras mit Geld-Zurück-Garantie oder Sachpreis gewinnen",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
       "valid_to": null,
       "submission_deadline": null,
-      "url": "https://geldzurueck.deals/globus-herta-frische-pizza-gratis-testen",
-      "submit_url": "https://herta-frische-pizza-testen.de/",
+      "url": "https://geldzurueck.deals/felix-little-extras-mit-geld-zurueck-garantie-oder-sachpreis-gewinnen",
+      "submit_url": "https://www.purina.de/felix/testen",
       "requirements": [
-        "produktfoto",
-        "bonfoto"
+        "bonfoto",
+        "registrierung"
       ],
-      "retailers": [
-        "Globus"
-      ],
+      "retailers": [],
       "eans": [],
-      "image_url": "https://geldzurueck.deals/images/154/globus-herta-frische-pizza-gratis-testen_xs.png",
+      "image_url": "https://geldzurueck.deals/images/163/felix-little-extras-mit-geld-zurueck-garantie-oder-sachpreis-gewinnen_xs.png",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -151,7 +149,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789895157_a5eab26f6ba95a49576772f0bc733dbf&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1789983485_0185e153f687209a57b61e77aa437aef&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -378,7 +376,7 @@
       "valid_to": "2026-12-14",
       "submission_deadline": "2026-12-14",
       "url": "https://www.mydealz.de/deals/gratis-testen-via-whatsapp-mylove-mylife-produkte-vegan-bis-zu-3-produkte-at-biomarkt-verbund-knuspr-bald-alnatura-2839270",
-      "submit_url": "https://www.mylove-mylife.at/aut/de",
+      "submit_url": null,
       "requirements": [
         "bonfoto",
         "iban"
@@ -470,7 +468,7 @@
       "limit_anzahl": 5000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
