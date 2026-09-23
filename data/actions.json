@@ -1,6 +1,27 @@
 {
-  "generated_at": "2026-09-22T09:04:15Z",
+  "generated_at": "2026-09-23T09:08:28Z",
   "actions": [
+    {
+      "id": "1f9d0d571179",
+      "title": "United let's move. — Open Gym Woche 2026",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 202600,
+      "valid_from": "2026-09-23",
+      "valid_to": "2026-09-30",
+      "submission_deadline": "2026-09-30",
+      "url": "https://www.unitedletsmove.org/",
+      "submit_url": "https://www.unitedletsmove.org/",
+      "requirements": [],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://unitedletsmove.org/opengraph-image",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "abwickler"
+    },
     {
       "id": "120e6a329fb8",
       "title": "FELIX Little Extras mit Geld-Zurück-Garantie oder Sachpreis gewinnen",
@@ -22,6 +43,30 @@
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "34379a35b5ff",
+      "title": "Fuchs Mahlaufsatz & Gewürz im Glas kaufen, Gewürz Gratis erhalten",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/fuchs-mahlaufsatz-und-gewuerz-im-glas-kaufen-gewuerz-gratis-erhalten",
+      "submit_url": "https://www.fuchs-aktion.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/164/fuchs-mahlaufsatz-und-gewuerz-im-glas-kaufen-gewuerz-gratis-erhalten_xs.png",
+      "limit_anzahl": 200,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags um 00:00 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -149,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790067756_22d885071d0516a7eca97ab2d5c64caf&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790154416_6ee81fa7ed5bfab5156f0489bbd1abf7&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -196,7 +241,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/UJkOQ/2832876_1/re/150x150/qt/55/2832876_1.jpg",
       "limit_anzahl": 1000,
       "limit_zeitraum": "tag",
-      "limit_reset": "Täglich um 09:00 Uhr",
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -468,7 +513,7 @@
       "limit_anzahl": 5000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": false,
+      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
@@ -515,8 +560,8 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/AUCBZ/2831122_1/re/150x150/qt/55/2831122_1.jpg",
-      "limit_anzahl": 40000,
-      "limit_zeitraum": null,
+      "limit_anzahl": 5000,
+      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -585,6 +630,30 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/Dt01g/2834275_1/re/150x150/qt/55/2834275_1.jpg",
       "limit_anzahl": 350,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "ff40752c936b",
+      "title": "SimplyV Scheiben Gratis Testen (täglich 333 Erstattungen) bis 30.11.",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-11-30",
+      "submission_deadline": "2026-11-30",
+      "url": "https://www.mydealz.de/deals/gzg-ab-0110-simplyv-scheiben-gratis-testen-taglich-333-erstattungen-bis-3011-2842672",
+      "submit_url": "https://www.simply-v.de/aktion",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/EgbVX/2842672_1/re/150x150/qt/55/2842672_1.jpg",
+      "limit_anzahl": 333,
       "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
