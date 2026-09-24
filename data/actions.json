@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T09:08:28Z",
+  "generated_at": "2026-09-24T09:02:54Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790154416_6ee81fa7ed5bfab5156f0489bbd1abf7&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790240495_5b36b4bb26dcc4991a472f0aa3e665c6&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -240,30 +240,6 @@
       ],
       "image_url": "https://static.mydealz.de/threads/raw/UJkOQ/2832876_1/re/150x150/qt/55/2832876_1.jpg",
       "limit_anzahl": 1000,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "7bedea0e37a2",
-      "title": "Arla Skyr Drink Gratis Testen (täglich 555 Teilnahmen) bis 08.11.",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 199,
-      "valid_from": null,
-      "valid_to": "2026-11-08",
-      "submission_deadline": "2026-11-08",
-      "url": "https://www.mydealz.de/deals/gzg-ab-3108-arla-skyr-drink-gratis-testen-taglich-555-teilnahmen-bis-0811-2830762",
-      "submit_url": "https://arla-skyr-promotion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/yeQKs/2830762_1/re/150x150/qt/55/2830762_1.jpg",
-      "limit_anzahl": 555,
       "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -536,6 +512,36 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/JtScI/2834412_1/re/150x150/qt/55/2834412_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "5831394b0c66",
+      "title": "MadeGood Müsli- & Haferriegel Multipacks Gratis Testen via scondoo",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-09-24",
+      "valid_to": "2026-09-28",
+      "submission_deadline": "2026-09-28",
+      "url": "https://www.mydealz.de/deals/gzg-madegood-musli-haferriegel-multipacks-gratis-testen-via-scondoo-2843339",
+      "submit_url": null,
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "app"
+      ],
+      "retailers": [
+        "Globus",
+        "Müller",
+        "Rewe"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/w0X0e/2843339_1/re/150x150/qt/55/2843339_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
