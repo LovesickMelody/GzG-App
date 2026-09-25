@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T09:02:54Z",
+  "generated_at": "2026-09-25T09:26:01Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790240495_5b36b4bb26dcc4991a472f0aa3e665c6&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790328281_4d0a9a3f5455082aaa0b7bd16a5e269d&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -502,10 +502,11 @@
       "valid_to": "2026-11-29",
       "submission_deadline": "2026-11-29",
       "url": "https://www.mydealz.de/deals/gzg-nur-bei-globus-herta-frische-pizza-gratis-testen-2834412",
-      "submit_url": null,
+      "submit_url": "https://herta-frische-pizza-testen.de/",
       "requirements": [
         "produktfoto",
-        "bonfoto"
+        "bonfoto",
+        "iban"
       ],
       "retailers": [
         "Globus"
@@ -528,12 +529,11 @@
       "valid_to": "2026-09-28",
       "submission_deadline": "2026-09-28",
       "url": "https://www.mydealz.de/deals/gzg-madegood-musli-haferriegel-multipacks-gratis-testen-via-scondoo-2843339",
-      "submit_url": null,
+      "submit_url": "https://scondoo.de/?cashbackDetail=81803&utm_campaign=sh_sl&utm_medium=sh&utm_source=sl",
       "requirements": [
-        "produktfoto",
         "bonfoto",
-        "zusammen_fotografieren",
-        "app"
+        "app",
+        "registrierung"
       ],
       "retailers": [
         "Globus",
