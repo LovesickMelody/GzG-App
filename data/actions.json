@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T09:26:01Z",
+  "generated_at": "2026-09-26T09:10:36Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790328281_4d0a9a3f5455082aaa0b7bd16a5e269d&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790413756_5b5095b343ac4ce1fd33774a8ad3b750&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -568,6 +568,36 @@
       "image_url": "https://static.mydealz.de/threads/raw/AUCBZ/2831122_1/re/150x150/qt/55/2831122_1.jpg",
       "limit_anzahl": 5000,
       "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "227981937494",
+      "title": "Oral-B Zahnpasta - gratis testen - Deutschland & Österreich ( Mit Aktionssticker )",
+      "brand": "Oral-B",
+      "type": "gratis_testen",
+      "max_refund_cents": 95,
+      "valid_from": "2026-09-25",
+      "valid_to": "2027-02-11",
+      "submission_deadline": "2027-02-11",
+      "url": "https://www.mydealz.de/deals/gzg-oral-b-gratis-testen-2843983",
+      "submit_url": "https://oralb-testen.de/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "strichcode",
+        "handy_verifizierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [
+        "8006530040983"
+      ],
+      "image_url": "https://static.mydealz.de/threads/raw/BVcwy/2843983_1/re/150x150/qt/55/2843983_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
