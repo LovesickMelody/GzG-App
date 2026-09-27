@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T09:10:36Z",
+  "generated_at": "2026-09-27T09:52:28Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790413756_5b5095b343ac4ce1fd33774a8ad3b750&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790502670_d2bcfaebadd7af55f7baa799511d4ab3&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -743,10 +743,9 @@
       "valid_to": "2026-12-31",
       "submission_deadline": "2026-12-31",
       "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
-      "submit_url": "https://www.zewa.net/de/",
+      "submit_url": "https://www.zewa.net/de/gewinnspiele/bald-gehts-los/",
       "requirements": [
-        "bonfoto",
-        "iban"
+        "bonfoto"
       ],
       "retailers": [
         "Rossmann"
