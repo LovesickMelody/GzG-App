@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T09:52:28Z",
+  "generated_at": "2026-09-28T10:38:36Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790502670_d2bcfaebadd7af55f7baa799511d4ab3&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790591833_9a66afaf9fb038b8212a23d82cfb36b1&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -359,35 +359,6 @@
       "source": "mydealz"
     },
     {
-      "id": "6b9c1233f469",
-      "title": "Gratis Testen Dove body+mind Serum Duschprodukte Geld zurück bei dm budni Rossmann Müller GZG",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 795,
-      "valid_from": "2026-09-20",
-      "valid_to": "2026-09-27",
-      "submission_deadline": "2026-09-27",
-      "url": "https://www.mydealz.de/deals/gzg-gratis-testen-dove-bodymind-serum-duschprodukte-geld-zuruck-bei-dm-budni-rossmann-muller-gzg-2831181",
-      "submit_url": "https://aktionen.oca-services.com/dove-serum-duschgel-zufriedenheitsgarantie#/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Budni",
-        "Müller",
-        "Rossmann",
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/df8qN/2831181_1/re/150x150/qt/55/2831181_1.jpg",
-      "limit_anzahl": 16000,
-      "limit_zeitraum": "woche",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "1658d0f0dcd8",
       "title": "Gratis Testen via WhatsApp: MyLove-MyLife Produkte (Vegan) - bis zu 3 Produkte @ BioMarkt-Verbund & Knuspr (bald Alnatura)",
       "brand": null,
@@ -489,7 +460,7 @@
       "limit_anzahl": 5000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": true,
+      "limit_erschoepft": false,
       "source": "mydealz"
     },
     {
@@ -544,30 +515,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/w0X0e/2843339_1/re/150x150/qt/55/2843339_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "9d1d4c0ee66c",
-      "title": "Milka Pralinen Gratis Testen (2.500 pro Woche/40.000 insgesamt) bis 27.12.",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 749,
-      "valid_from": "2026-09-07",
-      "valid_to": "2026-12-27",
-      "submission_deadline": "2026-12-27",
-      "url": "https://www.mydealz.de/deals/gzg-ab-0709-milka-pralinen-gratis-testen-2500-pro-woche40000-insgesamt-bis-2712-2831122",
-      "submit_url": "https://gratisschenken.milka.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/AUCBZ/2831122_1/re/150x150/qt/55/2831122_1.jpg",
-      "limit_anzahl": 5000,
-      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -783,6 +730,31 @@
       "limit_anzahl": 1000,
       "limit_zeitraum": "tag",
       "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "f34ce85f339f",
+      "title": "yfood Gratis Testen (50.000 Einlösungen / 555 täglich)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 399,
+      "valid_from": "2026-09-28",
+      "valid_to": "2026-12-24",
+      "submission_deadline": "2026-12-24",
+      "url": "https://www.mydealz.de/deals/gzg-yfood-gratis-testen-50000-einlosungen-555-taglich-2844862",
+      "submit_url": "https://yfood-gratis-testen.de/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/RhrRd/2844862_1/re/150x150/qt/55/2844862_1.jpg",
+      "limit_anzahl": 50000,
+      "limit_zeitraum": "tag",
+      "limit_reset": "Täglich um 09:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
