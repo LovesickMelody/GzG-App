@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T10:38:36Z",
+  "generated_at": "2026-09-29T10:27:43Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790591833_9a66afaf9fb038b8212a23d82cfb36b1&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790677572_eebfdf24c6ad9bafa23c25993d1754fb&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -311,16 +311,15 @@
       "valid_to": "2026-10-01",
       "submission_deadline": "2026-10-01",
       "url": "https://www.mydealz.de/deals/gzg-schwartau-the-jam-marmelade-2835317",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2835317",
+      "submit_url": "https://www.schwartau-gratistesten.de",
       "requirements": [
-        "registrierung"
+        "bonfoto",
+        "iban"
       ],
-      "retailers": [
-        "Edeka"
-      ],
+      "retailers": [],
       "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/oRBDw/2835317_1/re/150x150/qt/55/2835317_1.jpg",
-      "limit_anzahl": 1000,
+      "image_url": "https://static.mydealz.de/threads/raw/9Xi3s/2835317_1/re/150x150/qt/55/2835317_1.jpg",
+      "limit_anzahl": 555,
       "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -491,31 +490,26 @@
       "source": "mydealz"
     },
     {
-      "id": "5831394b0c66",
-      "title": "MadeGood Müsli- & Haferriegel Multipacks Gratis Testen via scondoo",
+      "id": "229b4ee3c64b",
+      "title": "KRAFT Käse Gratis Testen",
       "brand": null,
       "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-09-24",
-      "valid_to": "2026-09-28",
-      "submission_deadline": "2026-09-28",
-      "url": "https://www.mydealz.de/deals/gzg-madegood-musli-haferriegel-multipacks-gratis-testen-via-scondoo-2843339",
-      "submit_url": "https://scondoo.de/?cashbackDetail=81803&utm_campaign=sh_sl&utm_medium=sh&utm_source=sl",
+      "max_refund_cents": 269,
+      "valid_from": "2026-09-28",
+      "valid_to": "2026-11-08",
+      "submission_deadline": "2026-11-08",
+      "url": "https://www.mydealz.de/deals/gzg-kraft-kase-gratis-testen-2845209",
+      "submit_url": "https://www.kraft-kaese-gratistesten.de/",
       "requirements": [
         "bonfoto",
-        "app",
-        "registrierung"
+        "iban"
       ],
-      "retailers": [
-        "Globus",
-        "Müller",
-        "Rewe"
-      ],
+      "retailers": [],
       "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/w0X0e/2843339_1/re/150x150/qt/55/2843339_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
+      "image_url": "https://static.mydealz.de/threads/raw/3r3CE/2845209_1/re/150x150/qt/55/2845209_1.jpg",
+      "limit_anzahl": 35000,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -734,9 +728,9 @@
       "source": "mydealz"
     },
     {
-      "id": "f34ce85f339f",
+      "id": "5658ed9ce7f1",
       "title": "yfood Gratis Testen (50.000 Einlösungen / 555 täglich)",
-      "brand": null,
+      "brand": "yfood",
       "type": "gratis_testen",
       "max_refund_cents": 399,
       "valid_from": "2026-09-28",
