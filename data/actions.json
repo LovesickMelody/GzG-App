@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T10:27:43Z",
+  "generated_at": "2026-09-30T10:20:41Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -194,7 +194,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790677572_eebfdf24c6ad9bafa23c25993d1754fb&utm_campaign=DE-www.mydealz.de-Action-20985",
+      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790763554_2bf9b591029153c9da8ef7adc1373fe7&utm_campaign=DE-www.mydealz.de-Action-20985",
       "requirements": [
         "app"
       ],
@@ -255,7 +255,7 @@
       "valid_to": "2026-11-30",
       "submission_deadline": "2026-11-30",
       "url": "https://www.mydealz.de/deals/claro-spultabs-gratis-testen-100-cashback-26285-einlosungen-ab-01092026-2833206",
-      "submit_url": null,
+      "submit_url": "https://claro-gratis-testen.at/",
       "requirements": [
         "produktfoto",
         "bonfoto",
@@ -267,10 +267,10 @@
         "9005835315016"
       ],
       "image_url": "https://static.mydealz.de/threads/raw/MmtRk/2833206_1/re/150x150/qt/55/2833206_1.jpg",
-      "limit_anzahl": 26285,
-      "limit_zeitraum": null,
+      "limit_anzahl": 2000,
+      "limit_zeitraum": "woche",
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
+      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
