@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T10:20:41Z",
+  "generated_at": "2026-10-01T10:46:50Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,54 +21,6 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
-    },
-    {
-      "id": "120e6a329fb8",
-      "title": "FELIX Little Extras mit Geld-Zurück-Garantie oder Sachpreis gewinnen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/felix-little-extras-mit-geld-zurueck-garantie-oder-sachpreis-gewinnen",
-      "submit_url": "https://www.purina.de/felix/testen",
-      "requirements": [
-        "bonfoto",
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/163/felix-little-extras-mit-geld-zurueck-garantie-oder-sachpreis-gewinnen_xs.png",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "34379a35b5ff",
-      "title": "Fuchs Mahlaufsatz & Gewürz im Glas kaufen, Gewürz Gratis erhalten",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/fuchs-mahlaufsatz-und-gewuerz-im-glas-kaufen-gewuerz-gratis-erhalten",
-      "submit_url": "https://www.fuchs-aktion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/164/fuchs-mahlaufsatz-und-gewuerz-im-glas-kaufen-gewuerz-gratis-erhalten_xs.png",
-      "limit_anzahl": 200,
-      "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
     },
     {
       "id": "7caa492c6f42",
@@ -185,29 +137,6 @@
       "source": "mydealz"
     },
     {
-      "id": "6ad383672830",
-      "title": "90 Tage Gratis testen für Neukunden - 1 Million Hörbücher und E-Books - Kündigung jeder Zeit möglich",
-      "brand": "BookBeat",
-      "type": "gratis_testen",
-      "max_refund_cents": 999,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/bookbeat-90-tage-gratis-testen-fur-neukunden-1-million-horbucher-und-e-books-kundigung-jeder-zeit-moglich-2832202",
-      "submit_url": "https://www.bookbeat.com/de/ruhrpark90?utm_source=awin&utm_medium=affiliate&utm_content=0&utm_term=deal2&sv1=affiliate&sv_campaign_id=88787&awc=15760_1790763554_2bf9b591029153c9da8ef7adc1373fe7&utm_campaign=DE-www.mydealz.de-Action-20985",
-      "requirements": [
-        "app"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/s50mk/2832202_1/re/150x150/qt/55/2832202_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "efbc6632cf71",
       "title": "Air Wick Gratis Testen - 1000 Teilnahmen pro Tag",
       "brand": null,
@@ -302,14 +231,14 @@
       "source": "mydealz"
     },
     {
-      "id": "5e95ad1f2829",
+      "id": "bf9ee8705778",
       "title": "GZG • Schwartau the jam Konfitüre",
       "brand": "Schwartau",
       "type": "gratis_testen",
       "max_refund_cents": 339,
       "valid_from": null,
-      "valid_to": "2026-10-01",
-      "submission_deadline": "2026-10-01",
+      "valid_to": null,
+      "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/gzg-schwartau-the-jam-marmelade-2835317",
       "submit_url": "https://www.schwartau-gratistesten.de",
       "requirements": [
@@ -321,8 +250,8 @@
       "image_url": "https://static.mydealz.de/threads/raw/9Xi3s/2835317_1/re/150x150/qt/55/2835317_1.jpg",
       "limit_anzahl": 555,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
+      "limit_reset": "Täglich um 08:00 Uhr",
+      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
@@ -675,18 +604,21 @@
       "source": "mydealz"
     },
     {
-      "id": "67856dd2260b",
+      "id": "99e1c491cd4d",
       "title": "Zewa Wisch & Weg Gratis testen",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": "2026-10-01",
-      "valid_to": "2026-12-31",
-      "submission_deadline": "2026-12-31",
+      "valid_to": "2027-02-28",
+      "submission_deadline": "2027-02-28",
       "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
-      "submit_url": "https://www.zewa.net/de/gewinnspiele/bald-gehts-los/",
+      "submit_url": "https://www.zewa.net/de/gewinnspiele/zewa-ww-smart-cashback-2026/",
       "requirements": [
-        "bonfoto"
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "iban"
       ],
       "retailers": [
         "Rossmann"
@@ -694,9 +626,36 @@
       "eans": [
         "7322542604489"
       ],
-      "image_url": "https://static.mydealz.de/threads/raw/kuN5z/2840660_1/re/150x150/qt/55/2840660_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
+      "image_url": "https://static.mydealz.de/threads/raw/RGW8e/2840660_1/re/150x150/qt/55/2840660_1.jpg",
+      "limit_anzahl": 40000,
+      "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "f8ce4be822c1",
+      "title": "Zirkulin Vital Mikronährstoff Super Greens (4000 Einlösungen / 285 täglich)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 1499,
+      "valid_from": null,
+      "valid_to": "2026-10-11",
+      "submission_deadline": "2026-10-11",
+      "url": "https://www.mydealz.de/deals/gzg-zirkulin-vital-mikronahrstoff-super-greens-4000-einlosungen-285-taglich-2846109",
+      "submit_url": "https://zirkulin-aktion.de/supergreens.de",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [
+        "Müller",
+        "Rossmann",
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/7TO6z/2846109_1/re/150x150/qt/55/2846109_1.jpg",
+      "limit_anzahl": 4000,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
