@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T10:46:50Z",
+  "generated_at": "2026-10-02T10:22:00Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -137,44 +137,6 @@
       "source": "mydealz"
     },
     {
-      "id": "efbc6632cf71",
-      "title": "Air Wick Gratis Testen - 1000 Teilnahmen pro Tag",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 599,
-      "valid_from": "2026-09-14",
-      "valid_to": "2026-11-08",
-      "submission_deadline": "2026-11-08",
-      "url": "https://www.mydealz.de/deals/gzg-ab-1409-air-wick-gratis-testen-1000-teilnahmen-pro-tag-2832876",
-      "submit_url": "https://gratis.testen.airwick.de/",
-      "requirements": [
-        "bonfoto",
-        "strichcode",
-        "iban"
-      ],
-      "retailers": [
-        "Rossmann"
-      ],
-      "eans": [
-        "4002448019039",
-        "4002448146254",
-        "4002448153511",
-        "4251758415455",
-        "4251758415479",
-        "4251758422088",
-        "4251758433725",
-        "4251758433749",
-        "4251758433763",
-        "4251758433879"
-      ],
-      "image_url": "https://static.mydealz.de/threads/raw/UJkOQ/2832876_1/re/150x150/qt/55/2832876_1.jpg",
-      "limit_anzahl": 1000,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "adaa44c28099",
       "title": "Claro Spültabs gratis testen – 100 % Cashback | 26.285 Einlösungen | ab 01.09.2026",
       "brand": null,
@@ -305,6 +267,27 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/Nyghg/2839270_1/re/150x150/qt/55/2839270_1.jpg",
       "limit_anzahl": 15000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "1fa9646d4de5",
+      "title": "Gratis testen - Tulip Baconscheiben oder Baconstreifen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": "2026-12-24",
+      "submission_deadline": "2026-12-24",
+      "url": "https://www.mydealz.de/deals/gzg-ab-1210-gratis-testen-tulip-baconscheiben-oder-baconstreifen-2847185",
+      "submit_url": "https://www.danishcrown.com/de-de/unsere-marken/tulip/aktion/",
+      "requirements": [],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/SCjFd/2847185_1/re/150x150/qt/55/2847185_1.jpg",
+      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -604,9 +587,9 @@
       "source": "mydealz"
     },
     {
-      "id": "99e1c491cd4d",
-      "title": "Zewa Wisch & Weg Gratis testen",
-      "brand": null,
+      "id": "c8ed4af6c06c",
+      "title": "Zewa Wisch & Weg Gratis testen | GRATIS TESTEN AUFDRUCK NÖTIG!",
+      "brand": "Zewa",
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": "2026-10-01",
@@ -615,14 +598,10 @@
       "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
       "submit_url": "https://www.zewa.net/de/gewinnspiele/zewa-ww-smart-cashback-2026/",
       "requirements": [
-        "produktfoto",
         "bonfoto",
-        "zusammen_fotografieren",
         "iban"
       ],
-      "retailers": [
-        "Rossmann"
-      ],
+      "retailers": [],
       "eans": [
         "7322542604489"
       ],
