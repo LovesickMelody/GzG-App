@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-02T10:22:00Z",
+  "generated_at": "2026-10-03T09:43:51Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -130,6 +130,35 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/kE4le/2841355_1/re/150x150/qt/55/2841355_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "6d92096123c1",
+      "title": "Cashback auf Schär Meisterbäckers Mild Brot - NUR bei Edeka",
+      "brand": "Schär",
+      "type": "gratis_testen",
+      "max_refund_cents": 100,
+      "valid_from": "2026-10-01",
+      "valid_to": "2027-01-31",
+      "submission_deadline": "2027-01-31",
+      "url": "https://www.mydealz.de/deals/cashback-auf-schar-meisterbackers-mild-brot-nur-bei-edeka-2847406",
+      "submit_url": "https://www.schaer-aktion.com",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "Edeka",
+        "Netto"
+      ],
+      "eans": [
+        "8008698040782"
+      ],
+      "image_url": "https://static.mydealz.de/threads/raw/93t6u/2847406_1/re/150x150/qt/55/2847406_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -544,44 +573,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/EgbVX/2842672_1/re/150x150/qt/55/2842672_1.jpg",
       "limit_anzahl": 333,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "fe0c6defb449",
-      "title": "Tena Slipeinlagen Gratis Testen",
-      "brand": "TENA",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-09-01",
-      "valid_to": "2026-12-15",
-      "submission_deadline": "2026-12-15",
-      "url": "https://www.mydealz.de/deals/gzg-tena-slipeinlagen-gratis-testen-2832877",
-      "submit_url": "https://try.tena.com/de/aktionen/gratis-testen/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Aldi",
-        "Budni",
-        "Edeka",
-        "Globus",
-        "Kaufland",
-        "Lidl",
-        "Müller",
-        "Netto",
-        "Norma",
-        "Rewe",
-        "Rossmann",
-        "dm",
-        "tegut"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/PPGqQ/2832877_1/re/150x150/qt/55/2832877_1.jpg",
-      "limit_anzahl": 30000,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
