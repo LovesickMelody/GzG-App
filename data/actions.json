@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-04T10:27:49Z",
+  "generated_at": "2026-10-05T11:14:25Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,31 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "9e270ba1c2c6",
+      "title": "[Scondoo] Bonduelle Frische Salate Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/scondoo-bonduelle-frische-salate-gratis-testen",
+      "submit_url": "https://scondoo.de/?cashbackDetail=81789",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/177/scondoo-bonduelle-frische-salate-gratis-testen_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "7caa492c6f42",
@@ -79,10 +104,9 @@
       "valid_to": "2026-11-15",
       "submission_deadline": "2026-11-15",
       "url": "https://www.mydealz.de/deals/bifi-tasty-bites-wieder-da-333x-taglich-gratis-testen-gzg-2847927",
-      "submit_url": "https://www.bifi-promotion.de/tnb",
+      "submit_url": "https://www.bifi-promotion.de/",
       "requirements": [
         "bonfoto",
-        "registrierung",
         "iban"
       ],
       "retailers": [],
@@ -91,6 +115,31 @@
       "limit_anzahl": 333,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich um 08:00 Uhr",
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "12688f77fc52",
+      "title": "Bonduelle Salat Gratis Testen via scondoo",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": "2026-10-05",
+      "submission_deadline": "2026-10-05",
+      "url": "https://www.mydealz.de/deals/gzg-bonduelle-salat-gratis-testen-via-scondoo-2848450",
+      "submit_url": "https://scondoo.de/?cashbackDetail=81789&utm_campaign=sh_sl&utm_medium=sh&utm_source=sl",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/IRdDR/2848450_1/re/150x150/qt/55/2848450_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -142,34 +191,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/Mnm8R/2848127_1/re/150x150/qt/55/2848127_1.jpg",
       "limit_anzahl": 715,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "16a1f42cb9ff",
-      "title": "GZG VoltaHeat- (Wärmepflaster, Wärme Gel) oder VoltaCool-Produkt (Kühl Gel)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-09-01",
-      "valid_to": "2026-12-15",
-      "submission_deadline": "2026-12-15",
-      "url": "https://www.mydealz.de/deals/gzg-voltaheat-warmepflaster-warme-gel-oder-voltacool-produkt-kuhl-gel-2833246",
-      "submit_url": "https://www.erlebe-haleon.de/deals/voltaren/",
-      "requirements": [
-        "bonfoto",
-        "handy_verifizierung",
-        "registrierung",
-        "iban"
-      ],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/ITuar/2833246_1/re/150x150/qt/55/2833246_1.jpg",
-      "limit_anzahl": 20000,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -402,7 +423,7 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/3r3CE/2845209_1/re/150x150/qt/55/2845209_1.jpg",
       "limit_anzahl": 35000,
-      "limit_zeitraum": "woche",
+      "limit_zeitraum": null,
       "limit_reset": "Montags",
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -507,6 +528,29 @@
       "source": "mydealz"
     },
     {
+      "id": "9bb0e22dbfa7",
+      "title": "Samsung Bespoke AI Jet 100 EX80F28EES Akku Staubsauger + 100 Tage Geld zurück Garantie, 10€ extra bei Zahlung mit WERO",
+      "brand": "expert",
+      "type": "gratis_testen",
+      "max_refund_cents": 1000,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://www.mydealz.de/deals/samsung-bespoke-ai-jet-100-ex80f28ees-akku-staubsauger-100-tage-geld-zuruck-garantie-10eur-extra-bei-zahlung-mit-wero-2848382",
+      "submit_url": "https://www.expert.de/shop/unsere-produkte/haushalt-kuche/staubsauger/akku-staubsauger/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger.html?adword=zentrale_tgads/store/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger&branch_id=1907035&ctapreselect=Online&gad_campaignid=23469646470&gad_source=1&gclid=EAIaIQobChMIheGpsf6glwMVBYpoCR1nyDP7EAQYASABEgI4uvD_BwE&sv1=affiliate&sv_campaign_id=88787&awc=30007_1791198697_93dc1a6925e5fc3d7b1408b8916d3a7e&campaign=awin/88787",
+      "requirements": [
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/AyGlg/2848382_1/re/150x150/qt/55/2848382_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "ff40752c936b",
       "title": "SimplyV Scheiben Gratis Testen (täglich 333 Erstattungen) bis 30.11.",
       "brand": null,
@@ -542,7 +586,9 @@
       "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
       "submit_url": "https://www.zewa.net/de/gewinnspiele/zewa-ww-smart-cashback-2026/",
       "requirements": [
+        "produktfoto",
         "bonfoto",
+        "zusammen_fotografieren",
         "iban"
       ],
       "retailers": [],
