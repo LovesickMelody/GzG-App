@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T11:04:33Z",
+  "generated_at": "2026-10-07T10:54:17Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -251,27 +251,6 @@
       "source": "mydealz"
     },
     {
-      "id": "1fa9646d4de5",
-      "title": "Gratis testen - Tulip Baconscheiben oder Baconstreifen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-12-24",
-      "submission_deadline": "2026-12-24",
-      "url": "https://www.mydealz.de/deals/gzg-ab-1210-gratis-testen-tulip-baconscheiben-oder-baconstreifen-2847185",
-      "submit_url": "https://www.danishcrown.com/de-de/unsere-marken/tulip/aktion/",
-      "requirements": [],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/SCjFd/2847185_1/re/150x150/qt/55/2847185_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "5fb70fe3bafe",
       "title": "GzG Opflanzda vegane Obazda Alternative – Gratis Testen (Geld-zurück-Aktion)",
       "brand": null,
@@ -512,7 +491,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/samsung-bespoke-ai-jet-100-ex80f28ees-akku-staubsauger-100-tage-geld-zuruck-garantie-10eur-extra-bei-zahlung-mit-wero-2848382",
-      "submit_url": "https://www.expert.de/shop/unsere-produkte/haushalt-kuche/staubsauger/akku-staubsauger/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger.html?adword=zentrale_tgads/store/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger&branch_id=1907035&ctapreselect=Online&gad_campaignid=23469646470&gad_source=1&gclid=EAIaIQobChMIheGpsf6glwMVBYpoCR1nyDP7EAQYASABEgI4uvD_BwE&sv1=affiliate&sv_campaign_id=88787&awc=30007_1791284484_de171646ca89827402e9bbebb712f623&campaign=awin/88787",
+      "submit_url": "https://www.expert.de/shop/unsere-produkte/haushalt-kuche/staubsauger/akku-staubsauger/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger.html?adword=zentrale_tgads/store/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger&branch_id=1907035&ctapreselect=Online&gad_campaignid=23469646470&gad_source=1&gclid=EAIaIQobChMIheGpsf6glwMVBYpoCR1nyDP7EAQYASABEgI4uvD_BwE&sv1=affiliate&sv_campaign_id=88787&awc=30007_1791370289_0df719a8a0192a5e5d8024eed7ef5048&campaign=awin/88787",
       "requirements": [
         "registrierung"
       ],
@@ -550,8 +529,8 @@
       "source": "mydealz"
     },
     {
-      "id": "c8ed4af6c06c",
-      "title": "Zewa Wisch & Weg Gratis testen | GRATIS TESTEN AUFDRUCK NÖTIG!",
+      "id": "2946607b8cf1",
+      "title": "Zewa Wisch & Weg Gratis testen",
       "brand": "Zewa",
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -561,9 +540,7 @@
       "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
       "submit_url": "https://www.zewa.net/de/gewinnspiele/zewa-ww-smart-cashback-2026/",
       "requirements": [
-        "produktfoto",
         "bonfoto",
-        "zusammen_fotografieren",
         "iban"
       ],
       "retailers": [],
