@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T10:54:17Z",
+  "generated_at": "2026-10-08T11:12:03Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -491,7 +491,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://www.mydealz.de/deals/samsung-bespoke-ai-jet-100-ex80f28ees-akku-staubsauger-100-tage-geld-zuruck-garantie-10eur-extra-bei-zahlung-mit-wero-2848382",
-      "submit_url": "https://www.expert.de/shop/unsere-produkte/haushalt-kuche/staubsauger/akku-staubsauger/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger.html?adword=zentrale_tgads/store/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger&branch_id=1907035&ctapreselect=Online&gad_campaignid=23469646470&gad_source=1&gclid=EAIaIQobChMIheGpsf6glwMVBYpoCR1nyDP7EAQYASABEgI4uvD_BwE&sv1=affiliate&sv_campaign_id=88787&awc=30007_1791370289_0df719a8a0192a5e5d8024eed7ef5048&campaign=awin/88787",
+      "submit_url": "https://www.expert.de/shop/unsere-produkte/haushalt-kuche/staubsauger/akku-staubsauger/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger.html?adword=zentrale_tgads/store/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger&branch_id=1907035&ctapreselect=Online&gad_campaignid=23469646470&gad_source=1&gclid=EAIaIQobChMIheGpsf6glwMVBYpoCR1nyDP7EAQYASABEgI4uvD_BwE&sv1=affiliate&sv_campaign_id=88787&awc=30007_1791457750_05525ea72894d57399bd608b7ff9959a&campaign=awin/88787",
       "requirements": [
         "registrierung"
       ],
@@ -550,7 +550,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/RGW8e/2840660_1/re/150x150/qt/55/2840660_1.jpg",
       "limit_anzahl": 40000,
       "limit_zeitraum": "woche",
-      "limit_reset": null,
+      "limit_reset": "Montags um 08:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
