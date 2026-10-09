@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-08T11:12:03Z",
+  "generated_at": "2026-10-09T11:10:46Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -90,6 +90,30 @@
       "image_url": "https://static.mydealz.de/threads/raw/kE4le/2841355_1/re/150x150/qt/55/2841355_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "2227448780cb",
+      "title": "Ankündigung: The Green Mountain neue Cut-Linie - Gratis Probieren (Aktionssticker nötig)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-09-22",
+      "valid_to": "2027-02-28",
+      "submission_deadline": "2027-02-28",
+      "url": "https://www.mydealz.de/deals/ankundigung-the-green-mountain-probieren-plant-based-produkte-cashback-aktion-2834570",
+      "submit_url": "https://thegreenmountain-probieren.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/0ARfw/2834570_1/re/150x150/qt/55/2834570_1.jpg",
+      "limit_anzahl": 20000,
+      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -459,52 +483,6 @@
       "source": "mydealz"
     },
     {
-      "id": "2d96798f0bbc",
-      "title": "Reese's 1+1 GRATIS",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 219,
-      "valid_from": "2026-09-01",
-      "valid_to": "2026-11-07",
-      "submission_deadline": "2026-11-07",
-      "url": "https://www.mydealz.de/deals/teil-gzg-reeses-11-gratis-2834275",
-      "submit_url": "https://reeses-aktion.de",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Dt01g/2834275_1/re/150x150/qt/55/2834275_1.jpg",
-      "limit_anzahl": 350,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "9bb0e22dbfa7",
-      "title": "Samsung Bespoke AI Jet 100 EX80F28EES Akku Staubsauger + 100 Tage Geld zurück Garantie, 10€ extra bei Zahlung mit WERO",
-      "brand": "expert",
-      "type": "gratis_testen",
-      "max_refund_cents": 1000,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/samsung-bespoke-ai-jet-100-ex80f28ees-akku-staubsauger-100-tage-geld-zuruck-garantie-10eur-extra-bei-zahlung-mit-wero-2848382",
-      "submit_url": "https://www.expert.de/shop/unsere-produkte/haushalt-kuche/staubsauger/akku-staubsauger/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger.html?adword=zentrale_tgads/store/36204023743-bespoke-jet-ai-100-santorini-beige-akku-staubsauger&branch_id=1907035&ctapreselect=Online&gad_campaignid=23469646470&gad_source=1&gclid=EAIaIQobChMIheGpsf6glwMVBYpoCR1nyDP7EAQYASABEgI4uvD_BwE&sv1=affiliate&sv_campaign_id=88787&awc=30007_1791457750_05525ea72894d57399bd608b7ff9959a&campaign=awin/88787",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/AyGlg/2848382_1/re/150x150/qt/55/2848382_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "ff40752c936b",
       "title": "SimplyV Scheiben Gratis Testen (täglich 333 Erstattungen) bis 30.11.",
       "brand": null,
@@ -524,6 +502,29 @@
       "image_url": "https://static.mydealz.de/threads/raw/EgbVX/2842672_1/re/150x150/qt/55/2842672_1.jpg",
       "limit_anzahl": 333,
       "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "00bab4da7361",
+      "title": "TUC 2x kaufen & 1x Geld zurück Cashback-Aktion ab 19.10.",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 198,
+      "valid_from": null,
+      "valid_to": "2026-10-19",
+      "submission_deadline": "2026-10-19",
+      "url": "https://www.mydealz.de/deals/tuc-2x-kaufen-1x-geld-zuruck-cashback-aktion-ab-1910-2851258",
+      "submit_url": null,
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/gtJH4/2851258_1/re/150x150/qt/55/2851258_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
