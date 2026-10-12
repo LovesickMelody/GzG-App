@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T11:10:46Z",
+  "generated_at": "2026-10-12T11:42:52Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,29 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "b8b776495e6a",
+      "title": "TULIP Bacon Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/tulip-bacon-gratis-testen",
+      "submit_url": "https://www.danishcrown.com/de-de/unsere-marken/tulip/aktion/",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/180/tulip-bacon-gratis-testen_xs.png",
+      "limit_anzahl": 45000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "9e270ba1c2c6",
@@ -46,30 +69,6 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
-    },
-    {
-      "id": "7caa492c6f42",
-      "title": "100 % Cashback! Solero Bon Bon – fruchtiger Nasch-Deal! in zwei verschiedenen Sorten (GzG)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 449,
-      "valid_from": "2026-09-14",
-      "valid_to": "2026-10-11",
-      "submission_deadline": "2026-10-11",
-      "url": "https://www.mydealz.de/deals/100-cashback-solero-bon-bon-fruchtiger-nasch-deal-in-zwei-verschiedenen-sorten-2839144",
-      "submit_url": "https://aktionen.oca-services.com/teilnahmeformular/langnese/de-de/solero-cashback#/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/ymOcU/2839144_1/re/150x150/qt/55/2839144_1.jpg",
-      "limit_anzahl": 500,
-      "limit_zeitraum": "tag",
-      "limit_reset": "Täglich",
-      "limit_erschoepft": false,
-      "source": "mydealz"
     },
     {
       "id": "e328172aca93",
@@ -332,57 +331,6 @@
       "source": "mydealz"
     },
     {
-      "id": "dbae2de242b0",
-      "title": "GzG: CESAR Hundefutter gratis testen; bis zu 2 Teilnahmen pro Person",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 679,
-      "valid_from": "2026-09-07",
-      "valid_to": "2026-10-11",
-      "submission_deadline": "2026-10-11",
-      "url": "https://www.mydealz.de/deals/gzg-cesar-hundefutter-gratis-testen-bis-zu-2-teilnahmen-pro-person-2836515",
-      "submit_url": "https://promomo-cesar.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/REnVg/2836515_1/re/150x150/qt/55/2836515_1.jpg",
-      "limit_anzahl": 5000,
-      "limit_zeitraum": null,
-      "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "f28b8c59cf19",
-      "title": "Herta frische Pizza Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-08-31",
-      "valid_to": "2026-11-29",
-      "submission_deadline": "2026-11-29",
-      "url": "https://www.mydealz.de/deals/gzg-nur-bei-globus-herta-frische-pizza-gratis-testen-2834412",
-      "submit_url": "https://herta-frische-pizza-testen.de/",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Globus"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/JtScI/2834412_1/re/150x150/qt/55/2834412_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "229b4ee3c64b",
       "title": "KRAFT Käse Gratis Testen",
       "brand": null,
@@ -530,6 +478,30 @@
       "source": "mydealz"
     },
     {
+      "id": "fcd4e2f679ca",
+      "title": "Teil-GzG Gerolsteiner 50% Cashback (6 Flaschen kaufen, 3 Flaschen gratis erhalten)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-10-12",
+      "valid_to": "2026-12-24",
+      "submission_deadline": "2026-12-24",
+      "url": "https://www.mydealz.de/deals/teil-gzg-gerolsteiner-50-cashback-6-flaschen-kaufen-3-flaschen-gratis-erhalten-2852857",
+      "submit_url": "https://scondoo.de/fulfillments/gerolsteiner-3+3-cashback",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/cCdXY/2852857_1/re/150x150/qt/55/2852857_1.jpg",
+      "limit_anzahl": 10000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "2946607b8cf1",
       "title": "Zewa Wisch & Weg Gratis testen",
       "brand": "Zewa",
@@ -541,7 +513,9 @@
       "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
       "submit_url": "https://www.zewa.net/de/gewinnspiele/zewa-ww-smart-cashback-2026/",
       "requirements": [
+        "produktfoto",
         "bonfoto",
+        "zusammen_fotografieren",
         "iban"
       ],
       "retailers": [],
@@ -552,33 +526,6 @@
       "limit_anzahl": 40000,
       "limit_zeitraum": "woche",
       "limit_reset": "Montags um 08:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "f8ce4be822c1",
-      "title": "Zirkulin Vital Mikronährstoff Super Greens (4000 Einlösungen / 285 täglich)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 1499,
-      "valid_from": null,
-      "valid_to": "2026-10-11",
-      "submission_deadline": "2026-10-11",
-      "url": "https://www.mydealz.de/deals/gzg-zirkulin-vital-mikronahrstoff-super-greens-4000-einlosungen-285-taglich-2846109",
-      "submit_url": "https://zirkulin-aktion.de/supergreens.de",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [
-        "Müller",
-        "Rossmann",
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/7TO6z/2846109_1/re/150x150/qt/55/2846109_1.jpg",
-      "limit_anzahl": 4000,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
