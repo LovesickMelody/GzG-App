@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-12T11:42:52Z",
+  "generated_at": "2026-10-13T11:28:16Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,30 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "e5b1cf732992",
+      "title": "Schwartau The Jam Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/schwartau-the-jam-gratis-testen",
+      "submit_url": "https://www.schwartau-gratistesten.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/175/schwartau-the-jam-gratis-testen_xs.png",
+      "limit_anzahl": 555,
+      "limit_zeitraum": "tag",
+      "limit_reset": "Täglich um 08:00 Uhr",
+      "limit_erschoepft": true,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "b8b776495e6a",
@@ -89,30 +113,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/kE4le/2841355_1/re/150x150/qt/55/2841355_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "2227448780cb",
-      "title": "Ankündigung: The Green Mountain neue Cut-Linie - Gratis Probieren (Aktionssticker nötig)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-09-22",
-      "valid_to": "2027-02-28",
-      "submission_deadline": "2027-02-28",
-      "url": "https://www.mydealz.de/deals/ankundigung-the-green-mountain-probieren-plant-based-produkte-cashback-aktion-2834570",
-      "submit_url": "https://thegreenmountain-probieren.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/0ARfw/2834570_1/re/150x150/qt/55/2834570_1.jpg",
-      "limit_anzahl": 20000,
-      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -191,30 +191,6 @@
       "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "bf9ee8705778",
-      "title": "GZG • Schwartau the jam Konfitüre",
-      "brand": "Schwartau",
-      "type": "gratis_testen",
-      "max_refund_cents": 339,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/gzg-schwartau-the-jam-marmelade-2835317",
-      "submit_url": "https://www.schwartau-gratistesten.de",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/9Xi3s/2835317_1/re/150x150/qt/55/2835317_1.jpg",
-      "limit_anzahl": 555,
-      "limit_zeitraum": "tag",
-      "limit_reset": "Täglich um 08:00 Uhr",
-      "limit_erschoepft": true,
       "source": "mydealz"
     },
     {
@@ -502,6 +478,35 @@
       "source": "mydealz"
     },
     {
+      "id": "ec28b9e01b21",
+      "title": "Teil-GzG: LEKKA Pastrami x scondoo: 0,50 € Cashback auf eine Packung",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 50,
+      "valid_from": null,
+      "valid_to": "2026-11-01",
+      "submission_deadline": "2026-11-01",
+      "url": "https://www.mydealz.de/deals/lekka-pastrami-x-scondoo-050-eur-cashback-auf-eine-packung-2853247",
+      "submit_url": "https://scondoo.de/",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "registrierung"
+      ],
+      "retailers": [
+        "Penny",
+        "Rewe",
+        "tegut"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/fqc4z/2853247_1/re/150x150/qt/55/2853247_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "2946607b8cf1",
       "title": "Zewa Wisch & Weg Gratis testen",
       "brand": "Zewa",
@@ -624,33 +629,6 @@
       "eans": [],
       "image_url": "https://static.couponplatz.de/banner/1785927156440_891_mobile.webp",
       "limit_anzahl": 7000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "rabattigel"
-    },
-    {
-      "id": "20109d372907",
-      "title": "Fazer Aito Haferdrink",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-08-30",
-      "submission_deadline": "2026-08-30",
-      "url": "https://rabattigel.de/100-cashback-fazer-aito-haferdrink-ggf-personalisiert-gratis-testen-geld-zurueck/",
-      "submit_url": "https://scondoo.de",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "zusammen_fotografieren"
-      ],
-      "retailers": [
-        "Rewe"
-      ],
-      "eans": [],
-      "image_url": "https://rabattigel.de/wp-content/uploads/2026/08/75e9b71d-9fc0-47d7-9df7-237ab1517d21-766x432.jpg",
-      "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
