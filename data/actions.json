@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T08:55:03Z",
+  "generated_at": "2026-10-16T08:48:24Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,31 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "cdd75d25f607",
+      "title": "Pepsi Getränke Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/pepsi-pet-getraenke-gratis-testen",
+      "submit_url": "https://www.pepsi-gratistesten.de/",
+      "requirements": [
+        "bonfoto",
+        "registrierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/183/pepsi-pet-getraenke-gratis-testen_xs.png",
+      "limit_anzahl": 500,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": true,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "e5b1cf732992",
@@ -334,8 +359,8 @@
       "source": "mydealz"
     },
     {
-      "id": "1345ec8bc17d",
-      "title": "Gratis Testen Rexona Maximum Protection Deocreme Deospray Geld zurück GZG",
+      "id": "1174d2e8cf34",
+      "title": "Gratis Testen Rexona Maximum Protection Deocreme Deospray Geld zurück GZG 100% Cashback",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
@@ -409,6 +434,35 @@
       ],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/ztzCm/2839287_1/re/150x150/qt/55/2839287_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "352e9759cbcb",
+      "title": "Huel Trinkmahlzeit Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 399,
+      "valid_from": "2026-10-12",
+      "valid_to": "2026-11-18",
+      "submission_deadline": "2026-11-18",
+      "url": "https://www.mydealz.de/deals/gzg-nur-bei-rewe-huel-trinkmahlzeit-gratis-testen-2854438",
+      "submit_url": "https://huel-cashback.de/inactive",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "Edeka",
+        "Kaufland",
+        "Rewe",
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/5rpNU/2854438_1/re/150x150/qt/55/2854438_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -655,14 +709,13 @@
       "url": "https://www.mydealz.de/deals/gzg-wagner-pizza-pezzeria-style-gratis-testen-2854177",
       "submit_url": "https://wagner-cashback.com/de-DE/?Land=DE",
       "requirements": [
-        "bonfoto",
-        "iban"
+        "bonfoto"
       ],
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/PRtqc/2854177_1/re/150x150/qt/55/2854177_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
+      "limit_anzahl": 3333,
+      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -688,8 +741,8 @@
       ],
       "image_url": "https://static.mydealz.de/threads/raw/RGW8e/2840660_1/re/150x150/qt/55/2840660_1.jpg",
       "limit_anzahl": 40000,
-      "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 08:00 Uhr",
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
