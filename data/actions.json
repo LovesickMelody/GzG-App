@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T08:18:50Z",
+  "generated_at": "2026-10-18T08:36:20Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -336,12 +336,10 @@
       "valid_to": "2026-12-25",
       "submission_deadline": "2026-12-25",
       "url": "https://www.mydealz.de/deals/gzg-ab-1809-gillette-deo-gratis-testen-2840477",
-      "submit_url": "https://www.for-me-online.de/gillette-deo",
+      "submit_url": null,
       "requirements": [
         "bonfoto",
-        "handy_verifizierung",
-        "registrierung",
-        "iban"
+        "strichcode"
       ],
       "retailers": [
         "Norma"
@@ -577,7 +575,9 @@
       "url": "https://www.mydealz.de/deals/gzg-ab-0110-simplyv-scheiben-gratis-testen-taglich-333-erstattungen-bis-3011-2842672",
       "submit_url": "https://www.simply-v.de/aktion",
       "requirements": [
+        "produktfoto",
         "bonfoto",
+        "zusammen_fotografieren",
         "iban"
       ],
       "retailers": [],
