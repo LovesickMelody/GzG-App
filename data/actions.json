@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-18T08:36:20Z",
+  "generated_at": "2026-10-19T09:39:06Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -48,30 +48,6 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "e5b1cf732992",
-      "title": "Schwartau The Jam Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/schwartau-the-jam-gratis-testen",
-      "submit_url": "https://www.schwartau-gratistesten.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/175/schwartau-the-jam-gratis-testen_xs.png",
-      "limit_anzahl": 555,
-      "limit_zeitraum": "tag",
-      "limit_reset": "Täglich um 08:00 Uhr",
-      "limit_erschoepft": true,
-      "source": "geldzurueck-deals"
-    },
-    {
       "id": "b8b776495e6a",
       "title": "TULIP Bacon Gratis Testen",
       "brand": null,
@@ -95,27 +71,28 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "9e270ba1c2c6",
-      "title": "[Scondoo] Bonduelle Frische Salate Gratis Testen",
+      "id": "40439d16c235",
+      "title": "[DM] BILLY BOY SKYN Hautnah Extra Feucht 8er Gratis Testen",
       "brand": null,
       "type": "gratis_testen",
       "max_refund_cents": null,
       "valid_from": null,
       "valid_to": null,
       "submission_deadline": null,
-      "url": "https://geldzurueck.deals/scondoo-bonduelle-frische-salate-gratis-testen",
-      "submit_url": "https://scondoo.de/?cashbackDetail=81789",
+      "url": "https://geldzurueck.deals/billy-boy-skyn-hautnah-extra-feucht-8er-mit-geld-zurueck-aktion",
+      "submit_url": "https://www.bb-cashback.de",
       "requirements": [
-        "bonfoto",
-        "app",
-        "registrierung"
+        "produktfoto",
+        "bonfoto"
       ],
-      "retailers": [],
+      "retailers": [
+        "dm"
+      ],
       "eans": [],
-      "image_url": "https://geldzurueck.deals/images/177/scondoo-bonduelle-frische-salate-gratis-testen_xs.png",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
+      "image_url": "https://geldzurueck.deals/images/186/billy-boy-skyn-hautnah-extra-feucht-8er-mit-geld-zurueck-aktion_xs.png",
+      "limit_anzahl": 500,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -191,29 +168,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/93t6u/2847406_1/re/150x150/qt/55/2847406_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "fc63512fcb8f",
-      "title": "Cashback-Aktion: Doppelherz med Wund- & Heilsalbe (100% Erstattung)",
-      "brand": "Doppelherz",
-      "type": "gratis_testen",
-      "max_refund_cents": 499,
-      "valid_from": null,
-      "valid_to": "2026-10-18",
-      "submission_deadline": "2026-10-18",
-      "url": "https://www.mydealz.de/deals/exklusive-cashback-aktion-doppelherz-med-wund-heilsalbe-100-erstattung-2848127",
-      "submit_url": "https://doppelherz-med-aktion.de/",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Mnm8R/2848127_1/re/150x150/qt/55/2848127_1.jpg",
-      "limit_anzahl": 715,
-      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -336,10 +290,12 @@
       "valid_to": "2026-12-25",
       "submission_deadline": "2026-12-25",
       "url": "https://www.mydealz.de/deals/gzg-ab-1809-gillette-deo-gratis-testen-2840477",
-      "submit_url": null,
+      "submit_url": "https://www.for-me-online.de/gillette-deo",
       "requirements": [
         "bonfoto",
-        "strichcode"
+        "handy_verifizierung",
+        "registrierung",
+        "iban"
       ],
       "retailers": [
         "Norma"
@@ -416,10 +372,10 @@
       "valid_to": "2026-11-18",
       "submission_deadline": "2026-11-18",
       "url": "https://www.mydealz.de/deals/gzg-nur-bei-rewe-huel-trinkmahlzeit-gratis-testen-2854438",
-      "submit_url": "https://huel-cashback.de/inactive",
+      "submit_url": "https://huel-cashback.de/",
       "requirements": [
         "bonfoto",
-        "iban"
+        "registrierung"
       ],
       "retailers": [
         "Edeka",
@@ -428,7 +384,7 @@
         "dm"
       ],
       "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/5rpNU/2854438_1/re/150x150/qt/55/2854438_1.jpg",
+      "image_url": "https://static.mydealz.de/threads/raw/CwtVI/2854438_1/re/150x150/qt/55/2854438_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -575,9 +531,7 @@
       "url": "https://www.mydealz.de/deals/gzg-ab-0110-simplyv-scheiben-gratis-testen-taglich-333-erstattungen-bis-3011-2842672",
       "submit_url": "https://www.simply-v.de/aktion",
       "requirements": [
-        "produktfoto",
         "bonfoto",
-        "zusammen_fotografieren",
         "iban"
       ],
       "retailers": [],
