@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T09:39:06Z",
+  "generated_at": "2026-10-20T09:10:42Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,29 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "7418e57f9121",
+      "title": "MyLove-MyLife Cashback-Aktion",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/mylove-mylife-cashback-aktion-joghurts-und-drinks",
+      "submit_url": "https://pre.slace.com/leeb-milch/?ep_hash=MLML-POS-SM",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/187/mylove-mylife-cashback-aktion-joghurts-und-drinks_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "cdd75d25f607",
@@ -92,7 +115,7 @@
       "image_url": "https://geldzurueck.deals/images/186/billy-boy-skyn-hautnah-extra-feucht-8er-mit-geld-zurueck-aktion_xs.png",
       "limit_anzahl": 500,
       "limit_zeitraum": "woche",
-      "limit_reset": "Montags",
+      "limit_reset": "Montags um 08:30 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -168,6 +191,29 @@
       "image_url": "https://static.mydealz.de/threads/raw/93t6u/2847406_1/re/150x150/qt/55/2847406_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "dc729bd85360",
+      "title": "Cashback-Aktion: Doppelherz med Wund- & Heilsalbe (100% Erstattung)",
+      "brand": "Doppelherz",
+      "type": "gratis_testen",
+      "max_refund_cents": 499,
+      "valid_from": null,
+      "valid_to": "2026-10-25",
+      "submission_deadline": "2026-10-25",
+      "url": "https://www.mydealz.de/deals/exklusive-cashback-aktion-doppelherz-med-wund-heilsalbe-100-erstattung-2848127",
+      "submit_url": "https://doppelherz-med-aktion.de/",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/Mnm8R/2848127_1/re/150x150/qt/55/2848127_1.jpg",
+      "limit_anzahl": 715,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -334,30 +380,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/jFgSR/2854212_1/re/150x150/qt/55/2854212_1.jpg",
       "limit_anzahl": 2800,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "1658d0f0dcd8",
-      "title": "Gratis Testen via WhatsApp: MyLove-MyLife Produkte (Vegan) - bis zu 3 Produkte @ BioMarkt-Verbund & Knuspr (bald Alnatura)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 279,
-      "valid_from": "2026-09-07",
-      "valid_to": "2026-12-14",
-      "submission_deadline": "2026-12-14",
-      "url": "https://www.mydealz.de/deals/gratis-testen-via-whatsapp-mylove-mylife-produkte-vegan-bis-zu-3-produkte-at-biomarkt-verbund-knuspr-bald-alnatura-2839270",
-      "submit_url": "https://www.mylove-mylife.at/aut/de",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Nyghg/2839270_1/re/150x150/qt/55/2839270_1.jpg",
-      "limit_anzahl": 15000,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -539,29 +561,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/EgbVX/2842672_1/re/150x150/qt/55/2842672_1.jpg",
       "limit_anzahl": 333,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "00bab4da7361",
-      "title": "TUC 2x kaufen & 1x Geld zurück Cashback-Aktion ab 19.10.",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 198,
-      "valid_from": null,
-      "valid_to": "2026-10-19",
-      "submission_deadline": "2026-10-19",
-      "url": "https://www.mydealz.de/deals/tuc-2x-kaufen-1x-geld-zuruck-cashback-aktion-ab-1910-2851258",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/gtJH4/2851258_1/re/150x150/qt/55/2851258_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
