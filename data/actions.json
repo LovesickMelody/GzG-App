@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T09:10:42Z",
+  "generated_at": "2026-10-21T09:10:18Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -553,7 +553,9 @@
       "url": "https://www.mydealz.de/deals/gzg-ab-0110-simplyv-scheiben-gratis-testen-taglich-333-erstattungen-bis-3011-2842672",
       "submit_url": "https://www.simply-v.de/aktion",
       "requirements": [
+        "produktfoto",
         "bonfoto",
+        "zusammen_fotografieren",
         "iban"
       ],
       "retailers": [],
