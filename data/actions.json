@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T09:10:18Z",
+  "generated_at": "2026-10-26T09:46:28Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -191,29 +191,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/93t6u/2847406_1/re/150x150/qt/55/2847406_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "dc729bd85360",
-      "title": "Cashback-Aktion: Doppelherz med Wund- & Heilsalbe (100% Erstattung)",
-      "brand": "Doppelherz",
-      "type": "gratis_testen",
-      "max_refund_cents": 499,
-      "valid_from": null,
-      "valid_to": "2026-10-25",
-      "submission_deadline": "2026-10-25",
-      "url": "https://www.mydealz.de/deals/exklusive-cashback-aktion-doppelherz-med-wund-heilsalbe-100-erstattung-2848127",
-      "submit_url": "https://doppelherz-med-aktion.de/",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Mnm8R/2848127_1/re/150x150/qt/55/2848127_1.jpg",
-      "limit_anzahl": 715,
-      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
@@ -625,7 +602,7 @@
       "title": "Wagner Pizza Pizzeria Style - Gratis testen",
       "brand": null,
       "type": "gratis_testen",
-      "max_refund_cents": 500,
+      "max_refund_cents": 495,
       "valid_from": "2026-10-15",
       "valid_to": "2027-01-14",
       "submission_deadline": "2027-01-14",
