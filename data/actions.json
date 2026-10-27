@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-26T09:46:28Z",
+  "generated_at": "2026-10-27T09:39:47Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -71,29 +71,6 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "b8b776495e6a",
-      "title": "TULIP Bacon Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/tulip-bacon-gratis-testen",
-      "submit_url": "https://www.danishcrown.com/de-de/unsere-marken/tulip/aktion/",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/180/tulip-bacon-gratis-testen_xs.png",
-      "limit_anzahl": 45000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
       "id": "40439d16c235",
       "title": "[DM] BILLY BOY SKYN Hautnah Extra Feucht 8er Gratis Testen",
       "brand": null,
@@ -115,7 +92,7 @@
       "image_url": "https://geldzurueck.deals/images/186/billy-boy-skyn-hautnah-extra-feucht-8er-mit-geld-zurueck-aktion_xs.png",
       "limit_anzahl": 500,
       "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 08:30 Uhr",
+      "limit_reset": "Montags",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -362,6 +339,32 @@
       "source": "mydealz"
     },
     {
+      "id": "e392d6f3646c",
+      "title": "GzG ab 02.11 - Dove Deo Refill Set - gratis testen - 100% Cashback - [ Nur bei DM ]",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 211,
+      "valid_from": null,
+      "valid_to": "2026-11-15",
+      "submission_deadline": "2026-11-15",
+      "url": "https://www.mydealz.de/deals/gzg-dove-refill-set-gratis-testen-nur-bei-dm-2859474",
+      "submit_url": "https://refill-set-gratis-testen.de",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/6nS15/2859474_1/re/150x150/qt/55/2859474_1.jpg",
+      "limit_anzahl": 3500,
+      "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "352e9759cbcb",
       "title": "Huel Trinkmahlzeit Gratis Testen",
       "brand": null,
@@ -461,29 +464,6 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/KpPbx/2840838_1/re/150x150/qt/55/2840838_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "9deedc37d9ab",
-      "title": "Philips OneBlade Modelle Geld-zurück-Garantie mit Aktionszeitraum 01.01.2024-31.12.2026",
-      "brand": "Philips",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2024-01-01",
-      "valid_to": "2027-03-01",
-      "submission_deadline": "2027-03-01",
-      "url": "https://www.mydealz.de/deals/geld-zuruck-garantie-mit-aktionszeitraum-01012024-31122026-2839939",
-      "submit_url": "https://www.philips.de/c-w/aktion/gzg-oneblade?clickref=&origin=2_de_de___100l81_____mydealz_____Coupon%2FVoucher___pz&utm_source=100l81&utm_medium=affiliate&utm_campaign=partnerize&utm_content=Coupon%2FVoucher&utm_term=mydealz",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/p5gO9/2839939_1/re/150x150/qt/55/2839939_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -593,6 +573,34 @@
       "image_url": "https://static.mydealz.de/threads/raw/fqc4z/2853247_1/re/150x150/qt/55/2853247_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "2bcfc6b75951",
+      "title": "The Breath Co. Mundspülung Icy Mint Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 799,
+      "valid_from": "2026-11-14",
+      "valid_to": "2026-11-28",
+      "submission_deadline": "2026-11-28",
+      "url": "https://www.mydealz.de/deals/gzg-ab-0211-the-breath-co-mundspulung-icy-mint-gratis-testen-2859565",
+      "submit_url": "https://tbco-gratis-testen.de/",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [
+        "Budni",
+        "Edeka",
+        "Globus",
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/f3YT7/2859565_1/re/150x150/qt/55/2859565_1.jpg",
+      "limit_anzahl": 923,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
