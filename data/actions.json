@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-27T09:39:47Z",
+  "generated_at": "2026-10-28T10:24:13Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -42,6 +42,29 @@
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "18e6e6a33881",
+      "title": "Original Wagner Pizzeria Style Pizza Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 495,
+      "valid_from": "2026-10-15",
+      "valid_to": "2027-01-14",
+      "submission_deadline": "2027-01-14",
+      "url": "https://geldzurueck.deals/original-wagner-pizzeria-style-pizza-gratis-testen",
+      "submit_url": "https://wagner-cashback.com/de-DE/?Land=DE",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/182/original-wagner-pizzeria-style-pizza-gratis-testen_xs.png",
+      "limit_anzahl": 3333,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags um 09:00 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -275,38 +298,6 @@
       ],
       "image_url": "https://static.mydealz.de/threads/raw/9CZFR/2854196_1/re/150x150/qt/55/2854196_1.jpg",
       "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "82dfbc35464e",
-      "title": "Gillette Antitranspirant Deo Gratis Testen",
-      "brand": "for me:",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-09-18",
-      "valid_to": "2026-12-25",
-      "submission_deadline": "2026-12-25",
-      "url": "https://www.mydealz.de/deals/gzg-ab-1809-gillette-deo-gratis-testen-2840477",
-      "submit_url": "https://www.for-me-online.de/gillette-deo",
-      "requirements": [
-        "bonfoto",
-        "handy_verifizierung",
-        "registrierung",
-        "iban"
-      ],
-      "retailers": [
-        "Norma"
-      ],
-      "eans": [
-        "8006530030076",
-        "8006530030182",
-        "8006530030304"
-      ],
-      "image_url": "https://static.mydealz.de/threads/raw/smqGK/2840477_1/re/150x150/qt/55/2840477_1.jpg",
-      "limit_anzahl": 15000,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
@@ -601,29 +592,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/f3YT7/2859565_1/re/150x150/qt/55/2859565_1.jpg",
       "limit_anzahl": 923,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "98069fd46463",
-      "title": "Wagner Pizza Pizzeria Style - Gratis testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 495,
-      "valid_from": "2026-10-15",
-      "valid_to": "2027-01-14",
-      "submission_deadline": "2027-01-14",
-      "url": "https://www.mydealz.de/deals/gzg-wagner-pizza-pezzeria-style-gratis-testen-2854177",
-      "submit_url": "https://wagner-cashback.com/de-DE/?Land=DE",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/PRtqc/2854177_1/re/150x150/qt/55/2854177_1.jpg",
-      "limit_anzahl": 3333,
-      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
