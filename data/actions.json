@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-28T10:24:13Z",
+  "generated_at": "2026-10-29T10:45:15Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -409,6 +409,31 @@
       "source": "mydealz"
     },
     {
+      "id": "d83a4d0a065c",
+      "title": "McCain P!ckers Gratis Testen (1.666 Einlösungen pro Woche)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://www.mydealz.de/deals/ab-0211-mccain-pckers-gratis-testen-1666-einlosungen-pro-woche-2860715",
+      "submit_url": "https://pickers-gratis.de/",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/t8gfy/2860715_1/re/150x150/qt/55/2860715_1.jpg",
+      "limit_anzahl": 1666,
+      "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "227981937494",
       "title": "Oral-B Zahnpasta - gratis testen - Deutschland & Österreich ( Mit Aktionssticker )",
       "brand": "Oral-B",
@@ -432,29 +457,6 @@
         "8006530040983"
       ],
       "image_url": "https://static.mydealz.de/threads/raw/BVcwy/2843983_1/re/150x150/qt/55/2843983_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "06d3ef23f42d",
-      "title": "PRIMUM Hundefutter – 100 % Geld-zurück-Garantie bis max. 100 € | 2 Teilnahmen pro Haushalt | bis 31.12.2026 | Zufriedenheitsgarantie",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 10000,
-      "valid_from": null,
-      "valid_to": "2026-12-31",
-      "submission_deadline": "2026-12-31",
-      "url": "https://www.mydealz.de/deals/gzg-primum-hundefutter-100-geld-zuruck-garantie-bis-max-100-eur-2-teilnahmen-pro-haushalt-bis-31122026-zufriedenheitsgarantie-2840838",
-      "submit_url": "https://www.primum.pet/garantie",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/KpPbx/2840838_1/re/150x150/qt/55/2840838_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -592,32 +594,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/f3YT7/2859565_1/re/150x150/qt/55/2859565_1.jpg",
       "limit_anzahl": 923,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "2946607b8cf1",
-      "title": "Zewa Wisch & Weg Gratis testen",
-      "brand": "Zewa",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-10-01",
-      "valid_to": "2027-02-28",
-      "submission_deadline": "2027-02-28",
-      "url": "https://www.mydealz.de/deals/gzg-zewa-wisch-und-weg-2840660",
-      "submit_url": "https://www.zewa.net/de/gewinnspiele/zewa-ww-smart-cashback-2026/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [
-        "7322542604489"
-      ],
-      "image_url": "https://static.mydealz.de/threads/raw/RGW8e/2840660_1/re/150x150/qt/55/2840660_1.jpg",
-      "limit_anzahl": 40000,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
