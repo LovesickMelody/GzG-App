@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-29T10:45:15Z",
+  "generated_at": "2026-10-30T10:45:21Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -118,29 +118,6 @@
       "limit_reset": "Montags",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
-    },
-    {
-      "id": "e328172aca93",
-      "title": "3x FELIX Little Extras kaufen und bis zu 100% Geld zurück oder Prämie",
-      "brand": "PURINA",
-      "type": "gratis_testen",
-      "max_refund_cents": 717,
-      "valid_from": "2026-09-21",
-      "valid_to": "2026-11-15",
-      "submission_deadline": "2026-11-15",
-      "url": "https://www.mydealz.de/deals/3x-felix-little-extras-kaufen-und-100-geld-zuruck-oder-pramie-sichern-2841355",
-      "submit_url": null,
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/kE4le/2841355_1/re/150x150/qt/55/2841355_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
     },
     {
       "id": "35afbb866a88",
