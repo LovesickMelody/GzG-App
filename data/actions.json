@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30T10:45:21Z",
+  "generated_at": "2026-10-31T10:14:17Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -166,6 +166,32 @@
         "8008698040782"
       ],
       "image_url": "https://static.mydealz.de/threads/raw/93t6u/2847406_1/re/150x150/qt/55/2847406_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "2c1a2fb49047",
+      "title": "Clearblue Schwangerschaftstest 3€ und Ovulation 5€ Cashback - DE und AT",
+      "brand": "for me:",
+      "type": "gratis_testen",
+      "max_refund_cents": 300,
+      "valid_from": "2026-11-01",
+      "valid_to": "2027-04-12",
+      "submission_deadline": "2027-04-12",
+      "url": "https://www.mydealz.de/deals/teil-gzg-ab-0111-clearblue-schwangerschaftstest-3eur-und-5eur-cashback-de-und-at-2861874",
+      "submit_url": "https://www.for-me-online.de/clearblue-cashback",
+      "requirements": [
+        "bonfoto",
+        "strichcode",
+        "handy_verifizierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/XewOt/2861874_1/re/150x150/qt/55/2861874_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -465,32 +491,6 @@
       "limit_anzahl": 1600,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "ff40752c936b",
-      "title": "SimplyV Scheiben Gratis Testen (täglich 333 Erstattungen) bis 30.11.",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-10-01",
-      "valid_to": "2026-11-30",
-      "submission_deadline": "2026-11-30",
-      "url": "https://www.mydealz.de/deals/gzg-ab-0110-simplyv-scheiben-gratis-testen-taglich-333-erstattungen-bis-3011-2842672",
-      "submit_url": "https://www.simply-v.de/aktion",
-      "requirements": [
-        "produktfoto",
-        "bonfoto",
-        "zusammen_fotografieren",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/EgbVX/2842672_1/re/150x150/qt/55/2842672_1.jpg",
-      "limit_anzahl": 333,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
