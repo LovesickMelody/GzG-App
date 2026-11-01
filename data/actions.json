@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T10:14:17Z",
+  "generated_at": "2026-11-01T11:04:35Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -491,6 +491,32 @@
       "limit_anzahl": 1600,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich",
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "8503988f125d",
+      "title": "Teil GzG - Jacobs Kaffee: 2 Kaufen, das günstigere gratis",
+      "brand": "JACOBS Kaffee",
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-11-01",
+      "valid_to": "2026-12-24",
+      "submission_deadline": "2026-12-24",
+      "url": "https://www.mydealz.de/deals/teil-gzg-jacobs-kaffee-2-kaufen-das-gunstigere-gratis-2862522",
+      "submit_url": "https://www.jacobskaffee.de/aktionen/weihnachten-cashback/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "zusammen_fotografieren",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/s2lU0/2862522_1/re/150x150/qt/55/2862522_1.jpg",
+      "limit_anzahl": 20000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
