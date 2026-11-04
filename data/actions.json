@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T11:40:22Z",
+  "generated_at": "2026-11-04T11:54:09Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,31 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "90c960004aee",
+      "title": "Coca-Cola Cashback Gewinnspiel",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 2000,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/coca-cola-cashback-gewinnspiel",
+      "submit_url": "https://www.kisten-bescherung.de/",
+      "requirements": [
+        "bonfoto",
+        "registrierung",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/199/coca-cola-cashback-gewinnspiel_xs.png",
+      "limit_anzahl": 1500,
+      "limit_zeitraum": "tag",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "847a0afc372b",
@@ -55,7 +80,7 @@
       "valid_from": null,
       "valid_to": null,
       "submission_deadline": null,
-      "url": "https://geldzurueck.deals/mccain-p-ckers-gratis-testen",
+      "url": "https://geldzurueck.deals/mccain-pickers-gratis-testen",
       "submit_url": "https://pickers-gratis.de/",
       "requirements": [
         "bonfoto",
@@ -63,7 +88,7 @@
       ],
       "retailers": [],
       "eans": [],
-      "image_url": "https://geldzurueck.deals/images/196/mccain-p-ckers-gratis-testen_xs.png",
+      "image_url": "https://geldzurueck.deals/images/196/mccain-pickers-gratis-testen_xs.png",
       "limit_anzahl": 10000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 09:00 Uhr",
@@ -374,10 +399,10 @@
       "valid_to": "2026-11-18",
       "submission_deadline": "2026-11-18",
       "url": "https://www.mydealz.de/deals/gzg-nur-bei-rewe-huel-trinkmahlzeit-gratis-testen-2854438",
-      "submit_url": "https://huel-cashback.de/",
+      "submit_url": "https://huel-cashback.de/limit",
       "requirements": [
         "bonfoto",
-        "registrierung"
+        "iban"
       ],
       "retailers": [
         "Edeka",
@@ -522,7 +547,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/f3YT7/2859565_1/re/150x150/qt/55/2859565_1.jpg",
       "limit_anzahl": 923,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
+      "limit_reset": "Täglich um 08:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
