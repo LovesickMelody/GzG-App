@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T11:56:31Z",
+  "generated_at": "2026-11-06T11:51:45Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -57,7 +57,7 @@
       "valid_to": null,
       "submission_deadline": null,
       "url": "https://geldzurueck.deals/green-mountain-gratis-testen",
-      "submit_url": "https://thegreenmountain-testen.de/",
+      "submit_url": "https://thegreenmountain-probieren.de/",
       "requirements": [
         "bonfoto",
         "iban"
@@ -561,10 +561,9 @@
       "valid_to": "2027-01-14",
       "submission_deadline": "2027-01-14",
       "url": "https://www.mydealz.de/deals/gzg-wagner-pizza-pezzeria-style-gratis-testen-2854177",
-      "submit_url": null,
+      "submit_url": "https://wagner-cashback.com/de-DE/?Land=DE",
       "requirements": [
-        "bonfoto",
-        "iban"
+        "bonfoto"
       ],
       "retailers": [],
       "eans": [],
