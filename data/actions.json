@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-07T10:55:29Z",
+  "generated_at": "2026-11-08T11:05:31Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -170,35 +170,6 @@
       "limit_anzahl": 333,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich um 08:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "6d92096123c1",
-      "title": "Cashback auf Schär Meisterbäckers Mild Brot - NUR bei Edeka",
-      "brand": "Schär",
-      "type": "gratis_testen",
-      "max_refund_cents": 100,
-      "valid_from": "2026-10-01",
-      "valid_to": "2027-01-31",
-      "submission_deadline": "2027-01-31",
-      "url": "https://www.mydealz.de/deals/cashback-auf-schar-meisterbackers-mild-brot-nur-bei-edeka-2847406",
-      "submit_url": "https://www.schaer-aktion.com",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Edeka",
-        "Netto"
-      ],
-      "eans": [
-        "8008698040782"
-      ],
-      "image_url": "https://static.mydealz.de/threads/raw/93t6u/2847406_1/re/150x150/qt/55/2847406_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -399,10 +370,10 @@
       "valid_to": "2026-11-18",
       "submission_deadline": "2026-11-18",
       "url": "https://www.mydealz.de/deals/gzg-nur-bei-rewe-huel-trinkmahlzeit-gratis-testen-2854438",
-      "submit_url": "https://huel-cashback.de/limit",
+      "submit_url": "https://huel-cashback.de/",
       "requirements": [
         "bonfoto",
-        "iban"
+        "registrierung"
       ],
       "retailers": [
         "Edeka",
@@ -548,31 +519,6 @@
       "limit_anzahl": 923,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich um 08:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "83c5752e14e6",
-      "title": "Tony's Chocoloney bei Edeka per GZG für effektiv 0,24€",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 24,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/tonys-chocoloney-bei-edeka-per-gzg-fur-effektiv-024eur-2866338",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2866338",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [
-        "Edeka"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/DSiFy/2866338_1/re/150x150/qt/55/2866338_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
