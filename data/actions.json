@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-08T11:05:31Z",
+  "generated_at": "2026-11-09T12:34:30Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -21,6 +21,31 @@
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "abwickler"
+    },
+    {
+      "id": "61a382b881a9",
+      "title": "Abrahams Toast-Lachs Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/abrahams-toast-lachs-gratis-testen",
+      "submit_url": "https://www.abrahams-gmbh.de/toast-lachs-testen/",
+      "requirements": [
+        "produktfoto",
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/201/abrahams-toast-lachs-gratis-testen_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
     },
     {
       "id": "90c960004aee",
@@ -67,6 +92,30 @@
       "image_url": "https://geldzurueck.deals/images/198/green-mountain-gratis-testen_xs.png",
       "limit_anzahl": 2000,
       "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "9de6deed62aa",
+      "title": "Jetzt 3x Arla® Skyr Drink Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 597,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/jetzt-3x-arla-skyr-drink-gratis-testen",
+      "submit_url": "https://arla-skyr-promotion.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/202/jetzt-3x-arla-skyr-drink-gratis-testen_xs.png",
+      "limit_anzahl": 555,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
@@ -146,30 +195,6 @@
       "limit_anzahl": 1500,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "35afbb866a88",
-      "title": "BiFi Tasty Bites wieder da: 333x täglich Gratis Testen (GzG)",
-      "brand": "BiFi",
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-10-05",
-      "valid_to": "2026-11-15",
-      "submission_deadline": "2026-11-15",
-      "url": "https://www.mydealz.de/deals/bifi-tasty-bites-wieder-da-333x-taglich-gratis-testen-gzg-2847927",
-      "submit_url": "https://www.bifi-promotion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/7LPxj/2847927_1/re/150x150/qt/55/2847927_1.jpg",
-      "limit_anzahl": 333,
-      "limit_zeitraum": "tag",
-      "limit_reset": "Täglich um 08:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -282,6 +307,30 @@
       "source": "mydealz"
     },
     {
+      "id": "72a4a97a556d",
+      "title": "Florette Salat Gratis Testen bei Unzufriedenheit (mit Aktionshinweis)",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 299,
+      "valid_from": "2026-10-19",
+      "valid_to": "2027-07-31",
+      "submission_deadline": "2027-07-31",
+      "url": "https://www.mydealz.de/deals/gzg-florette-salat-gratis-testen-bei-unzufriedenheit-mit-aktionshinweis-2866898",
+      "submit_url": "https://florette-frische.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/FgcbE/2866898_1/re/150x150/qt/55/2866898_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "83d80a484f00",
       "title": "Geld-zurück-Garantie für NIVEA Q10 Gesichtspflege: Maximal 10€ Erstattung bei Kauf ab dem 09.11.",
       "brand": "NIVEA",
@@ -356,7 +405,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/6nS15/2859474_1/re/150x150/qt/55/2859474_1.jpg",
       "limit_anzahl": 3500,
       "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 09:00 Uhr",
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -370,10 +419,10 @@
       "valid_to": "2026-11-18",
       "submission_deadline": "2026-11-18",
       "url": "https://www.mydealz.de/deals/gzg-nur-bei-rewe-huel-trinkmahlzeit-gratis-testen-2854438",
-      "submit_url": "https://huel-cashback.de/",
+      "submit_url": "https://huel-cashback.de/expired",
       "requirements": [
         "bonfoto",
-        "registrierung"
+        "iban"
       ],
       "retailers": [
         "Edeka",
