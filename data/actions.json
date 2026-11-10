@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-09T12:34:30Z",
+  "generated_at": "2026-11-10T12:09:39Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -108,8 +108,7 @@
       "url": "https://geldzurueck.deals/jetzt-3x-arla-skyr-drink-gratis-testen",
       "submit_url": "https://arla-skyr-promotion.de/",
       "requirements": [
-        "bonfoto",
-        "iban"
+        "bonfoto"
       ],
       "retailers": [],
       "eans": [],
@@ -117,7 +116,7 @@
       "limit_anzahl": 555,
       "limit_zeitraum": "tag",
       "limit_reset": null,
-      "limit_erschoepft": false,
+      "limit_erschoepft": true,
       "source": "geldzurueck-deals"
     },
     {
@@ -141,30 +140,6 @@
       "limit_anzahl": 10000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "e826ab1a27c7",
-      "title": "Pahmeyer Wedges mit Kräutern Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 299,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/pahmeyer-wedges-mit-kraeutern-gratis-testen",
-      "submit_url": "https://pahmeyer-aktion.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/194/pahmeyer-wedges-mit-kraeutern-gratis-testen_xs.png",
-      "limit_anzahl": 1666,
-      "limit_zeitraum": "woche",
-      "limit_reset": "Montags um 00:01 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -589,6 +564,29 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/PRtqc/2854177_1/re/150x150/qt/55/2854177_1.jpg",
       "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "1c177a134b22",
+      "title": "granini MIX-IT gratis testen (bis zu 2,69 € Cashback, 7.500 Teilnahmen) bis 13.12.2026",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 269,
+      "valid_from": null,
+      "valid_to": "2026-12-13",
+      "submission_deadline": "2026-12-13",
+      "url": "https://www.mydealz.de/deals/gzg-granini-mix-it-gratis-testen-bis-zu-269-eur-cashback-7500-teilnahmen-bis-13122026-2867467",
+      "submit_url": "https://www.granini.de/gewinn/",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/hUwAN/2867467_1/re/150x150/qt/55/2867467_1.jpg",
+      "limit_anzahl": 7500,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
