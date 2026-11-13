@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-10T12:09:39Z",
+  "generated_at": "2026-11-13T11:54:41Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -140,8 +140,35 @@
       "limit_anzahl": 10000,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
+      "limit_erschoepft": true,
       "source": "geldzurueck-deals"
+    },
+    {
+      "id": "032186696754",
+      "title": "- Rügenwalder: Mühlen Chunks gratis testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 329,
+      "valid_from": "2027-01-04",
+      "valid_to": "2027-02-28",
+      "submission_deadline": "2027-02-28",
+      "url": "https://www.mydealz.de/deals/gzg-ab-040127-rugenwalder-muhlen-chunks-gratis-testen-2870351",
+      "submit_url": "https://muehlen-chunks-geschmacksgarantie.de/",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "iban"
+      ],
+      "retailers": [
+        "Müller"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/vAHnd/2870351_1/re/150x150/qt/55/2870351_1.jpg",
+      "limit_anzahl": 1875,
+      "limit_zeitraum": null,
+      "limit_reset": "Montags um 09:00 Uhr",
+      "limit_erschoepft": false,
+      "source": "mydealz"
     },
     {
       "id": "76142e0255cc",
@@ -170,6 +197,31 @@
       "limit_anzahl": 1500,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich",
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "628eb7cb8dc0",
+      "title": "Edeka regional Milka Adventskalender mit App 6,99, dazu das Milka Teil GZG-3€ = 3,99€",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 300,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://www.mydealz.de/deals/edeka-regional-milka-adventskalender-mit-app-699-dazu-das-milka-teil-gzg-3eur-2855694",
+      "submit_url": "https://www.mydealz.de/visit/threadmain/2855694",
+      "requirements": [
+        "registrierung"
+      ],
+      "retailers": [
+        "Edeka"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/Nesir/2855694_1/re/150x150/qt/55/2855694_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -299,6 +351,31 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/FgcbE/2866898_1/re/150x150/qt/55/2866898_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "1c2b005ee563",
+      "title": "GTA 6 gratis (Geld zurück) bei Eröffnung eines Kontos bei Deblock - mind. 1000€",
+      "brand": "Deblock",
+      "type": "gratis_testen",
+      "max_refund_cents": 100000,
+      "valid_from": null,
+      "valid_to": "2027-01-01",
+      "submission_deadline": "2027-01-01",
+      "url": "https://www.mydealz.de/deals/gta-6-gratis-geld-zuruck-bei-eroffnung-eines-kontos-bei-deblock-2856925",
+      "submit_url": "https://deblock.com/de/landing/get-gta-vi-for-free",
+      "requirements": [
+        "registrierung"
+      ],
+      "retailers": [
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/9jWiB/2856925_1/re/150x150/qt/55/2856925_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
@@ -488,30 +565,6 @@
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/s2lU0/2862522_1/re/150x150/qt/55/2862522_1.jpg",
       "limit_anzahl": 20000,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "fcd4e2f679ca",
-      "title": "Teil-GzG Gerolsteiner 50% Cashback (6 Flaschen kaufen, 3 Flaschen gratis erhalten)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-10-12",
-      "valid_to": "2026-12-24",
-      "submission_deadline": "2026-12-24",
-      "url": "https://www.mydealz.de/deals/teil-gzg-gerolsteiner-50-cashback-6-flaschen-kaufen-3-flaschen-gratis-erhalten-2852857",
-      "submit_url": "https://scondoo.de/fulfillments/gerolsteiner-3+3-cashback",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/cCdXY/2852857_1/re/150x150/qt/55/2852857_1.jpg",
-      "limit_anzahl": 10000,
       "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
