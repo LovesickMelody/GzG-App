@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-13T11:54:41Z",
+  "generated_at": "2026-11-14T11:15:37Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -487,34 +487,6 @@
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "25a89b43bb88",
-      "title": "Rexona Maximum Protection Deocreme gratis testen; Kauf bei Rossmann, Müller & Budni",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-10-19",
-      "valid_to": "2026-11-29",
-      "submission_deadline": "2026-11-29",
-      "url": "https://www.mydealz.de/deals/gzg-rexona-maximum-protection-deocreme-gratis-testen-kauf-bei-rossmann-muller-budni-2853745",
-      "submit_url": "https://www.rexona-max-pro-zufriedenheitsgarantie.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Budni",
-        "Müller",
-        "Rossmann"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/W7eOv/2853745_1/re/150x150/qt/55/2853745_1.jpg",
-      "limit_anzahl": 1600,
-      "limit_zeitraum": "tag",
-      "limit_reset": "Täglich",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
