@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14T11:15:37Z",
+  "generated_at": "2026-11-16T12:28:53Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -44,6 +44,30 @@
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "b1272af7e977",
+      "title": "CESAR Trocken Für Kleine Hunde Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/cesar-trocken-fuer-kleine-hunde-gratis-testen",
+      "submit_url": "https://promomo-cesar.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/205/cesar-trocken-fuer-kleine-hunde-gratis-testen_xs.png",
+      "limit_anzahl": 1000,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags um 00:00 Uhr",
       "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
@@ -116,30 +140,6 @@
       "limit_anzahl": 555,
       "limit_zeitraum": "tag",
       "limit_reset": null,
-      "limit_erschoepft": true,
-      "source": "geldzurueck-deals"
-    },
-    {
-      "id": "ddcd7b5e8827",
-      "title": "McCain P!CKERS Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 349,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/mccain-pickers-gratis-testen",
-      "submit_url": "https://pickers-gratis.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/196/mccain-pickers-gratis-testen_xs.png",
-      "limit_anzahl": 10000,
-      "limit_zeitraum": null,
-      "limit_reset": "Montags um 09:00 Uhr",
       "limit_erschoepft": true,
       "source": "geldzurueck-deals"
     },
@@ -431,32 +431,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/jFgSR/2854212_1/re/150x150/qt/55/2854212_1.jpg",
       "limit_anzahl": 2800,
       "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "6b255f32a36e",
-      "title": "GzG - Dove Deo Refill Set - gratis testen - 100% Cashback - [ Nur bei DM ]",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": "2026-11-15",
-      "submission_deadline": "2026-11-15",
-      "url": "https://www.mydealz.de/deals/gzg-dove-refill-set-gratis-testen-nur-bei-dm-2859474",
-      "submit_url": "https://refill-set-gratis-testen.de",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/6nS15/2859474_1/re/150x150/qt/55/2859474_1.jpg",
-      "limit_anzahl": 3500,
-      "limit_zeitraum": "woche",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
