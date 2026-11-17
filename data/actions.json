@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-16T12:28:53Z",
+  "generated_at": "2026-11-17T12:49:34Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -59,8 +59,7 @@
       "url": "https://geldzurueck.deals/cesar-trocken-fuer-kleine-hunde-gratis-testen",
       "submit_url": "https://promomo-cesar.de/",
       "requirements": [
-        "bonfoto",
-        "iban"
+        "bonfoto"
       ],
       "retailers": [],
       "eans": [],
@@ -68,7 +67,7 @@
       "limit_anzahl": 1000,
       "limit_zeitraum": "woche",
       "limit_reset": "Montags um 00:00 Uhr",
-      "limit_erschoepft": false,
+      "limit_erschoepft": true,
       "source": "geldzurueck-deals"
     },
     {
@@ -196,7 +195,7 @@
       "image_url": "https://static.mydealz.de/threads/raw/RgMWg/2863200_1/re/150x150/qt/55/2863200_1.jpg",
       "limit_anzahl": 1500,
       "limit_zeitraum": "tag",
-      "limit_reset": "Täglich",
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -546,29 +545,6 @@
       "source": "mydealz"
     },
     {
-      "id": "98069fd46463",
-      "title": "Wagner Pizza Pizzeria Style - Gratis testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 495,
-      "valid_from": "2026-10-15",
-      "valid_to": "2027-01-14",
-      "submission_deadline": "2027-01-14",
-      "url": "https://www.mydealz.de/deals/gzg-wagner-pizza-pezzeria-style-gratis-testen-2854177",
-      "submit_url": "https://wagner-cashback.com/de-DE/?Land=DE",
-      "requirements": [
-        "bonfoto"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/PRtqc/2854177_1/re/150x150/qt/55/2854177_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
       "id": "1c177a134b22",
       "title": "granini MIX-IT gratis testen (bis zu 2,69 € Cashback, 7.500 Teilnahmen) bis 13.12.2026",
       "brand": null,
@@ -587,6 +563,33 @@
       "image_url": "https://static.mydealz.de/threads/raw/hUwAN/2867467_1/re/150x150/qt/55/2867467_1.jpg",
       "limit_anzahl": 7500,
       "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "d39f2a2d8d8f",
+      "title": "tetesept Kreatin + Magnesium 500 (16.000 Einlösungen / 570 täglich)",
+      "brand": "tetesept",
+      "type": "gratis_testen",
+      "max_refund_cents": 599,
+      "valid_from": null,
+      "valid_to": "2026-12-13",
+      "submission_deadline": "2026-12-13",
+      "url": "https://www.mydealz.de/deals/gzg-tetesept-kreatin-magnesium-500-16000-einlosungen-570-taglich-2872845",
+      "submit_url": "https://tetesept-aktion.de/kreatin-magnesium",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [
+        "Müller",
+        "Rossmann",
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/0quL2/2872845_1/re/150x150/qt/55/2872845_1.jpg",
+      "limit_anzahl": 16000,
+      "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
