@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-18T12:42:22Z",
+  "generated_at": "2026-11-19T12:32:32Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -296,35 +296,6 @@
       "image_url": "https://static.mydealz.de/threads/raw/mIBfs/2863243_1/re/150x150/qt/55/2863243_1.jpg",
       "limit_anzahl": 10000,
       "limit_zeitraum": "woche",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "352e9759cbcb",
-      "title": "Huel Trinkmahlzeit Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 399,
-      "valid_from": "2026-10-12",
-      "valid_to": "2026-11-18",
-      "submission_deadline": "2026-11-18",
-      "url": "https://www.mydealz.de/deals/gzg-nur-bei-rewe-huel-trinkmahlzeit-gratis-testen-2854438",
-      "submit_url": "https://huel-cashback.de/expired",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Edeka",
-        "Kaufland",
-        "Rewe",
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/CwtVI/2854438_1/re/150x150/qt/55/2854438_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
