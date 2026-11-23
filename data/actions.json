@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-19T12:32:32Z",
+  "generated_at": "2026-11-23T14:04:25Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -96,30 +96,6 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "847a0afc372b",
-      "title": "GREEN MOUNTAIN – Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 500,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/green-mountain-gratis-testen",
-      "submit_url": "https://thegreenmountain-probieren.de/",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/198/green-mountain-gratis-testen_xs.png",
-      "limit_anzahl": 2000,
-      "limit_zeitraum": "woche",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
       "id": "9de6deed62aa",
       "title": "Jetzt 3x Arla® Skyr Drink Gratis Testen",
       "brand": null,
@@ -141,6 +117,35 @@
       "limit_reset": null,
       "limit_erschoepft": true,
       "source": "geldzurueck-deals"
+    },
+    {
+      "id": "07cb4032103d",
+      "title": "- Dove Duschgel / Duschschaum Body+mind Serum Range - gratis testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 3011,
+      "valid_from": null,
+      "valid_to": "2026-12-13",
+      "submission_deadline": "2026-12-13",
+      "url": "https://www.mydealz.de/deals/gzg-ab-3011-dove-bodymind-serum-range-gratis-testen-2879477",
+      "submit_url": "https://dove-serum-duschgel-cashback.de",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [
+        "Budni",
+        "Müller",
+        "Rossmann",
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/H8iJe/2879477_1/re/150x150/qt/55/2879477_1.jpg",
+      "limit_anzahl": 850,
+      "limit_zeitraum": "tag",
+      "limit_reset": "Täglich",
+      "limit_erschoepft": false,
+      "source": "mydealz"
     },
     {
       "id": "032186696754",
@@ -166,36 +171,6 @@
       "limit_anzahl": 1875,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "76142e0255cc",
-      "title": "100 % Geld zurück auf AXE Fine Fragrance Premium Body Wash! (GZG)",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": "2026-11-05",
-      "valid_to": "2026-11-22",
-      "submission_deadline": "2026-11-22",
-      "url": "https://www.mydealz.de/deals/100-geld-zuruck-auf-axe-fine-fragrance-premium-body-wash-2863200",
-      "submit_url": "https://axe-fine-fragrance-bodywash-zufriedenheitsgarantie.de",
-      "requirements": [
-        "bonfoto",
-        "iban"
-      ],
-      "retailers": [
-        "Budni",
-        "Kaufland",
-        "Müller",
-        "Rossmann",
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/RgMWg/2863200_1/re/150x150/qt/55/2863200_1.jpg",
-      "limit_anzahl": 1500,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -297,6 +272,34 @@
       "limit_anzahl": 10000,
       "limit_zeitraum": "woche",
       "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "156f678a9e60",
+      "title": "GzG: Bei Promomo.de gefunden: Dentastix gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 199,
+      "valid_from": null,
+      "valid_to": "2026-12-20",
+      "submission_deadline": "2026-12-20",
+      "url": "https://www.mydealz.de/deals/dentastix-gratis-testen-2879151",
+      "submit_url": "https://promomo-pedigree.de/",
+      "requirements": [
+        "bonfoto",
+        "iban"
+      ],
+      "retailers": [],
+      "eans": [
+        "5010394984577",
+        "5998749141922",
+        "5998749142004"
+      ],
+      "image_url": "https://static.mydealz.de/threads/raw/da3SR/2879151_1/re/150x150/qt/55/2879151_1.jpg",
+      "limit_anzahl": 4500,
+      "limit_zeitraum": "woche",
+      "limit_reset": "Montags um 00:00 Uhr",
       "limit_erschoepft": false,
       "source": "mydealz"
     },
