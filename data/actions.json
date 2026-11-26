@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-23T14:04:25Z",
+  "generated_at": "2026-11-26T13:35:44Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -71,31 +71,6 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "90c960004aee",
-      "title": "Coca-Cola Cashback Gewinnspiel",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 2000,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/coca-cola-cashback-gewinnspiel",
-      "submit_url": "https://www.kisten-bescherung.de/",
-      "requirements": [
-        "bonfoto",
-        "registrierung",
-        "iban"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/199/coca-cola-cashback-gewinnspiel_xs.png",
-      "limit_anzahl": 1500,
-      "limit_zeitraum": "tag",
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
       "id": "9de6deed62aa",
       "title": "Jetzt 3x Arla® Skyr Drink Gratis Testen",
       "brand": null,
@@ -116,6 +91,31 @@
       "limit_zeitraum": "tag",
       "limit_reset": null,
       "limit_erschoepft": true,
+      "source": "geldzurueck-deals"
+    },
+    {
+      "id": "d8521b559040",
+      "title": "[Scondoo] MadeGood Müsli- & Haferriegel Multipacks Gratis Testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://geldzurueck.deals/scondoo-madegood-muesli-haferriegel-multipacks-gratis-testen",
+      "submit_url": "https://scondoo.de/?cashbackDetail=81805",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "registrierung"
+      ],
+      "retailers": [],
+      "eans": [],
+      "image_url": "https://geldzurueck.deals/images/208/scondoo-madegood-muesli-haferriegel-multipacks-gratis-testen_xs.png",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
       "source": "geldzurueck-deals"
     },
     {
@@ -171,31 +171,6 @@
       "limit_anzahl": 1875,
       "limit_zeitraum": null,
       "limit_reset": "Montags um 09:00 Uhr",
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "628eb7cb8dc0",
-      "title": "Edeka regional Milka Adventskalender mit App 6,99, dazu das Milka Teil GZG-3€ = 3,99€",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": 300,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://www.mydealz.de/deals/edeka-regional-milka-adventskalender-mit-app-699-dazu-das-milka-teil-gzg-3eur-2855694",
-      "submit_url": "https://www.mydealz.de/visit/threadmain/2855694",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [
-        "Edeka"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/Nesir/2855694_1/re/150x150/qt/55/2855694_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
@@ -271,6 +246,35 @@
       "image_url": "https://static.mydealz.de/threads/raw/mIBfs/2863243_1/re/150x150/qt/55/2863243_1.jpg",
       "limit_anzahl": 10000,
       "limit_zeitraum": "woche",
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "d5e25e34125b",
+      "title": "GzG - MadeGood Müsli-& Haferriegel Multipacks gratis testen",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-11-26",
+      "valid_to": "2026-11-30",
+      "submission_deadline": "2026-11-30",
+      "url": "https://www.mydealz.de/deals/gzg-madegood-musli-haferriegel-multipacks-gratis-testen-2882019",
+      "submit_url": "https://scondoo.de/?cashbackDetail=81803&utm_campaign=sh_sl&utm_medium=sh&utm_source=sl",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "registrierung"
+      ],
+      "retailers": [
+        "Globus",
+        "Müller",
+        "Rewe"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/JubFs/2882019_1/re/150x150/qt/55/2882019_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
       "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
