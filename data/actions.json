@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T13:35:44Z",
+  "generated_at": "2026-11-27T13:32:04Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -94,31 +94,6 @@
       "source": "geldzurueck-deals"
     },
     {
-      "id": "d8521b559040",
-      "title": "[Scondoo] MadeGood Müsli- & Haferriegel Multipacks Gratis Testen",
-      "brand": null,
-      "type": "gratis_testen",
-      "max_refund_cents": null,
-      "valid_from": null,
-      "valid_to": null,
-      "submission_deadline": null,
-      "url": "https://geldzurueck.deals/scondoo-madegood-muesli-haferriegel-multipacks-gratis-testen",
-      "submit_url": "https://scondoo.de/?cashbackDetail=81805",
-      "requirements": [
-        "bonfoto",
-        "app",
-        "registrierung"
-      ],
-      "retailers": [],
-      "eans": [],
-      "image_url": "https://geldzurueck.deals/images/208/scondoo-madegood-muesli-haferriegel-multipacks-gratis-testen_xs.png",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "geldzurueck-deals"
-    },
-    {
       "id": "07cb4032103d",
       "title": "- Dove Duschgel / Duschschaum Body+mind Serum Range - gratis testen",
       "brand": null,
@@ -144,6 +119,31 @@
       "limit_anzahl": 850,
       "limit_zeitraum": "tag",
       "limit_reset": "Täglich",
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
+      "id": "96aa0cc88b34",
+      "title": "- Frosch Spülmaschinen - Gel All In 1 - gratis testen - Nur bei DM",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": 695,
+      "valid_from": null,
+      "valid_to": null,
+      "submission_deadline": null,
+      "url": "https://www.mydealz.de/deals/gzg-ab-0112-frosch-spulmaschinen-gel-all-in-1-gratis-testen-2883762",
+      "submit_url": "https://frosch-gratistesten.de",
+      "requirements": [
+        "bonfoto"
+      ],
+      "retailers": [
+        "dm"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/rbNf1/2883762_1/re/150x150/qt/55/2883762_1.jpg",
+      "limit_anzahl": null,
+      "limit_zeitraum": null,
+      "limit_reset": null,
       "limit_erschoepft": false,
       "source": "mydealz"
     },
