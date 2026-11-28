@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-27T13:32:04Z",
+  "generated_at": "2026-11-28T12:45:30Z",
   "actions": [
     {
       "id": "1f9d0d571179",
@@ -175,6 +175,35 @@
       "source": "mydealz"
     },
     {
+      "id": "94bc00629968",
+      "title": "Erasco Eintöpfe und Suppen nur in Dosen: 2 kaufen, 1 gratis (Cashback) bei REWE, EDEKA, famila, Globus & HIT",
+      "brand": null,
+      "type": "gratis_testen",
+      "max_refund_cents": null,
+      "valid_from": "2026-11-28",
+      "valid_to": "2026-12-31",
+      "submission_deadline": "2026-12-31",
+      "url": "https://www.mydealz.de/deals/scondoo-erasco-suppeneintopfe-2-kaufen-1-gratis-cashback-bei-rewe-edeka-famila-globus-hit-2884735",
+      "submit_url": "https://scondoo.de/?cashbackDetail=81874",
+      "requirements": [
+        "bonfoto",
+        "app",
+        "registrierung"
+      ],
+      "retailers": [
+        "Edeka",
+        "Globus",
+        "Rewe"
+      ],
+      "eans": [],
+      "image_url": "https://static.mydealz.de/threads/raw/Bhp7Y/2884735_1/re/150x150/qt/55/2884735_1.jpg",
+      "limit_anzahl": 5000,
+      "limit_zeitraum": null,
+      "limit_reset": null,
+      "limit_erschoepft": false,
+      "source": "mydealz"
+    },
+    {
       "id": "72a4a97a556d",
       "title": "Florette Salat Gratis Testen bei Unzufriedenheit (mit Aktionshinweis)",
       "brand": null,
@@ -192,31 +221,6 @@
       "retailers": [],
       "eans": [],
       "image_url": "https://static.mydealz.de/threads/raw/FgcbE/2866898_1/re/150x150/qt/55/2866898_1.jpg",
-      "limit_anzahl": null,
-      "limit_zeitraum": null,
-      "limit_reset": null,
-      "limit_erschoepft": false,
-      "source": "mydealz"
-    },
-    {
-      "id": "1c2b005ee563",
-      "title": "GTA 6 gratis (Geld zurück) bei Eröffnung eines Kontos bei Deblock - mind. 1000€",
-      "brand": "Deblock",
-      "type": "gratis_testen",
-      "max_refund_cents": 100000,
-      "valid_from": null,
-      "valid_to": "2027-01-01",
-      "submission_deadline": "2027-01-01",
-      "url": "https://www.mydealz.de/deals/gta-6-gratis-geld-zuruck-bei-eroffnung-eines-kontos-bei-deblock-2856925",
-      "submit_url": "https://deblock.com/de/landing/get-gta-vi-for-free",
-      "requirements": [
-        "registrierung"
-      ],
-      "retailers": [
-        "dm"
-      ],
-      "eans": [],
-      "image_url": "https://static.mydealz.de/threads/raw/9jWiB/2856925_1/re/150x150/qt/55/2856925_1.jpg",
       "limit_anzahl": null,
       "limit_zeitraum": null,
       "limit_reset": null,
